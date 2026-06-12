@@ -17,16 +17,16 @@ const KIND_LABEL: Record<Entry["kind"], string> = {
 
 export function EntryModal({ entry, onClose, onJumpToYear }: EntryModalProps) {
   const [summary, setSummary] = useState<WikiSummary | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [wikiLoading, setWikiLoading] = useState(true);
 
   useEffect(() => {
     let alive = true;
-    setLoading(true);
+    setWikiLoading(true);
     setSummary(null);
     getWikiSummary(entry.wikiTitle).then((s) => {
       if (!alive) return;
       setSummary(s);
-      setLoading(false);
+      setWikiLoading(false);
     });
     return () => {
       alive = false;
@@ -77,18 +77,18 @@ export function EntryModal({ entry, onClose, onJumpToYear }: EntryModalProps) {
               className="modal-image"
               src={summary.thumbnailUrl}
               alt={entry.title}
+              loading="lazy"
             />
           )}
-          {loading ? (
+          <p className="modal-extract">
+            {summary?.extract || entry.blurb}
+          </p>
+          {wikiLoading && !summary?.extract && (
             <p className="modal-extract modal-loading">
-              Consulting the archives…
-            </p>
-          ) : (
-            <p className="modal-extract">
-              {summary?.extract || entry.blurb}
+              Fetching live Wikipedia summary…
             </p>
           )}
-          {!loading && summary?.extract && summary.extract !== entry.blurb && (
+          {!wikiLoading && summary?.extract && summary.extract !== entry.blurb && (
             <p className="modal-blurb">{entry.blurb}</p>
           )}
           {entry.gotham && (

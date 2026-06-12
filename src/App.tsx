@@ -17,6 +17,7 @@ import { EntryModal } from "./components/EntryModal";
 import { AboutModal } from "./components/AboutModal";
 import { PopulationPanel } from "./components/PopulationPanel";
 import type { SegmentKey } from "./data/population";
+import { useDebouncedValue } from "./lib/useDebouncedValue";
 
 /** Initial window from a deep link like #year=1880 or #year=1880&span=0.05. */
 function initialWindow(): TimeWindow {
@@ -40,6 +41,8 @@ export default function App() {
   const [highlightGroup, setHighlightGroup] = useState<SegmentKey | null>(null);
 
   const year = useMemo(() => yearOfUnit((win.u0 + win.u1) / 2), [win]);
+  /** Map & population lag the playhead slightly so timeline scrub stays smooth. */
+  const mapYear = useDebouncedValue(year, 75);
   const era = useMemo(() => eraForYear(year), [year]);
 
   // Window changes coming from user gestures stop the autoplay.
@@ -113,14 +116,14 @@ export default function App() {
 
       <main className="app-main">
         <MapView
-          year={year}
+          year={mapYear}
           selectedEntry={selectedEntry}
           onSelectEntry={setSelectedEntry}
           showSettlements={popOpen && showSettlements}
           highlightGroup={highlightGroup}
         />
         <PopulationPanel
-          year={year}
+          year={mapYear}
           showSettlements={showSettlements}
           onShowSettlementsChange={setShowSettlements}
           highlightGroup={highlightGroup}

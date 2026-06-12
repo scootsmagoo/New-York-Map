@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Entry, Era } from "../types";
 import { formatYear } from "../data/eras";
 import { entriesForEra } from "../data/entries";
 import { getWikiSummary } from "../lib/wikipedia";
+import { runWikiQueued } from "../lib/wikiQueue";
 
 interface EraPanelProps {
   era: Era;
@@ -20,25 +21,37 @@ function EntryRow({
   entry,
   color,
   onSelect,
+  scrollRoot,
 }: {
   entry: Entry;
   color: string;
   onSelect: () => void;
+  scrollRoot: React.RefObject<HTMLElement | null>;
 }) {
+  const rowRef = useRef<HTMLButtonElement>(null);
   const [thumb, setThumb] = useState<string | null>(null);
 
   useEffect(() => {
-    let alive = true;
-    getWikiSummary(entry.wikiTitle).then((s) => {
-      if (alive && s?.thumbnailUrl) setThumb(s.thumbnailUrl);
-    });
-    return () => {
-      alive = false;
-    };
-  }, [entry.wikiTitle]);
+    const el = rowRef.current;
+    const root = scrollRoot.current;
+    if (!el || thumb) return;
+
+    const observer = new IntersectionObserver(
+      ([hit]) => {
+        if (!hit?.isIntersecting) return;
+        observer.disconnect();
+        runWikiQueued(() => getWikiSummary(entry.wikiTitle)).then((s) => {
+          if (s?.thumbnailUrl) setThumb(s.thumbnailUrl);
+        });
+      },
+      { root, rootMargin: "80px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [entry.wikiTitle, scrollRoot, thumb]);
 
   return (
-    <button className="entry-row" onClick={onSelect}>
+    <button className="entry-row" ref={rowRef} onClick={onSelect}>
       <span className="entry-thumb" style={{ borderColor: color }}>
         {thumb ? (
           <img src={thumb} alt="" loading="lazy" />
@@ -60,13 +73,14 @@ function EntryRow({
 
 export function EraPanel({ era, onClose, onSelectEntry }: EraPanelProps) {
   const entries = entriesForEra(era.id);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
     <aside className="era-panel">
       <button className="modal-close" onClick={onClose} aria-label="Close panel">
         ×
       </button>
-      <div className="era-panel-scroll">
+      <div className="era-panel-scroll" ref={scrollRef}>
         <header className="era-panel-header">
           <div className="era-panel-dates" style={{ color: era.color }}>
             {era.start <= -9000 ? "Deep time" : formatYear(era.start)} —{" "}
@@ -91,6 +105,7 @@ export function EraPanel({ era, onClose, onSelectEntry }: EraPanelProps) {
                     key={entry.id}
                     entry={entry}
                     color={era.color}
+                    scrollRoot={scrollRef}
                     onSelect={() => onSelectEntry(entry)}
                   />
                 ))}

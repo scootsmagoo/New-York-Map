@@ -110,6 +110,22 @@ function clamp01(v: number): number {
   return Math.max(0, Math.min(1, v));
 }
 
+/**
+ * Bucket zoom level so React only re-renders when level-of-detail thresholds
+ * are crossed — not on every pan/zoom frame.
+ */
+function zoomLodBand(k: number): number {
+  if (k < 1.4) return 0;
+  if (k < 1.5) return 1;
+  if (k < 1.8) return 2;
+  if (k < 2.0) return 3;
+  if (k < 2.2) return 4;
+  if (k < 2.5) return 5;
+  if (k < 2.8) return 6;
+  if (k < 3.6) return 7;
+  return 8;
+}
+
 /** Project a geographic radius to screen pixels at a point. */
 function projectedRadius(
   projection: (c: [number, number]) => [number, number] | null,
@@ -177,10 +193,28 @@ export function MapView({
 }: MapViewProps) {
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
+  const contentRef = useRef<SVGGElement>(null);
   const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
-  const [transform, setTransform] = useState(zoomIdentity);
-  const transformRef = useRef(transform);
-  transformRef.current = transform;
+  const transformRef = useRef(zoomIdentity);
+  const lodBandRef = useRef(zoomLodBand(1));
+  const [zoomK, setZoomK] = useState(1);
+
+  const applyTransform = (t: typeof zoomIdentity) => {
+    transformRef.current = t;
+    contentRef.current?.setAttribute("transform", t.toString());
+    const band = zoomLodBand(t.k);
+    if (band !== lodBandRef.current) {
+      lodBandRef.current = band;
+      setZoomK(t.k);
+    }
+  };
+
+  const syncZoomK = (t: typeof zoomIdentity) => {
+    transformRef.current = t;
+    contentRef.current?.setAttribute("transform", t.toString());
+    lodBandRef.current = zoomLodBand(t.k);
+    setZoomK(t.k);
+  };
 
   const projection = useMemo(() => {
     if (!width || !height) return null;
@@ -207,14 +241,20 @@ export function MapView({
         [0, 0],
         [width, height],
       ])
-      .on("zoom", (e: D3ZoomEvent<SVGSVGElement, unknown>) =>
-        setTransform(e.transform)
-      );
+      .on("zoom", (e: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        // Imperative transform during gesture — avoids re-rendering the full SVG tree.
+        applyTransform(e.transform);
+      })
+      .on("end", (e: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        syncZoomK(e.transform);
+      });
     zoomRef.current = behavior;
     const sel = select(svg);
     sel.call(behavior);
+    syncZoomK(zoomIdentity);
     return () => {
       sel.on(".zoom", null);
+      sel.on(".end", null);
       zoomRef.current = null;
     };
   }, [width, height]);
@@ -252,7 +292,7 @@ export function MapView({
   };
 
 
-  const k = transform.k;
+  const k = zoomK;
   const era = eraForYear(year);
 
   // ----- Level-of-detail fades -----
@@ -494,7 +534,7 @@ export function MapView({
 
         <rect className="map-water" width={width} height={height} />
 
-        <g transform={transform.toString()}>
+        <g ref={contentRef} className="map-content">
           {/* Surrounding land */}
           {(surroundData as any).features.map((f: any, i: number) => (
             <path key={`s${i}`} className="map-surround" d={path!(f) ?? undefined} />

@@ -173,6 +173,10 @@ button {
   cursor: grab;
 }
 
+.map-content {
+  will-change: transform;
+}
+
 .map-svg:active { cursor: grabbing; }
 
 .map-water {
