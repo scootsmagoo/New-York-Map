@@ -37,10 +37,14 @@ async function check(title, attempt = 0) {
   const slug = encodeURIComponent(title.replace(/ /g, "_"));
   const res = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`,
-    { headers: { "User-Agent": "new-york-map-validator/1.0 (personal project)" } }
+    {
+      headers: { "User-Agent": "new-york-map-validator/1.0 (personal project)" },
+      // Never hang the loop on a stalled connection.
+      signal: AbortSignal.timeout(8000),
+    }
   );
-  if (res.status === 429 && attempt < 5) {
-    await sleep(3000 * (attempt + 1));
+  if (res.status === 429 && attempt < 3) {
+    await sleep(2500 * (attempt + 1));
     return check(title, attempt + 1);
   }
   if (res.status === 429) {

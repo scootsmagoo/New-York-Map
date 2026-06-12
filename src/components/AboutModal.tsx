@@ -48,8 +48,10 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
           Wikipedia under their respective licenses. Coastlines come from U.S.
           Census cartographic boundary files (modern shorelines — landfill
           means the 17th-century island was a touch slimmer). Built-up
-          footprints and Lenape sites are deliberately impressionistic:
-          painted from period maps and archaeology, not surveyed.
+          footprints, streets, parks, and Lenape sites are deliberately
+          impressionistic: the 1811 grid is generated geometrically, colonial
+          roads and park outlines are hand-drawn from period maps — painted,
+          not surveyed.
         </p>
       </article>
     </div>

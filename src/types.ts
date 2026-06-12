@@ -32,6 +32,12 @@ export interface Entry {
   blurb: string;
   /** [longitude, latitude] — places (and some events) get a map marker. */
   coords?: [number, number];
+  /**
+   * Years the thing physically existed, for rise-and-fall map markers:
+   * [built, demolished]. `null` end = still standing. Entries without a
+   * lifespan fall back to era-based marker visibility.
+   */
+  lifespan?: [number, number | null];
   /** Optional note on how Burrows & Wallace's Gotham treats the subject. */
   gotham?: string;
 }
@@ -47,6 +53,36 @@ export interface FootprintSnapshot {
   manhattan: [number, number][][];
   /** Built-up rings for the other four boroughs, clipped to all city land. */
   other: [number, number][][];
+  /**
+   * Northern limit of Manhattan's solid built-up band at the Hudson (latW)
+   * and East River (latE) — drives the "streets built so far" frontier.
+   */
+  frontier: { latW: number; latE: number };
+}
+
+/** A bridge, ferry route, or other linear structure with a service life. */
+export interface Structure {
+  id: string;
+  name: string;
+  kind: "bridge" | "ferry";
+  /** Polyline of [lon, lat] points. */
+  pts: [number, number][];
+  open: number;
+  close?: number;
+  /** Optional entry id to open when clicked. */
+  entryId?: string;
+}
+
+/** A park with an acquisition date and optional construction period. */
+export interface Park {
+  id: string;
+  name: string;
+  /** Polygon ring of [lon, lat] points (counterclockwise, unclosed). */
+  ring: [number, number][];
+  /** Year the land became (or began becoming) a park. */
+  from: number;
+  /** Year construction finished; between `from` and this it draws hatched. */
+  completed?: number;
 }
 
 export interface WikiSummary {

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Entry } from "./types";
 import { eraForYear } from "./data/eras";
-import { allEntries } from "./data/entries";
 import {
   clampWindow,
   panWindow,
@@ -87,11 +86,6 @@ export default function App() {
     });
   }, []);
 
-  const markers = useMemo(
-    () => allEntries.filter((e) => e.era === era.id && e.coords),
-    [era.id]
-  );
-
   return (
     <div className="app" data-era={era.id} style={{ "--accent": era.color } as React.CSSProperties}>
       <Header
@@ -102,7 +96,7 @@ export default function App() {
       />
 
       <main className="app-main">
-        <MapView year={year} markers={markers} onSelectEntry={setSelectedEntry} />
+        <MapView year={year} onSelectEntry={setSelectedEntry} />
         {panelOpen && (
           <EraPanel
             era={era}

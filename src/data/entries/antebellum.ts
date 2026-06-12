@@ -145,6 +145,7 @@ export const antebellumEntries: Entry[] = [
     blurb:
       "America's first world's fair, in an iron-and-glass dome beside the Croton reservoir at 42nd Street; Elisha Otis cut his own elevator rope there to prove the safety brake. It burned in 1858.",
     coords: [-73.9832, 40.7536],
+    lifespan: [1853, 1858],
   },
   {
     id: "brooklyn-city",
@@ -167,6 +168,95 @@ export const antebellumEntries: Entry[] = [
       "After the city seized 770 acres of rocky commons — evicting Seneca Village and the shanty districts — Olmsted and Vaux's 'Greensward' won the 1857 design competition and 20,000 workers set to moving five million cubic yards of earth.",
   },
   {
+    id: "astor-opera-house",
+    era: "antebellum",
+    kind: "place",
+    title: "Astor Opera House",
+    wikiTitle: "Astor Opera House",
+    year: 1847,
+    yearLabel: "1847–1890",
+    blurb:
+      "The kid-glove opera house at Astor Place whose dress code (and Macready booking) provoked the deadly 1849 riot; reborn as the Mercantile Library's Clinton Hall, demolished 1890.",
+    coords: [-73.9916, 40.7296],
+    lifespan: [1847, 1890],
+  },
+  {
+    id: "astor-house",
+    era: "antebellum",
+    kind: "place",
+    title: "Astor House",
+    wikiTitle: "Astor House",
+    year: 1836,
+    yearLabel: "1836–1913",
+    blurb:
+      "John Jacob Astor's granite hotel on Broadway at Vesey — the most famous in America for a generation, host to presidents, with running water on every floor. Demolition began in 1913.",
+    coords: [-74.0089, 40.7118],
+    lifespan: [1836, 1913],
+  },
+  {
+    id: "barnums-museum",
+    era: "antebellum",
+    kind: "place",
+    title: "Barnum's American Museum",
+    wikiTitle: "Barnum's American Museum",
+    year: 1841,
+    yearLabel: "1841–1865",
+    blurb:
+      "Five floors of mermaids, whales, waxworks, and humbug at Broadway and Ann — 38 million admissions before it burned spectacularly in July 1865, whale tanks and all.",
+    coords: [-74.0066, 40.711],
+    lifespan: [1841, 1865],
+  },
+  {
+    id: "croton-reservoir",
+    era: "antebellum",
+    kind: "place",
+    title: "Croton Distributing Reservoir",
+    wikiTitle: "Croton Distributing Reservoir",
+    year: 1842,
+    yearLabel: "1842–1899",
+    blurb:
+      "The Egyptian-walled lake at Fifth Avenue and 42nd Street whose promenade offered the best view in town; razed at century's end for the New York Public Library.",
+    coords: [-73.9822, 40.7531],
+    lifespan: [1842, 1899],
+  },
+  {
+    id: "the-tombs",
+    era: "antebellum",
+    kind: "place",
+    title: "The Tombs",
+    wikiTitle: "The Tombs",
+    year: 1838,
+    blurb:
+      "The Egyptian Revival Halls of Justice built on the soggy Collect landfill — sinking, damp, and overcrowded from day one, with the gallows in its inner yard.",
+    coords: [-74.0007, 40.7167],
+    lifespan: [1838, null],
+  },
+  {
+    id: "niblos-garden",
+    era: "antebellum",
+    kind: "place",
+    title: "Niblo's Garden",
+    wikiTitle: "Niblo's Garden",
+    year: 1834,
+    yearLabel: "1823–1895",
+    blurb:
+      "Broadway's pleasure garden and theatre at Prince Street — home of spectacle, opera, and in 1866 'The Black Crook,' often called the first musical.",
+    coords: [-73.9967, 40.7234],
+    lifespan: [1823, 1895],
+  },
+  {
+    id: "highbridge",
+    era: "antebellum",
+    kind: "place",
+    title: "High Bridge",
+    wikiTitle: "High Bridge (New York City)",
+    year: 1848,
+    blurb:
+      "The Roman-arched aqueduct bridge carrying Croton water over the Harlem River — the city's oldest standing bridge, with a promenade that drew Edgar Allan Poe on his walks.",
+    coords: [-73.93, 40.8425],
+    lifespan: [1848, null],
+  },
+  {
     id: "five-points",
     era: "antebellum",
     kind: "place",
@@ -176,6 +266,7 @@ export const antebellumEntries: Entry[] = [
     blurb:
       "The Atlantic world's most notorious slum, atop the buried Collect — Irish and Black New York packed into groggeries and the Old Brewery, toured by Dickens (with two policemen) in 1842.",
     coords: [-74.0001, 40.7148],
+    lifespan: [1825, 1897],
   },
   {
     id: "bowery-theatres",
@@ -198,6 +289,7 @@ export const antebellumEntries: Entry[] = [
     blurb:
       "The largest community of Black property-owners in the city — churches, a school, Irish and German neighbors — razed in 1857 for Central Park between today's 82nd and 89th Streets.",
     coords: [-73.968, 40.7841],
+    lifespan: [1825, 1857],
   },
   {
     id: "greenwood",
@@ -209,6 +301,7 @@ export const antebellumEntries: Entry[] = [
     blurb:
       "Brooklyn's picturesque rural cemetery on the harbor's highest moraine — so popular with strolling visitors it proved New Yorkers would travel for landscape, a key argument for Central Park.",
     coords: [-73.9933, 40.6526],
+    lifespan: [1838, null],
   },
   {
     id: "atlantic-docks",
@@ -220,6 +313,7 @@ export const antebellumEntries: Entry[] = [
     blurb:
       "Brooklyn's bid for the port: enclosed ship basins and brick warehouses where grain from the Erie Canal met deep water — worked by the Irish longshoremen of 'Slickville.'",
     coords: [-74.0114, 40.6818],
+    lifespan: [1847, null],
   },
   {
     id: "marble-palace",
@@ -231,5 +325,6 @@ export const antebellumEntries: Entry[] = [
     blurb:
       "The white marble dry-goods store at Broadway and Chambers — plate glass, a dome, and clerks forbidden to haggle: the birth of the department store and of Ladies' Mile.",
     coords: [-74.0066, 40.7141],
+    lifespan: [1846, null],
   },
 ];

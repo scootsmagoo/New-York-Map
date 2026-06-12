@@ -36,8 +36,22 @@ Burrows & Mike Wallace, *Gotham: A History of New York City to 1898*.
   map marker, or panel row) opens a detail card with a **live Wikipedia
   summary and image**, the bundled fallback blurb, and an optional
   *Gotham* margin note.
+- **Zooming the map reveals street-level detail.** The 1811 Commissioners'
+  Plan grid is generated procedurally: from 1811 it appears as faint dashed
+  survey lines, and solid built streets chase the same northern frontier as
+  the footprint — Central Park punches its hole in the grid after 1857.
+  Colonial roads (Broadway, the Bowery, Boston Post Road, Brooklyn's Ferry
+  Road…) are hand-drawn polylines with dates; built-up areas outside the grid
+  zone get borough-angled street-hatch textures.
+- **Things rise and fall.** Landmarks carry `[built, demolished]` lifespans —
+  Fort Amsterdam is razed in 1790, Barnum's Museum burns in 1865, the Crystal
+  Palace vanishes in 1858, the Croton Reservoir gives way to the Library.
+  Bridges and ferries are dated line geometry (the Fulton Ferry dashes fade
+  out after the Brooklyn Bridge lands in 1883); parks appear on acquisition,
+  drawn as construction hatching until completed (Central Park 1857–1873).
 - Autoplay (▶ or spacebar) glides through time; arrow keys pan; the map
-  itself pans and zooms independently.
+  itself pans and zooms independently up to 16×, with detail layers fading
+  in by zoom level.
 
 ## Tech stack
 
@@ -110,6 +124,15 @@ header, theme, footprint, markers, panel — derives from it.
   Amsterdam 1637, British 1739, Gilded 1880). Production build clean at
   157 KB gzipped; pushed to GitHub with a Pages deploy workflow (enable
   **Settings → Pages → Source: GitHub Actions** once).
+- **2026-06-12 (later)** — Street-level detail pass. Lifespan model for
+  rise-and-fall landmarks (+10 new building entries: Astor Opera House &
+  Astor House, Barnum's, Croton Reservoir, the Tombs, Niblo's, St. Paul's,
+  Grand Central Depot, MSG 1890, High Bridge); bridges & ferries as dated
+  geometry; 18 parks with construction phases; procedural 1811 grid with
+  survey-vs-built frontiers and the Central Park hole; 17 hand-drawn colonial
+  roads; borough street-hatch fills; zoom-based level-of-detail framework
+  (max zoom 10×→16×). Verified in-browser at 1714, 1843, and 1880 at
+  multiple zooms.
 
 ## Lessons learned
 
@@ -147,6 +170,24 @@ header, theme, footprint, markers, panel — derives from it.
 8. **Cross-fading cumulative snapshots reads as growth.** Real shape
    interpolation (flubber-style morphing) is unnecessary when each snapshot
    contains the last: draw the current one solid and fade the next one in.
+9. **Borough polygons contain surprise islands.** Governors, Liberty, and
+   Ellis Islands belong to Manhattan's borough polygon, so a "built up to
+   14th Street" band clipped to Manhattan quietly painted the harbor islands
+   brown. Geometry that's *legally* one unit isn't *visually* one unit —
+   the band now starts just under the Battery.
+10. **SVG clipping composes better than geometry math.** The built-street
+    reveal is three nested clip paths (shoreline ∩ grid zone ∩ built
+    frontier); the "everything except the grid zone" hatch uses a frame
+    rectangle plus the zone ring with `clip-rule: evenodd`. Zero polygon
+    boolean libraries needed.
+11. **Counter-scale what should stay screen-sized.** Markers and labels use
+    `scale(1/k)`, strokes use `vector-effect: non-scaling-stroke`, and
+    hatch patterns put `scale(1/k)` in `patternTransform` so texture pitch
+    stays constant while geometry zooms.
+12. **A regular grid is data you can compute.** Generating the 1811 plan
+    (29° bearing, 79 m street pitch) costs ~60 lines and zero kilobytes,
+    against megabytes for real centerlines that would fight the archival
+    style anyway.
 
 ## Future features
 
@@ -154,8 +195,11 @@ header, theme, footprint, markers, panel — derives from it.
       city) — the era/entry model already supports it.
 - [ ] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
       Viele 1865) with opacity blending.
+- [x] ~~Street-grid growth rendering~~ — shipped: procedural 1811 grid with
+      survey-vs-built frontier, colonial road network, street-hatch fills.
 - [ ] Population counter and demographic strip charts that track the playhead.
-- [ ] Street-grid growth rendering (the 1811 grid materializing block by block).
+- [ ] Els, subway lines, and the Croton Aqueduct as dated line geometry;
+      street name labels beyond Broadway; demolition "ghost" markers.
 - [ ] Guided "tours": scripted camera+timeline paths (e.g., follow the Erie
       Canal money, or Whitman's ferry commute).
 - [ ] Search across entries; deep links (`?year=1863`) for sharing.

@@ -143,6 +143,7 @@ export const civilWarGildedEntries: Entry[] = [
     blurb:
       "Fourteen years, the Roeblings' caissons and bends, and 'the damndest corruption' later, the great span opened May 24, 1883 — the world's longest suspension bridge, binding the two cities a generation before they merged.",
     coords: [-73.9969, 40.7061],
+    lifespan: [1883, null],
   },
   {
     id: "liberty",
@@ -154,6 +155,7 @@ export const civilWarGildedEntries: Entry[] = [
     blurb:
       "Bartholdi's colossus rose on Bedloe's Island in October 1886, her pedestal paid by Pulitzer's nickel-and-dime subscribers, her meaning rewritten by Emma Lazarus toward the steerage ships passing below.",
     coords: [-74.0445, 40.6892],
+    lifespan: [1886, null],
   },
   {
     id: "blizzard-1888",
@@ -175,6 +177,32 @@ export const civilWarGildedEntries: Entry[] = [
     blurb:
       "On January 1, 1898, Andrew Haswell Green's long crusade made one city of New York, Brooklyn, Queens, the Bronx, and Staten Island — 3.4 million people, second only to London.",
     gotham: "The event on which Gotham's 1,236 pages close.",
+  },
+  {
+    id: "grand-central-depot",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Grand Central Depot",
+    wikiTitle: "History of Grand Central Terminal",
+    year: 1871,
+    yearLabel: "1871–1910",
+    blurb:
+      "Commodore Vanderbilt's iron train shed at 42nd Street — then practically the city's northern edge — that dragged the center of gravity uptown; dismantled for the present Terminal.",
+    coords: [-73.9772, 40.7527],
+    lifespan: [1871, 1910],
+  },
+  {
+    id: "msg-1890",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Madison Square Garden (1890)",
+    wikiTitle: "Madison Square Garden (1890)",
+    year: 1890,
+    yearLabel: "1890–1925",
+    blurb:
+      "Stanford White's Moorish pleasure palace with Saint-Gaudens's Diana on the tower — and the roof garden where Harry Thaw shot White dead in 1906.",
+    coords: [-73.9879, 40.7424],
+    lifespan: [1890, 1925],
   },
   {
     id: "tenements",
@@ -219,6 +247,7 @@ export const civilWarGildedEntries: Entry[] = [
     blurb:
       "Olmsted and Vaux's 'democratic development of the highest significance,' substantially complete by 1873 — carriage drives for the Belmonts, goat carts for everyone else.",
     coords: [-73.9665, 40.7812],
+    lifespan: [1858, null],
   },
   {
     id: "ellis-island",
@@ -230,6 +259,7 @@ export const civilWarGildedEntries: Entry[] = [
     blurb:
       "The federal immigration depot opened January 1, 1892, receiving Annie Moore of County Cork first of twelve million — the funnel through which the next city would pour.",
     coords: [-74.0397, 40.6995],
+    lifespan: [1892, null],
   },
   {
     id: "coney-island",

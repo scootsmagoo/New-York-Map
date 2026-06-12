@@ -208,6 +208,111 @@ button {
   pointer-events: none;
 }
 
+/* ---------------- Streets, grid, structures, parks ---------------- */
+
+.grid-survey {
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 0.5;
+  stroke-dasharray: 2.5 3;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.grid-built {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 62%, transparent);
+  stroke-width: 0.55;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.street {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 72%, transparent);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.street-label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 3.2px;
+  letter-spacing: 0.6px;
+  fill: var(--ink-soft);
+  pointer-events: none;
+}
+
+.hatch-line {
+  stroke: rgba(62, 42, 22, 0.5);
+  stroke-width: 0.5;
+}
+
+.bridge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 88%, transparent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.bridge:hover { stroke: var(--accent); }
+
+.bridge-label {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--ink);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 2.5px;
+  pointer-events: none;
+}
+
+.ferry {
+  fill: none;
+  stroke: #50685e;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.park {
+  fill: #a3b585;
+  fill-opacity: 0.82;
+  stroke: #6d8155;
+  stroke-width: 0.6;
+  stroke-opacity: 0.7;
+  vector-effect: non-scaling-stroke;
+}
+
+.park-construction {
+  fill: url(#construction-hatch);
+  fill-opacity: 0.85;
+  stroke-dasharray: 3 3;
+}
+
+.construction-bg { fill: #c9cfa6; }
+
+.construction-line {
+  stroke: #8a8a5e;
+  stroke-width: 0.7;
+}
+
+.park-label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 10.5px;
+  fill: #4c6038;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: color-mix(in srgb, var(--land) 80%, transparent);
+  stroke-width: 2.5px;
+  pointer-events: none;
+}
+
 .lenape-layer { pointer-events: none; }
 
 .lenape-trail {

@@ -149,6 +149,7 @@ export const newAmsterdamEntries: Entry[] = [
     blurb:
       "The earthen-walled fort at the island's tip — company headquarters, church, barracks, and the seed around which the town grew. The Custom House at Bowling Green stands on its site.",
     coords: [-74.0136, 40.7039],
+    lifespan: [1626, 1664],
   },
   {
     id: "the-wall",
@@ -160,6 +161,7 @@ export const newAmsterdamEntries: Entry[] = [
     blurb:
       "A nine-foot palisade thrown across the island in 1653 against feared English and Native attack. The lane along its inside face became Wall Street.",
     coords: [-74.0095, 40.7064],
+    lifespan: [1653, 1699],
   },
   {
     id: "heere-gracht",
@@ -171,6 +173,7 @@ export const newAmsterdamEntries: Entry[] = [
     blurb:
       "New Amsterdam's canal, dug Amsterdam-style up the middle of today's Broad Street, lined with stepped-gable houses — filled in by the English in 1676.",
     coords: [-74.0115, 40.7046],
+    lifespan: [1646, 1676],
   },
   {
     id: "bouwerij",

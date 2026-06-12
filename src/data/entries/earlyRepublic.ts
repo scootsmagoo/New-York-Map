@@ -158,8 +158,9 @@ export const earlyRepublicEntries: Entry[] = [
     wikiTitle: "Federal Hall",
     year: 1789,
     blurb:
-      "L'Enfant's remodeling of the old City Hall housed the first Congress, the Bill of Rights debates, and the first inauguration before the capital moved to Philadelphia in 1790.",
+      "L'Enfant's remodeling of the old City Hall housed the first Congress, the Bill of Rights debates, and the first inauguration before the capital moved to Philadelphia in 1790. Sold for salvage in 1812; the present Custom House rose on the site in 1842.",
     coords: [-74.0102, 40.7074],
+    lifespan: [1789, 1812],
   },
   {
     id: "tontine",
@@ -171,6 +172,7 @@ export const earlyRepublicEntries: Entry[] = [
     blurb:
       "The brokers' clubhouse at Wall and Water — auction room, insurance office, and shouting exchange floor where the city's merchants priced the young Republic.",
     coords: [-74.0067, 40.7052],
+    lifespan: [1793, 1855],
   },
   {
     id: "city-hall-1812",
@@ -182,6 +184,7 @@ export const earlyRepublicEntries: Entry[] = [
     blurb:
       "Mangin and McComb's marble-fronted hall in the old Common, finished 1812 — its rear faced in cheap brownstone on the theory nobody important would ever live north of it.",
     coords: [-74.0064, 40.7128],
+    lifespan: [1812, null],
   },
   {
     id: "castle-clinton",
@@ -193,6 +196,7 @@ export const earlyRepublicEntries: Entry[] = [
     blurb:
       "The West Battery, built offshore against the British before 1812 — later Castle Garden: concert hall (Jenny Lind, 1850), then the landing depot for eight million immigrants before Ellis Island.",
     coords: [-74.0167, 40.7036],
+    lifespan: [1811, null],
   },
   {
     id: "navy-yard",
@@ -204,6 +208,7 @@ export const earlyRepublicEntries: Entry[] = [
     blurb:
       "The federal shipyard on Wallabout Bay, founded 1801 — for 165 years the borough's industrial anchor, launching everything from the steam frigate Fulton to the USS Missouri.",
     coords: [-73.9706, 40.7021],
+    lifespan: [1801, null],
   },
   {
     id: "five-points-emerges",
@@ -215,5 +220,6 @@ export const earlyRepublicEntries: Entry[] = [
     blurb:
       "The poisoned pond was leveled into a swampy landfill by 1813; the cheap, sinking blocks at the five-cornered intersection above it were already turning into the era's most notorious slum.",
     coords: [-74.0001, 40.7148],
+    lifespan: [1813, 1825],
   },
 ];

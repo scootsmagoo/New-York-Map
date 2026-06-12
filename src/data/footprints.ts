@@ -28,12 +28,15 @@ function blob(cx: number, cy: number, rx: number, ry = rx * 0.8): Ring {
  * wide.
  */
 function manhattanBelow(latW: number, latE: number): Ring {
+  // Bottom edge sits just under the Battery (40.7003) and the west edge just
+  // off the island, so Governors, Liberty, and Ellis Islands — legally part
+  // of Manhattan's borough polygon — stay outside the band.
   return [
-    [-74.05, 40.69],
-    [-73.9, 40.69],
+    [-74.02, 40.6995],
+    [-73.9, 40.6995],
     [-73.9, latE],
     [-74.013, latW],
-    [-74.05, latW],
+    [-74.02, latW],
   ];
 }
 
@@ -41,16 +44,23 @@ function manhattanBelow(latW: number, latE: number): Ring {
 // extent at that date, so consecutive snapshots can simply be cross-faded.
 
 const snapshots: FootprintSnapshot[] = [
-  { year: 1609, manhattan: [], other: [] },
+  {
+    year: 1609,
+    manhattan: [],
+    other: [],
+    frontier: { latW: 40.7003, latE: 40.7003 },
+  },
 
   {
     year: 1628,
     manhattan: [manhattanBelow(40.7045, 40.7035)],
     other: [],
+    frontier: { latW: 40.7045, latE: 40.7035 },
   },
 
   {
     year: 1660,
+    frontier: { latW: 40.7085, latE: 40.7068 },
     manhattan: [manhattanBelow(40.7085, 40.7068)], // town below the Wall
     other: [
       blob(-73.9905, 40.6952, 0.005), // Breuckelen
@@ -64,6 +74,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1700,
+    frontier: { latW: 40.7135, latE: 40.7105 },
     manhattan: [manhattanBelow(40.7135, 40.7105)],
     other: [
       blob(-73.9905, 40.6952, 0.0055),
@@ -79,6 +90,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1740,
+    frontier: { latW: 40.7185, latE: 40.7135 },
     manhattan: [manhattanBelow(40.7185, 40.7135)],
     other: [
       blob(-73.9905, 40.6952, 0.006),
@@ -95,6 +107,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1776,
+    frontier: { latW: 40.722, latE: 40.716 },
     manhattan: [
       manhattanBelow(40.722, 40.716),
       [
@@ -121,6 +134,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1800,
+    frontier: { latW: 40.7265, latE: 40.7205 },
     manhattan: [
       manhattanBelow(40.7265, 40.7205),
       blob(-74.0035, 40.7335, 0.005, 0.0035), // Greenwich Village
@@ -142,6 +156,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1820,
+    frontier: { latW: 40.7325, latE: 40.7235 },
     manhattan: [
       manhattanBelow(40.7325, 40.7235),
       blob(-74.0035, 40.7345, 0.0075, 0.005),
@@ -164,6 +179,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1840,
+    frontier: { latW: 40.7415, latE: 40.7285 },
     manhattan: [manhattanBelow(40.7415, 40.7285)], // to ~14th Street
     other: [
       [
@@ -191,6 +207,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1860,
+    frontier: { latW: 40.7625, latE: 40.746 },
     manhattan: [
       manhattanBelow(40.7625, 40.746), // to ~42nd Street
       blob(-73.947, 40.7775, 0.005), // Yorkville
@@ -235,6 +252,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1880,
+    frontier: { latW: 40.7855, latE: 40.7705 },
     manhattan: [
       manhattanBelow(40.7855, 40.7705), // to ~86th/79th, els pushing north
       blob(-73.9395, 40.8085, 0.011, 0.007), // Harlem filling in
@@ -294,6 +312,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1898,
+    frontier: { latW: 40.8225, latE: 40.8045 },
     manhattan: [
       manhattanBelow(40.8225, 40.8045), // solid to ~125th
       blob(-73.9405, 40.8425, 0.0115, 0.009), // Washington Heights spotty
@@ -365,6 +384,7 @@ const snapshots: FootprintSnapshot[] = [
 
   {
     year: 1919,
+    frontier: { latW: 40.879, latE: 40.875 },
     manhattan: [manhattanBelow(40.879, 40.875)], // the whole island
     other: [
       [
@@ -489,4 +509,22 @@ export function footprintAt(year: number): {
     }
   }
   return { base: footprints[0], next: null, progress: 0 };
+}
+
+/**
+ * Smoothly interpolated northern limit of Manhattan's built-up band — the
+ * "streets built so far" frontier used by the procedural grid.
+ */
+export function frontierAt(year: number): { latW: number; latE: number } {
+  const { base, next, progress } = footprintAt(year);
+  if (!next) return base.frontier;
+  return {
+    latW: base.frontier.latW + (next.frontier.latW - base.frontier.latW) * progress,
+    latE: base.frontier.latE + (next.frontier.latE - base.frontier.latE) * progress,
+  };
+}
+
+/** The generous Manhattan band polygon used for clipping built streets. */
+export function frontierBand(f: { latW: number; latE: number }): [number, number][] {
+  return manhattanBelow(f.latW, f.latE);
 }

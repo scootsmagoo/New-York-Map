@@ -9,17 +9,24 @@ import {
   type ZoomBehavior,
 } from "d3-zoom";
 import type { Entry } from "../types";
-import { footprintAt } from "../data/footprints";
+import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
 import { lenapeSites, lenapeTerritories, lenapeTrails } from "../data/lenapeSites";
+import { bridges, ferries } from "../data/structures";
+import { parks } from "../data/parks";
+import { colonialStreets } from "../data/streets";
+import { gridSegments, GRID_ZONE_RING, type Seg } from "../lib/grid";
+import { allEntries } from "../data/entries";
+import { eraForYear } from "../data/eras";
 import { useElementSize } from "../lib/useElementSize";
 import boroughsData from "../data/geo/boroughs.json";
 import surroundData from "../data/geo/surround.json";
 
 interface MapViewProps {
   year: number;
-  markers: Entry[];
   onSelectEntry: (entry: Entry) => void;
 }
+
+type GeoJSON = any;
 
 /** Fixed geographic frame so layout doesn't shift as data changes. */
 const FRAME: GeoJSON = {
@@ -34,8 +41,6 @@ const FRAME: GeoJSON = {
     ].reverse(),
   ],
 };
-
-type GeoJSON = any;
 
 const KIND_SYMBOL = {
   person: (s: number) => <circle r={s * 0.62} />,
@@ -53,7 +58,6 @@ interface MapLabel {
   text: string;
   coords: [number, number];
   rotate?: number;
-  cls?: string;
 }
 
 function boroughLabels(year: number): MapLabel[] {
@@ -84,7 +88,58 @@ const WATER_LABELS: MapLabel[] = [
   { text: "Newark Bay", coords: [-74.138, 40.672], rotate: -80 },
 ];
 
-export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
+/** Street-hatch angles per borough, matching each grid's rough orientation. */
+const HATCH_ANGLES: Record<string, number> = {
+  Brooklyn: 18,
+  Queens: -8,
+  Bronx: 2,
+  "Staten Island": 35,
+};
+
+/** Linear fade for zoom-based level of detail. */
+function fade(k: number, from: number, to: number): number {
+  return Math.max(0, Math.min(1, (k - from) / (to - from)));
+}
+
+function clamp01(v: number): number {
+  return Math.max(0, Math.min(1, v));
+}
+
+/** Rings are authored counterclockwise; d3-geo wants clockwise exteriors. */
+function toGeo(rings: [number, number][][]): GeoJSON {
+  return {
+    type: "MultiPolygon",
+    coordinates: rings.map((ring) => {
+      const closed = [...ring, ring[0]];
+      return [closed.slice().reverse()];
+    }),
+  };
+}
+
+function ringCentroid(ring: [number, number][]): [number, number] {
+  let x = 0;
+  let y = 0;
+  for (const p of ring) {
+    x += p[0];
+    y += p[1];
+  }
+  return [x / ring.length, y / ring.length];
+}
+
+function ringBboxArea(ring: [number, number][]): number {
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (const [x, y] of ring) {
+    x0 = Math.min(x0, x);
+    x1 = Math.max(x1, x);
+    y0 = Math.min(y0, y);
+    y1 = Math.max(y1, y);
+  }
+  return (x1 - x0) * (y1 - y0);
+}
+
+const MAJOR_PARK_AREA = 5e-5;
+
+export function MapView({ year, onSelectEntry }: MapViewProps) {
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
   const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
@@ -110,7 +165,7 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
     const svg = svgRef.current;
     if (!svg || !width || !height) return;
     const behavior = zoom<SVGSVGElement, unknown>()
-      .scaleExtent([1, 10])
+      .scaleExtent([1, 16])
       .translateExtent([
         [0, 0],
         [width, height],
@@ -137,20 +192,26 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
       .call(behavior.transform as any, zoomIdentity);
   };
 
+
+  const k = transform.k;
+  const era = eraForYear(year);
+
+  // ----- Level-of-detail fades -----
+  const roadFade = fade(k, 1.5, 2.2); // colonial streets + grid
+  const ferryFade = fade(k, 1.4, 2.0);
+  const minorParkFade = fade(k, 1.8, 2.5);
+  const labelFade = fade(k, 2.8, 3.6);
+  const expandMarkers = k >= 2;
+
+  // ----- Footprint -----
   const { base, next, progress } = footprintAt(year);
 
-  // Rings are authored counterclockwise; d3-geo wants clockwise exteriors.
-  const toGeo = (rings: [number, number][][]): GeoJSON => ({
-    type: "MultiPolygon",
-    coordinates: rings.map((ring) => {
-      const closed = [...ring, ring[0]];
-      return [closed.slice().reverse()];
-    }),
-  });
+  // The brown wash recedes as street detail fades in, so lines stay legible.
+  const washFade = 1 - fade(k, 1.5, 2.6) * 0.45;
 
   const renderFootprint = (
     snapshot: { manhattan: [number, number][][]; other: [number, number][][] },
-    opacity?: number
+    opacity = 1
   ) => (
     <>
       {snapshot.manhattan.length > 0 && (
@@ -158,7 +219,7 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
           <path
             className="footprint"
             d={path!(toGeo(snapshot.manhattan)) ?? undefined}
-            style={opacity !== undefined ? { opacity } : undefined}
+            style={{ opacity: opacity * washFade }}
           />
         </g>
       )}
@@ -167,18 +228,117 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
           <path
             className="footprint"
             d={path!(toGeo(snapshot.other)) ?? undefined}
-            style={opacity !== undefined ? { opacity } : undefined}
+            style={{ opacity: opacity * washFade }}
           />
         </g>
       )}
     </>
   );
 
-  // Lenape layer fades from full at 1609 to nothing by 1680.
-  const lenapeOpacity =
-    year <= 1609 ? 1 : Math.max(0, 1 - (year - 1609) / 71);
+  // ----- Procedural grid -----
+  const gridD = useMemo(() => {
+    if (!projection) return "";
+    const { streets, avenues } = gridSegments();
+    const seg = (s: Seg) => {
+      const a = projection(s[0])!;
+      const b = projection(s[1])!;
+      return `M${a[0].toFixed(1)},${a[1].toFixed(1)}L${b[0].toFixed(1)},${b[1].toFixed(1)}`;
+    };
+    return [...streets, ...avenues].map(seg).join("");
+  }, [projection]);
 
-  const k = transform.k;
+  const surveyOpacity = clamp01((year - 1807) / 10) * roadFade;
+  const cpHole = year >= 1857;
+  const centralParkRing = parks[0].ring;
+
+  const zoneOnlyD = useMemo(
+    () => (path ? (path(toGeo([GRID_ZONE_RING])) ?? "") : ""),
+    [path]
+  );
+
+  const gridZoneD = useMemo(() => {
+    if (!path) return "";
+    const hole = cpHole ? (path(toGeo([centralParkRing])) ?? "") : "";
+    return zoneOnlyD + hole;
+  }, [path, zoneOnlyD, cpHole, centralParkRing]);
+
+  // Everything on the map EXCEPT the grid zone — clips the crooked-streets
+  // hatch to downtown and the Village.
+  const notGridD = useMemo(() => {
+    if (!path) return "";
+    return (path(FRAME) ?? "") + zoneOnlyD;
+  }, [path, zoneOnlyD]);
+
+  const builtClipD = useMemo(() => {
+    if (!path) return "";
+    const f = frontierAt(year);
+    return path(toGeo([frontierBand(f), ...base.manhattan])) ?? "";
+  }, [path, year, base]);
+
+  // ----- Colonial streets -----
+  const streetPaths = useMemo(() => {
+    if (!projection) return [];
+    return colonialStreets.map((s) => ({
+      ...s,
+      d: s.pts
+        .map((p, i) => {
+          const [x, y] = projection(p)!;
+          return `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
+        })
+        .join(""),
+    }));
+  }, [projection]);
+
+  // ----- Structures -----
+  const structurePaths = useMemo(() => {
+    if (!projection) return [];
+    return [...ferries, ...bridges].map((s) => {
+      const projected = s.pts.map((p) => projection(p)!);
+      const d = projected
+        .map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`)
+        .join("");
+      const a = projected[0];
+      const b = projected[projected.length - 1];
+      let angle = (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI;
+      if (angle > 90) angle -= 180;
+      if (angle < -90) angle += 180;
+      return {
+        ...s,
+        d,
+        mid: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] as [number, number],
+        angle,
+      };
+    });
+  }, [projection]);
+
+  // ----- Parks -----
+  const parkPaths = useMemo(() => {
+    if (!path || !projection) return [];
+    return parks.map((p) => ({
+      ...p,
+      d: path(toGeo([p.ring])) ?? "",
+      center: projection(ringCentroid(p.ring))!,
+      major: ringBboxArea(p.ring) >= MAJOR_PARK_AREA,
+    }));
+  }, [path, projection]);
+
+  // ----- Markers: era-based at low zoom, lifespan-based when zoomed -----
+  const markers = useMemo(() => {
+    return allEntries.filter((e) => {
+      if (!e.coords) return false;
+      if (e.lifespan) {
+        const alive =
+          year >= e.lifespan[0] &&
+          (e.lifespan[1] === null || year <= e.lifespan[1]);
+        if (!alive) return false;
+        return expandMarkers || e.era === era.id;
+      }
+      return e.era === era.id;
+    });
+  }, [year, era.id, expandMarkers]);
+
+  // Lenape layer fades from full at 1609 to nothing by 1680.
+  const lenapeOpacity = year <= 1609 ? 1 : Math.max(0, 1 - (year - 1609) / 71);
 
   if (!width || !height) return <div className="map-view" ref={ref} />;
 
@@ -198,6 +358,56 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
                 <path key={i} d={path!(f) ?? undefined} />
               ))}
           </clipPath>
+          {(boroughsData as any).features
+            .filter((f: any) => f.properties?.boro !== "Manhattan")
+            .map((f: any) => (
+              <clipPath
+                key={f.properties.boro}
+                id={`clip-${f.properties.boro.replace(/ /g, "-")}`}
+              >
+                <path d={path!(f) ?? undefined} />
+              </clipPath>
+            ))}
+          <clipPath id="gridzone-clip">
+            <path d={gridZoneD} clipRule="evenodd" />
+          </clipPath>
+          <clipPath id="notgrid-clip">
+            <path d={notGridD} clipRule="evenodd" />
+          </clipPath>
+          <pattern
+            id="hatch-Manhattan"
+            width={5}
+            height={5}
+            patternUnits="userSpaceOnUse"
+            patternTransform={`rotate(8) scale(${1 / k})`}
+          >
+            <line x1={0} y1={2.5} x2={5} y2={2.5} className="hatch-line" />
+          </pattern>
+          <clipPath id="built-clip">
+            <path d={builtClipD} />
+          </clipPath>
+          {Object.entries(HATCH_ANGLES).map(([boro, angle]) => (
+            <pattern
+              key={boro}
+              id={`hatch-${boro.replace(/ /g, "-")}`}
+              width={5}
+              height={5}
+              patternUnits="userSpaceOnUse"
+              patternTransform={`rotate(${angle}) scale(${1 / k})`}
+            >
+              <line x1={0} y1={2.5} x2={5} y2={2.5} className="hatch-line" />
+            </pattern>
+          ))}
+          <pattern
+            id="construction-hatch"
+            width={6}
+            height={6}
+            patternUnits="userSpaceOnUse"
+            patternTransform={`rotate(45) scale(${1 / k})`}
+          >
+            <rect width={6} height={6} className="construction-bg" />
+            <line x1={0} y1={3} x2={6} y2={3} className="construction-line" />
+          </pattern>
         </defs>
 
         <rect className="map-water" width={width} height={height} />
@@ -218,6 +428,140 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
           {/* Built-up footprint, clipped to the real shoreline */}
           {renderFootprint(base)}
           {next && renderFootprint(next, 0.25 + 0.75 * progress)}
+
+          {/* Street-hatch texture over the outer-borough footprint */}
+          {roadFade > 0 &&
+            base.other.length > 0 &&
+            Object.keys(HATCH_ANGLES).map((boro) => (
+              <g
+                key={boro}
+                clipPath={`url(#clip-${boro.replace(/ /g, "-")})`}
+                style={{ opacity: roadFade }}
+              >
+                <path
+                  d={path!(toGeo(base.other)) ?? undefined}
+                  fill={`url(#hatch-${boro.replace(/ /g, "-")})`}
+                  stroke="none"
+                />
+              </g>
+            ))}
+
+          {/* Crooked-street hatch for built Manhattan outside the grid zone */}
+          {roadFade > 0 && base.manhattan.length > 0 && (
+            <g clipPath="url(#manhattan-clip)" style={{ opacity: roadFade }}>
+              <g clipPath="url(#notgrid-clip)">
+                <path
+                  d={path!(toGeo(base.manhattan)) ?? undefined}
+                  fill="url(#hatch-Manhattan)"
+                  stroke="none"
+                />
+              </g>
+            </g>
+          )}
+
+          {/* The 1811 grid: faint survey lines, then built streets sweeping north */}
+          {surveyOpacity > 0 && (
+            <g clipPath="url(#manhattan-clip)">
+              <g clipPath="url(#gridzone-clip)">
+                <path
+                  className="grid-survey"
+                  d={gridD}
+                  style={{ opacity: surveyOpacity * 0.5 }}
+                />
+                <g clipPath="url(#built-clip)">
+                  <path
+                    className="grid-built"
+                    d={gridD}
+                    style={{ opacity: roadFade }}
+                  />
+                </g>
+              </g>
+            </g>
+          )}
+
+          {/* Colonial roads */}
+          {roadFade > 0 &&
+            streetPaths
+              .filter((s) => year >= s.from && (s.to === undefined || year <= s.to))
+              .map((s) => (
+                <g key={s.id} style={{ opacity: roadFade }}>
+                  <path id={`street-${s.id}`} className="street" d={s.d} />
+                  {s.labeled && labelFade > 0 && (
+                    <text className="street-label" style={{ opacity: labelFade }}>
+                      <textPath href={`#street-${s.id}`} startOffset="35%">
+                        {s.name}
+                      </textPath>
+                    </text>
+                  )}
+                  <title>{s.name}</title>
+                </g>
+              ))}
+
+          {/* Parks */}
+          {parkPaths
+            .filter((p) => year >= p.from)
+            .map((p) => {
+              const constructing = p.completed !== undefined && year < p.completed;
+              const visible = p.major ? 1 : minorParkFade;
+              if (visible <= 0) return null;
+              return (
+                <g key={p.id} style={{ opacity: visible }}>
+                  <path
+                    className={constructing ? "park park-construction" : "park"}
+                    d={p.d}
+                  >
+                    <title>
+                      {p.name}
+                      {constructing ? " (under construction)" : ""}
+                    </title>
+                  </path>
+                  {labelFade > 0 && (
+                    <text
+                      className="park-label"
+                      transform={`translate(${p.center[0]},${p.center[1]}) scale(${1 / k})`}
+                      style={{ opacity: labelFade }}
+                    >
+                      {p.name}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+          {/* Ferries and bridges */}
+          {structurePaths
+            .filter(
+              (s) =>
+                year >= s.open && (s.close === undefined || year <= s.close)
+            )
+            .map((s) => {
+              const opacity = s.kind === "ferry" ? ferryFade * 0.8 : 1;
+              if (opacity <= 0) return null;
+              const entry = s.entryId
+                ? allEntries.find((e) => e.id === s.entryId)
+                : undefined;
+              return (
+                <g key={s.id} style={{ opacity }}>
+                  <path
+                    className={s.kind === "ferry" ? "ferry" : "bridge"}
+                    d={s.d}
+                    onClick={entry ? () => onSelectEntry(entry) : undefined}
+                    style={entry ? { cursor: "pointer" } : undefined}
+                  />
+                  <title>{s.name}</title>
+                  {s.kind === "bridge" && labelFade > 0 && (
+                    <text
+                      className="bridge-label"
+                      transform={`translate(${s.mid[0]},${s.mid[1]}) rotate(${s.angle}) scale(${1 / k})`}
+                      style={{ opacity: labelFade }}
+                      y={-5}
+                    >
+                      {s.name}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
 
           {/* Lenapehoking layer */}
           {lenapeOpacity > 0 && (
@@ -293,7 +637,7 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
             );
           })}
 
-          {/* Era markers */}
+          {/* Entry markers */}
           {markers.map((m) => {
             const pos = projection!(m.coords!);
             if (!pos) return null;
@@ -322,8 +666,8 @@ export function MapView({ year, markers, onSelectEntry }: MapViewProps) {
         </button>
       </div>
       <div className="map-attribution">
-        Boundaries: U.S. Census Bureau · Content: Wikipedia · Built-up extents are
-        approximate
+        Boundaries: U.S. Census Bureau &amp; NYC Open Data · Content: Wikipedia ·
+        Built-up extents, streets &amp; sites are approximate
       </div>
     </div>
   );

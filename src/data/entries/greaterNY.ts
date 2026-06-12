@@ -157,6 +157,7 @@ export const greaterNYEntries: Entry[] = [
     blurb:
       "Burnham's steel wedge at 23rd and Broadway (1902) — not the first skyscraper, but the first one everybody photographed; downdrafts at its prow lifted skirts and a police catchphrase.",
     coords: [-73.9897, 40.7411],
+    lifespan: [1902, null],
   },
   {
     id: "times-square",
@@ -179,6 +180,7 @@ export const greaterNYEntries: Entry[] = [
     blurb:
       "McKim's Roman bath of travertine and steel over tunnels under two rivers (1910) — the Pennsylvania Railroad's gift of imperial arrival, demolished in 1963 to the city's lasting regret.",
     coords: [-73.9936, 40.7506],
+    lifespan: [1910, 1963],
   },
   {
     id: "grand-central",
@@ -190,6 +192,7 @@ export const greaterNYEntries: Entry[] = [
     blurb:
       "Electrification let the Central bury its yards and raise Terminal City above them; the 1913 concourse under a zodiac sky made midtown the city's new center of gravity.",
     coords: [-73.9772, 40.7527],
+    lifespan: [1913, null],
   },
   {
     id: "woolworth",
@@ -201,6 +204,7 @@ export const greaterNYEntries: Entry[] = [
     blurb:
       "Cass Gilbert's 792-foot 'Cathedral of Commerce' opposite City Hall, world's tallest from 1913 to 1930 — paid for in cash from five-and-dime nickels.",
     coords: [-74.0086, 40.7124],
+    lifespan: [1913, null],
   },
   {
     id: "luna-park",
@@ -212,6 +216,7 @@ export const greaterNYEntries: Entry[] = [
     blurb:
       "Coney's electric fantasy cities — a quarter-million lights, trips to the moon, premature-infant incubators as sideshow — mass leisure's laboratory until Dreamland burned in 1911.",
     coords: [-73.9836, 40.5745],
+    lifespan: [1903, 1944],
   },
   {
     id: "lower-east-side-1905",

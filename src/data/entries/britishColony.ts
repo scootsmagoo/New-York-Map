@@ -74,6 +74,7 @@ export const britishColonyEntries: Entry[] = [
     blurb:
       "In 1711 the Common Council fixed the Wall Street slip as the official market where enslaved Africans were hired and sold; by mid-century New York held more enslaved people than any colonial city but Charleston.",
     coords: [-74.0073, 40.7046],
+    lifespan: [1711, 1762],
   },
   {
     id: "dukes-laws",
@@ -104,8 +105,9 @@ export const britishColonyEntries: Entry[] = [
     wikiTitle: "Trinity Church (Manhattan)",
     year: 1697,
     blurb:
-      "The Anglican parish received its royal charter in 1697 and, soon after, the vast 'church farm' along the Hudson — making Trinity one of the largest landowners in Manhattan to this day.",
+      "The Anglican parish received its royal charter in 1697 and, soon after, the vast 'church farm' along the Hudson — making Trinity one of the largest landowners in Manhattan to this day. Three successive buildings: the first burned in 1776, the second was razed in 1839, and Upjohn's Gothic spire rose in 1846.",
     coords: [-74.0123, 40.7081],
+    lifespan: [1698, null],
   },
   {
     id: "slave-revolt-1712",
@@ -157,8 +159,9 @@ export const britishColonyEntries: Entry[] = [
     wikiTitle: "Fort Amsterdam",
     year: 1700,
     blurb:
-      "The old Dutch fort, renamed for each monarch in turn, remained the seat of royal government — its gates the stage for proclamations, riots, and the burning of governors in effigy.",
+      "The old Dutch fort, renamed for each monarch in turn, remained the seat of royal government — its gates the stage for proclamations, riots, and the burning of governors in effigy. Leveled in 1790 to make way for the Government House.",
     coords: [-74.0136, 40.7039],
+    lifespan: [1664, 1790],
   },
   {
     id: "city-hall-wall",
@@ -170,6 +173,19 @@ export const britishColonyEntries: Entry[] = [
     blurb:
       "Built in 1700 at Wall and Nassau: courtroom of the Zenger trial, meeting place of the Stamp Act Congress, and later, recast as Federal Hall, the first Capitol of the United States.",
     coords: [-74.0102, 40.7074],
+    lifespan: [1700, 1789],
+  },
+  {
+    id: "st-pauls-chapel",
+    era: "britishColony",
+    kind: "place",
+    title: "St. Paul's Chapel",
+    wikiTitle: "St. Paul's Chapel",
+    year: 1766,
+    blurb:
+      "Trinity's 'chapel of ease' in the fields north of town — the oldest church building in Manhattan, survivor of the 1776 fire, and Washington's pew on inauguration day.",
+    coords: [-74.0092, 40.7113],
+    lifespan: [1766, null],
   },
   {
     id: "fraunces-tavern",
@@ -181,6 +197,7 @@ export const britishColonyEntries: Entry[] = [
     blurb:
       "Samuel Fraunces's tavern in the old De Lancey house at Pearl and Broad — merchant exchange, Sons of Liberty haunt, and the room where Washington would bid his officers farewell.",
     coords: [-74.0113, 40.7034],
+    lifespan: [1762, null],
   },
   {
     id: "bowling-green",
@@ -192,6 +209,7 @@ export const britishColonyEntries: Entry[] = [
     blurb:
       "The Dutch cattle market and parade ground leased as the city's first park in 1733 'for the beauty and ornament of said street' — at a rent of one peppercorn a year.",
     coords: [-74.0134, 40.7048],
+    lifespan: [1733, null],
   },
   {
     id: "collect-pond-colonial",
@@ -203,5 +221,6 @@ export const britishColonyEntries: Entry[] = [
     blurb:
       "The town's freshwater source, sixty feet deep, ringed by tanneries, slaughterhouses, and breweries that slowly poisoned it — its filled-in swamp would breed the Five Points slum.",
     coords: [-74.0002, 40.7166],
+    lifespan: [1664, 1813],
   },
 ];
