@@ -1,20 +1,44 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Entry } from "../types";
-import { groupSearchHits, searchEntries } from "../lib/search";
+import type { ColonialStreet } from "../data/streets";
+import {
+  groupSearchHits,
+  searchEntries,
+  type SearchHit,
+  type SearchItemKind,
+} from "../lib/search";
 import { useDebouncedValue } from "../lib/useDebouncedValue";
 
-const KIND_GLYPH: Record<Entry["kind"], string> = {
+const KIND_GLYPH: Record<SearchItemKind, string> = {
   person: "●",
   place: "■",
   event: "◆",
+  street: "╱",
 };
 
 interface SearchPaletteProps {
   onClose: () => void;
   onSelectEntry: (entry: Entry) => void;
+  onSelectStreet: (street: ColonialStreet) => void;
 }
 
-export function SearchPalette({ onClose, onSelectEntry }: SearchPaletteProps) {
+function selectHit(
+  hit: SearchHit,
+  onSelectEntry: (entry: Entry) => void,
+  onSelectStreet: (street: ColonialStreet) => void
+) {
+  if (hit.item.source.type === "entry") {
+    onSelectEntry(hit.item.source.entry);
+  } else {
+    onSelectStreet(hit.item.source.street);
+  }
+}
+
+export function SearchPalette({
+  onClose,
+  onSelectEntry,
+  onSelectStreet,
+}: SearchPaletteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -51,16 +75,13 @@ export function SearchPalette({ onClose, onSelectEntry }: SearchPaletteProps) {
       } else if (e.key === "Enter") {
         e.preventDefault();
         const hit = flat[activeIndex];
-        if (hit?.item.source.type === "entry") {
-          onSelectEntry(hit.item.source.entry);
-        }
+        if (hit) selectHit(hit, onSelectEntry, onSelectStreet);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [flat, activeIndex, onClose, onSelectEntry]);
+  }, [flat, activeIndex, onClose, onSelectEntry, onSelectStreet]);
 
-  // Keep the highlighted row visible while keyboard-navigating.
   useEffect(() => {
     const el = document.querySelector(".search-result.is-active");
     el?.scrollIntoView({ block: "nearest" });
@@ -85,7 +106,7 @@ export function SearchPalette({ onClose, onSelectEntry }: SearchPaletteProps) {
             className="search-input"
             type="search"
             enterKeyHint="search"
-            placeholder="People, places, events…"
+            placeholder="People, places, events, streets…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-autocomplete="list"
@@ -107,8 +128,8 @@ export function SearchPalette({ onClose, onSelectEntry }: SearchPaletteProps) {
         <div id="search-results" className="search-results" role="listbox">
           {!query.trim() && (
             <p className="search-empty">
-              Search across every person, place, and event on the map — try{" "}
-              <em>Brooklyn Bridge</em>, <em>Tweed</em>, or <em>Central Park</em>.
+              Search people, places, events, and streets — try{" "}
+              <em>Pearl Street</em>, <em>Wall Street</em>, or <em>Tweed</em>.
             </p>
           )}
           {query.trim() && flat.length === 0 && (
@@ -131,11 +152,7 @@ export function SearchPalette({ onClose, onSelectEntry }: SearchPaletteProps) {
                         aria-selected={active}
                         className={`search-result${active ? " is-active" : ""}`}
                         onMouseEnter={() => setActiveIndex(index)}
-                        onClick={() => {
-                          if (hit.item.source.type === "entry") {
-                            onSelectEntry(hit.item.source.entry);
-                          }
-                        }}
+                        onClick={() => selectHit(hit, onSelectEntry, onSelectStreet)}
                       >
                         <span className="search-result-title">{hit.item.title}</span>
                         <span className="search-result-sub">{hit.item.subtitle}</span>

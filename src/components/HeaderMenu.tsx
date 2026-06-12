@@ -9,6 +9,8 @@ interface HeaderMenuProps {
   overlayOpacity: number;
   onOverlayOpacityChange: (v: number) => void;
   overlayActiveLabel: string;
+  showStreetLabels: boolean;
+  onShowStreetLabelsChange: (v: boolean) => void;
 }
 
 export function HeaderMenu({
@@ -20,6 +22,8 @@ export function HeaderMenu({
   overlayOpacity,
   onOverlayOpacityChange,
   overlayActiveLabel,
+  showStreetLabels,
+  onShowStreetLabelsChange,
 }: HeaderMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -66,6 +70,24 @@ export function HeaderMenu({
           >
             About this project
           </button>
+
+          <div className="header-menu-divider" role="separator" />
+
+          <div className="header-menu-section" role="group" aria-label="Map layers">
+            <div className="header-menu-section-title">Map layers</div>
+
+            <label className="header-menu-check">
+              <input
+                type="checkbox"
+                checked={showStreetLabels}
+                onChange={(e) => onShowStreetLabelsChange(e.target.checked)}
+              />
+              Street names
+            </label>
+            <p className="header-menu-section-note">
+              Labels appear when zoomed in; major streets first.
+            </p>
+          </div>
 
           <div className="header-menu-divider" role="separator" />
 

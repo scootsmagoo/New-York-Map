@@ -13,7 +13,13 @@ import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
 import { lenapeSites, lenapeTerritories, lenapeTrails } from "../data/lenapeSites";
 import { bridges, ferries } from "../data/structures";
 import { parks } from "../data/parks";
-import { colonialStreets } from "../data/streets";
+import {
+  colonialStreets,
+  streetFeatureActive,
+  streetMidpoint,
+  streetTooltip,
+  type ColonialStreet,
+} from "../data/streets";
 import { gridSegments, GRID_ZONE_RING, type Seg } from "../lib/grid";
 import { allEntries } from "../data/entries";
 import { eraForYear } from "../data/eras";
@@ -25,6 +31,7 @@ import {
   overlayManualPick,
   overlayPlacement,
 } from "../lib/historicalOverlays";
+import { layoutStreetLabels } from "../lib/streetLabels";
 import { useElementSize } from "../lib/useElementSize";
 import boroughsData from "../data/geo/boroughs.json";
 import surroundData from "../data/geo/surround.json";
@@ -34,12 +41,15 @@ interface MapViewProps {
   selectedEntry: Entry | null;
   /** Bumped on every selection so re-clicking the same entry still flies the map. */
   focusToken: number;
+  focusStreet?: ColonialStreet | null;
+  streetFocusToken?: number;
   onSelectEntry: (entry: Entry) => void;
   showSettlements?: boolean;
   highlightGroup?: SegmentKey | null;
   overlaysEnabled?: boolean;
   overlaysAuto?: boolean;
   overlayOpacity?: number;
+  showStreetLabels?: boolean;
 }
 
 type GeoJSON = any;
@@ -199,12 +209,15 @@ export function MapView({
   year,
   selectedEntry,
   focusToken,
+  focusStreet = null,
+  streetFocusToken = 0,
   onSelectEntry,
   showSettlements = false,
   highlightGroup = null,
   overlaysEnabled = false,
   overlaysAuto = true,
   overlayOpacity = 0.72,
+  showStreetLabels = false,
 }: MapViewProps) {
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
@@ -274,19 +287,22 @@ export function MapView({
     };
   }, [width, height]);
 
-  // Pan/zoom to the selected entry whenever it changes (map, timeline, or panel).
+  // Pan/zoom to the selected entry or street.
   useEffect(() => {
     const svg = svgRef.current;
     const behavior = zoomRef.current;
     if (!svg || !behavior || !projection || !width || !height) return;
-    if (!selectedEntry?.coords) return;
 
-    const pos = projection(selectedEntry.coords);
+    const coords =
+      selectedEntry?.coords ??
+      (focusStreet ? streetMidpoint(focusStreet) : undefined);
+    if (!coords) return;
+
+    const pos = projection(coords);
     if (!pos) return;
 
     const [px, py] = pos;
-    const targetK = Math.max(transformRef.current.k, 3.5);
-    // scale() then translate() — d3 composes translate after scale on the identity.
+    const targetK = Math.max(transformRef.current.k, focusStreet ? 4.2 : 3.5);
     const next = zoomIdentity
       .scale(targetK)
       .translate(width / 2 / targetK - px, height / 2 / targetK - py);
@@ -295,7 +311,15 @@ export function MapView({
       .transition()
       .duration(500)
       .call(behavior.transform as any, next);
-  }, [selectedEntry, focusToken, projection, width, height]);
+  }, [
+    selectedEntry,
+    focusStreet,
+    focusToken,
+    streetFocusToken,
+    projection,
+    width,
+    height,
+  ]);
 
   const resetZoom = () => {
     const svg = svgRef.current;
@@ -403,6 +427,11 @@ export function MapView({
         .join(""),
     }));
   }, [projection]);
+
+  const streetLabels = useMemo(() => {
+    if (!projection || !showStreetLabels) return [];
+    return layoutStreetLabels(colonialStreets, projection, year, k);
+  }, [projection, showStreetLabels, year, k]);
 
   // ----- Structures -----
   const structurePaths = useMemo(() => {
@@ -660,19 +689,41 @@ export function MapView({
           {roadFade > 0 &&
             streetPaths
               .filter((s) => year >= s.from && (s.to === undefined || year <= s.to))
-              .map((s) => (
-                <g key={s.id} style={{ opacity: roadFade }}>
-                  <path id={`street-${s.id}`} className="street" d={s.d} />
-                  {s.labeled && labelFade > 0 && (
-                    <text className="street-label" style={{ opacity: labelFade }}>
-                      <textPath href={`#street-${s.id}`} startOffset="35%">
-                        {s.name}
-                      </textPath>
-                    </text>
-                  )}
-                  <title>{s.name}</title>
-                </g>
-              ))}
+              .map((s) => {
+                const featureOn = streetFeatureActive(s, year);
+                const focused = focusStreet?.id === s.id;
+                const streetClass = [
+                  "street",
+                  featureOn && s.feature === "wall" ? "street-wall" : "",
+                  featureOn && s.feature === "canal" ? "street-canal" : "",
+                  focused ? "street-focused" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ");
+                return (
+                  <g key={s.id} style={{ opacity: roadFade }}>
+                    <path className={streetClass} d={s.d} />
+                    <title>{streetTooltip(s, year)}</title>
+                  </g>
+                );
+              })}
+
+          {/* Street name labels — counter-scaled, decluttered, optional layer */}
+          {showStreetLabels &&
+            streetLabels.map(({ street, pos, angle, opacity }) => (
+              <g key={`lbl-${street.id}`}>
+                <text
+                  className="street-label"
+                  transform={`translate(${pos[0]},${pos[1]}) rotate(${angle}) scale(${1 / k})`}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={{ opacity: opacity * roadFade }}
+                >
+                  {street.name}
+                </text>
+                <title>{streetTooltip(street, year)}</title>
+              </g>
+            ))}
 
           {/* Parks */}
           {parkPaths

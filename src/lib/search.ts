@@ -1,16 +1,26 @@
 import type { Entry, EntryKind } from "../types";
+import type { ColonialStreet } from "../data/streets";
+import {
+  colonialStreets,
+  streetMidpoint,
+  streetTier,
+} from "../data/streets";
 import { eras, formatYear } from "../data/eras";
 import { allEntries } from "../data/entries";
+
+export type SearchItemKind = EntryKind | "street";
 
 /** A single searchable record — extend `source` as new map content types ship. */
 export interface SearchItem {
   id: string;
-  kind: EntryKind;
+  kind: SearchItemKind;
   title: string;
   subtitle: string;
   /** Lowercased tokens used for fuzzy matching. */
   haystack: string;
-  source: { type: "entry"; entry: Entry };
+  source:
+    | { type: "entry"; entry: Entry }
+    | { type: "street"; street: ColonialStreet };
 }
 
 export interface SearchHit {
@@ -18,12 +28,13 @@ export interface SearchHit {
   score: number;
 }
 
-const KIND_ORDER: EntryKind[] = ["person", "place", "event"];
+const KIND_ORDER: SearchItemKind[] = ["person", "place", "event", "street"];
 
-const KIND_LABEL: Record<EntryKind, string> = {
+const KIND_LABEL: Record<SearchItemKind, string> = {
   person: "People",
   place: "Places",
   event: "Events",
+  street: "Streets",
 };
 
 const eraName = new Map(eras.map((e) => [e.id, e.name]));
@@ -50,7 +61,6 @@ function scoreField(query: string, field: string): number {
     return 120 + (wordStart ? 25 : 0) - idx * 0.15;
   }
 
-  // Subsequence fuzzy match — query chars appear in order.
   let qi = 0;
   let spread = 0;
   let consecutive = 0;
@@ -80,7 +90,6 @@ function scoreItem(query: string, item: SearchItem): number {
     scoreField(query, item.haystack) * 0.7
   );
 
-  // Every token must match somewhere; rewards tight multi-word queries.
   let tokens = 0;
   for (const word of words) {
     const w = Math.max(
@@ -93,17 +102,47 @@ function scoreItem(query: string, item: SearchItem): number {
   }
 
   const tokenScore = tokens * (words.length > 1 ? 0.92 : 1);
-  return Math.max(phrase, tokenScore);
+  let score = Math.max(phrase, tokenScore);
+  if (item.kind === "street") score *= 0.92;
+  return score;
+}
+
+function streetSearchItem(street: ColonialStreet): SearchItem {
+  const tier = streetTier(street);
+  const span =
+    street.to !== undefined
+      ? `${formatYear(street.from)}–${formatYear(street.to)}`
+      : `from ${formatYear(street.from)}`;
+  const former = street.historicalNames?.length
+    ? ` · formerly ${street.historicalNames.join(", ")}`
+    : "";
+  return {
+    id: `street:${street.id}`,
+    kind: "street",
+    title: street.name,
+    subtitle: `${span}${former}`,
+    haystack: [
+      street.name,
+      street.historicalNames?.join(" "),
+      street.searchTerms?.join(" "),
+      street.id.replace(/-/g, " "),
+      tier,
+      "street road avenue lane slip",
+    ]
+      .filter(Boolean)
+      .join(" "),
+    source: { type: "street", street },
+  };
 }
 
 /** Build the search index from all registered content sources. */
 export function buildSearchIndex(): SearchItem[] {
-  return allEntries.map((entry) => {
+  const entries = allEntries.map((entry) => {
     const era = eraName.get(entry.era) ?? entry.era;
     const year = entry.yearLabel ?? formatYear(entry.year);
     return {
       id: entry.id,
-      kind: entry.kind,
+      kind: entry.kind as EntryKind,
       title: entry.title,
       subtitle: `${year} · ${era}`,
       haystack: [
@@ -117,9 +156,10 @@ export function buildSearchIndex(): SearchItem[] {
       ]
         .filter(Boolean)
         .join(" "),
-      source: { type: "entry", entry },
+      source: { type: "entry" as const, entry },
     };
   });
+  return [...entries, ...colonialStreets.map(streetSearchItem)];
 }
 
 const INDEX = buildSearchIndex();
@@ -135,13 +175,13 @@ export function searchEntries(query: string, limit = 24): SearchHit[] {
 }
 
 export interface SearchGroup {
-  kind: EntryKind;
+  kind: SearchItemKind;
   label: string;
   hits: SearchHit[];
 }
 
 export function groupSearchHits(hits: SearchHit[]): SearchGroup[] {
-  const buckets = new Map<EntryKind, SearchHit[]>();
+  const buckets = new Map<SearchItemKind, SearchHit[]>();
   for (const hit of hits) {
     const list = buckets.get(hit.item.kind) ?? [];
     list.push(hit);
@@ -159,3 +199,5 @@ export function groupSearchHits(hits: SearchHit[]): SearchGroup[] {
         Math.max(...a.hits.map((h) => h.score))
     );
 }
+
+export { streetMidpoint };

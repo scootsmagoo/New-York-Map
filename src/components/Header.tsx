@@ -15,6 +15,8 @@ interface HeaderProps {
   overlayOpacity: number;
   onOverlayOpacityChange: (v: number) => void;
   overlayActiveLabel: string;
+  showStreetLabels: boolean;
+  onShowStreetLabelsChange: (v: boolean) => void;
 }
 
 export function Header({
@@ -30,6 +32,8 @@ export function Header({
   overlayOpacity,
   onOverlayOpacityChange,
   overlayActiveLabel,
+  showStreetLabels,
+  onShowStreetLabelsChange,
 }: HeaderProps) {
   return (
     <header className="app-header">
@@ -80,6 +84,8 @@ export function Header({
           overlayOpacity={overlayOpacity}
           onOverlayOpacityChange={onOverlayOpacityChange}
           overlayActiveLabel={overlayActiveLabel}
+          showStreetLabels={showStreetLabels}
+          onShowStreetLabelsChange={onShowStreetLabelsChange}
         />
       </div>
     </header>

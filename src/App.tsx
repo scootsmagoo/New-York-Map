@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Entry } from "./types";
+import type { ColonialStreet } from "./data/streets";
 import { eraForYear } from "./data/eras";
 import {
   clampWindow,
@@ -42,10 +43,13 @@ export default function App() {
   const [showSettlements, setShowSettlements] = useState(true);
   const [highlightGroup, setHighlightGroup] = useState<SegmentKey | null>(null);
   const [focusToken, setFocusToken] = useState(0);
+  const [focusStreet, setFocusStreet] = useState<ColonialStreet | null>(null);
+  const [streetFocusToken, setStreetFocusToken] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [overlaysEnabled, setOverlaysEnabled] = useState(false);
   const [overlaysAuto, setOverlaysAuto] = useState(true);
   const [overlayOpacity, setOverlayOpacity] = useState(0.72);
+  const [showStreetLabels, setShowStreetLabels] = useState(false);
 
   const year = useMemo(() => yearOfUnit((win.u0 + win.u1) / 2), [win]);
   /** Map & population lag the playhead slightly so timeline scrub stays smooth. */
@@ -88,6 +92,25 @@ export default function App() {
     return () => cancelAnimationFrame(raf);
   }, [playing]);
 
+  // Trackpad pinch (ctrl+wheel) outside the map zooms the whole browser page,
+  // which scrolls the header out of view. Keep pinch app-only; the map's own
+  // d3-zoom still receives the event and handles pinch-zoom over the SVG.
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) e.preventDefault();
+    };
+    const onGesture = (e: Event) => e.preventDefault();
+    window.addEventListener("wheel", onWheel, { passive: false });
+    // Safari fires proprietary gesture events for pinch.
+    window.addEventListener("gesturestart", onGesture);
+    window.addEventListener("gesturechange", onGesture);
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("gesturestart", onGesture);
+      window.removeEventListener("gesturechange", onGesture);
+    };
+  }, []);
+
   // Keyboard: Ctrl/Cmd+K opens search; arrows pan, +/- zoom, space toggles play.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -128,9 +151,29 @@ export default function App() {
   }, []);
 
   const selectEntry = useCallback((entry: Entry) => {
+    setFocusStreet(null);
     setSelectedEntry(entry);
     setFocusToken((t) => t + 1);
   }, []);
+
+  const goToStreet = useCallback(
+    (street: ColonialStreet) => {
+      setPlaying(false);
+      setPanelOpen(false);
+      setSearchOpen(false);
+      setSelectedEntry(null);
+      setShowStreetLabels(true);
+      const targetYear = Math.max(year, street.from);
+      setWin((w) => {
+        const span = Math.min(w.u1 - w.u0, 0.18);
+        const u = unitOfYear(targetYear);
+        return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
+      });
+      setFocusStreet(street);
+      setStreetFocusToken((t) => t + 1);
+    },
+    [year]
+  );
 
   const goToEntry = useCallback(
     (entry: Entry) => {
@@ -162,6 +205,8 @@ export default function App() {
         overlayOpacity={overlayOpacity}
         onOverlayOpacityChange={setOverlayOpacity}
         overlayActiveLabel={overlayActiveLabel}
+        showStreetLabels={showStreetLabels}
+        onShowStreetLabelsChange={setShowStreetLabels}
       />
 
       <main className="app-main">
@@ -169,12 +214,15 @@ export default function App() {
           year={mapYear}
           selectedEntry={selectedEntry}
           focusToken={focusToken}
+          focusStreet={focusStreet}
+          streetFocusToken={streetFocusToken}
           onSelectEntry={selectEntry}
           showSettlements={popOpen && showSettlements}
           highlightGroup={highlightGroup}
           overlaysEnabled={overlaysEnabled}
           overlaysAuto={overlaysAuto}
           overlayOpacity={overlayOpacity}
+          showStreetLabels={showStreetLabels}
         />
         <PopulationPanel
           year={mapYear}
@@ -213,6 +261,7 @@ export default function App() {
         <SearchPalette
           onClose={() => setSearchOpen(false)}
           onSelectEntry={goToEntry}
+          onSelectStreet={goToStreet}
         />
       )}
     </div>
