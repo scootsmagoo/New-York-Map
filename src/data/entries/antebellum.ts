@@ -1,0 +1,235 @@
+import type { Entry } from "../../types";
+
+export const antebellumEntries: Entry[] = [
+  {
+    id: "hone",
+    era: "antebellum",
+    kind: "person",
+    title: "Philip Hone",
+    wikiTitle: "Philip Hone",
+    year: 1830,
+    blurb:
+      "Auctioneer, one-term mayor, and the era's great diarist — chronicler of fires, riots, and society from the Whig side of the ballroom, watching 'this great commercial emporium' tear itself down and rebuild every decade.",
+  },
+  {
+    id: "greeley",
+    era: "antebellum",
+    kind: "person",
+    title: "Horace Greeley",
+    wikiTitle: "Horace Greeley",
+    year: 1841,
+    blurb:
+      "Founder of the New-York Tribune (1841) — moral crusader of the penny press, voice of free labor and antislavery, employer of a London correspondent named Karl Marx.",
+  },
+  {
+    id: "bennett",
+    era: "antebellum",
+    kind: "person",
+    title: "James Gordon Bennett",
+    wikiTitle: "James Gordon Bennett Sr.",
+    year: 1835,
+    blurb:
+      "His one-cent Herald invented the modern newspaper in a Wall Street cellar: crime, money markets, society gossip, and shamelessness — the most read (and most horsewhipped) editor in America.",
+  },
+  {
+    id: "barnum",
+    era: "antebellum",
+    kind: "person",
+    title: "P. T. Barnum",
+    wikiTitle: "P. T. Barnum",
+    year: 1842,
+    blurb:
+      "Impresario of the American Museum at Broadway and Ann — mermaids, midgets, and 'humbug' — who taught the city that publicity itself could be the show.",
+  },
+  {
+    id: "whitman",
+    era: "antebellum",
+    kind: "person",
+    title: "Walt Whitman",
+    wikiTitle: "Walt Whitman",
+    year: 1855,
+    blurb:
+      "Brooklyn printer, Eagle editor, and ferry-rider whose Leaves of Grass (1855) made the crowds, docks, and omnibus drivers of the two cities into American epic.",
+  },
+  {
+    id: "hughes",
+    era: "antebellum",
+    kind: "person",
+    title: "Archbishop John Hughes",
+    wikiTitle: "John Hughes (archbishop of New York)",
+    year: 1842,
+    blurb:
+      "'Dagger John,' combative shepherd of the Irish city — builder of parochial schools and St. Patrick's Cathedral, who armed his churches against nativist mobs and got results.",
+  },
+  {
+    id: "ruggles-david",
+    era: "antebellum",
+    kind: "person",
+    title: "David Ruggles",
+    wikiTitle: "David Ruggles",
+    year: 1838,
+    blurb:
+      "Black abolitionist whose Committee of Vigilance hid hundreds of fugitives from slave-catchers — including, in 1838, a young Frederick Douglass — and who ran the city's first Black bookstore.",
+  },
+  {
+    id: "restell",
+    era: "antebellum",
+    kind: "person",
+    title: "Madame Restell",
+    wikiTitle: "Madame Restell",
+    year: 1840,
+    yearLabel: "1830s–1878",
+    blurb:
+      "Ann Lohman, the city's most famous abortionist, grew rich enough to build a marble mansion on Fifth Avenue across from the future cathedral — hounded for decades, finally by Anthony Comstock.",
+    gotham:
+      "A recurring Gotham figure for what the city tolerated, used, and punished.",
+  },
+  {
+    id: "stewart",
+    era: "antebellum",
+    kind: "person",
+    title: "Alexander T. Stewart",
+    wikiTitle: "Alexander Turney Stewart",
+    year: 1846,
+    blurb:
+      "Irish-born dry-goods king whose Marble Palace (1846) and later Iron Palace invented the department store — fixed prices, free entry, and shopping as urban spectacle.",
+  },
+  {
+    id: "great-fire-1835",
+    era: "antebellum",
+    kind: "event",
+    title: "Great Fire of 1835",
+    wikiTitle: "Great Fire of New York",
+    year: 1835,
+    blurb:
+      "On a night so cold the rivers froze and pumps failed, 700 buildings of the business district burned. Insurance companies collapsed — and rebuilding began before the ruins cooled.",
+  },
+  {
+    id: "panic-1837",
+    era: "antebellum",
+    kind: "event",
+    title: "Panic of 1837",
+    wikiTitle: "Panic of 1837",
+    year: 1837,
+    blurb:
+      "The speculative bubble of the mid-1830s burst with the banks' suspension; a third of the city's workers were idled, and the flour riot had already shown the price of bread could empty warehouses.",
+  },
+  {
+    id: "croton",
+    era: "antebellum",
+    kind: "event",
+    title: "Croton water arrives",
+    wikiTitle: "Croton Aqueduct",
+    year: 1842,
+    blurb:
+      "Forty-one miles of masonry aqueduct brought Westchester water over High Bridge to fountains that jetted fifty feet in City Hall Park, October 1842 — death sentence for wells, cholera, and the fire risk alike.",
+  },
+  {
+    id: "astor-place-riot",
+    era: "antebellum",
+    kind: "event",
+    title: "Astor Place Riot",
+    wikiTitle: "Astor Place Riot",
+    year: 1849,
+    blurb:
+      "A feud between rival Shakespeareans — aristocratic Macready, Bowery favorite Forrest — became class war at the Opera House; the militia fired into the crowd, killing more than twenty.",
+    coords: [-73.9914, 40.7299],
+  },
+  {
+    id: "crystal-palace",
+    era: "antebellum",
+    kind: "event",
+    title: "Crystal Palace Exhibition",
+    wikiTitle: "New York Crystal Palace",
+    year: 1853,
+    blurb:
+      "America's first world's fair, in an iron-and-glass dome beside the Croton reservoir at 42nd Street; Elisha Otis cut his own elevator rope there to prove the safety brake. It burned in 1858.",
+    coords: [-73.9832, 40.7536],
+  },
+  {
+    id: "brooklyn-city",
+    era: "antebellum",
+    kind: "event",
+    title: "Brooklyn becomes a city",
+    wikiTitle: "Brooklyn",
+    year: 1834,
+    blurb:
+      "Chartered over Manhattan's objections in 1834, ferry-fed Brooklyn grew faster than any city in the country — absorbing Williamsburgh and Bushwick in 1855 to become America's third city.",
+  },
+  {
+    id: "central-park-begun",
+    era: "antebellum",
+    kind: "event",
+    title: "Central Park begun",
+    wikiTitle: "Central Park",
+    year: 1857,
+    blurb:
+      "After the city seized 770 acres of rocky commons — evicting Seneca Village and the shanty districts — Olmsted and Vaux's 'Greensward' won the 1857 design competition and 20,000 workers set to moving five million cubic yards of earth.",
+  },
+  {
+    id: "five-points",
+    era: "antebellum",
+    kind: "place",
+    title: "Five Points",
+    wikiTitle: "Five Points, Manhattan",
+    year: 1840,
+    blurb:
+      "The Atlantic world's most notorious slum, atop the buried Collect — Irish and Black New York packed into groggeries and the Old Brewery, toured by Dickens (with two policemen) in 1842.",
+    coords: [-74.0001, 40.7148],
+  },
+  {
+    id: "bowery-theatres",
+    era: "antebellum",
+    kind: "place",
+    title: "The Bowery",
+    wikiTitle: "Bowery",
+    year: 1845,
+    blurb:
+      "Broadway's raucous rival: theaters, oyster cellars, dance halls, and the Bowery B'hoy in his red shirt and soaped side-locks — working-class New York's grand promenade.",
+    coords: [-73.9926, 40.7242],
+  },
+  {
+    id: "seneca-village",
+    era: "antebellum",
+    kind: "place",
+    title: "Seneca Village",
+    wikiTitle: "Seneca Village",
+    year: 1853,
+    blurb:
+      "The largest community of Black property-owners in the city — churches, a school, Irish and German neighbors — razed in 1857 for Central Park between today's 82nd and 89th Streets.",
+    coords: [-73.968, 40.7841],
+  },
+  {
+    id: "greenwood",
+    era: "antebellum",
+    kind: "place",
+    title: "Green-Wood Cemetery",
+    wikiTitle: "Green-Wood Cemetery",
+    year: 1838,
+    blurb:
+      "Brooklyn's picturesque rural cemetery on the harbor's highest moraine — so popular with strolling visitors it proved New Yorkers would travel for landscape, a key argument for Central Park.",
+    coords: [-73.9933, 40.6526],
+  },
+  {
+    id: "atlantic-docks",
+    era: "antebellum",
+    kind: "place",
+    title: "Atlantic Docks, Red Hook",
+    wikiTitle: "Red Hook, Brooklyn",
+    year: 1847,
+    blurb:
+      "Brooklyn's bid for the port: enclosed ship basins and brick warehouses where grain from the Erie Canal met deep water — worked by the Irish longshoremen of 'Slickville.'",
+    coords: [-74.0114, 40.6818],
+  },
+  {
+    id: "marble-palace",
+    era: "antebellum",
+    kind: "place",
+    title: "Stewart's Marble Palace",
+    wikiTitle: "Marble Palace",
+    year: 1846,
+    blurb:
+      "The white marble dry-goods store at Broadway and Chambers — plate glass, a dome, and clerks forbidden to haggle: the birth of the department store and of Ladies' Mile.",
+    coords: [-74.0066, 40.7141],
+  },
+];

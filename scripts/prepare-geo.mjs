@@ -1,10 +1,14 @@
 /**
- * Builds the base-map geometry from US Census cartographic boundary data.
+ * Builds the base-map geometry.
  *
- * Source: cb_2023_us_county_500k (1:500,000, clipped to shoreline, public domain).
+ * Sources:
+ *   - NYC Open Data "Borough Boundaries" (gthc-hcne), clipped to shoreline —
+ *     detailed enough to keep the East and Harlem Rivers visible.
+ *   - US Census cb_2023_us_county_500k for the surrounding NJ/NY/CT land.
+ *
  * Outputs:
  *   src/data/geo/boroughs.json — the five boroughs as named polygons
- *   src/data/geo/surround.json — dissolved NJ/Westchester/Nassau/CT land for context
+ *   src/data/geo/surround.json — dissolved neighboring land for context
  *
  * Run: node scripts/prepare-geo.mjs
  */
@@ -13,6 +17,7 @@ import os from "node:os";
 import path from "node:path";
 import mapshaper from "mapshaper";
 
+const BOROUGHS_URL = "https://data.cityofnewyork.us/resource/gthc-hcne.geojson";
 const CENSUS_URL =
   "https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_us_county_500k.zip";
 
@@ -21,26 +26,27 @@ const outDir = path.resolve("src/data/geo");
 fs.mkdirSync(rawDir, { recursive: true });
 fs.mkdirSync(outDir, { recursive: true });
 
+async function download(url, dest, label) {
+  if (fs.existsSync(dest)) return;
+  console.log(`Downloading ${label}...`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Download failed (${res.status}): ${url}`);
+  fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+}
+
+const boroughsRaw = path.join(rawDir, "boroughs_raw.geojson");
+await download(BOROUGHS_URL, boroughsRaw, "NYC borough boundaries (~3 MB)");
+
 let zipPath = path.join(rawDir, "cb_2023_us_county_500k.zip");
 const tmpZip = path.join(os.tmpdir(), "cb_2023_us_county_500k.zip");
 if (!fs.existsSync(zipPath) && fs.existsSync(tmpZip)) {
   fs.copyFileSync(tmpZip, zipPath);
 }
-if (!fs.existsSync(zipPath)) {
-  console.log("Downloading census county boundaries (~12 MB)...");
-  const res = await fetch(CENSUS_URL);
-  if (!res.ok) throw new Error(`Download failed: ${res.status}`);
-  fs.writeFileSync(zipPath, Buffer.from(await res.arrayBuffer()));
-}
+await download(CENSUS_URL, zipPath, "census county boundaries (~12 MB)");
 
 const zip = zipPath.split(path.sep).join("/");
+const boroSrc = boroughsRaw.split(path.sep).join("/");
 const out = outDir.split(path.sep).join("/");
-
-// The five boroughs are coterminous with five NY counties.
-const BORO_FILTER =
-  'STATEFP=="36" && "005,047,061,081,085".indexOf(COUNTYFP) > -1';
-const BORO_NAME =
-  'boro = NAME=="New York" ? "Manhattan" : NAME=="Kings" ? "Brooklyn" : NAME=="Richmond" ? "Staten Island" : NAME';
 
 // Surrounding land: all of NJ and CT plus nearby NY counties, dissolved to one
 // anonymous mass and clipped to the map's viewport box.
@@ -49,23 +55,27 @@ const SURROUND_FILTER =
 const CLIP_BBOX = "-74.65,40.30,-73.30,41.18";
 
 await mapshaper.runCommands(
-  `-i '${zip}' ` +
-    `-filter '${BORO_FILTER}' ` +
-    `-each '${BORO_NAME}' ` +
+  `-i '${boroSrc}' ` +
+    `-each 'boro=boroname' ` +
     `-filter-fields boro ` +
-    `-simplify weighted 90% keep-shapes ` +
+    `-simplify weighted 8% keep-shapes ` +
     `-clean ` +
-    `-o '${out}/boroughs.json' format=geojson precision=0.00001`
+    // gj2008: keep pre-RFC-7946 ring winding (clockwise exteriors), which is
+    // what d3-geo's spherical winding convention expects.
+    `-o '${out}/boroughs.json' format=geojson gj2008 precision=0.00001`
 );
 
 await mapshaper.runCommands(
   `-i '${zip}' ` +
     `-filter '${SURROUND_FILTER}' ` +
     `-dissolve2 ` +
+    // Keep one property so mapshaper emits a FeatureCollection, not a bare
+    // GeometryCollection.
+    `-each 'name="surround"' ` +
     `-clip bbox=${CLIP_BBOX} ` +
     `-simplify weighted 30% keep-shapes ` +
     `-clean ` +
-    `-o '${out}/surround.json' format=geojson precision=0.0001`
+    `-o '${out}/surround.json' format=geojson gj2008 precision=0.0001`
 );
 
 for (const f of ["boroughs.json", "surround.json"]) {

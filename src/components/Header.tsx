@@ -1,0 +1,43 @@
+import type { Era } from "../types";
+import { formatYear } from "../data/eras";
+
+interface HeaderProps {
+  year: number;
+  era: Era;
+  onExploreEra: () => void;
+  onAbout: () => void;
+}
+
+export function Header({ year, era, onExploreEra, onAbout }: HeaderProps) {
+  return (
+    <header className="app-header">
+      <div className="brand">
+        <h1>Gotham</h1>
+        <span className="brand-sub">A Timeline of New York City</span>
+      </div>
+
+      <div className="year-display">
+        <div className="year-now">{formatYear(year)}</div>
+        <div className="era-now">
+          <span className="era-now-name" style={{ color: era.color }}>
+            {era.name}
+          </span>
+          <span className="era-now-sub">{era.subtitle}</span>
+        </div>
+      </div>
+
+      <div className="header-actions">
+        <button
+          className="explore-btn"
+          style={{ background: era.color }}
+          onClick={onExploreEra}
+        >
+          Explore this era
+        </button>
+        <button className="about-btn" onClick={onAbout} title="About this project">
+          ?
+        </button>
+      </div>
+    </header>
+  );
+}
