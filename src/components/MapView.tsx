@@ -17,6 +17,8 @@ import { colonialStreets } from "../data/streets";
 import { gridSegments, GRID_ZONE_RING, type Seg } from "../lib/grid";
 import { allEntries } from "../data/entries";
 import { eraForYear } from "../data/eras";
+import { populationAt, SEGMENT_META, type SegmentKey } from "../data/population";
+import { settlementsAt } from "../data/settlements";
 import { useElementSize } from "../lib/useElementSize";
 import boroughsData from "../data/geo/boroughs.json";
 import surroundData from "../data/geo/surround.json";
@@ -25,6 +27,8 @@ interface MapViewProps {
   year: number;
   selectedEntry: Entry | null;
   onSelectEntry: (entry: Entry) => void;
+  showSettlements?: boolean;
+  highlightGroup?: SegmentKey | null;
 }
 
 type GeoJSON = any;
@@ -106,6 +110,30 @@ function clamp01(v: number): number {
   return Math.max(0, Math.min(1, v));
 }
 
+/** Project a geographic radius to screen pixels at a point. */
+function projectedRadius(
+  projection: (c: [number, number]) => [number, number] | null,
+  coords: [number, number],
+  radiusDeg: number
+): number {
+  const c = projection(coords);
+  const edge = projection([coords[0] + radiusDeg, coords[1]]);
+  if (!c || !edge) return 8;
+  return Math.max(6, Math.hypot(edge[0] - c[0], edge[1] - c[1]));
+}
+
+/** Fade a settlement in over a few years after it forms, out before it ends. */
+function settlementOpacity(
+  year: number,
+  from: number,
+  to?: number
+): number {
+  const inFade = clamp01((year - from) / 6);
+  if (to === undefined) return inFade;
+  const outFade = clamp01((to - year) / 6);
+  return inFade * outFade;
+}
+
 /** Rings are authored counterclockwise; d3-geo wants clockwise exteriors. */
 function toGeo(rings: [number, number][][]): GeoJSON {
   return {
@@ -140,7 +168,13 @@ function ringBboxArea(ring: [number, number][]): number {
 
 const MAJOR_PARK_AREA = 5e-5;
 
-export function MapView({ year, selectedEntry, onSelectEntry }: MapViewProps) {
+export function MapView({
+  year,
+  selectedEntry,
+  onSelectEntry,
+  showSettlements = false,
+  highlightGroup = null,
+}: MapViewProps) {
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
   const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
@@ -364,6 +398,29 @@ export function MapView({ year, selectedEntry, onSelectEntry }: MapViewProps) {
 
   // Lenape layer fades from full at 1609 to nothing by 1680.
   const lenapeOpacity = year <= 1609 ? 1 : Math.max(0, 1 - (year - 1609) / 71);
+
+  const popScope = useMemo(() => populationAt(year).scope, [year]);
+  const settlementFade = fade(k, 1.2, 1.8);
+
+  const visibleSettlements = useMemo(() => {
+    if (!showSettlements || !projection) return [];
+    return settlementsAt(year, popScope).map((s) => {
+      const pos = projection(s.coords)!;
+      const r = projectedRadius(projection, s.coords, s.radiusDeg);
+      const baseOpacity = settlementOpacity(year, s.from, s.to) * settlementFade;
+      const highlighted =
+        !highlightGroup || s.groups.includes(highlightGroup);
+      const color = SEGMENT_META[s.primaryGroup].color;
+      return {
+        ...s,
+        pos,
+        r,
+        color,
+        opacity: highlighted ? baseOpacity : baseOpacity * 0.2,
+        strokeOpacity: highlighted ? 0.85 : 0.25,
+      };
+    });
+  }, [showSettlements, year, popScope, projection, settlementFade, highlightGroup]);
 
   if (!width || !height) return <div className="map-view" ref={ref} />;
 
@@ -661,6 +718,38 @@ export function MapView({ year, selectedEntry, onSelectEntry }: MapViewProps) {
               </text>
             );
           })}
+
+          {/* Immigrant & community enclaves (population panel) */}
+          {visibleSettlements.length > 0 && (
+            <g className="settlement-layer">
+              {visibleSettlements.map((s) => (
+                <g
+                  key={s.id}
+                  transform={`translate(${s.pos[0]},${s.pos[1]})`}
+                  style={{ opacity: s.opacity }}
+                >
+                  <circle
+                    className="settlement-blob"
+                    r={s.r}
+                    fill={s.color}
+                    stroke={s.color}
+                    style={{ strokeOpacity: s.strokeOpacity }}
+                  />
+                  {labelFade > 0 && (
+                    <text
+                      className="settlement-label"
+                      y={-s.r - 4}
+                      transform={`scale(${1 / k})`}
+                      style={{ opacity: labelFade }}
+                    >
+                      {s.name}
+                    </text>
+                  )}
+                  <title>{`${s.name} (${s.from}${s.to ? `–${s.to}` : "–"}) — ${s.note}`}</title>
+                </g>
+              ))}
+            </g>
+          )}
 
           {/* Entry markers */}
           {markers.map((m) => {

@@ -15,6 +15,8 @@ import { Timeline } from "./components/Timeline";
 import { EraPanel } from "./components/EraPanel";
 import { EntryModal } from "./components/EntryModal";
 import { AboutModal } from "./components/AboutModal";
+import { PopulationPanel } from "./components/PopulationPanel";
+import type { SegmentKey } from "./data/population";
 
 /** Initial window from a deep link like #year=1880 or #year=1880&span=0.05. */
 function initialWindow(): TimeWindow {
@@ -33,6 +35,9 @@ export default function App() {
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [popOpen, setPopOpen] = useState(false);
+  const [showSettlements, setShowSettlements] = useState(true);
+  const [highlightGroup, setHighlightGroup] = useState<SegmentKey | null>(null);
 
   const year = useMemo(() => yearOfUnit((win.u0 + win.u1) / 2), [win]);
   const era = useMemo(() => eraForYear(year), [year]);
@@ -111,6 +116,16 @@ export default function App() {
           year={year}
           selectedEntry={selectedEntry}
           onSelectEntry={setSelectedEntry}
+          showSettlements={popOpen && showSettlements}
+          highlightGroup={highlightGroup}
+        />
+        <PopulationPanel
+          year={year}
+          showSettlements={showSettlements}
+          onShowSettlementsChange={setShowSettlements}
+          highlightGroup={highlightGroup}
+          onHighlightGroup={setHighlightGroup}
+          onOpenChange={setPopOpen}
         />
         {panelOpen && (
           <EraPanel
