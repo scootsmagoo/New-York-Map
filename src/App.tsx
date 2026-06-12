@@ -18,6 +18,7 @@ import { AboutModal } from "./components/AboutModal";
 import { PopulationPanel } from "./components/PopulationPanel";
 import { SearchPalette } from "./components/SearchPalette";
 import type { SegmentKey } from "./data/population";
+import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
 import { useDebouncedValue } from "./lib/useDebouncedValue";
 
 /** Initial window from a deep link like #year=1880 or #year=1880&span=0.05. */
@@ -42,11 +43,23 @@ export default function App() {
   const [highlightGroup, setHighlightGroup] = useState<SegmentKey | null>(null);
   const [focusToken, setFocusToken] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [overlaysEnabled, setOverlaysEnabled] = useState(false);
+  const [overlaysAuto, setOverlaysAuto] = useState(true);
+  const [overlayOpacity, setOverlayOpacity] = useState(0.72);
 
   const year = useMemo(() => yearOfUnit((win.u0 + win.u1) / 2), [win]);
   /** Map & population lag the playhead slightly so timeline scrub stays smooth. */
   const mapYear = useDebouncedValue(year, 75);
   const era = useMemo(() => eraForYear(year), [year]);
+  const overlayActiveLabel = useMemo(
+    () =>
+      activeOverlayLabel(
+        mapYear,
+        overlaysAuto,
+        overlaysAuto ? overlayAutoWeights(mapYear) : new Map()
+      ),
+    [mapYear, overlaysAuto]
+  );
 
   // Window changes coming from user gestures stop the autoplay.
   const setWindowFromUser = useCallback((w: TimeWindow) => {
@@ -142,6 +155,13 @@ export default function App() {
         onSearch={() => setSearchOpen(true)}
         onExploreEra={() => setPanelOpen((o) => !o)}
         onAbout={() => setAboutOpen(true)}
+        overlaysEnabled={overlaysEnabled}
+        onOverlaysEnabledChange={setOverlaysEnabled}
+        overlaysAuto={overlaysAuto}
+        onOverlaysAutoChange={setOverlaysAuto}
+        overlayOpacity={overlayOpacity}
+        onOverlayOpacityChange={setOverlayOpacity}
+        overlayActiveLabel={overlayActiveLabel}
       />
 
       <main className="app-main">
@@ -152,6 +172,9 @@ export default function App() {
           onSelectEntry={selectEntry}
           showSettlements={popOpen && showSettlements}
           highlightGroup={highlightGroup}
+          overlaysEnabled={overlaysEnabled}
+          overlaysAuto={overlaysAuto}
+          overlayOpacity={overlayOpacity}
         />
         <PopulationPanel
           year={mapYear}

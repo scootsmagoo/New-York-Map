@@ -19,6 +19,12 @@ import { allEntries } from "../data/entries";
 import { eraForYear } from "../data/eras";
 import { populationAt, SEGMENT_META, type SegmentKey } from "../data/population";
 import { settlementsAt } from "../data/settlements";
+import { HISTORICAL_OVERLAYS } from "../data/historicalOverlays";
+import {
+  overlayAutoWeights,
+  overlayManualPick,
+  overlayPlacement,
+} from "../lib/historicalOverlays";
 import { useElementSize } from "../lib/useElementSize";
 import boroughsData from "../data/geo/boroughs.json";
 import surroundData from "../data/geo/surround.json";
@@ -31,6 +37,9 @@ interface MapViewProps {
   onSelectEntry: (entry: Entry) => void;
   showSettlements?: boolean;
   highlightGroup?: SegmentKey | null;
+  overlaysEnabled?: boolean;
+  overlaysAuto?: boolean;
+  overlayOpacity?: number;
 }
 
 type GeoJSON = any;
@@ -193,6 +202,9 @@ export function MapView({
   onSelectEntry,
   showSettlements = false,
   highlightGroup = null,
+  overlaysEnabled = false,
+  overlaysAuto = true,
+  overlayOpacity = 0.72,
 }: MapViewProps) {
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
@@ -446,6 +458,24 @@ export function MapView({
   const popScope = useMemo(() => populationAt(year).scope, [year]);
   const settlementFade = fade(k, 1.2, 1.8);
 
+  const overlayWeights = useMemo(() => {
+    if (!overlaysEnabled) return new Map<string, number>();
+    if (overlaysAuto) return overlayAutoWeights(year);
+    const id = overlayManualPick(year);
+    const weights = new Map<string, number>();
+    if (id) weights.set(id, 1);
+    return weights;
+  }, [overlaysEnabled, overlaysAuto, year]);
+
+  const overlayFrames = useMemo(() => {
+    if (!projection || !overlaysEnabled) return [];
+    return HISTORICAL_OVERLAYS.map((overlay) => ({
+      overlay,
+      placement: overlayPlacement(projection, overlay.bounds),
+      weight: overlayWeights.get(overlay.id) ?? 0,
+    })).filter((f) => f.placement && f.weight > 0);
+  }, [projection, overlaysEnabled, overlayWeights]);
+
   const visibleSettlements = useMemo(() => {
     if (!showSettlements || !projection) return [];
     return settlementsAt(year, popScope).map((s) => {
@@ -554,6 +584,27 @@ export function MapView({
           {/* Built-up footprint, clipped to the real shoreline */}
           {renderFootprint(base)}
           {next && renderFootprint(next, 0.25 + 0.75 * progress)}
+
+          {/* Georeferenced historical map sheets (Manhattan only) */}
+          {overlayFrames.length > 0 && (
+            <g className="historical-overlays" clipPath="url(#manhattan-clip)">
+              {overlayFrames.map(({ overlay, placement, weight }) => (
+                <image
+                  key={overlay.id}
+                  className="historical-overlay"
+                  href={overlay.src}
+                  x={placement!.x}
+                  y={placement!.y}
+                  width={placement!.width}
+                  height={placement!.height}
+                  preserveAspectRatio="none"
+                  opacity={overlayOpacity * weight}
+                >
+                  <title>{overlay.label}</title>
+                </image>
+              ))}
+            </g>
+          )}
 
           {/* Street-hatch texture over the outer-borough footprint */}
           {roadFade > 0 &&

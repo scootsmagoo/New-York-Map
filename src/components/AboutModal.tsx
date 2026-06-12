@@ -40,6 +40,10 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
             <strong>Click marks</strong> on the timeline or map for the full
             story, with live summaries and images from Wikipedia.
           </li>
+          <li>
+            Optional <strong>historical map overlays</strong> (Castello, Ratzer,
+            Viele) are in the <strong>⋯ menu</strong> in the header.
+          </li>
         </ul>
         <h3>Sources &amp; caveats</h3>
         <p>

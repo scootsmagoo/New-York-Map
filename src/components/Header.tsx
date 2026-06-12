@@ -1,5 +1,6 @@
 import type { Era } from "../types";
 import { formatYear } from "../data/eras";
+import { HeaderMenu } from "./HeaderMenu";
 
 interface HeaderProps {
   year: number;
@@ -7,9 +8,29 @@ interface HeaderProps {
   onSearch: () => void;
   onExploreEra: () => void;
   onAbout: () => void;
+  overlaysEnabled: boolean;
+  onOverlaysEnabledChange: (v: boolean) => void;
+  overlaysAuto: boolean;
+  onOverlaysAutoChange: (v: boolean) => void;
+  overlayOpacity: number;
+  onOverlayOpacityChange: (v: number) => void;
+  overlayActiveLabel: string;
 }
 
-export function Header({ year, era, onSearch, onExploreEra, onAbout }: HeaderProps) {
+export function Header({
+  year,
+  era,
+  onSearch,
+  onExploreEra,
+  onAbout,
+  overlaysEnabled,
+  onOverlaysEnabledChange,
+  overlaysAuto,
+  onOverlaysAutoChange,
+  overlayOpacity,
+  onOverlayOpacityChange,
+  overlayActiveLabel,
+}: HeaderProps) {
   return (
     <header className="app-header">
       <div className="brand">
@@ -50,9 +71,16 @@ export function Header({ year, era, onSearch, onExploreEra, onAbout }: HeaderPro
         >
           Explore this era
         </button>
-        <button className="about-btn" onClick={onAbout} title="About this project">
-          ?
-        </button>
+        <HeaderMenu
+          onAbout={onAbout}
+          overlaysEnabled={overlaysEnabled}
+          onOverlaysEnabledChange={onOverlaysEnabledChange}
+          overlaysAuto={overlaysAuto}
+          onOverlaysAutoChange={onOverlaysAutoChange}
+          overlayOpacity={overlayOpacity}
+          onOverlayOpacityChange={onOverlayOpacityChange}
+          overlayActiveLabel={overlayActiveLabel}
+        />
       </div>
     </header>
   );

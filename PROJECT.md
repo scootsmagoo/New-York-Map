@@ -138,6 +138,11 @@ header, theme, footprint, markers, panel — derives from it.
   and fixed the "snap back to era" bug: drags that started on an era band or
   mark were firing those elements' click handlers on release. Added deep
   links (`#year=1880&span=0.11`).
+- **2026-06-12 (historical overlays)** — Castello (1660), Ratzer (1767), and
+  Viele (1865) map sheets from Wikimedia Commons, georeferenced to the
+  Mercator frame, clipped to Manhattan, with timeline crossfade, manual
+  pick mode, and a global opacity slider (~2.8 MB compressed assets in
+  `public/overlays/`).
 
 ## Lessons learned
 
@@ -207,11 +212,12 @@ header, theme, footprint, markers, panel — derives from it.
 
 - [ ] Extend past 1919 (Depression/War, Moses era, fiscal crisis, modern
       city) — the era/entry model already supports it.
-- [ ] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
-      Viele 1865) with opacity blending.
+- [x] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
+      Viele 1865) with opacity blending — shipped: Wikimedia-sourced sheets,
+      Manhattan clip, timeline crossfade + manual override, opacity slider.
 - [x] ~~Street-grid growth rendering~~ — shipped: procedural 1811 grid with
       survey-vs-built frontier, colonial road network, street-hatch fills.
-- [ ] Population counter and demographic strip charts that track the playhead.
+- [x] Population counter and demographic strip charts that track the playhead.
 - [ ] Els, subway lines, and the Croton Aqueduct as dated line geometry;
       street name labels beyond Broadway; demolition "ghost" markers.
 - [ ] Guided "tours": scripted camera+timeline paths (e.g., follow the Erie
@@ -235,6 +241,7 @@ npm run dev        # http://localhost:5173
 npm run build      # static build in dist/
 npm run validate:wiki   # check all Wikipedia titles still resolve
 node scripts/prepare-geo.mjs  # regenerate geometry from sources
+node scripts/prepare-overlays.mjs  # download & compress historical map sheets
 ```
 
 ## Credits

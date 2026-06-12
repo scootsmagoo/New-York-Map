@@ -46,6 +46,7 @@ sources and caveats, lessons learned, and the future-features roadmap.
 | `npm run preview` | serve the production build locally |
 | `npm run validate:wiki` | verify every Wikipedia title resolves |
 | `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources |
+| `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |
 
 ## Credits
 
