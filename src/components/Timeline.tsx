@@ -24,8 +24,10 @@ interface TimelineProps {
 
 const BAND_H = 30;
 const AXIS_H = 26;
-const MARKS_H = 64;
+const MARKS_H = 78;
 const HEIGHT = BAND_H + AXIS_H + MARKS_H;
+const LANES = 4;
+const LANE_STEP = 16;
 
 const KIND_GLYPH: Record<Entry["kind"], string> = {
   person: "●",
@@ -47,6 +49,11 @@ export function Timeline({
   const { ref, width } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
   const drag = useRef<{ x: number; moved: boolean } | null>(null);
+  // Whether the most recent pointer interaction was a drag. Browsers still
+  // fire `click` on the element where the pointer went down (era bands,
+  // marks), so click handlers must check this to avoid snapping the view
+  // back after a pan.
+  const wasDrag = useRef(false);
   const anim = useRef<number | null>(null);
 
   const winRef = useRef(win);
@@ -115,19 +122,26 @@ export function Timeline({
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
     cancelAnim();
     drag.current = { x: e.clientX, moved: false };
+    wasDrag.current = false;
     (e.target as Element).setPointerCapture?.(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     if (!drag.current || !width) return;
     const dx = e.clientX - drag.current.x;
-    if (Math.abs(dx) > 3) drag.current.moved = true;
+    if (Math.abs(dx) > 3) {
+      drag.current.moved = true;
+      wasDrag.current = true;
+    }
     drag.current.x = e.clientX;
     onWindowChange(panWindow(win, (-dx / width) * (win.u1 - win.u0)));
   };
 
   const onPointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
-    if (drag.current && !drag.current.moved && width) {
+    const onInteractive = (e.target as Element).closest?.(
+      ".era-band, .entry-mark"
+    );
+    if (drag.current && !drag.current.moved && width && !onInteractive) {
       // Treat as a click: recenter the timeline on the clicked year.
       const rect = svgRef.current!.getBoundingClientRect();
       const u = win.u0 + ((e.clientX - rect.left) / width) * (win.u1 - win.u0);
@@ -147,8 +161,9 @@ export function Timeline({
 
   const showMarkLabels = span < 0.22;
 
-  // Entries visible in the current window, staggered across three lanes with
-  // label-width-aware collision avoidance.
+  // Entries visible in the current window, decluttered across lanes:
+  // place with a label where it fits, fall back to a bare glyph, and hide
+  // the mark entirely rather than ever drawing on top of a neighbor.
   const marks = useMemo(() => {
     if (!width) return [];
     const t0 = xToYear(-20, win, width);
@@ -156,27 +171,18 @@ export function Timeline({
     const visible = allEntries
       .filter((e) => e.year >= t0 && e.year <= t1)
       .sort((a, b) => a.year - b.year);
-    const laneEnd = [-Infinity, -Infinity, -Infinity];
-    return visible.map((entry, i) => {
+    const laneEnd: number[] = Array(LANES).fill(-Infinity);
+    const placed: { entry: Entry; x: number; lane: number; labeled: boolean }[] =
+      [];
+    for (const entry of visible) {
       const x = yearToX(entry.year, win, width);
-      let lane = -1;
-      for (let l = 0; l < 3; l++) {
-        if (laneEnd[l] <= x - 8) {
-          lane = l;
-          break;
-        }
-      }
-      let labeled = false;
-      if (lane === -1) {
-        lane = i % 3;
-      } else if (showMarkLabels) {
-        labeled = true;
-        laneEnd[lane] = x + entry.title.length * 6.4 + 16;
-      } else {
-        laneEnd[lane] = x + 8;
-      }
-      return { entry, x, lane, labeled };
-    });
+      const lane = laneEnd.findIndex((end) => end <= x - 8);
+      if (lane === -1) continue; // no room anywhere — zooming in reveals it
+      const labeled = showMarkLabels;
+      laneEnd[lane] = labeled ? x + 12 + entry.title.length * 6.2 : x + 8;
+      placed.push({ entry, x, lane, labeled });
+    }
+    return placed;
   }, [win, width, showMarkLabels]);
 
   const zoomBy = (factor: number) => {
@@ -236,6 +242,7 @@ export function Timeline({
                   fill={era.color}
                   onClick={(e) => {
                     e.stopPropagation();
+                    if (wasDrag.current) return; // a pan ended here, not a click
                     const pad = (unitOfYear(era.end) - unitOfYear(era.start)) * 0.06;
                     flyTo({
                       u0: unitOfYear(era.start) - pad,
@@ -286,7 +293,7 @@ export function Timeline({
 
           {/* Entry marks */}
           {marks.map(({ entry, x, lane, labeled }) => {
-            const y = BAND_H + AXIS_H + 10 + lane * 17;
+            const y = BAND_H + AXIS_H + 12 + lane * LANE_STEP;
             const era = eras.find((e) => e.id === entry.era);
             return (
               <g
@@ -295,9 +302,9 @@ export function Timeline({
                 transform={`translate(${x},${y})`}
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (wasDrag.current) return; // pan release, not a selection
                   onSelectEntry(entry);
                 }}
-                onPointerDown={(e) => e.stopPropagation()}
               >
                 <text className="entry-glyph" fill={era?.color}>
                   {KIND_GLYPH[entry.kind]}

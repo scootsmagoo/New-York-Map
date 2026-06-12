@@ -133,6 +133,11 @@ header, theme, footprint, markers, panel — derives from it.
   roads; borough street-hatch fills; zoom-based level-of-detail framework
   (max zoom 10×→16×). Verified in-browser at 1714, 1843, and 1880 at
   multiple zooms.
+- **2026-06-12 (timeline UX)** — Fixed overlapping timeline marks with a
+  proper declutter pass (4 lanes, label-width reservation, hide-don't-overlap)
+  and fixed the "snap back to era" bug: drags that started on an era band or
+  mark were firing those elements' click handlers on release. Added deep
+  links (`#year=1880&span=0.11`).
 
 ## Lessons learned
 
@@ -188,6 +193,15 @@ header, theme, footprint, markers, panel — derives from it.
     (29° bearing, 79 m street pitch) costs ~60 lines and zero kilobytes,
     against megabytes for real centerlines that would fight the archival
     style anyway.
+13. **Browsers fire `click` after a drag.** With pointer capture, a pan that
+    starts on an era band still ends with that band receiving a click —
+    which flew the view right back to the era the user was trying to leave.
+    Custom drag surfaces need a "was this a drag?" flag consulted by every
+    click handler on them.
+14. **Never draw two things in one spot; hide the loser.** The timeline's
+    declutter reserves real label widths per lane and simply skips marks
+    that don't fit — zooming in reveals them. An overlapped label is worse
+    than an absent one.
 
 ## Future features
 
@@ -202,7 +216,9 @@ header, theme, footprint, markers, panel — derives from it.
       street name labels beyond Broadway; demolition "ghost" markers.
 - [ ] Guided "tours": scripted camera+timeline paths (e.g., follow the Erie
       Canal money, or Whitman's ferry commute).
-- [ ] Search across entries; deep links (`?year=1863`) for sharing.
+- [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
+      timeline there.
+- [ ] Search across entries.
 - [ ] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
 - [ ] Optional 2.5D mode (extruded massing by era) — evaluated three.js for
       v1 and chose 2D: no credible 3D data exists before ~1900, and the

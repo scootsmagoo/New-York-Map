@@ -16,8 +16,19 @@ import { EraPanel } from "./components/EraPanel";
 import { EntryModal } from "./components/EntryModal";
 import { AboutModal } from "./components/AboutModal";
 
+/** Initial window from a deep link like #year=1880 or #year=1880&span=0.05. */
+function initialWindow(): TimeWindow {
+  const hash = window.location.hash;
+  const yearMatch = hash.match(/year=(-?\d+)/);
+  if (!yearMatch) return { u0: 0, u1: 1 };
+  const u = unitOfYear(parseInt(yearMatch[1], 10));
+  const spanMatch = hash.match(/span=([\d.]+)/);
+  const span = spanMatch ? parseFloat(spanMatch[1]) : 0.1;
+  return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
+}
+
 export default function App() {
-  const [win, setWin] = useState<TimeWindow>({ u0: 0, u1: 1 });
+  const [win, setWin] = useState<TimeWindow>(initialWindow);
   const [panelOpen, setPanelOpen] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
