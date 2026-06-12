@@ -26,6 +26,12 @@ npm run dev      # open http://localhost:5173
   anything — timeline marks, map markers, panel rows — for the full story.
 - Arrow keys pan time; `+` / `-` zoom; the map pans and zooms independently.
 
+## Deploying
+
+Pushes to `main` build and publish automatically via GitHub Actions. One-time
+setup: in the repo's **Settings → Pages**, set *Source* to **GitHub Actions**.
+The site will be served at `https://scootsmagoo.github.io/New-York-Map/`.
+
 ## Documentation
 
 See [PROJECT.md](PROJECT.md) for the project outline, architecture, data

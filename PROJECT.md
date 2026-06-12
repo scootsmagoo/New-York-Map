@@ -105,8 +105,11 @@ header, theme, footprint, markers, panel — derives from it.
   Scaffolded Vite/React/TS; geo pipeline (mapshaper) built; 8 eras and ~115
   entries authored; polylinear timeline, morphing map, era panel, entry
   modal, theming, autoplay all working; Wikipedia titles validated against
-  the live API. First full visual pass in the browser looks right in all
-  eras tested (Lenapehoking, New Amsterdam 1637, British 1739, Gilded 1880).
+  the live API (9 titles corrected to canonical articles). First full visual
+  pass in the browser looks right in all eras tested (Lenapehoking, New
+  Amsterdam 1637, British 1739, Gilded 1880). Production build clean at
+  157 KB gzipped; pushed to GitHub with a Pages deploy workflow (enable
+  **Settings → Pages → Source: GitHub Actions** once).
 
 ## Lessons learned
 
