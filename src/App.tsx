@@ -107,7 +107,11 @@ export default function App() {
       />
 
       <main className="app-main">
-        <MapView year={year} onSelectEntry={setSelectedEntry} />
+        <MapView
+          year={year}
+          selectedEntry={selectedEntry}
+          onSelectEntry={setSelectedEntry}
+        />
         {panelOpen && (
           <EraPanel
             era={era}

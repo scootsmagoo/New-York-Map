@@ -23,6 +23,7 @@ import surroundData from "../data/geo/surround.json";
 
 interface MapViewProps {
   year: number;
+  selectedEntry: Entry | null;
   onSelectEntry: (entry: Entry) => void;
 }
 
@@ -139,11 +140,13 @@ function ringBboxArea(ring: [number, number][]): number {
 
 const MAJOR_PARK_AREA = 5e-5;
 
-export function MapView({ year, onSelectEntry }: MapViewProps) {
+export function MapView({ year, selectedEntry, onSelectEntry }: MapViewProps) {
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
   const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
   const [transform, setTransform] = useState(zoomIdentity);
+  const transformRef = useRef(transform);
+  transformRef.current = transform;
 
   const projection = useMemo(() => {
     if (!width || !height) return null;
@@ -181,6 +184,28 @@ export function MapView({ year, onSelectEntry }: MapViewProps) {
       zoomRef.current = null;
     };
   }, [width, height]);
+
+  // Pan/zoom to the selected entry whenever it changes (map, timeline, or panel).
+  useEffect(() => {
+    const svg = svgRef.current;
+    const behavior = zoomRef.current;
+    if (!svg || !behavior || !projection || !width || !height) return;
+    if (!selectedEntry?.coords) return;
+
+    const pos = projection(selectedEntry.coords);
+    if (!pos) return;
+
+    const [px, py] = pos;
+    const targetK = Math.max(transformRef.current.k, 3.5);
+    const tx = width / 2 - px * targetK;
+    const ty = height / 2 - py * targetK;
+    const next = zoomIdentity.translate(tx, ty).scale(targetK);
+
+    select(svg)
+      .transition()
+      .duration(500)
+      .call(behavior.transform as any, next);
+  }, [selectedEntry, projection, width, height]);
 
   const resetZoom = () => {
     const svg = svgRef.current;
