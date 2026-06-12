@@ -16,6 +16,7 @@ import { EraPanel } from "./components/EraPanel";
 import { EntryModal } from "./components/EntryModal";
 import { AboutModal } from "./components/AboutModal";
 import { PopulationPanel } from "./components/PopulationPanel";
+import { SearchPalette } from "./components/SearchPalette";
 import type { SegmentKey } from "./data/population";
 import { useDebouncedValue } from "./lib/useDebouncedValue";
 
@@ -39,6 +40,8 @@ export default function App() {
   const [popOpen, setPopOpen] = useState(false);
   const [showSettlements, setShowSettlements] = useState(true);
   const [highlightGroup, setHighlightGroup] = useState<SegmentKey | null>(null);
+  const [focusToken, setFocusToken] = useState(0);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const year = useMemo(() => yearOfUnit((win.u0 + win.u1) / 2), [win]);
   /** Map & population lag the playhead slightly so timeline scrub stays smooth. */
@@ -72,9 +75,15 @@ export default function App() {
     return () => cancelAnimationFrame(raf);
   }, [playing]);
 
-  // Keyboard: arrows pan, +/- zoom, space toggles play.
+  // Keyboard: Ctrl/Cmd+K opens search; arrows pan, +/- zoom, space toggles play.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+        return;
+      }
+      if (searchOpen) return;
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "BUTTON") return;
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
@@ -92,7 +101,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [searchOpen]);
 
   const jumpToYear = useCallback((target: number) => {
     setPlaying(false);
@@ -105,11 +114,32 @@ export default function App() {
     });
   }, []);
 
+  const selectEntry = useCallback((entry: Entry) => {
+    setSelectedEntry(entry);
+    setFocusToken((t) => t + 1);
+  }, []);
+
+  const goToEntry = useCallback(
+    (entry: Entry) => {
+      setPlaying(false);
+      setPanelOpen(false);
+      setSearchOpen(false);
+      setWin((w) => {
+        const span = Math.min(w.u1 - w.u0, 0.18);
+        const u = unitOfYear(entry.year);
+        return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
+      });
+      selectEntry(entry);
+    },
+    [selectEntry]
+  );
+
   return (
     <div className="app" data-era={era.id} style={{ "--accent": era.color } as React.CSSProperties}>
       <Header
         year={year}
         era={era}
+        onSearch={() => setSearchOpen(true)}
         onExploreEra={() => setPanelOpen((o) => !o)}
         onAbout={() => setAboutOpen(true)}
       />
@@ -118,7 +148,8 @@ export default function App() {
         <MapView
           year={mapYear}
           selectedEntry={selectedEntry}
-          onSelectEntry={setSelectedEntry}
+          focusToken={focusToken}
+          onSelectEntry={selectEntry}
           showSettlements={popOpen && showSettlements}
           highlightGroup={highlightGroup}
         />
@@ -134,7 +165,7 @@ export default function App() {
           <EraPanel
             era={era}
             onClose={() => setPanelOpen(false)}
-            onSelectEntry={setSelectedEntry}
+            onSelectEntry={selectEntry}
           />
         )}
       </main>
@@ -142,7 +173,7 @@ export default function App() {
       <Timeline
         window={win}
         onWindowChange={setWindowFromUser}
-        onSelectEntry={setSelectedEntry}
+        onSelectEntry={selectEntry}
         playing={playing}
         onTogglePlay={() => setPlaying((p) => !p)}
       />
@@ -155,6 +186,12 @@ export default function App() {
         />
       )}
       {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
+      {searchOpen && (
+        <SearchPalette
+          onClose={() => setSearchOpen(false)}
+          onSelectEntry={goToEntry}
+        />
+      )}
     </div>
   );
 }

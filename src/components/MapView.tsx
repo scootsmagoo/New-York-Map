@@ -26,6 +26,8 @@ import surroundData from "../data/geo/surround.json";
 interface MapViewProps {
   year: number;
   selectedEntry: Entry | null;
+  /** Bumped on every selection so re-clicking the same entry still flies the map. */
+  focusToken: number;
   onSelectEntry: (entry: Entry) => void;
   showSettlements?: boolean;
   highlightGroup?: SegmentKey | null;
@@ -187,6 +189,7 @@ const MAJOR_PARK_AREA = 5e-5;
 export function MapView({
   year,
   selectedEntry,
+  focusToken,
   onSelectEntry,
   showSettlements = false,
   highlightGroup = null,
@@ -271,15 +274,16 @@ export function MapView({
 
     const [px, py] = pos;
     const targetK = Math.max(transformRef.current.k, 3.5);
-    const tx = width / 2 - px * targetK;
-    const ty = height / 2 - py * targetK;
-    const next = zoomIdentity.translate(tx, ty).scale(targetK);
+    // scale() then translate() — d3 composes translate after scale on the identity.
+    const next = zoomIdentity
+      .scale(targetK)
+      .translate(width / 2 / targetK - px, height / 2 / targetK - py);
 
     select(svg)
       .transition()
       .duration(500)
       .call(behavior.transform as any, next);
-  }, [selectedEntry, projection, width, height]);
+  }, [selectedEntry, focusToken, projection, width, height]);
 
   const resetZoom = () => {
     const svg = svgRef.current;

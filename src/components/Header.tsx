@@ -4,11 +4,12 @@ import { formatYear } from "../data/eras";
 interface HeaderProps {
   year: number;
   era: Era;
+  onSearch: () => void;
   onExploreEra: () => void;
   onAbout: () => void;
 }
 
-export function Header({ year, era, onExploreEra, onAbout }: HeaderProps) {
+export function Header({ year, era, onSearch, onExploreEra, onAbout }: HeaderProps) {
   return (
     <header className="app-header">
       <div className="brand">
@@ -27,6 +28,21 @@ export function Header({ year, era, onExploreEra, onAbout }: HeaderProps) {
       </div>
 
       <div className="header-actions">
+        <button
+          className="search-btn"
+          type="button"
+          onClick={onSearch}
+          title="Search (Ctrl+K)"
+          aria-label="Search people, places, and events"
+        >
+          <span className="search-btn-icon" aria-hidden>
+            ⌕
+          </span>
+          <span className="search-btn-label">Search</span>
+          <kbd className="search-kbd" aria-hidden>
+            ⌘K
+          </kbd>
+        </button>
         <button
           className="explore-btn"
           style={{ background: era.color }}
