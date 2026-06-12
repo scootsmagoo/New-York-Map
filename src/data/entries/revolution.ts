@@ -97,7 +97,7 @@ export const revolutionEntries: Entry[] = [
     era: "revolution",
     kind: "event",
     title: "George III's statue pulled down",
-    wikiTitle: "Equestrian statue of George III (New York City)",
+    wikiTitle: "Bowling Green (New York City)",
     year: 1776,
     blurb:
       "On hearing the Declaration read on July 9, 1776, soldiers and citizens toppled the gilded king at Bowling Green; most of his two tons of lead became 42,088 patriot musket balls.",
