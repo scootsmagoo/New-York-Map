@@ -73,6 +73,17 @@ export interface Structure {
   entryId?: string;
 }
 
+/** Els, subways, aqueducts — dated line geometry with distinct styling. */
+export interface InfrastructureLine {
+  id: string;
+  name: string;
+  kind: "aqueduct" | "elevated" | "subway";
+  pts: [number, number][];
+  open: number;
+  close?: number;
+  entryId?: string;
+}
+
 /** A park with an acquisition date and optional construction period. */
 export interface Park {
   id: string;

@@ -12,6 +12,7 @@ import type { Entry } from "../types";
 import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
 import { lenapeSites, lenapeTerritories, lenapeTrails } from "../data/lenapeSites";
 import { bridges, ferries } from "../data/structures";
+import { infrastructureLines } from "../data/infrastructure";
 import { parks } from "../data/parks";
 import {
   colonialStreets,
@@ -31,7 +32,7 @@ import {
   overlayManualPick,
   overlayPlacement,
 } from "../lib/historicalOverlays";
-import { layoutStreetLabels } from "../lib/streetLabels";
+import { layoutStreetLabels, layoutGridLabels } from "../lib/streetLabels";
 import { useElementSize } from "../lib/useElementSize";
 import boroughsData from "../data/geo/boroughs.json";
 import surroundData from "../data/geo/surround.json";
@@ -157,6 +158,11 @@ function projectedRadius(
   const edge = projection([coords[0] + radiusDeg, coords[1]]);
   if (!c || !edge) return 8;
   return Math.max(6, Math.hypot(edge[0] - c[0], edge[1] - c[1]));
+}
+
+/** Fade a demolished landmark's ghost in over a few years. */
+function ghostOpacity(year: number, demolished: number): number {
+  return clamp01((year - demolished) / 8) * 0.55;
 }
 
 /** Fade a settlement in over a few years after it forms, out before it ends. */
@@ -338,6 +344,7 @@ export function MapView({
   // ----- Level-of-detail fades -----
   const roadFade = fade(k, 1.5, 2.2); // colonial streets + grid
   const ferryFade = fade(k, 1.4, 2.0);
+  const infraFade = fade(k, 1.6, 2.4); // els, subway, aqueduct
   const minorParkFade = fade(k, 1.8, 2.5);
   const labelFade = fade(k, 2.8, 3.6);
   const expandMarkers = k >= 2;
@@ -433,6 +440,13 @@ export function MapView({
     return layoutStreetLabels(colonialStreets, projection, year, k);
   }, [projection, showStreetLabels, year, k]);
 
+  const gridLabels = useMemo(() => {
+    if (!projection || !showStreetLabels) return [];
+    const f = frontierAt(year);
+    const maxLat = Math.max(f.latW, f.latE);
+    return layoutGridLabels(projection, year, k, maxLat);
+  }, [projection, showStreetLabels, year, k]);
+
   // ----- Structures -----
   const structurePaths = useMemo(() => {
     if (!projection) return [];
@@ -448,6 +462,28 @@ export function MapView({
       if (angle < -90) angle += 180;
       return {
         ...s,
+        d,
+        mid: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] as [number, number],
+        angle,
+      };
+    });
+  }, [projection]);
+
+  // ----- Infrastructure (els, subway, aqueduct) -----
+  const infrastructurePaths = useMemo(() => {
+    if (!projection) return [];
+    return infrastructureLines.map((line) => {
+      const projected = line.pts.map((p) => projection(p)!);
+      const d = projected
+        .map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`)
+        .join("");
+      const a = projected[0];
+      const b = projected[projected.length - 1];
+      let angle = (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI;
+      if (angle > 90) angle -= 180;
+      if (angle < -90) angle += 180;
+      return {
+        ...line,
         d,
         mid: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] as [number, number],
         angle,
@@ -481,7 +517,16 @@ export function MapView({
     });
   }, [year, era.id, expandMarkers]);
 
-  // Lenape layer fades from full at 1609 to nothing by 1680.
+  // Demolished landmarks leave faint "ghost" markers when zoomed in.
+  const ghostMarkers = useMemo(() => {
+    if (!expandMarkers) return [];
+    return allEntries.filter((e) => {
+      if (!e.coords || !e.lifespan) return false;
+      const demolished = e.lifespan[1];
+      return demolished !== null && year > demolished;
+    });
+  }, [year, expandMarkers]);
+
   const lenapeOpacity = year <= 1609 ? 1 : Math.max(0, 1 - (year - 1609) / 71);
 
   const popScope = useMemo(() => populationAt(year).scope, [year]);
@@ -725,6 +770,20 @@ export function MapView({
               </g>
             ))}
 
+          {showStreetLabels &&
+            gridLabels.map(({ text, pos, angle, opacity }) => (
+              <text
+                key={`grid-${text}-${pos[0].toFixed(0)}`}
+                className="street-label street-label-grid"
+                transform={`translate(${pos[0]},${pos[1]}) rotate(${angle}) scale(${1 / k})`}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={{ opacity: opacity * roadFade }}
+              >
+                {text}
+              </text>
+            ))}
+
           {/* Parks */}
           {parkPaths
             .filter((p) => year >= p.from)
@@ -785,6 +844,43 @@ export function MapView({
                       y={-5}
                     >
                       {s.name}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+          {/* Els, subway, and Croton Aqueduct */}
+          {infrastructurePaths
+            .filter(
+              (line) =>
+                year >= line.open &&
+                (line.close === undefined || year <= line.close)
+            )
+            .map((line) => {
+              if (infraFade <= 0) return null;
+              const entry = line.entryId
+                ? allEntries.find((e) => e.id === line.entryId)
+                : undefined;
+              const clip =
+                line.kind === "aqueduct" ? undefined : "url(#manhattan-clip)";
+              return (
+                <g key={line.id} clipPath={clip} style={{ opacity: infraFade }}>
+                  <path
+                    className={`infra infra-${line.kind}`}
+                    d={line.d}
+                    onClick={entry ? () => onSelectEntry(entry) : undefined}
+                    style={entry ? { cursor: "pointer" } : undefined}
+                  />
+                  <title>{line.name}</title>
+                  {labelFade > 0 && line.kind !== "aqueduct" && (
+                    <text
+                      className="infra-label"
+                      transform={`translate(${line.mid[0]},${line.mid[1]}) rotate(${line.angle}) scale(${1 / k})`}
+                      style={{ opacity: labelFade * 0.85 }}
+                      y={line.kind === "subway" ? 6 : -5}
+                    >
+                      {line.name}
                     </text>
                   )}
                 </g>
@@ -896,6 +992,31 @@ export function MapView({
               ))}
             </g>
           )}
+
+          {/* Demolished landmark ghosts */}
+          {ghostMarkers.map((m) => {
+            const demolished = m.lifespan![1]!;
+            const pos = projection!(m.coords!);
+            if (!pos) return null;
+            const opacity = ghostOpacity(year, demolished);
+            if (opacity <= 0) return null;
+            return (
+              <g
+                key={`ghost-${m.id}`}
+                className={`marker marker-ghost marker-${m.kind}`}
+                transform={`translate(${pos[0]},${pos[1]}) scale(${1 / k})`}
+                style={{ opacity }}
+                onClick={() => onSelectEntry(m)}
+              >
+                <circle className="marker-halo" r={11} />
+                {KIND_SYMBOL[m.kind](9)}
+                <text className="marker-label marker-label-ghost" y={-12}>
+                  {m.title}
+                </text>
+                <title>{`${m.title} (demolished ${demolished})`}</title>
+              </g>
+            );
+          })}
 
           {/* Entry markers */}
           {markers.map((m) => {

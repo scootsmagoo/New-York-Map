@@ -1,5 +1,6 @@
 import type { ColonialStreet, StreetTier } from "../data/streets";
 import { streetTier } from "../data/streets";
+import { gridSegments, type Seg } from "./grid";
 
 function fade(k: number, from: number, to: number): number {
   return Math.max(0, Math.min(1, (k - from) / (to - from)));
@@ -28,6 +29,14 @@ export interface StreetLabelLayout {
   pos: [number, number];
   angle: number;
   opacity: number;
+}
+
+export interface GridLabelLayout {
+  text: string;
+  pos: [number, number];
+  angle: number;
+  opacity: number;
+  tier: StreetTier;
 }
 
 interface BBox {
@@ -130,6 +139,102 @@ export function layoutStreetLabels(
 
   for (const layout of candidates) {
     const box = labelBBox(layout.pos, layout.street.name, k);
+    if (placed.some((p) => overlaps(p, box))) continue;
+    placed.push(box);
+    out.push(layout);
+  }
+
+  return out;
+}
+
+/** Avenue index (grid `j`) to display name. */
+const AVE_NAMES: Record<number, string> = {
+  [-8]: "10th Ave",
+  [-6]: "8th Ave",
+  [-4]: "6th Ave",
+  [-2]: "4th Ave",
+  [0]: "2nd Ave",
+  [1]: "3rd Ave",
+  [2]: "Lexington Ave",
+  [3]: "5th Ave",
+  [4]: "Madison Ave",
+};
+
+function segMidpoint(seg: Seg): [number, number] {
+  return [(seg[0][0] + seg[1][0]) / 2, (seg[0][1] + seg[1][1]) / 2];
+}
+
+function segAngle(
+  project: (c: [number, number]) => [number, number] | null,
+  seg: Seg
+): { pos: [number, number]; angle: number } | null {
+  const a = project(seg[0]);
+  const b = project(seg[1]);
+  if (!a || !b) return null;
+  let angle = (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI;
+  if (angle > 90) angle -= 180;
+  if (angle < -90) angle += 180;
+  return {
+    pos: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2],
+    angle,
+  };
+}
+
+/**
+ * Labels for the procedural 1811 grid — avenues and every 10th street.
+ * Only meaningful once the grid exists (1811+) and the user is zoomed in.
+ */
+export function layoutGridLabels(
+  project: (c: [number, number]) => [number, number] | null,
+  year: number,
+  k: number,
+  maxLat: number
+): GridLabelLayout[] {
+  if (year < 1811) return [];
+
+  const { streets, avenues } = gridSegments();
+  const candidates: GridLabelLayout[] = [];
+
+  for (const [j, name] of Object.entries(AVE_NAMES)) {
+    const idx = parseInt(j, 10);
+    const aveSeg = avenues[idx + 10];
+    if (!aveSeg) continue;
+    const mid = segMidpoint(aveSeg);
+    if (mid[1] > maxLat) continue;
+    const layout = segAngle(project, aveSeg);
+    if (!layout) continue;
+    const opacity = streetLabelOpacity("major", k);
+    if (opacity <= 0) continue;
+    candidates.push({ text: name, ...layout, opacity, tier: "major" });
+  }
+
+  for (let i = 9; i < streets.length; i += 10) {
+    const streetNum = i + 1;
+    const seg = streets[i];
+    const mid = segMidpoint(seg);
+    if (mid[1] > maxLat) continue;
+    const layout = segAngle(project, seg);
+    if (!layout) continue;
+    const tier: StreetTier = streetNum % 20 === 0 ? "secondary" : "minor";
+    const opacity = streetLabelOpacity(tier, k);
+    if (opacity <= 0) continue;
+    candidates.push({
+      text: `${streetNum}th St`,
+      ...layout,
+      opacity,
+      tier,
+    });
+  }
+
+  candidates.sort(
+    (a, b) => TIER_RANK[a.tier] - TIER_RANK[b.tier] || b.opacity - a.opacity
+  );
+
+  const placed: BBox[] = [];
+  const out: GridLabelLayout[] = [];
+
+  for (const layout of candidates) {
+    const box = labelBBox(layout.pos, layout.text, k);
     if (placed.some((p) => overlaps(p, box))) continue;
     placed.push(box);
     out.push(layout);

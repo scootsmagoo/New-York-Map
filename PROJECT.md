@@ -218,7 +218,7 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] ~~Street-grid growth rendering~~ — shipped: procedural 1811 grid with
       survey-vs-built frontier, colonial road network, street-hatch fills.
 - [x] Population counter and demographic strip charts that track the playhead.
-- [ ] Els, subway lines, and the Croton Aqueduct as dated line geometry;
+- [x] Els, subway lines, and the Croton Aqueduct as dated line geometry;
       street name labels beyond Broadway; demolition "ghost" markers.
 - [ ] Guided "tours": scripted camera+timeline paths (e.g., follow the Erie
       Canal money, or Whitman's ferry commute).

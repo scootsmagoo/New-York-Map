@@ -630,6 +630,50 @@ button {
   vector-effect: non-scaling-stroke;
 }
 
+.infra {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.infra-aqueduct {
+  stroke: #3d6b8a;
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  opacity: 0.85;
+}
+
+.infra-elevated {
+  stroke: #4a3d35;
+  stroke-width: 2.6;
+  stroke-dasharray: 1 0;
+}
+
+.infra-subway {
+  stroke: #2e2e2e;
+  stroke-width: 2.2;
+  stroke-dasharray: 3 2;
+  opacity: 0.9;
+}
+
+.infra-label {
+  font-size: 9px;
+  font-weight: 600;
+  fill: color-mix(in srgb, var(--ink) 75%, transparent);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 2px;
+  pointer-events: none;
+}
+
+.street-label-grid {
+  font-size: 9px;
+  font-style: italic;
+  fill: color-mix(in srgb, var(--ink) 58%, transparent);
+}
+
 .park {
   fill: #a3b585;
   fill-opacity: 0.82;
@@ -753,6 +797,26 @@ button {
 }
 
 .marker:hover .marker-label { opacity: 1; }
+
+.marker-ghost circle:not(.marker-halo),
+.marker-ghost rect,
+.marker-ghost path {
+  fill: transparent;
+  stroke: color-mix(in srgb, var(--ink) 45%, transparent);
+  stroke-width: 1.6;
+  stroke-dasharray: 3 2;
+}
+
+.marker-ghost .marker-halo {
+  opacity: 0.25;
+}
+
+.marker-label-ghost {
+  font-style: italic;
+  opacity: 0.65;
+}
+
+.marker-ghost:hover .marker-label-ghost { opacity: 1; }
 
 .map-controls {
   position: absolute;
