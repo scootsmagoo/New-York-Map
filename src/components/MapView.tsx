@@ -160,6 +160,16 @@ function projectedRadius(
   return Math.max(6, Math.hypot(edge[0] - c[0], edge[1] - c[1]));
 }
 
+/** Let keyboard users activate SVG markers with Enter or Space. */
+function activateOnKey(fn: () => void) {
+  return (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      fn();
+    }
+  };
+}
+
 /** Fade a demolished landmark's ghost in over a few years. */
 function ghostOpacity(year: number, demolished: number): number {
   return clamp01((year - demolished) / 8) * 0.55;
@@ -604,7 +614,14 @@ function MapViewInner({
 
   return (
     <div className="map-view" ref={ref}>
-      <svg ref={svgRef} className="map-svg" width={width} height={height}>
+      <svg
+        ref={svgRef}
+        className="map-svg"
+        width={width}
+        height={height}
+        role="img"
+        aria-label={`Map of New York City in ${year}`}
+      >
         <defs>
           <clipPath id="land-clip">
             {boroughPaths.map((b: { boro: string; d: string }) => (
@@ -1033,7 +1050,11 @@ function MapViewInner({
                 className={`marker marker-ghost marker-${m.kind}`}
                 transform={`translate(${pos[0]},${pos[1]}) scale(${1 / k})`}
                 style={{ opacity }}
+                role="button"
+                tabIndex={0}
+                aria-label={`${m.title} (demolished ${demolished})`}
                 onClick={() => onSelectEntry(m)}
+                onKeyDown={activateOnKey(() => onSelectEntry(m))}
               >
                 <circle className="marker-halo" r={11} />
                 {KIND_SYMBOL[m.kind](9)}
@@ -1054,7 +1075,11 @@ function MapViewInner({
                 key={m.id}
                 className={`marker marker-${m.kind}`}
                 transform={`translate(${pos[0]},${pos[1]}) scale(${1 / k})`}
+                role="button"
+                tabIndex={0}
+                aria-label={m.title}
                 onClick={() => onSelectEntry(m)}
+                onKeyDown={activateOnKey(() => onSelectEntry(m))}
               >
                 <circle className="marker-halo" r={11} />
                 {KIND_SYMBOL[m.kind](9)}

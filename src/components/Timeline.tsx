@@ -300,10 +300,20 @@ export function Timeline({
                 key={entry.id}
                 className="entry-mark"
                 transform={`translate(${x},${y})`}
+                role="button"
+                tabIndex={0}
+                aria-label={`${entry.title}, ${entry.yearLabel ?? formatYear(entry.year)}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (wasDrag.current) return; // pan release, not a selection
                   onSelectEntry(entry);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onSelectEntry(entry);
+                  }
                 }}
               >
                 <text className="entry-glyph" fill={era?.color}>

@@ -797,7 +797,23 @@ button {
   pointer-events: none;
 }
 
-.marker:hover .marker-label { opacity: 1; }
+.marker:hover .marker-label,
+.marker:focus-visible .marker-label { opacity: 1; }
+
+.marker:focus-visible,
+.entry-mark:focus-visible {
+  outline: none;
+}
+
+.marker:focus-visible .marker-halo {
+  stroke: var(--accent);
+  stroke-width: 2;
+  opacity: 1;
+}
+
+.entry-mark:focus-visible .entry-glyph {
+  stroke: var(--ink);
+}
 
 .marker-ghost circle:not(.marker-halo),
 .marker-ghost rect,
