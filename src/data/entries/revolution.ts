@@ -2,6 +2,18 @@ import type { Entry } from "../../types";
 
 export const revolutionEntries: Entry[] = [
   {
+    id: "st-pauls-chapel",
+    era: "revolution",
+    kind: "place",
+    title: "St. Paul's Chapel",
+    wikiTitle: "St. Paul's Chapel",
+    year: 1766,
+    blurb:
+      "Trinity's 'chapel of ease' in the fields north of town — the oldest church building in Manhattan, survivor of the 1776 fire, and Washington's pew on inauguration day.",
+    coords: [-74.0092, 40.7113],
+    lifespan: [1766, null],
+  },
+  {
     id: "mcdougall",
     era: "revolution",
     kind: "person",
