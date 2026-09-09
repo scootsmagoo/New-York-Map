@@ -25,6 +25,10 @@ npm run dev      # open http://localhost:5173
 - **Explore this era** lists the era's people, places, and events; click
   anything — timeline marks, map markers, panel rows — for the full story.
 - Arrow keys pan time; `+` / `-` zoom; the map pans and zooms independently.
+- **Guided tours** (⋯ menu) walk the timeline and camera through a story —
+  the grid marching north, crossing the East River, fire and Croton water.
+  Deep-link one with `#tour=grid`, `#tour=east-river`, or `#tour=fire-water`.
+- Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
 
 ## Deploying
 
@@ -44,6 +48,7 @@ sources and caveats, lessons learned, and the future-features roadmap.
 | `npm run dev` | development server |
 | `npm run build` | typecheck + static production build (`dist/`) |
 | `npm run preview` | serve the production build locally |
+| `npm test` | unit tests (timescale, grid, label layout, content integrity, tours) |
 | `npm run validate:wiki` | verify every Wikipedia title resolves |
 | `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources |
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |

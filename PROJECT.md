@@ -143,6 +143,20 @@ header, theme, footprint, markers, panel — derives from it.
   Mercator frame, clipped to Manhattan, with timeline crossfade, manual
   pick mode, and a global opacity slider (~2.8 MB compressed assets in
   `public/overlays/`).
+- **2026-09-09 (Safari performance + hygiene)** — First pass by reading:
+  MapView re-rendered on every animation frame and re-serialized the
+  borough shorelines each time; the map-year debounce never settled during
+  motion. Memoized the map, header, and population panel; hoisted static
+  path strings; throttled + deferred the map year; dropped the footprint
+  blend mode and the blurs floating over the map; added reduced-motion
+  support. Second pass by measuring (Playwright WebKit + Chromium, wheel
+  zoom / pan / autoplay / timeline drag): the real Safari cost was the
+  five-path land clipPath, rasterized as a mask per frame; merged into one
+  path, WebKit map zoom went 10 → 57 fps and pan 17 → 61 fps. Keyboard access for markers. Layer preferences
+  persist. Vitest suite (34 tests) with a CI workflow; the suite found one
+  mis-filed entry. Guided tours shipped (three stories, animated flights,
+  `#tour=` deep links). d3 umbrella dependency replaced by the four
+  submodules in use.
 
 ## Lessons learned
 
@@ -207,6 +221,28 @@ header, theme, footprint, markers, panel — derives from it.
     declutter reserves real label widths per lane and simply skips marks
     that don't fit — zooming in reveals them. An overlapped label is worse
     than an absent one.
+15. **A debounce on a value that changes every frame is a freeze.** The map
+    year was debounced 75 ms behind a float year that moved on every
+    animation frame, so the timer never fired during autoplay or drags and
+    the map snapped on release. Round to whole years and *throttle*; a
+    trailing-edge throttle tracks continuous motion at a steady cadence.
+16. **Measure before believing the folklore.** The Safari slowness was
+    assumed to be React churn, blend modes, and blurs. A Playwright WebKit
+    benchmark (wheel-zoom over the map, count animation frames) showed the
+    real shape: autoplay and timeline drags ran at 60 fps everywhere, but
+    map zoom ran at 10 fps in WebKit versus 60 in Chromium, and none of the
+    first-round fixes moved it. Ablating layers with injected CSS found the
+    culprit in minutes: hiding the footprint wash alone restored 58 fps.
+17. **WebKit clips geometrically only when a `<clipPath>` holds one shape.**
+    The land clip held five borough paths, so WebKit rasterized it as a mask
+    on every pan/zoom frame. Concatenating the borough outlines into a
+    single `<path>` (multiple subpaths, same nonzero fill) took map zoom
+    from 10 fps to 57 fps and panning from 17 to 61 in WebKit. Chromium was
+    already at 60. Keep every clipPath to a single path element.
+18. **Content tests catch what eyes skip.** A ten-line test that checks each
+    entry's year falls inside its era found St. Paul's Chapel (1766) filed
+    under an era that ends in 1763. Data authored by hand deserves the same
+    invariants as code.
 
 ## Future features
 
@@ -220,15 +256,15 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Population counter and demographic strip charts that track the playhead.
 - [x] Els, subway lines, and the Croton Aqueduct as dated line geometry;
       street name labels beyond Broadway; demolition "ghost" markers.
-- [ ] Guided "tours": scripted camera+timeline paths (e.g., follow the Erie
-      Canal money, or Whitman's ferry commute).
+- [x] Guided "tours": scripted camera+timeline paths — shipped: three tours
+      (the 1811 grid marching north, crossing the East River, fire and Croton
+      water) with animated timeline flights, map camera moves, and
+      `#tour=<id>` deep links. Adding one is a data entry in `tours.ts`.
 - [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
       timeline there.
-- [ ] Search across entries.
+- [x] ~~Search across entries~~ — shipped: fuzzy palette over entries and
+      streets (⌘K).
 - [ ] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
-- [ ] Optional 2.5D mode (extruded massing by era) — evaluated three.js for
-      v1 and chose 2D: no credible 3D data exists before ~1900, and the
-      2D archival look serves the story better.
 - [ ] Audio: ambient soundscapes per era (gulls and surf → harbor bells →
       els and steam → ragtime).
 - [ ] More *Gotham* margin notes; chapter cross-references per entry.
