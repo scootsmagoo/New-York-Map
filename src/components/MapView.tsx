@@ -293,6 +293,11 @@ function MapViewInner({
     }));
   }, [path]);
 
+  const landClipD = useMemo(
+    () => boroughPaths.map((b: { d: string }) => b.d).join(""),
+    [boroughPaths]
+  );
+
   const surroundPaths = useMemo(() => {
     if (!path) return [];
     return (surroundData as any).features.map((f: any) => path(f) ?? "");
@@ -656,10 +661,11 @@ function MapViewInner({
         aria-label={`Map of New York City in ${year}`}
       >
         <defs>
+          {/* One <path> per clipPath: WebKit clips geometrically only when a
+              clipPath holds a single shape, and otherwise rasterizes a mask on
+              every pan/zoom frame (10 fps vs 60 fps on the footprint wash). */}
           <clipPath id="land-clip">
-            {boroughPaths.map((b: { boro: string; d: string }) => (
-              <path key={b.boro} d={b.d} />
-            ))}
+            <path d={landClipD} />
           </clipPath>
           <clipPath id="manhattan-clip">
             {boroughPaths
