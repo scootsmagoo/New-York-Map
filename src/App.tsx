@@ -21,6 +21,7 @@ import { SearchPalette } from "./components/SearchPalette";
 import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
 import { useThrottledValue } from "./lib/useThrottledValue";
+import { usePersistedState } from "./lib/usePersistedState";
 
 /** Initial window from a deep link like #year=1880 or #year=1880&span=0.05. */
 function initialWindow(): TimeWindow {
@@ -40,16 +41,17 @@ export default function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [popOpen, setPopOpen] = useState(false);
-  const [showSettlements, setShowSettlements] = useState(true);
+  const [showSettlements, setShowSettlements] = usePersistedState("settlements", true);
   const [highlightGroup, setHighlightGroup] = useState<SegmentKey | null>(null);
   const [focusToken, setFocusToken] = useState(0);
   const [focusStreet, setFocusStreet] = useState<ColonialStreet | null>(null);
   const [streetFocusToken, setStreetFocusToken] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [overlaysEnabled, setOverlaysEnabled] = useState(false);
-  const [overlaysAuto, setOverlaysAuto] = useState(true);
-  const [overlayOpacity, setOverlayOpacity] = useState(0.72);
-  const [showStreetLabels, setShowStreetLabels] = useState(false);
+  // Layer preferences survive reloads; everything else starts fresh.
+  const [overlaysEnabled, setOverlaysEnabled] = usePersistedState("overlays", false);
+  const [overlaysAuto, setOverlaysAuto] = usePersistedState("overlaysAuto", true);
+  const [overlayOpacity, setOverlayOpacity] = usePersistedState("overlayOpacity", 0.72);
+  const [showStreetLabels, setShowStreetLabels] = usePersistedState("streetLabels", false);
 
   // Whole years only: the window moves every frame, but nothing downstream
   // (header, era, map) needs sub-year precision, and integer years let
