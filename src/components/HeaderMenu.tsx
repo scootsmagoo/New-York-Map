@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { tours, type Tour } from "../data/tours";
 
 interface HeaderMenuProps {
   onAbout: () => void;
+  onStartTour: (tour: Tour) => void;
   overlaysEnabled: boolean;
   onOverlaysEnabledChange: (v: boolean) => void;
   overlaysAuto: boolean;
@@ -15,6 +17,7 @@ interface HeaderMenuProps {
 
 export function HeaderMenu({
   onAbout,
+  onStartTour,
   overlaysEnabled,
   onOverlaysEnabledChange,
   overlaysAuto,
@@ -70,6 +73,30 @@ export function HeaderMenu({
           >
             About this project
           </button>
+
+          <div className="header-menu-divider" role="separator" />
+
+          <div className="header-menu-section" role="group" aria-label="Guided tours">
+            <div className="header-menu-section-title">Guided tours</div>
+            <p className="header-menu-section-note">
+              Scripted walks through time and across the map.
+            </p>
+            {tours.map((tour) => (
+              <button
+                key={tour.id}
+                className="header-menu-tour"
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setOpen(false);
+                  onStartTour(tour);
+                }}
+              >
+                <span className="header-menu-tour-title">{tour.title}</span>
+                <span className="header-menu-tour-sub">{tour.subtitle}</span>
+              </button>
+            ))}
+          </div>
 
           <div className="header-menu-divider" role="separator" />
 

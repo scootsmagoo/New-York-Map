@@ -1,4 +1,11 @@
-import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { Entry } from "./types";
 import type { ColonialStreet } from "./data/streets";
 import { eraForYear } from "./data/eras";
@@ -18,10 +25,16 @@ import { EntryModal } from "./components/EntryModal";
 import { AboutModal } from "./components/AboutModal";
 import { PopulationPanel } from "./components/PopulationPanel";
 import { SearchPalette } from "./components/SearchPalette";
+import { TourCard } from "./components/TourCard";
+import { tourById, type MapFocus, type Tour } from "./data/tours";
 import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
 import { useThrottledValue } from "./lib/useThrottledValue";
 import { usePersistedState } from "./lib/usePersistedState";
+
+function easeInOutCubic(t: number): number {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
 
 /** Initial window from a deep link like #year=1880 or #year=1880&span=0.05. */
 function initialWindow(): TimeWindow {
@@ -52,6 +65,40 @@ export default function App() {
   const [overlaysAuto, setOverlaysAuto] = usePersistedState("overlaysAuto", true);
   const [overlayOpacity, setOverlayOpacity] = usePersistedState("overlayOpacity", 0.72);
   const [showStreetLabels, setShowStreetLabels] = usePersistedState("streetLabels", false);
+  const [tour, setTour] = useState<{ tour: Tour; step: number } | null>(null);
+  const [focusPoint, setFocusPoint] = useState<MapFocus | null>(null);
+  const [focusPointToken, setFocusPointToken] = useState(0);
+
+  // Animated timeline flights (tours). Any user gesture cancels one in progress.
+  const winRef = useRef(win);
+  winRef.current = win;
+  const flyAnim = useRef<number | null>(null);
+  const cancelFly = useCallback(() => {
+    if (flyAnim.current !== null) {
+      cancelAnimationFrame(flyAnim.current);
+      flyAnim.current = null;
+    }
+  }, []);
+  const flyWindow = useCallback(
+    (target: TimeWindow, duration = 900) => {
+      cancelFly();
+      const from = { ...winRef.current };
+      const to = clampWindow(target);
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const p = Math.min(1, (now - t0) / duration);
+        const e = easeInOutCubic(p);
+        setWin({
+          u0: from.u0 + (to.u0 - from.u0) * e,
+          u1: from.u1 + (to.u1 - from.u1) * e,
+        });
+        flyAnim.current = p < 1 ? requestAnimationFrame(step) : null;
+      };
+      flyAnim.current = requestAnimationFrame(step);
+    },
+    [cancelFly]
+  );
+  useEffect(() => cancelFly, [cancelFly]);
 
   // Whole years only: the window moves every frame, but nothing downstream
   // (header, era, map) needs sub-year precision, and integer years let
@@ -75,14 +122,19 @@ export default function App() {
   );
 
   // Window changes coming from user gestures stop the autoplay.
-  const setWindowFromUser = useCallback((w: TimeWindow) => {
-    setPlaying(false);
-    setWin(w);
-  }, []);
+  const setWindowFromUser = useCallback(
+    (w: TimeWindow) => {
+      cancelFly();
+      setPlaying(false);
+      setWin(w);
+    },
+    [cancelFly]
+  );
 
   // Autoplay: glide the window rightward until the end of time.
   useEffect(() => {
     if (!playing) return;
+    cancelFly();
     let raf = 0;
     let last = performance.now();
     const step = (now: number) => {
@@ -99,7 +151,7 @@ export default function App() {
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [playing]);
+  }, [playing, cancelFly]);
 
   // Trackpad pinch (ctrl+wheel) outside the map zooms the whole browser page,
   // which scrolls the header out of view. Keep pinch app-only; the map's own
@@ -133,11 +185,14 @@ export default function App() {
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "BUTTON") return;
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         const dir = e.key === "ArrowLeft" ? -1 : 1;
+        cancelFly();
         setPlaying(false);
         setWin((w) => panWindow(w, dir * (w.u1 - w.u0) * 0.08));
       } else if (e.key === "+" || e.key === "=") {
+        cancelFly();
         setWin((w) => zoomWindow(w, 1.35, (w.u0 + w.u1) / 2));
       } else if (e.key === "-" || e.key === "_") {
+        cancelFly();
         setWin((w) => zoomWindow(w, 1 / 1.35, (w.u0 + w.u1) / 2));
       } else if (e.key === " ") {
         e.preventDefault();
@@ -146,7 +201,54 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [searchOpen]);
+  }, [searchOpen, cancelFly]);
+
+  // ----- Guided tours -----
+  const showTourStop = useCallback(
+    (t: Tour, index: number) => {
+      const stop = t.stops[index];
+      const span = stop.span ?? 0.05;
+      const u = unitOfYear(stop.year);
+      flyWindow({ u0: u - span / 2, u1: u + span / 2 });
+      setFocusPoint(stop.focus ?? null);
+      setFocusPointToken((n) => n + 1);
+    },
+    [flyWindow]
+  );
+
+  const startTour = useCallback(
+    (t: Tour) => {
+      setPlaying(false);
+      setPanelOpen(false);
+      setSearchOpen(false);
+      setSelectedEntry(null);
+      setFocusStreet(null);
+      setTour({ tour: t, step: 0 });
+      showTourStop(t, 0);
+    },
+    [showTourStop]
+  );
+
+  const stepTour = useCallback(
+    (index: number) => {
+      if (!tour) return;
+      if (index < 0 || index >= tour.tour.stops.length) return;
+      setSelectedEntry(null);
+      setTour({ tour: tour.tour, step: index });
+      showTourStop(tour.tour, index);
+    },
+    [tour, showTourStop]
+  );
+
+  const endTour = useCallback(() => setTour(null), []);
+
+  // #tour=<id> deep link starts a tour on load.
+  useEffect(() => {
+    const m = window.location.hash.match(/tour=([\w-]+)/);
+    const t = m ? tourById(m[1]) : undefined;
+    if (t) startTour(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const jumpToYear = useCallback((target: number) => {
     setPlaying(false);
@@ -207,6 +309,7 @@ export default function App() {
         onSearch={() => setSearchOpen(true)}
         onExploreEra={() => setPanelOpen((o) => !o)}
         onAbout={() => setAboutOpen(true)}
+        onStartTour={startTour}
         overlaysEnabled={overlaysEnabled}
         onOverlaysEnabledChange={setOverlaysEnabled}
         overlaysAuto={overlaysAuto}
@@ -218,13 +321,15 @@ export default function App() {
         onShowStreetLabelsChange={setShowStreetLabels}
       />
 
-      <main className="app-main">
+      <main className={`app-main${tour ? " app-main-touring" : ""}`}>
         <MapView
           year={mapYear}
           selectedEntry={selectedEntry}
           focusToken={focusToken}
           focusStreet={focusStreet}
           streetFocusToken={streetFocusToken}
+          focusPoint={focusPoint}
+          focusPointToken={focusPointToken}
           onSelectEntry={selectEntry}
           showSettlements={popOpen && showSettlements}
           highlightGroup={highlightGroup}
@@ -241,6 +346,16 @@ export default function App() {
           onHighlightGroup={setHighlightGroup}
           onOpenChange={setPopOpen}
         />
+        {tour && (
+          <TourCard
+            tour={tour.tour}
+            step={tour.step}
+            onStep={stepTour}
+            onClose={endTour}
+            onReadMore={selectEntry}
+            escapeCloses={!selectedEntry && !aboutOpen && !searchOpen}
+          />
+        )}
         {panelOpen && (
           <EraPanel
             era={era}

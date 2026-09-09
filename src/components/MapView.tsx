@@ -33,6 +33,7 @@ import {
   overlayPlacement,
 } from "../lib/historicalOverlays";
 import { layoutStreetLabels, layoutGridLabels } from "../lib/streetLabels";
+import type { MapFocus } from "../data/tours";
 import { useElementSize } from "../lib/useElementSize";
 import boroughsData from "../data/geo/boroughs.json";
 import surroundData from "../data/geo/surround.json";
@@ -44,6 +45,9 @@ interface MapViewProps {
   focusToken: number;
   focusStreet?: ColonialStreet | null;
   streetFocusToken?: number;
+  /** Scripted camera target (guided tours); null pulls back to the whole city. */
+  focusPoint?: MapFocus | null;
+  focusPointToken?: number;
   onSelectEntry: (entry: Entry) => void;
   showSettlements?: boolean;
   highlightGroup?: SegmentKey | null;
@@ -227,6 +231,8 @@ function MapViewInner({
   focusToken,
   focusStreet = null,
   streetFocusToken = 0,
+  focusPoint = null,
+  focusPointToken = 0,
   onSelectEntry,
   showSettlements = false,
   highlightGroup = null,
@@ -352,6 +358,33 @@ function MapViewInner({
     width,
     height,
   ]);
+
+  // Guided-tour camera: fly to an explicit point and zoom, or pull back.
+  // A token that arrives before the map has measured itself (a #tour deep
+  // link on first load) is applied once the projection exists; a resize
+  // afterwards must not re-fly, hence the applied-token ref.
+  const appliedFocusToken = useRef(0);
+  useEffect(() => {
+    if (!focusPointToken || appliedFocusToken.current === focusPointToken) return;
+    const svg = svgRef.current;
+    const behavior = zoomRef.current;
+    if (!svg || !behavior || !projection || !width || !height) return;
+    appliedFocusToken.current = focusPointToken;
+
+    let next = zoomIdentity;
+    if (focusPoint) {
+      const pos = projection(focusPoint.coords);
+      if (!pos) return;
+      const targetK = Math.max(1, Math.min(16, focusPoint.k));
+      next = zoomIdentity
+        .scale(targetK)
+        .translate(width / 2 / targetK - pos[0], height / 2 / targetK - pos[1]);
+    }
+    select(svg)
+      .transition()
+      .duration(900)
+      .call(behavior.transform as any, next);
+  }, [focusPointToken, focusPoint, projection, width, height]);
 
   const resetZoom = () => {
     const svg = svgRef.current;

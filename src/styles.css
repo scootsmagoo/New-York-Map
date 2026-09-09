@@ -1582,3 +1582,180 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------------- Guided tours ---------------- */
+
+.tour-card {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: min(580px, calc(100vw - 24px));
+  padding: 12px 44px 12px 18px;
+  border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  border-left: 5px solid var(--accent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--paper) 97%, #fff 3%);
+  box-shadow: 0 10px 30px rgba(40, 28, 12, 0.22);
+  z-index: 9;
+  animation: modal-in 0.22s ease;
+}
+
+.tour-card-kicker {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11.5px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.tour-card-count {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.tour-card-title {
+  margin: 6px 0 4px;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tour-card-year {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  vertical-align: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+.tour-card-text {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.tour-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tour-card-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.tour-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  background: transparent;
+}
+
+.tour-dot-active {
+  background: var(--accent);
+}
+
+.tour-card-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tour-btn {
+  padding: 6px 12px;
+  border: 1px solid color-mix(in srgb, var(--ink) 40%, transparent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.tour-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.tour-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.tour-btn-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.tour-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+  background: var(--accent);
+}
+
+.tour-link {
+  padding: 6px 4px;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.header-menu-tour {
+  display: block;
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.header-menu-tour:hover {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.header-menu-tour-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.header-menu-tour-sub {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+/* The tour card sits where the attribution line lives; yield to it. */
+.app-main-touring .map-attribution {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .tour-card {
+    bottom: 8px;
+  }
+}

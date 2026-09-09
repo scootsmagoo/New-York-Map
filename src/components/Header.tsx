@@ -2,6 +2,7 @@ import { memo } from "react";
 import type { Era } from "../types";
 import { formatYear } from "../data/eras";
 import { HeaderMenu } from "./HeaderMenu";
+import type { Tour } from "../data/tours";
 
 interface HeaderProps {
   year: number;
@@ -9,6 +10,7 @@ interface HeaderProps {
   onSearch: () => void;
   onExploreEra: () => void;
   onAbout: () => void;
+  onStartTour: (tour: Tour) => void;
   overlaysEnabled: boolean;
   onOverlaysEnabledChange: (v: boolean) => void;
   overlaysAuto: boolean;
@@ -26,6 +28,7 @@ function HeaderInner({
   onSearch,
   onExploreEra,
   onAbout,
+  onStartTour,
   overlaysEnabled,
   onOverlaysEnabledChange,
   overlaysAuto,
@@ -78,6 +81,7 @@ function HeaderInner({
         </button>
         <HeaderMenu
           onAbout={onAbout}
+          onStartTour={onStartTour}
           overlaysEnabled={overlaysEnabled}
           onOverlaysEnabledChange={onOverlaysEnabledChange}
           overlaysAuto={overlaysAuto}
