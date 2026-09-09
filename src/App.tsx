@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import type { Entry } from "./types";
 import type { ColonialStreet } from "./data/streets";
 import { eraForYear } from "./data/eras";
@@ -20,7 +20,7 @@ import { PopulationPanel } from "./components/PopulationPanel";
 import { SearchPalette } from "./components/SearchPalette";
 import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
-import { useDebouncedValue } from "./lib/useDebouncedValue";
+import { useThrottledValue } from "./lib/useThrottledValue";
 
 /** Initial window from a deep link like #year=1880 or #year=1880&span=0.05. */
 function initialWindow(): TimeWindow {
@@ -51,9 +51,16 @@ export default function App() {
   const [overlayOpacity, setOverlayOpacity] = useState(0.72);
   const [showStreetLabels, setShowStreetLabels] = useState(false);
 
-  const year = useMemo(() => yearOfUnit((win.u0 + win.u1) / 2), [win]);
-  /** Map & population lag the playhead slightly so timeline scrub stays smooth. */
-  const mapYear = useDebouncedValue(year, 75);
+  // Whole years only: the window moves every frame, but nothing downstream
+  // (header, era, map) needs sub-year precision, and integer years let
+  // memoized children skip most frames entirely.
+  const year = useMemo(() => Math.round(yearOfUnit((win.u0 + win.u1) / 2)), [win]);
+  /**
+   * Map & population lag the playhead slightly so timeline scrub stays smooth:
+   * throttled to a steady cadence, and deferred so a slow map render never
+   * blocks the timeline's own frame.
+   */
+  const mapYear = useDeferredValue(useThrottledValue(year, 75));
   const era = useMemo(() => eraForYear(year), [year]);
   const overlayActiveLabel = useMemo(
     () =>

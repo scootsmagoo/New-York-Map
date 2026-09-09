@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Era } from "../types";
 import { formatYear } from "../data/eras";
 import { HeaderMenu } from "./HeaderMenu";
@@ -19,7 +20,7 @@ interface HeaderProps {
   onShowStreetLabelsChange: (v: boolean) => void;
 }
 
-export function Header({
+function HeaderInner({
   year,
   era,
   onSearch,
@@ -91,3 +92,5 @@ export function Header({
     </header>
   );
 }
+
+export const Header = memo(HeaderInner);

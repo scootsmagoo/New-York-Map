@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { geoMercator, geoPath } from "d3-geo";
 import { select } from "d3-selection";
 import "d3-transition";
@@ -8,7 +8,7 @@ import {
   type D3ZoomEvent,
   type ZoomBehavior,
 } from "d3-zoom";
-import type { Entry } from "../types";
+import type { Entry, FootprintSnapshot } from "../types";
 import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
 import { lenapeSites, lenapeTerritories, lenapeTrails } from "../data/lenapeSites";
 import { bridges, ferries } from "../data/structures";
@@ -211,7 +211,7 @@ function ringBboxArea(ring: [number, number][]): number {
 
 const MAJOR_PARK_AREA = 5e-5;
 
-export function MapView({
+function MapViewInner({
   year,
   selectedEntry,
   focusToken,
@@ -265,6 +265,22 @@ export function MapView({
     () => (projection ? geoPath(projection) : null),
     [projection]
   );
+
+  // Static geometry, serialized once per projection rather than on every
+  // render: the borough shorelines alone are ~6,700 vertices and were being
+  // re-stringified four times per frame during autoplay.
+  const boroughPaths = useMemo(() => {
+    if (!path) return [];
+    return (boroughsData as any).features.map((f: any) => ({
+      boro: f.properties?.boro as string,
+      d: path(f) ?? "",
+    }));
+  }, [path]);
+
+  const surroundPaths = useMemo(() => {
+    if (!path) return [];
+    return (surroundData as any).features.map((f: any) => path(f) ?? "");
+  }, [path]);
 
   useEffect(() => {
     const svg = svgRef.current;
@@ -352,28 +368,42 @@ export function MapView({
   // ----- Footprint -----
   const { base, next, progress } = footprintAt(year);
 
+  // Snapshots are shared objects, so these only recompute when the playhead
+  // crosses into a new snapshot interval (13 times across the whole timeline).
+  const projectSnapshot = (snapshot: FootprintSnapshot | null) => {
+    if (!snapshot || !path) return { manhattan: "", other: "" };
+    return {
+      manhattan: snapshot.manhattan.length ? (path(toGeo(snapshot.manhattan)) ?? "") : "",
+      other: snapshot.other.length ? (path(toGeo(snapshot.other)) ?? "") : "",
+    };
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const basePaths = useMemo(() => projectSnapshot(base), [path, base]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const nextPaths = useMemo(() => projectSnapshot(next), [path, next]);
+
   // The brown wash recedes as street detail fades in, so lines stay legible.
   const washFade = 1 - fade(k, 1.5, 2.6) * 0.45;
 
   const renderFootprint = (
-    snapshot: { manhattan: [number, number][][]; other: [number, number][][] },
+    paths: { manhattan: string; other: string },
     opacity = 1
   ) => (
     <>
-      {snapshot.manhattan.length > 0 && (
+      {paths.manhattan && (
         <g clipPath="url(#manhattan-clip)">
           <path
             className="footprint"
-            d={path!(toGeo(snapshot.manhattan)) ?? undefined}
+            d={paths.manhattan}
             style={{ opacity: opacity * washFade }}
           />
         </g>
       )}
-      {snapshot.other.length > 0 && (
+      {paths.other && (
         <g clipPath="url(#land-clip)">
           <path
             className="footprint"
-            d={path!(toGeo(snapshot.other)) ?? undefined}
+            d={paths.other}
             style={{ opacity: opacity * washFade }}
           />
         </g>
@@ -577,25 +607,22 @@ export function MapView({
       <svg ref={svgRef} className="map-svg" width={width} height={height}>
         <defs>
           <clipPath id="land-clip">
-            {(boroughsData as any).features.map((f: any, i: number) => (
-              <path key={i} d={path!(f) ?? undefined} />
+            {boroughPaths.map((b: { boro: string; d: string }) => (
+              <path key={b.boro} d={b.d} />
             ))}
           </clipPath>
           <clipPath id="manhattan-clip">
-            {(boroughsData as any).features
-              .filter((f: any) => f.properties?.boro === "Manhattan")
-              .map((f: any, i: number) => (
-                <path key={i} d={path!(f) ?? undefined} />
+            {boroughPaths
+              .filter((b: { boro: string }) => b.boro === "Manhattan")
+              .map((b: { boro: string; d: string }) => (
+                <path key={b.boro} d={b.d} />
               ))}
           </clipPath>
-          {(boroughsData as any).features
-            .filter((f: any) => f.properties?.boro !== "Manhattan")
-            .map((f: any) => (
-              <clipPath
-                key={f.properties.boro}
-                id={`clip-${f.properties.boro.replace(/ /g, "-")}`}
-              >
-                <path d={path!(f) ?? undefined} />
+          {boroughPaths
+            .filter((b: { boro: string }) => b.boro !== "Manhattan")
+            .map((b: { boro: string; d: string }) => (
+              <clipPath key={b.boro} id={`clip-${b.boro.replace(/ /g, "-")}`}>
+                <path d={b.d} />
               </clipPath>
             ))}
           <clipPath id="gridzone-clip">
@@ -644,20 +671,20 @@ export function MapView({
 
         <g ref={contentRef} className="map-content">
           {/* Surrounding land */}
-          {(surroundData as any).features.map((f: any, i: number) => (
-            <path key={`s${i}`} className="map-surround" d={path!(f) ?? undefined} />
+          {surroundPaths.map((d: string, i: number) => (
+            <path key={`s${i}`} className="map-surround" d={d} />
           ))}
 
           {/* The five boroughs */}
-          {(boroughsData as any).features.map((f: any, i: number) => (
-            <path key={`b${i}`} className="map-land" d={path!(f) ?? undefined}>
-              <title>{f.properties?.boro}</title>
+          {boroughPaths.map((b: { boro: string; d: string }) => (
+            <path key={b.boro} className="map-land" d={b.d}>
+              <title>{b.boro}</title>
             </path>
           ))}
 
           {/* Built-up footprint, clipped to the real shoreline */}
-          {renderFootprint(base)}
-          {next && renderFootprint(next, 0.25 + 0.75 * progress)}
+          {renderFootprint(basePaths)}
+          {next && renderFootprint(nextPaths, 0.25 + 0.75 * progress)}
 
           {/* Georeferenced historical map sheets (Manhattan only) */}
           {overlayFrames.length > 0 && (
@@ -690,7 +717,7 @@ export function MapView({
                 style={{ opacity: roadFade }}
               >
                 <path
-                  d={path!(toGeo(base.other)) ?? undefined}
+                  d={basePaths.other}
                   fill={`url(#hatch-${boro.replace(/ /g, "-")})`}
                   stroke="none"
                 />
@@ -702,7 +729,7 @@ export function MapView({
             <g clipPath="url(#manhattan-clip)" style={{ opacity: roadFade }}>
               <g clipPath="url(#notgrid-clip)">
                 <path
-                  d={path!(toGeo(base.manhattan)) ?? undefined}
+                  d={basePaths.manhattan}
                   fill="url(#hatch-Manhattan)"
                   stroke="none"
                 />
@@ -1053,3 +1080,5 @@ export function MapView({
     </div>
   );
 }
+
+export const MapView = memo(MapViewInner);

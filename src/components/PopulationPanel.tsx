@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import {
   formatPopulation,
   populationAt,
@@ -19,7 +19,7 @@ interface PopulationPanelProps {
 
 const MIN_PCT = 1;
 
-export function PopulationPanel({
+function PopulationPanelInner({
   year,
   showSettlements,
   onShowSettlementsChange,
@@ -183,3 +183,5 @@ function LegendRow({
     </li>
   );
 }
+
+export const PopulationPanel = memo(PopulationPanelInner);
