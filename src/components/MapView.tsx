@@ -256,6 +256,7 @@ function MapViewInner({
   const lodBandRef = useRef(zoomLodBand(1));
   const [zoomK, setZoomK] = useState(1);
   const cameraId = useRef(Symbol("map")).current;
+  const adoptedCamera = useRef(false);
 
   const applyTransform = (t: typeof zoomIdentity) => {
     transformRef.current = t;
@@ -346,7 +347,10 @@ function MapViewInner({
       following = false;
       if (settled) syncZoomK(next);
     };
-    if (cameraLink?.current) follow(cameraLink.current, true);
+    // A map that mounts beside another (compare mode) starts where that one
+    // is. Only once: re-running on resize would cut short a flight in progress.
+    if (cameraLink?.current && !adoptedCamera.current) follow(cameraLink.current, true);
+    adoptedCamera.current = true;
     const unsubscribe = cameraLink?.subscribe((t, source, settled) => {
       if (source !== cameraId) follow(t, settled);
     });

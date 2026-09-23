@@ -13,6 +13,7 @@ interface HeaderProps {
   onStartTour: (tour: Tour) => void;
   comparing: boolean;
   onToggleCompare: () => void;
+  getViewUrl: () => string;
   overlaysEnabled: boolean;
   onOverlaysEnabledChange: (v: boolean) => void;
   overlaysAuto: boolean;
@@ -33,6 +34,7 @@ function HeaderInner({
   onStartTour,
   comparing,
   onToggleCompare,
+  getViewUrl,
   overlaysEnabled,
   onOverlaysEnabledChange,
   overlaysAuto,
@@ -89,6 +91,7 @@ function HeaderInner({
           onStartTour={onStartTour}
           comparing={comparing}
           onToggleCompare={onToggleCompare}
+          getViewUrl={getViewUrl}
           overlaysEnabled={overlaysEnabled}
           onOverlaysEnabledChange={onOverlaysEnabledChange}
           overlaysAuto={overlaysAuto}

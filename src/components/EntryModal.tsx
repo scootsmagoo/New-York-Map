@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import type { Entry, WikiSummary } from "../types";
 import { eras, formatYear } from "../data/eras";
 import { getWikiSummary } from "../lib/wikipedia";
+import { viewUrl } from "../lib/viewLink";
+import { CopyLinkButton } from "./CopyLinkButton";
 
 interface EntryModalProps {
   entry: Entry;
@@ -111,6 +113,11 @@ export function EntryModal({ entry, onClose, onJumpToYear }: EntryModalProps) {
           >
             Read on Wikipedia ↗
           </a>
+          <CopyLinkButton
+            className="modal-link-btn"
+            label="Copy link"
+            getUrl={() => viewUrl({ entry: entry.id })}
+          />
         </footer>
       </article>
     </div>

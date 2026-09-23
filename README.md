@@ -31,6 +31,8 @@ npm run dev      # open http://localhost:5173
   or `#tour=moses`.
 - **Then & Now** (⋯ menu) pins the current year on the left of a draggable
   seam; scrub the timeline to compare. Deep-link with `#year=1900&compare=1776`.
+- **Share a view:** ⋯ → *Copy link to this view*, or *Copy link* on any
+  entry card. `#entry=vj-day` opens that entry directly.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
 
 ## Deploying

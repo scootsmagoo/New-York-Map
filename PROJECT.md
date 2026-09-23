@@ -286,7 +286,8 @@ header, theme, footprint, markers, panel — derives from it.
       water, Robert Moses's bridges and fair) with animated timeline flights, map camera moves, and
       `#tour=<id>` deep links. Adding one is a data entry in `tours.ts`.
 - [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
-      timeline there.
+      timeline there; `#entry=<id>` opens an entry; *Copy link* on entry
+      cards and in the ⋯ menu.
 - [x] ~~Search across entries~~ — shipped: fuzzy palette over entries and
       streets (⌘K).
 - [x] Then & Now: a pinned year beside the live one, split by a draggable

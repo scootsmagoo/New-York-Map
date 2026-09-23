@@ -29,6 +29,8 @@ import { SearchPalette } from "./components/SearchPalette";
 import { TourCard } from "./components/TourCard";
 import { CompareDivider } from "./components/CompareDivider";
 import { compareYearFromHash, createCameraLink } from "./lib/mapCamera";
+import { entryIdFromHash, viewUrl } from "./lib/viewLink";
+import { allEntries } from "./data/entries";
 import { tourById, type MapFocus, type Tour } from "./data/tours";
 import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
@@ -77,6 +79,8 @@ export default function App() {
   );
   const [comparePos, setComparePos] = useState(0.5);
   const cameraLink = useMemo(() => createCameraLink(), []);
+  const compareRef = useRef(compareYear);
+  compareRef.current = compareYear;
 
   // Animated timeline flights (tours). Any user gesture cancels one in progress.
   const winRef = useRef(win);
@@ -252,12 +256,30 @@ export default function App() {
 
   const endTour = useCallback(() => setTour(null), []);
 
-  // #tour=<id> deep link starts a tour on load.
+  // #tour=<id> deep link starts a tour on load; #entry=<id> opens an entry.
   useEffect(() => {
     const m = window.location.hash.match(/tour=([\w-]+)/);
     const t = m ? tourById(m[1]) : undefined;
     if (t) startTour(t);
+    const entryId = entryIdFromHash(window.location.hash);
+    const entry = entryId ? allEntries.find((e) => e.id === entryId) : undefined;
+    if (entry && !t) goToEntry(entry);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const toggleCompare = useCallback(() => {
+    setCompareYear((c) => (c === null ? year : null));
+    setComparePos(0.5);
+  }, [year]);
+
+  // Read through refs so the header's memo isn't broken on every frame.
+  const getViewUrl = useCallback(() => {
+    const w = winRef.current;
+    return viewUrl({
+      year: yearOfUnit((w.u0 + w.u1) / 2),
+      span: w.u1 - w.u0,
+      compare: compareRef.current,
+    });
   }, []);
 
   const jumpToYear = useCallback((target: number) => {
@@ -321,10 +343,8 @@ export default function App() {
         onAbout={() => setAboutOpen(true)}
         onStartTour={startTour}
         comparing={compareYear !== null}
-        onToggleCompare={() => {
-          setCompareYear((c) => (c === null ? year : null));
-          setComparePos(0.5);
-        }}
+        onToggleCompare={toggleCompare}
+        getViewUrl={getViewUrl}
         overlaysEnabled={overlaysEnabled}
         onOverlaysEnabledChange={setOverlaysEnabled}
         overlaysAuto={overlaysAuto}

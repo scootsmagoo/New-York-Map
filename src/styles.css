@@ -1514,10 +1514,30 @@ button {
 }
 
 .modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
   margin-top: 16px;
   padding-top: 10px;
   border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
   font-size: 14px;
+}
+
+.modal-link-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.modal-link-btn:hover {
+  color: var(--ink);
 }
 
 a {

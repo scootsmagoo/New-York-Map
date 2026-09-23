@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { tours, type Tour } from "../data/tours";
 import { formatYear } from "../data/eras";
+import { CopyLinkButton } from "./CopyLinkButton";
 
 interface HeaderMenuProps {
   year: number;
@@ -8,6 +9,7 @@ interface HeaderMenuProps {
   onStartTour: (tour: Tour) => void;
   comparing: boolean;
   onToggleCompare: () => void;
+  getViewUrl: () => string;
   overlaysEnabled: boolean;
   onOverlaysEnabledChange: (v: boolean) => void;
   overlaysAuto: boolean;
@@ -25,6 +27,7 @@ export function HeaderMenu({
   onStartTour,
   comparing,
   onToggleCompare,
+  getViewUrl,
   overlaysEnabled,
   onOverlaysEnabledChange,
   overlaysAuto,
@@ -97,6 +100,13 @@ export function HeaderMenu({
                 : `Pin ${formatYear(year)} on the left, then scrub the timeline to see what changed.`}
             </span>
           </button>
+
+          <CopyLinkButton
+            className="header-menu-item"
+            role="menuitem"
+            label="Copy link to this view"
+            getUrl={getViewUrl}
+          />
 
           <div className="header-menu-divider" role="separator" />
 
