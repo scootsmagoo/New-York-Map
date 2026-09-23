@@ -49,6 +49,9 @@ export function Timeline({
   const { ref, width } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
   const drag = useRef<{ x: number; moved: boolean } | null>(null);
+  // Every finger currently down, for two-finger pinch on touch screens.
+  const pointers = useRef(new Map<number, number>());
+  const pinch = useRef<{ dist: number; mid: number } | null>(null);
   // Whether the most recent pointer interaction was a drag. Browsers still
   // fire `click` on the element where the pointer went down (era bands,
   // marks), so click handlers must check this to avoid snapping the view
@@ -119,25 +122,75 @@ export function Timeline({
     return () => svg.removeEventListener("wheel", onWheel);
   }, [cancelAnim, onWindowChange]);
 
+  const pinchState = () => {
+    const [a, b] = [...pointers.current.values()];
+    return { dist: Math.max(1, Math.abs(a - b)), mid: (a + b) / 2 };
+  };
+
+  /** Apply a window change now, so a second event before the next render builds on it. */
+  const setWin = (next: TimeWindow) => {
+    winRef.current = next;
+    onWindowChange(next);
+  };
+
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
     cancelAnim();
+    pointers.current.set(e.pointerId, e.clientX);
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+    if (pointers.current.size === 2) {
+      // A second finger turns the drag into a pinch; it is never a click.
+      pinch.current = pinchState();
+      wasDrag.current = true;
+      if (drag.current) drag.current.moved = true;
+      return;
+    }
     drag.current = { x: e.clientX, moved: false };
     wasDrag.current = false;
-    (e.target as Element).setPointerCapture?.(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
-    if (!drag.current || !width) return;
+    if (!width || !pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, e.clientX);
+
+    if (pinch.current && pointers.current.size === 2) {
+      const next = pinchState();
+      const w = winRef.current;
+      const rect = svgRef.current!.getBoundingClientRect();
+      // Zoom about the fingers' midpoint, then follow the midpoint as it slides.
+      const uMid = w.u0 + ((pinch.current.mid - rect.left) / width) * (w.u1 - w.u0);
+      const zoomed = zoomWindow(w, next.dist / pinch.current.dist, uMid);
+      const dx = next.mid - pinch.current.mid;
+      setWin(panWindow(zoomed, (-dx / width) * (zoomed.u1 - zoomed.u0)));
+      pinch.current = next;
+      return;
+    }
+
+    if (!drag.current) return;
     const dx = e.clientX - drag.current.x;
     if (Math.abs(dx) > 3) {
       drag.current.moved = true;
       wasDrag.current = true;
     }
     drag.current.x = e.clientX;
-    onWindowChange(panWindow(win, (-dx / width) * (win.u1 - win.u0)));
+    const w = winRef.current;
+    setWin(panWindow(w, (-dx / width) * (w.u1 - w.u0)));
+  };
+
+  const onPointerCancel = (e: React.PointerEvent<SVGSVGElement>) => {
+    pointers.current.delete(e.pointerId);
+    pinch.current = null;
+    drag.current = null;
   };
 
   const onPointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
+    pointers.current.delete(e.pointerId);
+    if (pinch.current) {
+      // Lifting one finger of a pinch leaves the other one panning.
+      pinch.current = null;
+      const [rest] = [...pointers.current.values()];
+      drag.current = rest === undefined ? null : { x: rest, moved: true };
+      return;
+    }
     const onInteractive = (e.target as Element).closest?.(
       ".era-band, .entry-mark"
     );
@@ -223,6 +276,7 @@ export function Timeline({
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
+          onPointerCancel={onPointerCancel}
           onPointerLeave={() => (drag.current = null)}
         >
           {/* Era bands */}
