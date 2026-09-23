@@ -97,7 +97,7 @@ export function HeaderMenu({
             <span className="header-menu-item-sub">
               {comparing
                 ? "Back to a single map."
-                : `Pin ${formatYear(year)} on the left, then scrub the timeline to see what changed.`}
+                : `Wipe between ${formatYear(year)} and an earlier year of your choosing.`}
             </span>
           </button>
 

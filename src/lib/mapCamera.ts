@@ -43,3 +43,22 @@ export function compareYearFromHash(hash: string): number | null {
   const m = hash.match(/compare=(-?\d+)/);
   return m ? parseInt(m[1], 10) : null;
 }
+
+/**
+ * The "Then" year a compare opens with: the latest footprint snapshot at
+ * least half a century back, so the two halves differ at a glance. Before the
+ * snapshots begin, the Lenape world of 1500 stands in.
+ */
+export function defaultThenYear(now: number, snapshotYears: number[]): number {
+  const earlier = snapshotYears.filter((y) => y <= now - 50);
+  if (earlier.length) return Math.max(...earlier);
+  return now > 1500 ? 1500 : now - 1000;
+}
+
+/** A typed year, clamped to the timeline; null if it isn't a number. */
+export function parseYearInput(text: string, min: number, max: number): number | null {
+  const m = text.trim().match(/^(-?\d+)\s*(bce|bc)?$/i);
+  if (!m) return null;
+  const n = parseInt(m[1], 10) * (m[2] ? -1 : 1);
+  return Math.max(min, Math.min(max, n));
+}

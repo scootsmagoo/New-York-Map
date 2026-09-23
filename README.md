@@ -29,8 +29,9 @@ npm run dev      # open http://localhost:5173
   the grid marching north, crossing the East River, fire and Croton water.
   Deep-link one with `#tour=grid`, `#tour=east-river`, `#tour=fire-water`,
   or `#tour=moses`.
-- **Then & Now** (⋯ menu) pins the current year on the left of a draggable
-  seam; scrub the timeline to compare. Deep-link with `#year=1900&compare=1776`.
+- **Then & Now** (⋯ menu) wipes between two years with a draggable line.
+  Type either year, or scrub the timeline to change Now. Deep-link with
+  `#year=1900&compare=1776`.
 - **Share a view:** ⋯ → *Copy link to this view*, or *Copy link* on any
   entry card. `#entry=vj-day` opens that entry directly.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.

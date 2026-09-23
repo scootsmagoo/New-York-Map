@@ -28,7 +28,12 @@ import { PopulationPanel } from "./components/PopulationPanel";
 import { SearchPalette } from "./components/SearchPalette";
 import { TourCard } from "./components/TourCard";
 import { CompareDivider } from "./components/CompareDivider";
-import { compareYearFromHash, createCameraLink } from "./lib/mapCamera";
+import {
+  compareYearFromHash,
+  createCameraLink,
+  defaultThenYear,
+} from "./lib/mapCamera";
+import { footprints } from "./data/footprints";
 import { entryIdFromHash, viewUrl } from "./lib/viewLink";
 import { allEntries } from "./data/entries";
 import { tourById, type MapFocus, type Tour } from "./data/tours";
@@ -268,9 +273,20 @@ export default function App() {
   }, []);
 
   const toggleCompare = useCallback(() => {
-    setCompareYear((c) => (c === null ? year : null));
+    setCompareYear((c) =>
+      c === null ? defaultThenYear(year, footprints.map((f) => f.year)) : null
+    );
     setComparePos(0.5);
   }, [year]);
+
+  // Typing a Now year moves the timeline there at the current zoom.
+  const setLiveYear = useCallback(
+    (y: number) => {
+      const w = winRef.current;
+      setWindowFromUser(windowAround(unitOfYear(y), w.u1 - w.u0));
+    },
+    [setWindowFromUser]
+  );
 
   // Read through refs so the header's memo isn't broken on every frame.
   const getViewUrl = useCallback(() => {
@@ -407,7 +423,9 @@ export default function App() {
               position={comparePos}
               onPositionChange={setComparePos}
               pinnedYear={compareYear}
-              liveYear={mapYear}
+              onPinnedYearChange={setCompareYear}
+              liveYear={year}
+              onLiveYearChange={setLiveYear}
               onClose={() => setCompareYear(null)}
             />
           </>
