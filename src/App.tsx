@@ -154,7 +154,7 @@ export default function App() {
       const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
       setWin((w) => {
-        if (w.u1 >= 0.9999) {
+        if ((w.u0 + w.u1) / 2 >= 0.9999) {
           setPlaying(false);
           return w;
         }

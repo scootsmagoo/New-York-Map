@@ -39,17 +39,15 @@ export interface TimeWindow {
   u1: number;
 }
 
+/**
+ * Limits the span, and keeps the window's center (the playhead) inside time.
+ * The window itself may hang half off either end, so the first and last years
+ * can sit under the playhead at any zoom.
+ */
 export function clampWindow(w: TimeWindow): TimeWindow {
-  let { u0, u1 } = w;
-  let span = u1 - u0;
-  span = Math.min(1, Math.max(MIN_WINDOW, span));
-  if (u0 < 0) {
-    u0 = 0;
-  }
-  if (u0 + span > 1) {
-    u0 = 1 - span;
-  }
-  return { u0, u1: u0 + span };
+  const span = Math.min(1, Math.max(MIN_WINDOW, w.u1 - w.u0));
+  const center = Math.min(1, Math.max(0, (w.u0 + w.u1) / 2));
+  return { u0: center - span / 2, u1: center + span / 2 };
 }
 
 /** Zoom the window by `factor` (>1 zooms in), keeping `uFixed` stationary at its screen position. */
@@ -63,14 +61,9 @@ export function zoomWindow(
   return clampWindow({ u0: uFixed - rel * span, u1: uFixed + (1 - rel) * span });
 }
 
-/**
- * A window centered on `u`. Near either end of time the span narrows so `u`
- * can still sit under the center playhead; clamping a wide window would
- * slide it, and the playhead would land on some other year.
- */
+/** A window of `span` with `u` under the playhead. */
 export function windowAround(u: number, span: number): TimeWindow {
-  const s = Math.max(MIN_WINDOW, Math.min(span, 2 * u, 2 * (1 - u)));
-  return clampWindow({ u0: u - s / 2, u1: u + s / 2 });
+  return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
 }
 
 export function panWindow(w: TimeWindow, deltaUnits: number): TimeWindow {

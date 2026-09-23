@@ -43,8 +43,10 @@ describe("polylinear year <-> unit mapping", () => {
 
 describe("window math", () => {
   it("clamps to [0, 1] and enforces the minimum span", () => {
-    expect(clampWindow({ u0: -0.2, u1: 0.3 })).toEqual({ u0: 0, u1: 0.5 });
-    expect(clampWindow({ u0: 0.8, u1: 1.3 })).toEqual({ u0: 0.5, u1: 1 });
+    // The playhead (center) stays in time; the window may hang off the ends.
+    expect(clampWindow({ u0: -0.2, u1: 0.3 })).toEqual({ u0: -0.2, u1: 0.3 });
+    expect(clampWindow({ u0: -0.4, u1: 0.1 })).toEqual({ u0: -0.25, u1: 0.25 });
+    expect(clampWindow({ u0: 0.9, u1: 1.4 })).toEqual({ u0: 0.75, u1: 1.25 });
     const tiny = clampWindow({ u0: 0.5, u1: 0.5001 });
     expect(tiny.u1 - tiny.u0).toBeCloseTo(MIN_WINDOW, 12);
   });
@@ -106,26 +108,17 @@ describe("ticks", () => {
 });
 
 describe("windowAround", () => {
-  it("keeps the target year under the playhead near the end of time", () => {
-    const centerYear = (year: number) => {
+  it("puts any year under the playhead, even at the ends of time", () => {
+    for (const year of [TIME_MIN, -9000, 1609, 1776, 1919, 1940, TIME_MAX]) {
       const w = windowAround(unitOfYear(year), 0.1);
-      return Math.round(yearOfUnit((w.u0 + w.u1) / 2));
-    };
-    for (const year of [1919, 1940, 1944, -9000, 1609]) {
-      expect(centerYear(year)).toBe(year);
+      expect(Math.round(yearOfUnit((w.u0 + w.u1) / 2))).toBe(year);
     }
-    // The very last year sits within half a minimum window of the edge.
-    expect(centerYear(TIME_MAX)).toBeGreaterThanOrEqual(TIME_MAX - 1);
   });
 
-  it("uses the requested span away from the ends", () => {
-    const w = windowAround(unitOfYear(1776), 0.1);
-    expect(w.u1 - w.u0).toBeCloseTo(0.1, 12);
-  });
-
-  it("never narrows past the minimum window", () => {
-    const w = windowAround(1, 0.1);
-    expect(w.u1 - w.u0).toBeCloseTo(MIN_WINDOW, 12);
-    expect(w.u1).toBeLessThanOrEqual(1);
+  it("keeps the requested span", () => {
+    for (const u of [0, 0.5, 1]) {
+      const w = windowAround(u, 0.1);
+      expect(w.u1 - w.u0).toBeCloseTo(0.1, 12);
+    }
   });
 });
