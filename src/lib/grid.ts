@@ -1,13 +1,25 @@
 /**
- * Procedural 1811 Commissioners' Plan grid.
+ * The 1811 Commissioners' Plan grid.
  *
- * The Manhattan grid is regular enough to generate geometrically: avenues run
- * ~29° east of true north, streets perpendicular. We generate generous line
- * segments in lon/lat and let SVG clipping (Manhattan shoreline ∩ grid zone ∩
- * built frontier) carve them into the survey-vs-built street story.
+ * Streets and avenues are straight lines on the grid's ~29° bearing, placed
+ * where the real ones are: positions are measured from NYC's street
+ * centerlines by scripts/prepare-streets.mjs (avenues are unevenly spaced,
+ * and the wide crosstown streets push the numbering north). We draw generous
+ * segments and let SVG clipping (Manhattan shoreline ∩ grid zone ∩ built
+ * frontier) carve them into the survey-vs-built street story.
  */
+import manhattanGrid from "../data/geo/manhattanGrid.json";
 
 export type Seg = [[number, number], [number, number]];
+
+interface GridAvenue {
+  name: string;
+  /** Meters across the grid (east positive) from the origin. */
+  across: number;
+  /** Meters along the grid where the avenue starts and ends. */
+  from: number;
+  to: number;
+}
 
 const BEARING = (29 * Math.PI) / 180;
 /** Meters per degree at NYC's latitude. */
@@ -25,17 +37,16 @@ const STREET = [
   -Math.sin(BEARING) / M_PER_DEG_LAT,
 ];
 
-/** Anchor near First Street & Second Avenue. */
+/** Anchor near First Street & Second Avenue (shared with the prep script). */
 const ORIGIN: [number, number] = [-73.992, 40.7245];
 
-const STREET_PITCH_M = 79.25; // 200 ft block + 60 ft street
-const AVE_PITCH_M = 281; // average avenue spacing
-const STREET_COUNT = 250; // up to Inwood; clipped to the island anyway
 const STREET_HALF_LEN_M = 3000;
-/** Avenues extend north from the grid zone; no southern tail into the Hudson. */
-const AVE_SPAN_M: [number, number] = [0, 19800];
-/** Avenue offsets west (negative) and east of the origin. */
-const AVE_RANGE: [number, number] = [-10, 5];
+
+/** Meters along the grid for 1st through 220th Street. */
+export const STREET_ALONG: number[] = manhattanGrid.streets.filter(
+  (m): m is number => m !== null
+);
+export const GRID_AVENUES: GridAvenue[] = manhattanGrid.avenues;
 
 function pt(
   base: [number, number],
@@ -49,34 +60,31 @@ let cache: { streets: Seg[]; avenues: Seg[] } | null = null;
 
 export function gridSegments(): { streets: Seg[]; avenues: Seg[] } {
   if (cache) return cache;
-  const streets: Seg[] = [];
-  for (let i = 0; i < STREET_COUNT; i++) {
-    const c = pt(ORIGIN, AVE, i * STREET_PITCH_M);
-    streets.push([
-      pt(c, STREET, -STREET_HALF_LEN_M),
-      pt(c, STREET, STREET_HALF_LEN_M),
-    ]);
-  }
-  const avenues: Seg[] = [];
-  for (let j = AVE_RANGE[0]; j <= AVE_RANGE[1]; j++) {
-    const c = pt(ORIGIN, STREET, j * AVE_PITCH_M);
-    avenues.push([pt(c, AVE, AVE_SPAN_M[0]), pt(c, AVE, AVE_SPAN_M[1])]);
-  }
+  const streets: Seg[] = STREET_ALONG.map((along) => {
+    const c = pt(ORIGIN, AVE, along);
+    return [pt(c, STREET, -STREET_HALF_LEN_M), pt(c, STREET, STREET_HALF_LEN_M)];
+  });
+  const avenues: Seg[] = GRID_AVENUES.map((a) => {
+    const c = pt(ORIGIN, STREET, a.across);
+    return [pt(c, AVE, a.from), pt(c, AVE, a.to)];
+  });
   cache = { streets, avenues };
   return cache;
 }
 
 /**
- * Sample points along a numbered avenue (grid index `j`, matching AVE_RANGE).
- * `fromM` / `toM` are meters along the avenue bearing from the First Street row.
+ * Sample points along a named avenue (e.g. "3rd Ave"). `fromM` / `toM` are
+ * meters along the avenue bearing from the First Street row.
  */
 export function avenuePolyline(
-  j: number,
+  name: string,
   fromM: number,
   toM: number,
   stepM = 350
 ): [number, number][] {
-  const c = pt(ORIGIN, STREET, j * AVE_PITCH_M);
+  const ave = GRID_AVENUES.find((a) => a.name === name);
+  if (!ave) throw new Error(`Unknown avenue: ${name}`);
+  const c = pt(ORIGIN, STREET, ave.across);
   const pts: [number, number][] = [];
   for (let m = fromM; m <= toM; m += stepM) {
     pts.push(pt(c, AVE, m));

@@ -3,8 +3,8 @@ import { avenuePolyline } from "../lib/grid";
 
 /**
  * Dated linear infrastructure — els, early subway, and the Croton Aqueduct.
- * Els and subway routes are sampled from the 1811 grid bearing so they track
- * real avenue corridors; the aqueduct is hand-placed north of the city.
+ * Els and subway routes follow the real avenues on the grid bearing; the
+ * aqueduct is hand-placed north of the city.
  */
 
 /** Meters along-avenue from the First Street row. */
@@ -44,8 +44,7 @@ export const infrastructureLines: InfrastructureLine[] = [
     open: 1868,
     close: 1940,
     entryId: "el-railroads",
-    // grid j=-7 ≈ 9th Ave
-    pts: avenuePolyline(-7, DOWNTOWN, HARLEM),
+    pts: avenuePolyline("9th Ave", DOWNTOWN, HARLEM),
   },
   {
     id: "sixth-ave-el",
@@ -54,7 +53,7 @@ export const infrastructureLines: InfrastructureLine[] = [
     open: 1878,
     close: 1938,
     entryId: "el-railroads",
-    pts: avenuePolyline(-4, DOWNTOWN, MIDTOWN),
+    pts: avenuePolyline("6th Ave", DOWNTOWN, MIDTOWN),
   },
   {
     id: "third-ave-el",
@@ -63,7 +62,7 @@ export const infrastructureLines: InfrastructureLine[] = [
     open: 1878,
     close: 1955,
     entryId: "el-railroads",
-    pts: avenuePolyline(1, DOWNTOWN, INWOOD),
+    pts: avenuePolyline("3rd Ave", DOWNTOWN, INWOOD),
   },
   {
     id: "second-ave-el",
@@ -72,7 +71,7 @@ export const infrastructureLines: InfrastructureLine[] = [
     open: 1880,
     close: 1942,
     entryId: "el-railroads",
-    pts: avenuePolyline(0, DOWNTOWN, HARLEM),
+    pts: avenuePolyline("2nd Ave", DOWNTOWN, HARLEM),
   },
   {
     id: "irt-broadway",
@@ -81,7 +80,7 @@ export const infrastructureLines: InfrastructureLine[] = [
     open: 1904,
     entryId: "subway-opens",
     // Broadway / 7th Ave corridor between 6th and 8th
-    pts: avenuePolyline(-5, DOWNTOWN, HARLEM),
+    pts: avenuePolyline("7th Ave", DOWNTOWN, HARLEM),
   },
   {
     id: "irt-lexington",
@@ -89,7 +88,7 @@ export const infrastructureLines: InfrastructureLine[] = [
     kind: "subway",
     open: 1904,
     entryId: "subway-opens",
-    pts: avenuePolyline(2, DOWNTOWN, HARLEM),
+    pts: avenuePolyline("Lexington Ave", DOWNTOWN, HARLEM),
   },
   {
     id: "ind-eighth",
@@ -97,7 +96,7 @@ export const infrastructureLines: InfrastructureLine[] = [
     kind: "subway",
     open: 1932,
     entryId: "ind-subway",
-    pts: avenuePolyline(-6, DOWNTOWN, HARLEM),
+    pts: avenuePolyline("8th Ave", DOWNTOWN, HARLEM),
   },
   {
     id: "ind-sixth",
@@ -106,6 +105,6 @@ export const infrastructureLines: InfrastructureLine[] = [
     open: 1940,
     entryId: "ind-subway",
     // Dug beneath the Sixth Avenue El, torn down in 1938.
-    pts: avenuePolyline(-4, DOWNTOWN, MIDTOWN),
+    pts: avenuePolyline("6th Ave", DOWNTOWN, MIDTOWN),
   },
 ];
