@@ -58,6 +58,7 @@ sources and caveats, lessons learned, and the future-features roadmap.
 | `npm run validate:wiki` | verify every Wikipedia title resolves |
 | `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources |
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |
+| `node --experimental-strip-types scripts/prepare-streets.mjs` | street names and the Manhattan grid table from NYC street centerlines |
 
 ## Credits
 

@@ -679,12 +679,6 @@ button {
   pointer-events: none;
 }
 
-.street-label-grid {
-  font-size: 9px;
-  font-style: italic;
-  fill: color-mix(in srgb, var(--ink) 58%, transparent);
-}
-
 .park {
   fill: #a3b585;
   fill-opacity: 0.82;

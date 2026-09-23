@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { geoMercator, geoPath } from "d3-geo";
 import { select } from "d3-selection";
 import "d3-transition";
@@ -32,7 +32,7 @@ import {
   overlayManualPick,
   overlayPlacement,
 } from "../lib/historicalOverlays";
-import { layoutStreetLabels, layoutGridLabels } from "../lib/streetLabels";
+import { StreetLabelLayer } from "./StreetLabelLayer";
 import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
@@ -268,11 +268,23 @@ function MapViewInner({
     }
   };
 
+  // Layers that lay out by viewport (street names) re-query when the view
+  // settles rather than on every frame of a pan.
+  const settledListeners = useRef(new Set<() => void>());
+  const onViewSettled = useCallback((fn: () => void) => {
+    settledListeners.current.add(fn);
+    return () => {
+      settledListeners.current.delete(fn);
+    };
+  }, []);
+  const getTransform = useCallback(() => transformRef.current, []);
+
   const syncZoomK = (t: typeof zoomIdentity) => {
     transformRef.current = t;
     contentRef.current?.setAttribute("transform", t.toString());
     lodBandRef.current = zoomLodBand(t.k);
     setZoomK(t.k);
+    for (const fn of settledListeners.current) fn();
   };
 
   const projection = useMemo(() => {
@@ -544,18 +556,6 @@ function MapViewInner({
         .join(""),
     }));
   }, [projection]);
-
-  const streetLabels = useMemo(() => {
-    if (!projection || !showStreetLabels) return [];
-    return layoutStreetLabels(colonialStreets, projection, year, k);
-  }, [projection, showStreetLabels, year, k]);
-
-  const gridLabels = useMemo(() => {
-    if (!projection || !showStreetLabels) return [];
-    const f = frontierAt(year);
-    const maxLat = Math.max(f.latW, f.latE);
-    return layoutGridLabels(projection, year, k, maxLat);
-  }, [projection, showStreetLabels, year, k]);
 
   // ----- Structures -----
   const structurePaths = useMemo(() => {
@@ -868,37 +868,6 @@ function MapViewInner({
                 );
               })}
 
-          {/* Street name labels — counter-scaled, decluttered, optional layer */}
-          {showStreetLabels &&
-            streetLabels.map(({ street, pos, angle, opacity }) => (
-              <g key={`lbl-${street.id}`}>
-                <text
-                  className="street-label"
-                  transform={`translate(${pos[0]},${pos[1]}) rotate(${angle}) scale(${1 / k})`}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  style={{ opacity: opacity * roadFade }}
-                >
-                  {street.name}
-                </text>
-                <title>{streetTooltip(street, year)}</title>
-              </g>
-            ))}
-
-          {showStreetLabels &&
-            gridLabels.map(({ text, pos, angle, opacity }) => (
-              <text
-                key={`grid-${text}-${pos[0].toFixed(0)}`}
-                className="street-label street-label-grid"
-                transform={`translate(${pos[0]},${pos[1]}) rotate(${angle}) scale(${1 / k})`}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={{ opacity: opacity * roadFade }}
-              >
-                {text}
-              </text>
-            ))}
-
           {/* Parks */}
           {parkPaths
             .filter((p) => year >= p.from)
@@ -1001,6 +970,20 @@ function MapViewInner({
                 </g>
               );
             })}
+
+          {/* Street names — every named street, decluttered to what fits */}
+          {showStreetLabels && (
+            <StreetLabelLayer
+              project={projection}
+              year={year}
+              k={k}
+              width={width}
+              height={height}
+              getTransform={getTransform}
+              onViewSettled={onViewSettled}
+              fade={roadFade}
+            />
+          )}
 
           {/* Lenapehoking layer */}
           {lenapeOpacity > 0 && (

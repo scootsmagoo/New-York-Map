@@ -146,7 +146,7 @@ export function HeaderMenu({
               Street names
             </label>
             <p className="header-menu-section-note">
-              Labels appear when zoomed in; major streets first.
+              Every street, named as the city reaches it. Zoom in for more.
             </p>
           </div>
 

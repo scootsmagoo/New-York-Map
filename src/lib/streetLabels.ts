@@ -1,6 +1,5 @@
 import type { ColonialStreet, StreetTier } from "../data/streets";
 import { streetTier } from "../data/streets";
-import { gridSegments, type Seg } from "./grid";
 
 function fade(k: number, from: number, to: number): number {
   return Math.max(0, Math.min(1, (k - from) / (to - from)));
@@ -29,14 +28,6 @@ export interface StreetLabelLayout {
   pos: [number, number];
   angle: number;
   opacity: number;
-}
-
-export interface GridLabelLayout {
-  text: string;
-  pos: [number, number];
-  angle: number;
-  opacity: number;
-  tier: StreetTier;
 }
 
 interface BBox {
@@ -86,23 +77,11 @@ export function pathMidpointAndAngle(
   return { pos: last, angle: 0 };
 }
 
-function labelBBox(pos: [number, number], name: string, k: number): BBox {
-  const w = Math.min(120, name.length * 5.6 + 6);
-  const h = 12;
-  const pad = 3 / k;
-  return {
-    x0: pos[0] - w / 2 - pad,
-    y0: pos[1] - h / 2 - pad,
-    x1: pos[0] + w / 2 + pad,
-    y1: pos[1] + h / 2 + pad,
-  };
-}
-
 function overlaps(a: BBox, b: BBox): boolean {
   return a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
 }
 
-/** Pick non-overlapping labels; higher tiers win. */
+/** Candidate labels for the hand-drawn streets named in `year`, most important first. */
 export function layoutStreetLabels(
   streets: ColonialStreet[],
   project: (c: [number, number]) => [number, number] | null,
@@ -128,117 +107,169 @@ export function layoutStreetLabels(
     candidates.push({ street, pos, angle, opacity });
   }
 
-  candidates.sort(
+  return candidates.sort(
     (a, b) =>
       TIER_RANK[streetTier(a.street)] - TIER_RANK[streetTier(b.street)] ||
       b.opacity - a.opacity
   );
+}
 
-  const placed: BBox[] = [];
-  const out: StreetLabelLayout[] = [];
+// ----- The full street-name layer (NYC street centerlines) -----
 
-  for (const layout of candidates) {
-    const box = labelBBox(layout.pos, layout.street.name, k);
-    if (placed.some((p) => overlaps(p, box))) continue;
-    placed.push(box);
-    out.push(layout);
+/** As written by scripts/prepare-streets.mjs. */
+export interface StreetLabelData {
+  names: string[];
+  /** [lon, lat (1e-5° from -74.3, 40.45), angle°, from, to (0 = open), name, tier]. */
+  anchors: number[][];
+}
+
+const TIERS: StreetTier[] = ["major", "secondary", "minor"];
+
+/** Anchors projected to map (k = 1) coordinates and bucketed for lookup. */
+export interface StreetLabelIndex {
+  data: StreetLabelData;
+  xs: Float32Array;
+  ys: Float32Array;
+  cell: number;
+  buckets: Map<number, number[]>;
+}
+
+const bucketKey = (cx: number, cy: number) => cx * 100003 + cy;
+
+export function buildStreetLabelIndex(
+  data: StreetLabelData,
+  project: (c: [number, number]) => [number, number] | null,
+  cell = 40
+): StreetLabelIndex {
+  const n = data.anchors.length;
+  const xs = new Float32Array(n);
+  const ys = new Float32Array(n);
+  const buckets = new Map<number, number[]>();
+  for (let i = 0; i < n; i++) {
+    const a = data.anchors[i];
+    const p = project([a[0] / 1e5 - 74.3, a[1] / 1e5 + 40.45]);
+    if (!p) {
+      xs[i] = NaN;
+      continue;
+    }
+    xs[i] = p[0];
+    ys[i] = p[1];
+    const key = bucketKey(Math.floor(p[0] / cell), Math.floor(p[1] / cell));
+    let b = buckets.get(key);
+    if (!b) buckets.set(key, (b = []));
+    b.push(i);
   }
+  return { data, xs, ys, cell, buckets };
+}
 
+export interface LabelCandidate {
+  key: string;
+  text: string;
+  /** Map (k = 1) coordinates. */
+  pos: [number, number];
+  angle: number;
+  opacity: number;
+  /** Lower wins a collision. */
+  rank: number;
+}
+
+/** Anchors inside a map-space rectangle that are named in `year` and visible at zoom `k`. */
+export function queryStreetLabels(
+  index: StreetLabelIndex,
+  rect: { x0: number; y0: number; x1: number; y1: number },
+  year: number,
+  k: number
+): LabelCandidate[] {
+  const { data, xs, ys, cell, buckets } = index;
+  const out: LabelCandidate[] = [];
+  const opacityByTier = TIERS.map((t) => streetLabelOpacity(t, k));
+  const cx0 = Math.floor(rect.x0 / cell);
+  const cx1 = Math.floor(rect.x1 / cell);
+  const cy0 = Math.floor(rect.y0 / cell);
+  const cy1 = Math.floor(rect.y1 / cell);
+  for (let cx = cx0; cx <= cx1; cx++) {
+    for (let cy = cy0; cy <= cy1; cy++) {
+      const b = buckets.get(bucketKey(cx, cy));
+      if (!b) continue;
+      for (const i of b) {
+        const [, , angle, from, to, name, tier] = data.anchors[i];
+        if (year < from || (to !== 0 && year > to)) continue;
+        const opacity = opacityByTier[tier];
+        if (opacity <= 0) continue;
+        const x = xs[i];
+        const y = ys[i];
+        if (x < rect.x0 || x > rect.x1 || y < rect.y0 || y > rect.y1) continue;
+        // Mercator is conformal, so the ground angle is the screen angle
+        // (flipped: screen y points down). Keep text upright.
+        let a = -angle;
+        if (a > 90) a -= 180;
+        if (a < -90) a += 180;
+        out.push({ key: `a${i}`, text: data.names[name], pos: [x, y], angle: a, opacity, rank: tier });
+      }
+    }
+  }
   return out;
 }
 
-/** Avenue index (grid `j`) to display name. */
-const AVE_NAMES: Record<number, string> = {
-  [-8]: "10th Ave",
-  [-6]: "8th Ave",
-  [-4]: "6th Ave",
-  [-2]: "4th Ave",
-  [0]: "2nd Ave",
-  [1]: "3rd Ave",
-  [2]: "Lexington Ave",
-  [3]: "5th Ave",
-  [4]: "Madison Ave",
-};
-
-function segMidpoint(seg: Seg): [number, number] {
-  return [(seg[0][0] + seg[1][0]) / 2, (seg[0][1] + seg[1][1]) / 2];
-}
-
-function segAngle(
-  project: (c: [number, number]) => [number, number] | null,
-  seg: Seg
-): { pos: [number, number]; angle: number } | null {
-  const a = project(seg[0]);
-  const b = project(seg[1]);
-  if (!a || !b) return null;
-  let angle = (Math.atan2(b[1] - a[1], b[0] - a[0]) * 180) / Math.PI;
-  if (angle > 90) angle -= 180;
-  if (angle < -90) angle += 180;
-  return {
-    pos: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2],
-    angle,
-  };
-}
+const CHAR_W = 5.6;
+const LABEL_H = 12;
+const PAD = 3;
 
 /**
- * Labels for the procedural 1811 grid — avenues and every 10th street.
- * Only meaningful once the grid exists (1811+) and the user is zoomed in.
+ * Keep the most important labels that fit without touching. At most `cap`
+ * of them inside `visible` (map coordinates; labels in the margin beyond it
+ * are kept so a short pan shows them, but don't count). Boxes are the label's
+ * on-screen size (text doesn't scale with the map), rotated with the street,
+ * in a spatial hash so this stays linear.
  */
-export function layoutGridLabels(
-  project: (c: [number, number]) => [number, number] | null,
-  year: number,
+export function declutterLabels(
+  candidates: LabelCandidate[],
   k: number,
-  maxLat: number
-): GridLabelLayout[] {
-  if (year < 1811) return [];
-
-  const { streets, avenues } = gridSegments();
-  const candidates: GridLabelLayout[] = [];
-
-  for (const [j, name] of Object.entries(AVE_NAMES)) {
-    const idx = parseInt(j, 10);
-    const aveSeg = avenues[idx + 10];
-    if (!aveSeg) continue;
-    const mid = segMidpoint(aveSeg);
-    if (mid[1] > maxLat) continue;
-    const layout = segAngle(project, aveSeg);
-    if (!layout) continue;
-    const opacity = streetLabelOpacity("major", k);
-    if (opacity <= 0) continue;
-    candidates.push({ text: name, ...layout, opacity, tier: "major" });
+  cap = 180,
+  visible?: { x0: number; y0: number; x1: number; y1: number }
+): LabelCandidate[] {
+  const sorted = [...candidates].sort((a, b) => a.rank - b.rank || b.opacity - a.opacity);
+  const cell = 60;
+  const grid = new Map<number, BBox[]>();
+  const out: LabelCandidate[] = [];
+  let shown = 0;
+  for (const c of sorted) {
+    const onScreen =
+      !visible ||
+      (c.pos[0] >= visible.x0 && c.pos[0] <= visible.x1 && c.pos[1] >= visible.y0 && c.pos[1] <= visible.y1);
+    if (onScreen && shown >= cap) continue;
+    if (!onScreen && out.length - shown >= cap) continue;
+    const w = c.text.length * CHAR_W + 6;
+    const rad = (c.angle * Math.PI) / 180;
+    const cos = Math.abs(Math.cos(rad));
+    const sin = Math.abs(Math.sin(rad));
+    const hw = (w * cos + LABEL_H * sin) / 2 + PAD;
+    const hh = (w * sin + LABEL_H * cos) / 2 + PAD;
+    const sx = c.pos[0] * k;
+    const sy = c.pos[1] * k;
+    const box = { x0: sx - hw, y0: sy - hh, x1: sx + hw, y1: sy + hh };
+    const gx0 = Math.floor(box.x0 / cell);
+    const gx1 = Math.floor(box.x1 / cell);
+    const gy0 = Math.floor(box.y0 / cell);
+    const gy1 = Math.floor(box.y1 / cell);
+    let hit = false;
+    for (let gx = gx0; gx <= gx1 && !hit; gx++) {
+      for (let gy = gy0; gy <= gy1 && !hit; gy++) {
+        const cellBoxes = grid.get(bucketKey(gx, gy));
+        if (cellBoxes?.some((p) => overlaps(p, box))) hit = true;
+      }
+    }
+    if (hit) continue;
+    for (let gx = gx0; gx <= gx1; gx++) {
+      for (let gy = gy0; gy <= gy1; gy++) {
+        const key = bucketKey(gx, gy);
+        let cellBoxes = grid.get(key);
+        if (!cellBoxes) grid.set(key, (cellBoxes = []));
+        cellBoxes.push(box);
+      }
+    }
+    if (onScreen) shown++;
+    out.push(c);
   }
-
-  for (let i = 9; i < streets.length; i += 10) {
-    const streetNum = i + 1;
-    const seg = streets[i];
-    const mid = segMidpoint(seg);
-    if (mid[1] > maxLat) continue;
-    const layout = segAngle(project, seg);
-    if (!layout) continue;
-    const tier: StreetTier = streetNum % 20 === 0 ? "secondary" : "minor";
-    const opacity = streetLabelOpacity(tier, k);
-    if (opacity <= 0) continue;
-    candidates.push({
-      text: `${streetNum}th St`,
-      ...layout,
-      opacity,
-      tier,
-    });
-  }
-
-  candidates.sort(
-    (a, b) => TIER_RANK[a.tier] - TIER_RANK[b.tier] || b.opacity - a.opacity
-  );
-
-  const placed: BBox[] = [];
-  const out: GridLabelLayout[] = [];
-
-  for (const layout of candidates) {
-    const box = labelBBox(layout.pos, layout.text, k);
-    if (placed.some((p) => overlaps(p, box))) continue;
-    placed.push(box);
-    out.push(layout);
-  }
-
   return out;
 }

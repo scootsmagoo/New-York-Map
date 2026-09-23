@@ -106,6 +106,15 @@ header, theme, footprint, markers, panel — derives from it.
 - **Boundaries:** NYC Open Data "Borough Boundaries" (gthc-hcne) and US Census
   `cb_2023_us_county_500k` (surrounding NJ/NY/CT land). Modern shorelines —
   landfill means the 1660 island was slightly slimmer than drawn.
+- **Street names:** NYC Open Data street centerlines (CSCL, inkn-q76z),
+  processed by `scripts/prepare-streets.mjs` into ~15,000 label anchors.
+  There is no dataset of street opening dates, so a name appears when the
+  built-up footprint reaches it (not before 1800; Manhattan grid names not
+  before 1815). Names are today's, except for a table of well-known
+  renamings (Lenox Ave, 7th/8th Aves in Harlem, Columbus/Amsterdam/West End
+  before 1880–90, Richmond Turnpike, East River Drive…); obscure renamings
+  and a few post-1945 streets on already-built land will slip through. The
+  same data places the Manhattan grid's streets and avenues.
 - **Built-up footprints:** hand-drawn approximations against period maps
   (Castello Plan, Ratzer, Viele, Bromley atlases from memory), deliberately
   impressionistic, clipped to real land. They are *illustrations of growth*,
@@ -264,6 +273,17 @@ header, theme, footprint, markers, panel — derives from it.
     back at ~51. Followers apply the leader's transform imperatively and
     re-render only when the leader's gesture settles.
 
+20. **A collision box must be measured in the units it collides in.** The
+    street-label declutter sized boxes in screen pixels but placed them in
+    map units, so at 6× zoom every label reserved six times its real room
+    and most streets went unlabeled. That, more than missing data, was why
+    the layer looked spotty.
+21. **Lay out by viewport when the view settles, not per frame.** The
+    street layer indexes ~15,000 anchors in a spatial hash, queries the
+    visible rectangle (plus a margin) only when a pan or zoom ends or the
+    year changes, and caps on-screen labels at 180. WebKit pan and scrub
+    frame rates match the layer switched off, with 16× the labels.
+
 ## Future features
 
 - [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the
@@ -281,6 +301,8 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Population counter and demographic strip charts that track the playhead.
 - [x] Els, subway lines, and the Croton Aqueduct as dated line geometry;
       street name labels beyond Broadway; demolition "ghost" markers.
+- [x] Every named street: ~15,000 label anchors from the city's street
+      centerlines, appearing as the built-up area reaches them.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: four tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair) with animated timeline flights, map camera moves, and
@@ -306,6 +328,7 @@ npm run build      # static build in dist/
 npm run validate:wiki   # check all Wikipedia titles still resolve
 node scripts/prepare-geo.mjs  # regenerate geometry from sources
 node scripts/prepare-overlays.mjs  # download & compress historical map sheets
+node --experimental-strip-types scripts/prepare-streets.mjs  # street names + grid table
 ```
 
 ## Credits
