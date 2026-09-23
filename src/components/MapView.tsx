@@ -445,7 +445,7 @@ function MapViewInner({
   const { base, next, progress } = footprintAt(year);
 
   // Snapshots are shared objects, so these only recompute when the playhead
-  // crosses into a new snapshot interval (13 times across the whole timeline).
+  // crosses into a new snapshot interval (14 times across the whole timeline).
   const projectSnapshot = (snapshot: FootprintSnapshot | null) => {
     if (!snapshot || !path) return { manhattan: "", other: "" };
     return {

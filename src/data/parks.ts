@@ -193,4 +193,18 @@ export const parks: Park[] = [
     ring: blob(-73.8485, 40.7025, 0.0062, 0.0045),
     from: 1895,
   },
+  {
+    id: "flushing-meadows",
+    name: "Flushing Meadows",
+    // The Corona ash dumps, filled and graded for the 1939 World's Fair.
+    ring: [
+      [-73.8395, 40.76],
+      [-73.856, 40.7555],
+      [-73.8515, 40.73],
+      [-73.836, 40.7255],
+      [-73.8345, 40.742],
+    ],
+    from: 1936,
+    completed: 1939,
+  },
 ];

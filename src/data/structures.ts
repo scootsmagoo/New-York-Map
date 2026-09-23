@@ -77,6 +77,90 @@ export const bridges: Structure[] = [
     ],
     open: 1916,
   },
+  {
+    id: "goethals",
+    name: "Goethals Bridge",
+    kind: "bridge",
+    pts: [
+      [-74.1955, 40.6325],
+      [-74.202, 40.639],
+    ],
+    open: 1928,
+  },
+  {
+    id: "outerbridge",
+    name: "Outerbridge Crossing",
+    kind: "bridge",
+    pts: [
+      [-74.2475, 40.5225],
+      [-74.2575, 40.5265],
+    ],
+    open: 1928,
+  },
+  {
+    id: "gw-bridge",
+    name: "George Washington Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.9475, 40.8505],
+      [-73.965, 40.8535],
+    ],
+    open: 1931,
+    entryId: "gw-bridge",
+  },
+  {
+    id: "bayonne-bridge",
+    name: "Bayonne Bridge",
+    kind: "bridge",
+    pts: [
+      [-74.1405, 40.6385],
+      [-74.142, 40.6475],
+    ],
+    open: 1931,
+  },
+  {
+    id: "triborough",
+    name: "Triborough Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.9205, 40.779],
+      [-73.927, 40.784],
+      [-73.9245, 40.7985],
+      [-73.935, 40.802],
+    ],
+    open: 1936,
+    entryId: "triborough",
+  },
+  {
+    id: "henry-hudson",
+    name: "Henry Hudson Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.9215, 40.8745],
+      [-73.9195, 40.8795],
+    ],
+    open: 1936,
+  },
+  {
+    id: "marine-parkway",
+    name: "Marine Parkway Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.885, 40.581],
+      [-73.884, 40.57],
+    ],
+    open: 1937,
+  },
+  {
+    id: "whitestone",
+    name: "Bronx–Whitestone Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.8275, 40.8055],
+      [-73.8295, 40.793],
+    ],
+    open: 1939,
+  },
 ];
 
 export const ferries: Structure[] = [

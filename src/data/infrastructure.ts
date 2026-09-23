@@ -91,4 +91,21 @@ export const infrastructureLines: InfrastructureLine[] = [
     entryId: "subway-opens",
     pts: avenuePolyline(2, DOWNTOWN, HARLEM),
   },
+  {
+    id: "ind-eighth",
+    name: "IND Eighth Ave line",
+    kind: "subway",
+    open: 1932,
+    entryId: "ind-subway",
+    pts: avenuePolyline(-6, DOWNTOWN, HARLEM),
+  },
+  {
+    id: "ind-sixth",
+    name: "IND Sixth Ave line",
+    kind: "subway",
+    open: 1940,
+    entryId: "ind-subway",
+    // Dug beneath the Sixth Avenue El, torn down in 1938.
+    pts: avenuePolyline(-4, DOWNTOWN, MIDTOWN),
+  },
 ];

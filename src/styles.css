@@ -27,6 +27,7 @@
 [data-era="antebellum"]    { --paper: #ece4d0; --paper-deep: #ded4b9; --water: #c8d4cd; }
 [data-era="civilWarGilded"]{ --paper: #eadfca; --paper-deep: #dcceae; --water: #c6cfc9; }
 [data-era="greaterNY"]     { --paper: #e9e3d4; --paper-deep: #d9d2c0; --water: #c5cdd0; --ink: #28211b; }
+[data-era="capitalWorld"]  { --paper: #e8e2d6; --paper-deep: #d8d0c2; --water: #c3cbd1; --ink: #26201c; }
 
 * { box-sizing: border-box; }
 

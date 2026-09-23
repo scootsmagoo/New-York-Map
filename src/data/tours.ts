@@ -185,6 +185,59 @@ export const tours: Tour[] = [
       },
     ],
   },
+  {
+    id: "moses",
+    title: "The Power Broker's City",
+    subtitle: "Bridges, parks, and a World's Fair, 1931–1945",
+    stops: [
+      {
+        year: 1931,
+        title: "A bridge twice as long as any before",
+        text:
+          "The Port Authority opened Othmar Ammann's George Washington Bridge in 1931, early in the Depression. Its 3,500-foot span was nearly double the old record. It was the new scale of building that Robert Moses would make his own.",
+        focus: { coords: [-73.953, 40.852], k: 3.4 },
+        entryId: "gw-bridge",
+      },
+      {
+        year: 1934,
+        title: "One man, a dozen jobs",
+        text:
+          "When La Guardia took office in 1934 he made Moses parks commissioner of all five boroughs. Moses already ran the Long Island State Park Commission, and soon he ran the Triborough Bridge Authority too. With federal relief money he put tens of thousands of men to work rebuilding nearly every park in the city within a year.",
+        entryId: "robert-moses",
+      },
+      {
+        year: 1936,
+        title: "Three boroughs and a toll booth",
+        text:
+          "The Triborough Bridge joined Manhattan, Queens, and the Bronx at Randalls Island in July 1936, the same summer eleven huge new swimming pools opened. Its tolls paid Moses's authority year after year, money that no mayor or governor could touch.",
+        focus: { coords: [-73.926, 40.791], k: 4.2 },
+        entryId: "triborough",
+      },
+      {
+        year: 1939,
+        title: "The World of Tomorrow on an ash dump",
+        text:
+          "Moses backed the World's Fair so the Corona ash dumps would be filled, graded, and handed back as a park. The map hatches Flushing Meadows as a construction site until the fair opens in April 1939.",
+        focus: { coords: [-73.845, 40.745], k: 3.6 },
+        entryId: "worlds-fair-1939",
+      },
+      {
+        year: 1940,
+        title: "Roads to the suburbs",
+        text:
+          "The Bronx–Whitestone Bridge opened in time for fairgoers, and the new municipal airport at North Beach opened in December 1939. Parkways ran out toward Long Island's beaches, built for private cars at a time when most New Yorkers rode the subway.",
+        focus: { coords: [-73.85, 40.795], k: 3 },
+        entryId: "laguardia-airport",
+      },
+      {
+        year: 1945,
+        title: "The expressway years ahead",
+        text:
+          "By V-J Day Moses had built more public works than anyone else in the city's history, and the largest were still ahead: the expressways, the housing projects, and the neighborhoods cleared to make room for them. This timeline stops here, in 1945.",
+        entryId: "vj-day",
+      },
+    ],
+  },
 ];
 
 export function tourById(id: string): Tour | undefined {

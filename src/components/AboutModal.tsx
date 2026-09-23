@@ -22,7 +22,8 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
           First World War — the span covered by Edwin G. Burrows &amp; Mike
           Wallace's <em>Gotham: A History of New York City to 1898</em> and
           Mike Wallace's <em>Greater Gotham (1898–1919)</em>, which inspired
-          this project.
+          this project — and on through the Depression and the Second World
+          War to 1945.
         </p>
         <h3>How to use it</h3>
         <ul>

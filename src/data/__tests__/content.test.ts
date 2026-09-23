@@ -14,7 +14,7 @@ describe("eras", () => {
   });
 
   it("resolve every year to exactly one era", () => {
-    for (const year of [TIME_MIN, -500, 1608, 1609, 1664, 1783, 1898, 1919]) {
+    for (const year of [TIME_MIN, -500, 1608, 1609, 1664, 1783, 1898, 1919, 1945]) {
       const era = eraForYear(year);
       expect(era.start).toBeLessThanOrEqual(year);
       expect(year).toBeLessThanOrEqual(era.end);
@@ -86,7 +86,7 @@ describe("footprints", () => {
 
   it("move the frontier north monotonically", () => {
     let prev = -Infinity;
-    for (let y = 1600; y <= 1919; y++) {
+    for (let y = 1600; y <= TIME_MAX; y++) {
       const f = frontierAt(y).latW;
       expect(f).toBeGreaterThanOrEqual(prev - 1e-12);
       prev = f;

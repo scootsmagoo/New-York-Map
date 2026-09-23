@@ -3,10 +3,11 @@ import type { Era } from "../types";
 /**
  * Era periodization loosely follows the part structure of Burrows & Wallace's
  * "Gotham: A History of New York City to 1898", extended to 1919 where the
- * sequel "Greater Gotham" leaves off.
+ * sequel "Greater Gotham" leaves off, then on through the Depression and the
+ * Second World War without the books as a guide.
  */
 export const TIME_MIN = -10000;
-export const TIME_MAX = 1919;
+export const TIME_MAX = 1945;
 
 export const eras: Era[] = [
   {
@@ -91,10 +92,21 @@ export const eras: Era[] = [
     name: "Greater New York",
     subtitle: "The imperial city, 1898–1919",
     start: 1898,
-    end: TIME_MAX,
+    end: 1919,
     color: "#3f5573",
     summary:
       "The consolidated city of 3.4 million dug subways, raised steel towers, and absorbed the greatest immigration wave in its history through Ellis Island. Skyscrapers, the Triangle fire, ragtime, suffrage marches, and Great War mobilization carried New York to 1919 — capital of capital, second city of the world and gaining on London — where Wallace's 'Greater Gotham' closes.",
+    wikiTitle: "History of New York City (1898–1945)",
+  },
+  {
+    id: "capitalWorld",
+    name: "Capital of the World",
+    subtitle: "Jazz Age, Depression, and war, 1919–1945",
+    start: 1919,
+    end: TIME_MAX,
+    color: "#6e4561",
+    summary:
+      "Prohibition, the Harlem Renaissance, and a building boom that raised the Chrysler and Empire State towers ended in the 1929 crash and shantytowns in Central Park. La Guardia's city hall and Robert Moses's bridges, parkways, pools, and public housing rebuilt the city with New Deal money; the 1939 World's Fair sold 'the World of Tomorrow' on a Queens ash dump, and the port and Navy Yard sent a war overseas until V-J Day filled Times Square.",
     wikiTitle: "History of New York City (1898–1945)",
   },
 ];

@@ -1,9 +1,10 @@
 # Gotham: A Timeline of New York City
 
 An interactive, pannable timeline of New York City's history — from the Lenape
-world through New Amsterdam, British New York, and the metropolis, ending in
-1919 where Mike Wallace's *Greater Gotham* closes. Inspired by Edwin G.
-Burrows & Mike Wallace, *Gotham: A History of New York City to 1898*.
+world through New Amsterdam, British New York, and the metropolis to 1919,
+where Mike Wallace's *Greater Gotham* closes, then on through the Depression
+and the Second World War to 1945. Inspired by Edwin G. Burrows & Mike
+Wallace, *Gotham: A History of New York City to 1898*.
 
 **Repo:** https://github.com/scootsmagoo/New-York-Map
 
@@ -14,20 +15,20 @@ Burrows & Mike Wallace, *Gotham: A History of New York City to 1898*.
 - A **zoomable, pannable timeline** runs along the bottom of the screen. The
   year under the center playhead drives everything else. The ~11,600 years of
   Lenapehoking are compressed into the left 14% of the strip (a polylinear
-  scale); 1609–1919 gets the rest.
+  scale); 1609–1945 gets the rest.
 - A **stylized archival map** fills the screen. As the playhead moves, the
   city's rough built-up footprint grows — lower Manhattan first, then the
   ribbon up the Bowery, Brooklyn ferry towns, the 1811 grid filling north,
   Brooklyn's row-house ring, the South Bronx, Queens corridors, Staten
-  Island's north shore. Footprints cross-fade between 13 hand-drawn snapshots
-  (1609–1919) and are clipped to real shorelines.
+  Island's north shore. Footprints cross-fade between 14 hand-drawn snapshots
+  (1609–1945) and are clipped to real shorelines.
 - Before 1609, the map shows the **Lenape world** instead: territory names
   (Wecquaesgeek, Canarsee, Raritan…), village sites (Werpoes, Shorakapok…),
   and the Wickquasgeck trail that became Broadway. This layer fades out
   through the early Dutch period. Borough labels are era-aware (Breuckelen →
   Brooklyn, Staaten Eylandt → Staten Island, Westchester → The Bronx).
-- **Eight eras** (Lenapehoking → Greater New York) tint the whole UI with
-  their own palette and carry ~115 curated **people, places, and events**,
+- **Nine eras** (Lenapehoking → Capital of the World) tint the whole UI with
+  their own palette and carry ~190 curated **people, places, and events**,
   weighted toward what the book emphasizes (Juan Rodriguez, the Flushing
   Remonstrance, the 1741 conspiracy trials, Madame Restell, the Draft Riots,
   Henry George's 1886 campaign…).
@@ -76,9 +77,9 @@ No backend. The production build is fully static and deploys to GitHub Pages.
 src/
   data/
     eras.ts            8 eras with palette, summary, Wikipedia article
-    entries/<era>.ts   ~115 people/places/events, each with wikiTitle,
+    entries/<era>.ts   ~190 people/places/events, each with wikiTitle,
                        fallback blurb, optional coords + Gotham note
-    footprints.ts      13 cumulative built-up snapshots, 1609–1919
+    footprints.ts      14 cumulative built-up snapshots, 1609–1945
     lenapeSites.ts     villages, territories, trails (pre-contact layer)
     geo/*.json         generated borough + surrounding-land GeoJSON
   lib/
@@ -161,6 +162,14 @@ header, theme, footprint, markers, panel — derives from it.
   mis-filed entry. Guided tours shipped (three stories, animated flights,
   `#tour=` deep links). d3 umbrella dependency replaced by the four
   submodules in use.
+- **2026-09-23 (Then & Now + to 1945)** — Then & Now compare: a pinned
+  year on the left of a draggable seam, one shared camera, `#compare=`
+  deep links; WebKit pans it as fast as a single map. The timeline now
+  runs to 1945: a ninth era (Capital of the World), 26 entries, eight
+  bridges from the Goethals to the Whitestone, the IND lines, a 1945
+  footprint, 1930/1940 population with a Puerto Rican segment, El Barrio
+  and Bed-Stuy, Flushing Meadows, and a fourth tour ("The Power Broker's
+  City"). Fixed deep links and jumps to late years landing a decade early.
 
 ## Lessons learned
 
@@ -257,8 +266,13 @@ header, theme, footprint, markers, panel — derives from it.
 
 ## Future features
 
-- [ ] Extend past 1919 (Depression/War, Moses era, fiscal crisis, modern
-      city) — the era/entry model already supports it.
+- [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the
+      World: Jazz Age, Depression, war), 26 entries, the Moses-era bridges,
+      the IND, the els coming down, a 1945 footprint, and 1930/1940 census
+      population. The books end at 1919, so these entries carry no margin
+      notes.
+- [ ] Carry on past 1945 (Moses's expressways, the fiscal crisis, the
+      modern city).
 - [x] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
       Viele 1865) with opacity blending — shipped: Wikimedia-sourced sheets,
       Manhattan clip, timeline crossfade + manual override, opacity slider.
@@ -267,9 +281,9 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Population counter and demographic strip charts that track the playhead.
 - [x] Els, subway lines, and the Croton Aqueduct as dated line geometry;
       street name labels beyond Broadway; demolition "ghost" markers.
-- [x] Guided "tours": scripted camera+timeline paths — shipped: three tours
+- [x] Guided "tours": scripted camera+timeline paths — shipped: four tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
-      water) with animated timeline flights, map camera moves, and
+      water, Robert Moses's bridges and fair) with animated timeline flights, map camera moves, and
       `#tour=<id>` deep links. Adding one is a data entry in `tours.ts`.
 - [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
       timeline there.

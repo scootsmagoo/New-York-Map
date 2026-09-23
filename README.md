@@ -1,7 +1,7 @@
 # Gotham — A Timeline of New York City
 
 An interactive, pannable timeline of New York City's history, from
-Lenapehoking to Greater New York (1919). Pan through time and watch the
+Lenapehoking to V-J Day (1945). Pan through time and watch the
 city's built-up footprint spread across the five boroughs; click into any era
 for its people, places, and events, with live summaries and images from
 Wikipedia.
@@ -27,7 +27,8 @@ npm run dev      # open http://localhost:5173
 - Arrow keys pan time; `+` / `-` zoom; the map pans and zooms independently.
 - **Guided tours** (⋯ menu) walk the timeline and camera through a story —
   the grid marching north, crossing the East River, fire and Croton water.
-  Deep-link one with `#tour=grid`, `#tour=east-river`, or `#tour=fire-water`.
+  Deep-link one with `#tour=grid`, `#tour=east-river`, `#tour=fire-water`,
+  or `#tour=moses`.
 - **Then & Now** (⋯ menu) pins the current year on the left of a draggable
   seam; scrub the timeline to compare. Deep-link with `#year=1900&compare=1776`.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.

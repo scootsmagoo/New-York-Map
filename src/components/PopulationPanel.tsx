@@ -3,6 +3,7 @@ import {
   formatPopulation,
   populationAt,
   scopeLabel,
+  segmentLabel,
   SEGMENT_META,
   type SegmentKey,
 } from "../data/population";
@@ -94,7 +95,7 @@ function PopulationPanelInner({
                       flex: s.value,
                       background: SEGMENT_META[s.key].color,
                     }}
-                    title={`${SEGMENT_META[s.key].label}: ${formatPopulation(s.value)} (${s.pct.toFixed(1)}%)`}
+                    title={`${segmentLabel(s.key, year)}: ${formatPopulation(s.value)} (${s.pct.toFixed(1)}%)`}
                   />
                 ))}
               </div>
@@ -106,6 +107,7 @@ function PopulationPanelInner({
                     <LegendRow
                       key={s.key}
                       segmentKey={s.key}
+                      year={year}
                       value={s.value}
                       pct={s.pct}
                       active={highlightGroup === s.key}
@@ -129,7 +131,7 @@ function PopulationPanelInner({
           {highlightGroup && hoveredSettlements.length > 0 && (
             <div className="population-enclaves">
               <div className="population-enclaves-title">
-                {SEGMENT_META[highlightGroup].label} enclaves
+                {segmentLabel(highlightGroup, year)} enclaves
               </div>
               <ul>
                 {hoveredSettlements.map((s) => (
@@ -153,6 +155,7 @@ function PopulationPanelInner({
 
 function LegendRow({
   segmentKey,
+  year,
   value,
   pct,
   active,
@@ -160,6 +163,7 @@ function LegendRow({
   onLeave,
 }: {
   segmentKey: SegmentKey;
+  year: number;
   value: number;
   pct: number;
   active: boolean;
@@ -177,7 +181,7 @@ function LegendRow({
         className="population-swatch"
         style={{ background: meta.color }}
       />
-      <span className="population-legend-label">{meta.label}</span>
+      <span className="population-legend-label">{segmentLabel(segmentKey, year)}</span>
       <span className="population-legend-count">{formatPopulation(value, true)}</span>
       <span className="population-legend-pct">{pct.toFixed(1)}%</span>
     </li>

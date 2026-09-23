@@ -1,6 +1,6 @@
 /**
  * Historical population snapshots for Manhattan (through 1897) and Greater New
- * York (1898–1919). Figures are rounded census totals or scholarly estimates;
+ * York (1898–1945). Figures are rounded census totals or scholarly estimates;
  * demographic splits are approximate, informed by federal censuses and
  * Burrows & Wallace's *Gotham*.
  */
@@ -20,6 +20,7 @@ export type SegmentKey =
   | "jewish"
   | "polish"
   | "chinese"
+  | "puerto_rican"
   | "scandinavian"
   | "other_foreign";
 
@@ -39,6 +40,7 @@ export const SEGMENT_META: Record<
   jewish: { label: "Jewish", color: "#7d5ba6" },
   polish: { label: "Polish", color: "#5c4a7a" },
   chinese: { label: "Chinese", color: "#b84a4a" },
+  puerto_rican: { label: "Puerto Rican", color: "#c0873a" },
   scandinavian: { label: "Scandinavian", color: "#4a7a8c" },
   other_foreign: { label: "Other foreign-born", color: "#3f5573" },
 };
@@ -57,6 +59,7 @@ export const SEGMENT_ORDER: SegmentKey[] = [
   "jewish",
   "polish",
   "chinese",
+  "puerto_rican",
   "scandinavian",
   "other_foreign",
 ];
@@ -278,6 +281,48 @@ const SNAPSHOTS = [
       other_foreign: 231_730,
     },
   },
+  {
+    // 1930 census total (6,930,446); the split continues the rough
+    // proportions above and is an estimate.
+    year: 1930,
+    scope: "greaterNY",
+    estimate: true,
+    segments: {
+      native_born_white: 3_250_000,
+      free_black: 328_000,
+      puerto_rican: 45_000,
+      irish: 470_000,
+      german: 420_000,
+      british_other: 80_000,
+      italian: 820_000,
+      jewish: 900_000,
+      polish: 240_000,
+      chinese: 8_500,
+      scandinavian: 125_000,
+      other_foreign: 243_946,
+    },
+  },
+  {
+    // 1940 census total (7,454,995); Black and Puerto Rican counts follow
+    // the census, the rest is an estimate.
+    year: 1940,
+    scope: "greaterNY",
+    estimate: true,
+    segments: {
+      native_born_white: 3_643_295,
+      free_black: 458_000,
+      puerto_rican: 61_000,
+      irish: 420_000,
+      german: 380_000,
+      british_other: 75_000,
+      italian: 860_000,
+      jewish: 950_000,
+      polish: 230_000,
+      chinese: 12_700,
+      scandinavian: 115_000,
+      other_foreign: 250_000,
+    },
+  },
 ].map((s) => ({ ...s, segments: { ...s.segments } })) as PopSnapshot[];
 
 export interface PopulationAtYear {
@@ -351,6 +396,12 @@ function segmentList(segments: Segments): PopulationAtYear["segments"] {
     const value = segments[key] ?? 0;
     return { key, value, pct: (value / total) * 100 };
   });
+}
+
+/** "Free Black" only means something while slavery is legal (to 1827 in New York). */
+export function segmentLabel(key: SegmentKey, year: number): string {
+  if (key === "free_black" && year >= 1827) return "Black";
+  return SEGMENT_META[key].label;
 }
 
 export function formatPopulation(n: number, compact = false): string {
