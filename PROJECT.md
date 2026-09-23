@@ -115,6 +115,9 @@ header, theme, footprint, markers, panel — derives from it.
   before 1880–90, Richmond Turnpike, East River Drive…); obscure renamings
   and a few post-1945 streets on already-built land will slip through. The
   same data places the Manhattan grid's streets and avenues.
+- **Neighborhood names:** hand-dated from standard neighborhood histories
+  (`neighborhoods.ts`); dates mark common use, not incorporation, and
+  positions are label anchors, not boundaries.
 - **Built-up footprints:** hand-drawn approximations against period maps
   (Castello Plan, Ratzer, Viele, Bromley atlases from memory), deliberately
   impressionistic, clipped to real land. They are *illustrations of growth*,
@@ -303,6 +306,11 @@ header, theme, footprint, markers, panel — derives from it.
       street name labels beyond Broadway; demolition "ghost" markers.
 - [x] Every named street: ~15,000 label anchors from the city's street
       centerlines, appearing as the built-up area reaches them.
+- [x] Neighborhood names: ~70 villages and neighborhoods under the names
+      they had then (Nieuw Haarlem, Vlissingen, Hallett's Cove, Longacre
+      Square…), fading in and out with their dates.
+- [ ] More layers: the lost landscape (1609 shoreline vs. landfill, buried
+      streams and ponds), streetcar lines, real outer-borough street lines.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: four tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair) with animated timeline flights, map camera moves, and

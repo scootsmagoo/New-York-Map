@@ -607,6 +607,20 @@ button {
   pointer-events: none;
 }
 
+.neighborhood-label {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  fill: color-mix(in srgb, var(--ink) 78%, transparent);
+  stroke: var(--paper);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  pointer-events: none;
+}
+
 .hatch-line {
   stroke: rgba(62, 42, 22, 0.5);
   stroke-width: 0.5;

@@ -19,6 +19,8 @@ interface HeaderMenuProps {
   overlayActiveLabel: string;
   showStreetLabels: boolean;
   onShowStreetLabelsChange: (v: boolean) => void;
+  showNeighborhoods: boolean;
+  onShowNeighborhoodsChange: (v: boolean) => void;
 }
 
 export function HeaderMenu({
@@ -37,6 +39,8 @@ export function HeaderMenu({
   overlayActiveLabel,
   showStreetLabels,
   onShowStreetLabelsChange,
+  showNeighborhoods,
+  onShowNeighborhoodsChange,
 }: HeaderMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -147,6 +151,18 @@ export function HeaderMenu({
             </label>
             <p className="header-menu-section-note">
               Every street, named as the city reaches it. Zoom in for more.
+            </p>
+
+            <label className="header-menu-check">
+              <input
+                type="checkbox"
+                checked={showNeighborhoods}
+                onChange={(e) => onShowNeighborhoodsChange(e.target.checked)}
+              />
+              Neighborhood names
+            </label>
+            <p className="header-menu-section-note">
+              Villages and neighborhoods by the names they had then.
             </p>
           </div>
 

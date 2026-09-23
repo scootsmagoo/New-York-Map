@@ -23,6 +23,8 @@ interface HeaderProps {
   overlayActiveLabel: string;
   showStreetLabels: boolean;
   onShowStreetLabelsChange: (v: boolean) => void;
+  showNeighborhoods: boolean;
+  onShowNeighborhoodsChange: (v: boolean) => void;
 }
 
 function HeaderInner({
@@ -44,6 +46,8 @@ function HeaderInner({
   overlayActiveLabel,
   showStreetLabels,
   onShowStreetLabelsChange,
+  showNeighborhoods,
+  onShowNeighborhoodsChange,
 }: HeaderProps) {
   return (
     <header className="app-header">
@@ -101,6 +105,8 @@ function HeaderInner({
           overlayActiveLabel={overlayActiveLabel}
           showStreetLabels={showStreetLabels}
           onShowStreetLabelsChange={onShowStreetLabelsChange}
+          showNeighborhoods={showNeighborhoods}
+          onShowNeighborhoodsChange={onShowNeighborhoodsChange}
         />
       </div>
     </header>

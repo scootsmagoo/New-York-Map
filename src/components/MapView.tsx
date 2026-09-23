@@ -33,6 +33,8 @@ import {
   overlayPlacement,
 } from "../lib/historicalOverlays";
 import { StreetLabelLayer } from "./StreetLabelLayer";
+import { NeighborhoodLayer } from "./NeighborhoodLayer";
+import { boroughLabels, type MapLabel } from "../data/mapLabels";
 import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
@@ -56,6 +58,7 @@ interface MapViewProps {
   overlaysAuto?: boolean;
   overlayOpacity?: number;
   showStreetLabels?: boolean;
+  showNeighborhoods?: boolean;
   /** Keeps pan/zoom in step with other maps sharing the link (compare mode). */
   cameraLink?: CameraLink;
   /** Reset button and attribution; off for the second map in compare mode. */
@@ -89,29 +92,6 @@ const KIND_SYMBOL = {
     />
   ),
 } as const;
-
-interface MapLabel {
-  text: string;
-  coords: [number, number];
-  rotate?: number;
-}
-
-function boroughLabels(year: number): MapLabel[] {
-  if (year < 1609) return [];
-  const labels: MapLabel[] = [
-    { text: "MANHATTAN", coords: [-73.9619, 40.79], rotate: -61 },
-    { text: year < 1664 ? "BREUCKELEN" : "BROOKLYN", coords: [-73.946, 40.6395] },
-    { text: year < 1664 ? "STAATEN EYLANDT" : "STATEN ISLAND", coords: [-74.1525, 40.5715] },
-  ];
-  if (year >= 1683) {
-    labels.push({ text: "QUEENS", coords: [-73.7945, 40.733] });
-    labels.push({
-      text: year < 1874 ? "WESTCHESTER" : "THE BRONX",
-      coords: [-73.8585, 40.8655],
-    });
-  }
-  return labels;
-}
 
 const WATER_LABELS: MapLabel[] = [
   { text: "Hudson River", coords: [-73.984, 40.8155], rotate: -73 },
@@ -245,6 +225,7 @@ function MapViewInner({
   overlaysAuto = true,
   overlayOpacity = 0.72,
   showStreetLabels = false,
+  showNeighborhoods = false,
   cameraLink,
   chrome = true,
 }: MapViewProps) {
@@ -983,6 +964,10 @@ function MapViewInner({
               onViewSettled={onViewSettled}
               fade={roadFade}
             />
+          )}
+
+          {showNeighborhoods && (
+            <NeighborhoodLayer project={projection} year={year} k={k} />
           )}
 
           {/* Lenapehoking layer */}

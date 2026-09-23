@@ -171,6 +171,8 @@ export interface LabelCandidate {
   opacity: number;
   /** Lower wins a collision. */
   rank: number;
+  /** Average glyph width in px, for sizing the label's box (default 5.6). */
+  charW?: number;
 }
 
 /** Anchors inside a map-space rectangle that are named in `year` and visible at zoom `k`. */
@@ -239,7 +241,7 @@ export function declutterLabels(
       (c.pos[0] >= visible.x0 && c.pos[0] <= visible.x1 && c.pos[1] >= visible.y0 && c.pos[1] <= visible.y1);
     if (onScreen && shown >= cap) continue;
     if (!onScreen && out.length - shown >= cap) continue;
-    const w = c.text.length * CHAR_W + 6;
+    const w = c.text.length * (c.charW ?? CHAR_W) + 6;
     const rad = (c.angle * Math.PI) / 180;
     const cos = Math.abs(Math.cos(rad));
     const sin = Math.abs(Math.sin(rad));
