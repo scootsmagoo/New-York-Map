@@ -1871,3 +1871,40 @@ a {
 .compare-close:hover {
   color: var(--ink);
 }
+
+/* Phones: the era panel is a bottom sheet, so the map stays in view above it. */
+@media (max-width: 640px) {
+  .era-panel {
+    top: auto;
+    left: 0;
+    width: auto;
+    height: 62%;
+    background: var(--paper);
+    border-left: none;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -10px 28px rgba(40, 28, 12, 0.22);
+    animation-name: sheet-up;
+  }
+
+  .era-panel::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 36px;
+    height: 4px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--ink) 25%, transparent);
+  }
+
+  .era-panel-scroll {
+    padding: 20px 18px 24px;
+  }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
