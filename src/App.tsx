@@ -26,6 +26,8 @@ import { AboutModal } from "./components/AboutModal";
 import { PopulationPanel } from "./components/PopulationPanel";
 import { SearchPalette } from "./components/SearchPalette";
 import { TourCard } from "./components/TourCard";
+import { CompareDivider } from "./components/CompareDivider";
+import { compareYearFromHash, createCameraLink } from "./lib/mapCamera";
 import { tourById, type MapFocus, type Tour } from "./data/tours";
 import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
@@ -68,6 +70,12 @@ export default function App() {
   const [tour, setTour] = useState<{ tour: Tour; step: number } | null>(null);
   const [focusPoint, setFocusPoint] = useState<MapFocus | null>(null);
   const [focusPointToken, setFocusPointToken] = useState(0);
+  // Then & Now: a pinned year on the left of a draggable seam.
+  const [compareYear, setCompareYear] = useState<number | null>(() =>
+    compareYearFromHash(window.location.hash)
+  );
+  const [comparePos, setComparePos] = useState(0.5);
+  const cameraLink = useMemo(() => createCameraLink(), []);
 
   // Animated timeline flights (tours). Any user gesture cancels one in progress.
   const winRef = useRef(win);
@@ -223,6 +231,7 @@ export default function App() {
       setSearchOpen(false);
       setSelectedEntry(null);
       setFocusStreet(null);
+      setCompareYear(null);
       setTour({ tour: t, step: 0 });
       showTourStop(t, 0);
     },
@@ -310,6 +319,11 @@ export default function App() {
         onExploreEra={() => setPanelOpen((o) => !o)}
         onAbout={() => setAboutOpen(true)}
         onStartTour={startTour}
+        comparing={compareYear !== null}
+        onToggleCompare={() => {
+          setCompareYear((c) => (c === null ? year : null));
+          setComparePos(0.5);
+        }}
         overlaysEnabled={overlaysEnabled}
         onOverlaysEnabledChange={setOverlaysEnabled}
         overlaysAuto={overlaysAuto}
@@ -321,7 +335,12 @@ export default function App() {
         onShowStreetLabelsChange={setShowStreetLabels}
       />
 
-      <main className={`app-main${tour ? " app-main-touring" : ""}`}>
+      <main
+        className={`app-main${tour ? " app-main-touring" : ""}${
+          compareYear !== null ? " app-main-comparing" : ""
+        }`}
+        style={{ "--compare-pos": `${comparePos * 100}%` } as React.CSSProperties}
+      >
         <MapView
           year={mapYear}
           selectedEntry={selectedEntry}
@@ -337,7 +356,41 @@ export default function App() {
           overlaysAuto={overlaysAuto}
           overlayOpacity={overlayOpacity}
           showStreetLabels={showStreetLabels}
+          cameraLink={cameraLink}
         />
+        {compareYear !== null && (
+          <>
+            <div
+              className="compare-pane"
+              data-era={eraForYear(compareYear).id}
+              style={
+                {
+                  "--accent": eraForYear(compareYear).color,
+                } as React.CSSProperties
+              }
+            >
+              <MapView
+                year={compareYear}
+                selectedEntry={null}
+                focusToken={0}
+                onSelectEntry={selectEntry}
+                overlaysEnabled={overlaysEnabled}
+                overlaysAuto={overlaysAuto}
+                overlayOpacity={overlayOpacity}
+                showStreetLabels={showStreetLabels}
+                cameraLink={cameraLink}
+                chrome={false}
+              />
+            </div>
+            <CompareDivider
+              position={comparePos}
+              onPositionChange={setComparePos}
+              pinnedYear={compareYear}
+              liveYear={mapYear}
+              onClose={() => setCompareYear(null)}
+            />
+          </>
+        )}
         <PopulationPanel
           year={mapYear}
           showSettlements={showSettlements}

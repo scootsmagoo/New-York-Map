@@ -49,6 +49,10 @@ Burrows & Mike Wallace, *Gotham: A History of New York City to 1898*.
   Bridges and ferries are dated line geometry (the Fulton Ferry dashes fade
   out after the Brooklyn Bridge lands in 1883); parks appear on acquisition,
   drawn as construction hatching until completed (Central Park 1857–1873).
+- **Then & Now** (⋯ menu) pins the current year on the left of a draggable
+  seam; scrub the timeline and the right half follows it. Both halves share
+  one camera, so panning or zooming either moves both. Deep link:
+  `#year=1900&compare=1776`.
 - Autoplay (▶ or spacebar) glides through time; arrow keys pan; the map
   itself pans and zooms independently up to 16×, with detail layers fading
   in by zoom level.
@@ -243,6 +247,13 @@ header, theme, footprint, markers, panel — derives from it.
     entry's year falls inside its era found St. Paul's Chapel (1766) filed
     under an era that ends in 1763. Data authored by hand deserves the same
     invariants as code.
+19. **Two stacked SVGs cost two SVGs, unless each paints only its half.**
+    Then & Now puts the pinned map in a clipped pane over the live one;
+    WebKit still painted the whole live map underneath and panning fell from
+    ~50 to ~36 fps. Clipping the live SVG to its own half (a CSS variable
+    drives both clips, so dragging the seam re-renders neither map) put it
+    back at ~51. Followers apply the leader's transform imperatively and
+    re-render only when the leader's gesture settles.
 
 ## Future features
 
@@ -264,6 +275,8 @@ header, theme, footprint, markers, panel — derives from it.
       timeline there.
 - [x] ~~Search across entries~~ — shipped: fuzzy palette over entries and
       streets (⌘K).
+- [x] Then & Now: a pinned year beside the live one, split by a draggable
+      seam, with a shared camera and `#compare=<year>` deep links.
 - [ ] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
 - [ ] Audio: ambient soundscapes per era (gulls and surf → harbor bells →
       els and steam → ragtime).

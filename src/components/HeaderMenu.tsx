@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { tours, type Tour } from "../data/tours";
+import { formatYear } from "../data/eras";
 
 interface HeaderMenuProps {
+  year: number;
   onAbout: () => void;
   onStartTour: (tour: Tour) => void;
+  comparing: boolean;
+  onToggleCompare: () => void;
   overlaysEnabled: boolean;
   onOverlaysEnabledChange: (v: boolean) => void;
   overlaysAuto: boolean;
@@ -16,8 +20,11 @@ interface HeaderMenuProps {
 }
 
 export function HeaderMenu({
+  year,
   onAbout,
   onStartTour,
+  comparing,
+  onToggleCompare,
   overlaysEnabled,
   onOverlaysEnabledChange,
   overlaysAuto,
@@ -72,6 +79,23 @@ export function HeaderMenu({
             }}
           >
             About this project
+          </button>
+
+          <button
+            className="header-menu-item"
+            type="button"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false);
+              onToggleCompare();
+            }}
+          >
+            {comparing ? "Close Then & Now" : "Then & Now"}
+            <span className="header-menu-item-sub">
+              {comparing
+                ? "Back to a single map."
+                : `Pin ${formatYear(year)} on the left, then scrub the timeline to see what changed.`}
+            </span>
           </button>
 
           <div className="header-menu-divider" role="separator" />

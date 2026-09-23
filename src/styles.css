@@ -18,14 +18,15 @@
 }
 
 /* Era moods — paper and water shift slightly through time */
-.app[data-era="lenape"]        { --paper: #e9e6cd; --paper-deep: #dcd8b6; --water: #c3d2c2; --land: #ede9d1; --land-muted: #dcd6b8; }
-.app[data-era="newAmsterdam"]  { --paper: #f0e3c6; --paper-deep: #e5d4ab; --water: #ccd6c8; }
-.app[data-era="britishColony"] { --paper: #efe2c9; --paper-deep: #e3d3af; --water: #cbd5cb; }
-.app[data-era="revolution"]    { --paper: #ece0cb; --paper-deep: #ded0b3; --water: #c8d1c8; }
-.app[data-era="earlyRepublic"] { --paper: #eee6d2; --paper-deep: #e1d6b9; --water: #cad6d0; }
-.app[data-era="antebellum"]    { --paper: #ece4d0; --paper-deep: #ded4b9; --water: #c8d4cd; }
-.app[data-era="civilWarGilded"]{ --paper: #eadfca; --paper-deep: #dcceae; --water: #c6cfc9; }
-.app[data-era="greaterNY"]     { --paper: #e9e3d4; --paper-deep: #d9d2c0; --water: #c5cdd0; --ink: #28211b; }
+[data-era] { --land: #f1e8d3; --land-muted: #e0d5ba; }
+[data-era="lenape"]        { --paper: #e9e6cd; --paper-deep: #dcd8b6; --water: #c3d2c2; --land: #ede9d1; --land-muted: #dcd6b8; }
+[data-era="newAmsterdam"]  { --paper: #f0e3c6; --paper-deep: #e5d4ab; --water: #ccd6c8; }
+[data-era="britishColony"] { --paper: #efe2c9; --paper-deep: #e3d3af; --water: #cbd5cb; }
+[data-era="revolution"]    { --paper: #ece0cb; --paper-deep: #ded0b3; --water: #c8d1c8; }
+[data-era="earlyRepublic"] { --paper: #eee6d2; --paper-deep: #e1d6b9; --water: #cad6d0; }
+[data-era="antebellum"]    { --paper: #ece4d0; --paper-deep: #ded4b9; --water: #c8d4cd; }
+[data-era="civilWarGilded"]{ --paper: #eadfca; --paper-deep: #dcceae; --water: #c6cfc9; }
+[data-era="greaterNY"]     { --paper: #e9e3d4; --paper-deep: #d9d2c0; --water: #c5cdd0; --ink: #28211b; }
 
 * { box-sizing: border-box; }
 
@@ -466,6 +467,14 @@ button {
   text-align: left;
 }
 
+.header-menu-item-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
 .header-menu-item:hover {
   background: color-mix(in srgb, var(--ink) 6%, transparent);
 }
@@ -837,6 +846,7 @@ button {
 
 .map-controls {
   position: absolute;
+  z-index: 3;
   right: 12px;
   top: 12px;
   display: flex;
@@ -1086,6 +1096,7 @@ button {
 
 .map-attribution {
   position: absolute;
+  z-index: 3;
   left: 10px;
   bottom: 8px;
   font-size: 10.5px;
@@ -1758,4 +1769,104 @@ a {
   .tour-card {
     bottom: 8px;
   }
+}
+
+/* ----- Then & Now compare ----- */
+
+.compare-pane {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  clip-path: inset(0 calc(100% - var(--compare-pos)) 0 0);
+}
+
+/* The live map under the pane only paints its own half: two full SVGs
+   cost WebKit ~30% of its pan frame rate, two halves cost nothing. */
+.app-main-comparing > .map-view > .map-svg {
+  clip-path: inset(0 0 0 var(--compare-pos));
+}
+
+.compare-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 28px;
+  transform: translateX(-50%);
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.compare-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  background: var(--paper);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 35%, transparent),
+    0 0 8px rgba(0, 0, 0, 0.18);
+}
+
+.compare-knob {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 30%, transparent),
+    0 2px 10px rgba(0, 0, 0, 0.2);
+  font-family: var(--serif);
+  color: var(--ink);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.compare-knob:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.compare-year {
+  padding: 3px 9px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  background: var(--land);
+}
+
+.compare-grip {
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: -2px;
+}
+
+.compare-close {
+  position: absolute;
+  left: 50%;
+  top: 56px;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 30%, transparent);
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.compare-close:hover {
+  color: var(--ink);
 }

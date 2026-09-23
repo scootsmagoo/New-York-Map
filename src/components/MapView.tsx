@@ -34,6 +34,7 @@ import {
 } from "../lib/historicalOverlays";
 import { layoutStreetLabels, layoutGridLabels } from "../lib/streetLabels";
 import type { MapFocus } from "../data/tours";
+import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
 import boroughsData from "../data/geo/boroughs.json";
 import surroundData from "../data/geo/surround.json";
@@ -55,6 +56,10 @@ interface MapViewProps {
   overlaysAuto?: boolean;
   overlayOpacity?: number;
   showStreetLabels?: boolean;
+  /** Keeps pan/zoom in step with other maps sharing the link (compare mode). */
+  cameraLink?: CameraLink;
+  /** Reset button and attribution; off for the second map in compare mode. */
+  chrome?: boolean;
 }
 
 type GeoJSON = any;
@@ -240,6 +245,8 @@ function MapViewInner({
   overlaysAuto = true,
   overlayOpacity = 0.72,
   showStreetLabels = false,
+  cameraLink,
+  chrome = true,
 }: MapViewProps) {
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
@@ -248,6 +255,7 @@ function MapViewInner({
   const transformRef = useRef(zoomIdentity);
   const lodBandRef = useRef(zoomLodBand(1));
   const [zoomK, setZoomK] = useState(1);
+  const cameraId = useRef(Symbol("map")).current;
 
   const applyTransform = (t: typeof zoomIdentity) => {
     transformRef.current = t;
@@ -306,6 +314,9 @@ function MapViewInner({
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg || !width || !height) return;
+    // True while applying a transform that another map published, so it
+    // isn't echoed back.
+    let following = false;
     const behavior = zoom<SVGSVGElement, unknown>()
       .scaleExtent([1, 16])
       .translateExtent([
@@ -315,20 +326,37 @@ function MapViewInner({
       .on("zoom", (e: D3ZoomEvent<SVGSVGElement, unknown>) => {
         // Imperative transform during gesture — avoids re-rendering the full SVG tree.
         applyTransform(e.transform);
+        if (!following) cameraLink?.publish(e.transform, cameraId);
       })
       .on("end", (e: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        // A follower settles when its leader does, not after every step.
+        if (following) return;
         syncZoomK(e.transform);
+        cameraLink?.publish(e.transform, cameraId, true);
       });
     zoomRef.current = behavior;
     const sel = select(svg);
     sel.call(behavior);
     syncZoomK(zoomIdentity);
+    const follow = (t: { k: number; x: number; y: number }, settled: boolean) => {
+      const next = zoomIdentity.translate(t.x, t.y).scale(t.k);
+      following = true;
+      sel.interrupt();
+      behavior.transform(sel, next);
+      following = false;
+      if (settled) syncZoomK(next);
+    };
+    if (cameraLink?.current) follow(cameraLink.current, true);
+    const unsubscribe = cameraLink?.subscribe((t, source, settled) => {
+      if (source !== cameraId) follow(t, settled);
+    });
     return () => {
+      unsubscribe?.();
       sel.on(".zoom", null);
       sel.on(".end", null);
       zoomRef.current = null;
     };
-  }, [width, height]);
+  }, [width, height, cameraLink, cameraId]);
 
   // Pan/zoom to the selected entry or street.
   useEffect(() => {
@@ -1132,15 +1160,19 @@ function MapViewInner({
         </g>
       </svg>
 
-      <div className="map-controls">
-        <button className="tl-btn" onClick={resetZoom} title="Reset map view">
-          ⌖
-        </button>
-      </div>
-      <div className="map-attribution">
-        Boundaries: U.S. Census Bureau &amp; NYC Open Data · Content: Wikipedia ·
-        Built-up extents, streets &amp; sites are approximate
-      </div>
+      {chrome && (
+        <>
+          <div className="map-controls">
+            <button className="tl-btn" onClick={resetZoom} title="Reset map view">
+              ⌖
+            </button>
+          </div>
+          <div className="map-attribution">
+            Boundaries: U.S. Census Bureau &amp; NYC Open Data · Content: Wikipedia ·
+            Built-up extents, streets &amp; sites are approximate
+          </div>
+        </>
+      )}
     </div>
   );
 }

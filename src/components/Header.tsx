@@ -11,6 +11,8 @@ interface HeaderProps {
   onExploreEra: () => void;
   onAbout: () => void;
   onStartTour: (tour: Tour) => void;
+  comparing: boolean;
+  onToggleCompare: () => void;
   overlaysEnabled: boolean;
   onOverlaysEnabledChange: (v: boolean) => void;
   overlaysAuto: boolean;
@@ -29,6 +31,8 @@ function HeaderInner({
   onExploreEra,
   onAbout,
   onStartTour,
+  comparing,
+  onToggleCompare,
   overlaysEnabled,
   onOverlaysEnabledChange,
   overlaysAuto,
@@ -80,8 +84,11 @@ function HeaderInner({
           Explore this era
         </button>
         <HeaderMenu
+          year={year}
           onAbout={onAbout}
           onStartTour={onStartTour}
+          comparing={comparing}
+          onToggleCompare={onToggleCompare}
           overlaysEnabled={overlaysEnabled}
           onOverlaysEnabledChange={onOverlaysEnabledChange}
           overlaysAuto={overlaysAuto}
