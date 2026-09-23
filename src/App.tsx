@@ -12,6 +12,7 @@ import { eraForYear } from "./data/eras";
 import {
   clampWindow,
   panWindow,
+  windowAround,
   unitOfYear,
   yearOfUnit,
   zoomWindow,
@@ -46,7 +47,7 @@ function initialWindow(): TimeWindow {
   const u = unitOfYear(parseInt(yearMatch[1], 10));
   const spanMatch = hash.match(/span=([\d.]+)/);
   const span = spanMatch ? parseFloat(spanMatch[1]) : 0.1;
-  return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
+  return windowAround(u, span);
 }
 
 export default function App() {
@@ -217,7 +218,7 @@ export default function App() {
       const stop = t.stops[index];
       const span = stop.span ?? 0.05;
       const u = unitOfYear(stop.year);
-      flyWindow({ u0: u - span / 2, u1: u + span / 2 });
+      flyWindow(windowAround(u, span));
       setFocusPoint(stop.focus ?? null);
       setFocusPointToken((n) => n + 1);
     },
@@ -266,7 +267,7 @@ export default function App() {
     setWin((w) => {
       const span = Math.min(w.u1 - w.u0, 0.18);
       const u = unitOfYear(target);
-      return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
+      return windowAround(u, span);
     });
   }, []);
 
@@ -287,7 +288,7 @@ export default function App() {
       setWin((w) => {
         const span = Math.min(w.u1 - w.u0, 0.18);
         const u = unitOfYear(targetYear);
-        return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
+        return windowAround(u, span);
       });
       setFocusStreet(street);
       setStreetFocusToken((t) => t + 1);
@@ -303,7 +304,7 @@ export default function App() {
       setWin((w) => {
         const span = Math.min(w.u1 - w.u0, 0.18);
         const u = unitOfYear(entry.year);
-        return clampWindow({ u0: u - span / 2, u1: u + span / 2 });
+        return windowAround(u, span);
       });
       selectEntry(entry);
     },

@@ -2,7 +2,7 @@ import { TIME_MIN, TIME_MAX } from "../data/eras";
 
 /**
  * The timeline is polylinear: the ~11,600 years of Lenapehoking are compressed
- * into a fixed fraction of the strip, while 1609–1919 gets the rest. Pan/zoom
+ * into a fixed fraction of the strip, while 1609–1945 gets the rest. Pan/zoom
  * operate on a visible window [u0, u1] in "unit space" [0, 1].
  */
 export const BREAK_YEAR = 1609;
@@ -61,6 +61,16 @@ export function zoomWindow(
   const span = (w.u1 - w.u0) / factor;
   const rel = (uFixed - w.u0) / (w.u1 - w.u0);
   return clampWindow({ u0: uFixed - rel * span, u1: uFixed + (1 - rel) * span });
+}
+
+/**
+ * A window centered on `u`. Near either end of time the span narrows so `u`
+ * can still sit under the center playhead; clamping a wide window would
+ * slide it, and the playhead would land on some other year.
+ */
+export function windowAround(u: number, span: number): TimeWindow {
+  const s = Math.max(MIN_WINDOW, Math.min(span, 2 * u, 2 * (1 - u)));
+  return clampWindow({ u0: u - s / 2, u1: u + s / 2 });
 }
 
 export function panWindow(w: TimeWindow, deltaUnits: number): TimeWindow {

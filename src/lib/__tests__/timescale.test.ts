@@ -8,6 +8,7 @@ import {
   panWindow,
   ticksFor,
   unitOfYear,
+  windowAround,
   yearOfUnit,
   yearToX,
   zoomWindow,
@@ -101,5 +102,30 @@ describe("ticks", () => {
       expect(t.year).toBeGreaterThanOrEqual(t0);
       expect(t.year).toBeLessThanOrEqual(t1);
     }
+  });
+});
+
+describe("windowAround", () => {
+  it("keeps the target year under the playhead near the end of time", () => {
+    const centerYear = (year: number) => {
+      const w = windowAround(unitOfYear(year), 0.1);
+      return Math.round(yearOfUnit((w.u0 + w.u1) / 2));
+    };
+    for (const year of [1919, 1940, 1944, -9000, 1609]) {
+      expect(centerYear(year)).toBe(year);
+    }
+    // The very last year sits within half a minimum window of the edge.
+    expect(centerYear(TIME_MAX)).toBeGreaterThanOrEqual(TIME_MAX - 1);
+  });
+
+  it("uses the requested span away from the ends", () => {
+    const w = windowAround(unitOfYear(1776), 0.1);
+    expect(w.u1 - w.u0).toBeCloseTo(0.1, 12);
+  });
+
+  it("never narrows past the minimum window", () => {
+    const w = windowAround(1, 0.1);
+    expect(w.u1 - w.u0).toBeCloseTo(MIN_WINDOW, 12);
+    expect(w.u1).toBeLessThanOrEqual(1);
   });
 });
