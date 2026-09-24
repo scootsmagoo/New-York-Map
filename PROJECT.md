@@ -115,6 +115,12 @@ header, theme, footprint, markers, panel — derives from it.
   before 1880–90, Richmond Turnpike, East River Drive…); obscure renamings
   and a few post-1945 streets on already-built land will slip through. The
   same data places the Manhattan grid's streets and avenues.
+- **Lost landscape:** Viele (1865), registered by seven landmarks (~45 m
+  error); made land and marshes picked by his map colors, Collect Pond,
+  Lispenard Meadows, Minetta Brook, and Stuyvesant's creek and meadows
+  traced by hand. When each strip of land was made is estimated from its
+  distance to the older shore — see `scripts/lost-landscape/README.md`.
+  Manhattan only.
 - **Neighborhood names:** hand-dated from standard neighborhood histories
   (`neighborhoods.ts`); dates mark common use, not incorporation, and
   positions are label anchors, not boundaries.
@@ -287,6 +293,13 @@ header, theme, footprint, markers, panel — derives from it.
     year changes, and caps on-screen labels at 180. WebKit pan and scrub
     frame rates match the layer switched off, with 16× the labels.
 
+22. **Check that a scan is north-up before placing it by bounds.** The
+    Viele sheet runs along the island with north to the right; stretched
+    into a north-up box, it was unrecognizable, and no one noticed because
+    the overlays are opt-in. Placing a sheet by landmarks (least-squares
+    affine over a few known squares) fixes any rotation and gives the error
+    as a number.
+
 ## Future features
 
 - [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the
@@ -309,8 +322,11 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Neighborhood names: ~70 villages and neighborhoods under the names
       they had then (Nieuw Haarlem, Vlissingen, Hallett's Cove, Longacre
       Square…), fading in and out with their dates.
-- [ ] More layers: the lost landscape (1609 shoreline vs. landfill, buried
-      streams and ponds), streetcar lines, real outer-borough street lines.
+- [x] Lost landscape: the 1609 shoreline, made land dated by decade and
+      drawn as river until filled, and the island's ponds, streams, and
+      marshes, from the Viele map (`scripts/lost-landscape/`).
+- [ ] Fit the Ratzer and Castello overlays by landmarks, as Viele now is.
+- [ ] More layers: streetcar lines, real outer-borough street lines.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: four tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair) with animated timeline flights, map camera moves, and

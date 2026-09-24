@@ -21,6 +21,8 @@ interface HeaderMenuProps {
   onShowStreetLabelsChange: (v: boolean) => void;
   showNeighborhoods: boolean;
   onShowNeighborhoodsChange: (v: boolean) => void;
+  showLostLandscape: boolean;
+  onShowLostLandscapeChange: (v: boolean) => void;
 }
 
 export function HeaderMenu({
@@ -41,6 +43,8 @@ export function HeaderMenu({
   onShowStreetLabelsChange,
   showNeighborhoods,
   onShowNeighborhoodsChange,
+  showLostLandscape,
+  onShowLostLandscapeChange,
 }: HeaderMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -163,6 +167,19 @@ export function HeaderMenu({
             </label>
             <p className="header-menu-section-note">
               Villages and neighborhoods by the names they had then.
+            </p>
+
+            <label className="header-menu-check">
+              <input
+                type="checkbox"
+                checked={showLostLandscape}
+                onChange={(e) => onShowLostLandscapeChange(e.target.checked)}
+              />
+              Lost landscape
+            </label>
+            <p className="header-menu-section-note">
+              Manhattan's 1609 shoreline, landfill as it was made, and buried
+              streams and ponds (from the Viele map).
             </p>
           </div>
 

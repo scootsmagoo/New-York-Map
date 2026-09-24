@@ -25,6 +25,8 @@ interface HeaderProps {
   onShowStreetLabelsChange: (v: boolean) => void;
   showNeighborhoods: boolean;
   onShowNeighborhoodsChange: (v: boolean) => void;
+  showLostLandscape: boolean;
+  onShowLostLandscapeChange: (v: boolean) => void;
 }
 
 function HeaderInner({
@@ -48,6 +50,8 @@ function HeaderInner({
   onShowStreetLabelsChange,
   showNeighborhoods,
   onShowNeighborhoodsChange,
+  showLostLandscape,
+  onShowLostLandscapeChange,
 }: HeaderProps) {
   return (
     <header className="app-header">
@@ -107,6 +111,8 @@ function HeaderInner({
           onShowStreetLabelsChange={onShowStreetLabelsChange}
           showNeighborhoods={showNeighborhoods}
           onShowNeighborhoodsChange={onShowNeighborhoodsChange}
+          showLostLandscape={showLostLandscape}
+          onShowLostLandscapeChange={onShowLostLandscapeChange}
         />
       </div>
     </header>

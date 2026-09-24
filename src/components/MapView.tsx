@@ -34,6 +34,7 @@ import {
 } from "../lib/historicalOverlays";
 import { StreetLabelLayer } from "./StreetLabelLayer";
 import { NeighborhoodLayer } from "./NeighborhoodLayer";
+import { LostLandscapeLayer } from "./LostLandscapeLayer";
 import { boroughLabels, type MapLabel } from "../data/mapLabels";
 import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
@@ -59,6 +60,7 @@ interface MapViewProps {
   overlayOpacity?: number;
   showStreetLabels?: boolean;
   showNeighborhoods?: boolean;
+  showLostLandscape?: boolean;
   /** Keeps pan/zoom in step with other maps sharing the link (compare mode). */
   cameraLink?: CameraLink;
   /** Reset button and attribution; off for the second map in compare mode. */
@@ -226,6 +228,7 @@ function MapViewInner({
   overlayOpacity = 0.72,
   showStreetLabels = false,
   showNeighborhoods = false,
+  showLostLandscape = false,
   cameraLink,
   chrome = true,
 }: MapViewProps) {
@@ -725,6 +728,16 @@ function MapViewInner({
             </pattern>
           ))}
           <pattern
+            id="made-land"
+            width={4}
+            height={4}
+            patternUnits="userSpaceOnUse"
+            patternTransform={`scale(${1 / k})`}
+          >
+            <circle cx={1} cy={1} r={0.55} className="made-land-dot" />
+            <circle cx={3} cy={3} r={0.55} className="made-land-dot" />
+          </pattern>
+          <pattern
             id="construction-hatch"
             width={6}
             height={6}
@@ -952,6 +965,9 @@ function MapViewInner({
                 </g>
               );
             })}
+
+          {/* The original shoreline and waters; unmade land drawn as river */}
+          {showLostLandscape && <LostLandscapeLayer project={projection} year={year} k={k} />}
 
           {/* Street names — every named street, decluttered to what fits */}
           {showStreetLabels && (

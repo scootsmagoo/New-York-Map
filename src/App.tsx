@@ -76,6 +76,7 @@ export default function App() {
   const [overlayOpacity, setOverlayOpacity] = usePersistedState("overlayOpacity", 0.72);
   const [showStreetLabels, setShowStreetLabels] = usePersistedState("streetLabels", false);
   const [showNeighborhoods, setShowNeighborhoods] = usePersistedState("neighborhoods", false);
+  const [showLostLandscape, setShowLostLandscape] = usePersistedState("lostLandscape", false);
   const [tour, setTour] = useState<{ tour: Tour; step: number } | null>(null);
   const [focusPoint, setFocusPoint] = useState<MapFocus | null>(null);
   const [focusPointToken, setFocusPointToken] = useState(0);
@@ -373,6 +374,8 @@ export default function App() {
         onShowStreetLabelsChange={setShowStreetLabels}
         showNeighborhoods={showNeighborhoods}
         onShowNeighborhoodsChange={setShowNeighborhoods}
+        showLostLandscape={showLostLandscape}
+        onShowLostLandscapeChange={setShowLostLandscape}
       />
 
       <main
@@ -397,6 +400,7 @@ export default function App() {
           overlayOpacity={overlayOpacity}
           showStreetLabels={showStreetLabels}
           showNeighborhoods={showNeighborhoods}
+          showLostLandscape={showLostLandscape}
           cameraLink={cameraLink}
         />
         {compareYear !== null && (
@@ -420,6 +424,7 @@ export default function App() {
                 overlayOpacity={overlayOpacity}
                 showStreetLabels={showStreetLabels}
                 showNeighborhoods={showNeighborhoods}
+                showLostLandscape={showLostLandscape}
                 cameraLink={cameraLink}
                 chrome={false}
               />

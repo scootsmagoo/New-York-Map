@@ -33,8 +33,10 @@ npm run dev      # open http://localhost:5173
 - **Then & Now** (⋯ menu) wipes between two years with a draggable line.
   Type either year, or scrub the timeline to change Now. Deep-link with
   `#year=1900&compare=1776`.
-- **Map layers** (⋯ menu): street names for every street in the city, and
-  neighborhood names as they were in each year. Zoom in for more.
+- **Map layers** (⋯ menu): street names for every street in the city,
+  neighborhood names as they were in each year, and the **lost landscape**:
+  Manhattan's 1609 shoreline, land drawn as river until it was filled, and
+  buried streams and ponds such as the Collect and Minetta Brook.
 - **Share a view:** ⋯ → *Copy link to this view*, or *Copy link* on any
   entry card. `#entry=vj-day` opens that entry directly.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
@@ -65,8 +67,6 @@ https://scootsmagoo.github.io/New-York-Map/. 57 unit tests pass.
 
 **Next up** (candidates; details in PROJECT.md → Future features)
 
-- *Lost landscape* layer: the 1609 shoreline against today's landfill, plus
-  buried streams and ponds (Collect Pond, Minetta Brook).
 - Streetcar lines, 1832–1945.
 - Real street lines outside Manhattan at high zoom, in place of the hatch
   texture.
@@ -75,6 +75,8 @@ https://scootsmagoo.github.io/New-York-Map/. 57 unit tests pass.
 
 **Known rough edges**
 
+- The Ratzer (1767) and Castello (1660) overlays are placed as stretched
+  rectangles and don't line up; they need the landmark fit Viele now uses.
 - Some early-colonial comparisons in Then & Now look alike at whole-city
   zoom, because the city was tiny. Zoom into lower Manhattan to see them.
 - The 1930 and 1940 population breakdowns (apart from the Black and Puerto
