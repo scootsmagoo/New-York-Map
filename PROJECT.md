@@ -326,6 +326,15 @@ header, theme, footprint, markers, panel — derives from it.
       drawn as river until filled, and the island's ponds, streams, and
       marshes, from the Viele map (`scripts/lost-landscape/`).
 - [ ] Fit the Ratzer and Castello overlays by landmarks, as Viele now is.
+      Both are placed as stretched north-up rectangles (`bounds` in
+      `src/data/historicalOverlays.ts`) and visibly don't line up: Ratzer's
+      streets run the wrong way, and Castello's town misses the island's
+      tip. Fix: give each entry `size` + `gcps` (sheet pixels ↔ lon/lat for
+      3+ identifiable points, e.g. Fort George/Battery, Trinity Church,
+      Bowling Green, the Wall Street line, City Hall), and
+      `overlayPlacement` does the rest. `scripts/lost-landscape/vcrop.py`
+      shows how to read pixel coordinates off a gridded crop. Note Castello
+      is a bird's-eye view, not a survey, so expect a looser fit.
 - [ ] More layers: streetcar lines, real outer-borough street lines.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: four tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
