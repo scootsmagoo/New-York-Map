@@ -8,13 +8,78 @@ export interface OverlayPlacement {
   y: number;
   width: number;
   height: number;
+  /** SVG transform for sheets placed by control points. */
+  transform?: string;
 }
 
-/** Project geographic bounds to SVG image placement (north-up). */
+/**
+ * Least-squares affine map from points `from` to `to`: returns [a, b, c, d,
+ * e, f] with x' = a·x + c·y + e and y' = b·x + d·y + f (SVG matrix order).
+ */
+export function fitAffine(
+  from: [number, number][],
+  to: [number, number][]
+): [number, number, number, number, number, number] | null {
+  if (from.length < 3 || from.length !== to.length) return null;
+  // Normal equations for [p, q, r] in out = p·x + q·y + r.
+  const m = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
+  const bx = [0, 0, 0];
+  const by = [0, 0, 0];
+  from.forEach(([x, y], i) => {
+    const row = [x, y, 1];
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 3; c++) m[r][c] += row[r] * row[c];
+      bx[r] += row[r] * to[i][0];
+      by[r] += row[r] * to[i][1];
+    }
+  });
+  const solve = (b: number[]) => {
+    const a = m.map((row, i) => [...row, b[i]]);
+    for (let i = 0; i < 3; i++) {
+      let piv = i;
+      for (let r = i + 1; r < 3; r++) if (Math.abs(a[r][i]) > Math.abs(a[piv][i])) piv = r;
+      [a[i], a[piv]] = [a[piv], a[i]];
+      if (Math.abs(a[i][i]) < 1e-12) return null;
+      for (let r = 0; r < 3; r++) {
+        if (r === i) continue;
+        const f = a[r][i] / a[i][i];
+        for (let c = i; c < 4; c++) a[r][c] -= f * a[i][c];
+      }
+    }
+    return [a[0][3] / a[0][0], a[1][3] / a[1][1], a[2][3] / a[2][2]];
+  };
+  const px = solve(bx);
+  const py = solve(by);
+  if (!px || !py) return null;
+  return [px[0], py[0], px[1], py[1], px[2], py[2]];
+}
+
+/** Project an overlay to SVG image placement: by control points, else north-up bounds. */
 export function overlayPlacement(
   projection: (coords: [number, number]) => [number, number] | null,
-  bounds: HistoricalOverlay["bounds"]
+  overlay: Pick<HistoricalOverlay, "bounds" | "gcps" | "size">
 ): OverlayPlacement | null {
+  if (overlay.gcps && overlay.size) {
+    const screen = overlay.gcps.map((g) => projection(g.lonlat));
+    if (screen.some((p) => !p)) return null;
+    const m = fitAffine(
+      overlay.gcps.map((g) => g.px),
+      screen as [number, number][]
+    );
+    if (!m) return null;
+    return {
+      x: 0,
+      y: 0,
+      width: overlay.size[0],
+      height: overlay.size[1],
+      transform: `matrix(${m.join(",")})`,
+    };
+  }
+  const { bounds } = overlay;
   const sw = projection([bounds.west, bounds.south]);
   const ne = projection([bounds.east, bounds.north]);
   if (!sw || !ne) return null;

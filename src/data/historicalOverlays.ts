@@ -7,6 +7,15 @@ export interface HistoricalOverlay {
   year: number;
   /** Path under public/ (served at ./overlays/… with Vite base). */
   src: string;
+  /**
+   * Ground control points for sheets that aren't drawn north-up: image
+   * pixels (in `size` units) matched to known places. When present they
+   * place the image by a least-squares affine fit, and `bounds` is only a
+   * rough extent.
+   */
+  gcps?: { px: [number, number]; lonlat: [number, number]; place: string }[];
+  /** Image size in pixels, required with `gcps`. */
+  size?: [number, number];
   /** Axis-aligned bounds in lon/lat, north-up image. */
   bounds: {
     west: number;
@@ -48,6 +57,18 @@ export const HISTORICAL_OVERLAYS: HistoricalOverlay[] = [
     shortLabel: "Viele",
     year: 1865,
     src: "./overlays/viele.jpg",
+    // Drawn along the island (north to the right), so it is placed by
+    // landmarks, not bounds. Fit error is ~45 m (about half a block).
+    size: [2400, 708],
+    gcps: [
+      { place: "Croton Receiving Reservoir, 79th–86th St", px: [1241.6, 306.7], lonlat: [-73.96665, 40.78119] },
+      { place: "Mount Morris, 120th–124th St", px: [1622, 360], lonlat: [-73.94283, 40.80414] },
+      { place: "Union Square", px: [588.3, 383.3], lonlat: [-73.9903, 40.7359] },
+      { place: "Madison Square", px: [680.7, 365], lonlat: [-73.9878, 40.7421] },
+      { place: "Stuyvesant Square", px: [596.7, 451.7], lonlat: [-73.9837, 40.7337] },
+      { place: "Tompkins Square", px: [521.7, 518.3], lonlat: [-73.9818, 40.7265] },
+      { place: "Washington Square", px: [493.3, 340], lonlat: [-73.9973, 40.7308] },
+    ],
     bounds: { west: -74.022, south: 40.704, east: -73.928, north: 40.882 },
     window: { from: 1845, peak: 1865, to: 1895 },
     attribution:

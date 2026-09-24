@@ -636,7 +636,7 @@ function MapViewInner({
     if (!projection || !overlaysEnabled) return [];
     return HISTORICAL_OVERLAYS.map((overlay) => ({
       overlay,
-      placement: overlayPlacement(projection, overlay.bounds),
+      placement: overlayPlacement(projection, overlay),
       weight: overlayWeights.get(overlay.id) ?? 0,
     })).filter((f) => f.placement && f.weight > 0);
   }, [projection, overlaysEnabled, overlayWeights]);
@@ -767,6 +767,7 @@ function MapViewInner({
                   y={placement!.y}
                   width={placement!.width}
                   height={placement!.height}
+                  transform={placement!.transform}
                   preserveAspectRatio="none"
                   opacity={overlayOpacity * weight}
                 >
