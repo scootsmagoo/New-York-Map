@@ -313,6 +313,15 @@ header, theme, footprint, markers, panel — derives from it.
     typing in Chromium: the field selected its text a frame after focus.
     Hand testing in WebKit had passed, typing at human speed.
 
+25. **Measure the first load before trimming the bundle.** Throttled to a
+    slow phone, the biggest download wasn't the app but its fonts: 207 KB
+    of variable Fraunces and Source Sans with axes and weights the styles
+    never use, more than the whole JavaScript bundle. Asking only for the
+    weights in use and dropping Fraunces's optical-size axis took them to
+    139 KB with no visible change. Delta-encoding the borough outlines
+    (141 → 50 KB) and lazy-loading the dialogs did the rest: 402 → 311 KB
+    in all, map on screen 1.63 → 1.50 s, fully loaded 3.28 → 2.81 s.
+
 ## Future features
 
 - [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the

@@ -41,8 +41,11 @@ import { MapKey, type MapKeyVisible } from "./MapKey";
 import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
-import boroughsData from "../data/geo/boroughs.json";
+import packedBoroughs from "../data/geo/boroughs.packed.json";
+import { unpackBoroughs } from "../lib/geoPack";
 import surroundData from "../data/geo/surround.json";
+
+const boroughsData = unpackBoroughs(packedBoroughs);
 
 interface MapViewProps {
   year: number;

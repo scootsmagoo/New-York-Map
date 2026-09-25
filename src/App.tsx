@@ -5,6 +5,8 @@ import {
   useMemo,
   useRef,
   useState,
+  lazy,
+  Suspense,
 } from "react";
 import type { Entry } from "./types";
 import type { ColonialStreet } from "./data/streets";
@@ -19,15 +21,22 @@ import {
   type TimeWindow,
 } from "./lib/timescale";
 import { Header } from "./components/Header";
+
+// Nothing on screen at first load needs these; they load when first opened,
+// which keeps them (and the search index) out of the first download.
+const named = <K extends string, M extends Record<K, React.ComponentType<any>>>(
+  load: () => Promise<M>,
+  name: K
+) => lazy(() => load().then((m) => ({ default: m[name] })));
+const EraPanel = named(() => import("./components/EraPanel"), "EraPanel");
+const EntryModal = named(() => import("./components/EntryModal"), "EntryModal");
+const AboutModal = named(() => import("./components/AboutModal"), "AboutModal");
+const SearchPalette = named(() => import("./components/SearchPalette"), "SearchPalette");
+const TourCard = named(() => import("./components/TourCard"), "TourCard");
+const CompareDivider = named(() => import("./components/CompareDivider"), "CompareDivider");
 import { MapView } from "./components/MapView";
 import { Timeline } from "./components/Timeline";
-import { EraPanel } from "./components/EraPanel";
-import { EntryModal } from "./components/EntryModal";
-import { AboutModal } from "./components/AboutModal";
 import { PopulationPanel } from "./components/PopulationPanel";
-import { SearchPalette } from "./components/SearchPalette";
-import { TourCard } from "./components/TourCard";
-import { CompareDivider } from "./components/CompareDivider";
 import {
   compareYearFromHash,
   createCameraLink,
@@ -454,15 +463,17 @@ export default function App() {
                 chrome={false}
               />
             </div>
-            <CompareDivider
-              position={comparePos}
-              onPositionChange={setComparePos}
-              pinnedYear={compareYear}
-              onPinnedYearChange={setCompareYear}
-              liveYear={year}
-              onLiveYearChange={setLiveYear}
-              onClose={() => setCompareYear(null)}
-            />
+            <Suspense fallback={null}>
+              <CompareDivider
+                position={comparePos}
+                onPositionChange={setComparePos}
+                pinnedYear={compareYear}
+                onPinnedYearChange={setCompareYear}
+                liveYear={year}
+                onLiveYearChange={setLiveYear}
+                onClose={() => setCompareYear(null)}
+              />
+            </Suspense>
           </>
         )}
         <PopulationPanel
@@ -474,21 +485,25 @@ export default function App() {
           onOpenChange={setPopOpen}
         />
         {tour && (
-          <TourCard
-            tour={tour.tour}
-            step={tour.step}
-            onStep={stepTour}
-            onClose={endTour}
-            onReadMore={selectEntry}
-            escapeCloses={!selectedEntry && !aboutOpen && !searchOpen}
-          />
+          <Suspense fallback={null}>
+            <TourCard
+              tour={tour.tour}
+              step={tour.step}
+              onStep={stepTour}
+              onClose={endTour}
+              onReadMore={selectEntry}
+              escapeCloses={!selectedEntry && !aboutOpen && !searchOpen}
+            />
+          </Suspense>
         )}
         {panelOpen && (
-          <EraPanel
-            era={era}
-            onClose={() => setPanelOpen(false)}
-            onSelectEntry={selectEntry}
-          />
+          <Suspense fallback={null}>
+            <EraPanel
+              era={era}
+              onClose={() => setPanelOpen(false)}
+              onSelectEntry={selectEntry}
+            />
+          </Suspense>
         )}
       </main>
 
@@ -501,20 +516,28 @@ export default function App() {
       />
 
       {selectedEntry && (
-        <EntryModal
-          entry={selectedEntry}
-          onClose={() => setSelectedEntry(null)}
-          onJumpToYear={jumpToYear}
-        />
+        <Suspense fallback={null}>
+          <EntryModal
+            entry={selectedEntry}
+            onClose={() => setSelectedEntry(null)}
+            onJumpToYear={jumpToYear}
+          />
+        </Suspense>
       )}
-      {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
+      {aboutOpen && (
+        <Suspense fallback={null}>
+          <AboutModal onClose={() => setAboutOpen(false)} />
+        </Suspense>
+      )}
       {searchOpen && (
-        <SearchPalette
-          onClose={() => setSearchOpen(false)}
-          onSelectEntry={goToEntry}
-          onSelectStreet={goToStreet}
-          onSelectLocation={goToLocation}
-        />
+        <Suspense fallback={null}>
+          <SearchPalette
+            onClose={() => setSearchOpen(false)}
+            onSelectEntry={goToEntry}
+            onSelectStreet={goToStreet}
+            onSelectLocation={goToLocation}
+          />
+        </Suspense>
       )}
     </div>
   );

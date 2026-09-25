@@ -82,8 +82,6 @@ deploy. A pan frame-rate check runs locally (CI has no GPU).
 *Keeping it working*
 - A phone pass on the newer features (Then & Now, layer menu, tour card,
   search) on a small touch screen.
-- A lighter first load: the main bundle is ~590 KB, mostly geometry every
-  visitor downloads up front.
 
 *More history*
 - Lost landscape for Brooklyn and Queens (Gowanus Creek, Wallabout Bay,
@@ -127,7 +125,7 @@ sources and caveats, lessons learned, and the future-features roadmap.
 | `npm test` | unit tests (timescale, grid, labels, compare, links, content, tours, neighborhoods) |
 | `npm run test:e2e` | browser tests in WebKit and Chromium against the build (`npm run build` first); the pan frame-rate check runs locally only (`PERF_FLOOR=45` to hold the line) |
 | `npm run validate:wiki` | verify every Wikipedia title resolves |
-| `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources |
+| `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources (then packs it with `scripts/pack-geo.mjs`) |
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |
 | `node --experimental-strip-types scripts/prepare-streets.mjs` | street names and the Manhattan grid table from NYC street centerlines |
 

@@ -82,3 +82,6 @@ for (const f of ["boroughs.json", "surround.json"]) {
   const size = fs.statSync(path.join(outDir, f)).size;
   console.log(`${f}: ${(size / 1024).toFixed(1)} KB`);
 }
+
+// The app loads a compact copy of the boroughs; see pack-geo.mjs.
+await import("./pack-geo.mjs");
