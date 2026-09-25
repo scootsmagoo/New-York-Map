@@ -71,11 +71,31 @@ https://scootsmagoo.github.io/New-York-Map/. 57 unit tests pass.
 
 **Next up** (candidates; details in PROJECT.md → Future features)
 
+*Making it easier to understand*
+- A map key: a small collapsible legend for what's on screen (hatching,
+  dashed shorelines, stipple, marker shapes, ghosts). *In progress.*
+- A one-time "Things to try" card pointing to tours, Then & Now, map
+  layers, and search, which are all tucked away in the ⋯ menu or ⌘K.
+
+*Keeping it working*
+- Browser tests in CI: load the page, run a tour, search, turn on each
+  layer, and check pan speed in WebKit on every push. *In progress.*
+- A phone pass on the newer features (Then & Now, layer menu, tour card,
+  search) on a small touch screen.
+- A lighter first load: the main bundle is ~590 KB, mostly geometry every
+  visitor downloads up front.
+
+*More history*
+- Lost landscape for Brooklyn and Queens (Gowanus Creek, Wallabout Bay,
+  Jamaica Bay marshes), from an 1840s U.S. Coast Survey chart.
 - Streetcar lines, 1832–1945.
 - Real street lines outside Manhattan at high zoom, in place of the hatch
   texture.
-- Carry the timeline past 1945 (Moses's expressways, the fiscal crisis).
-- Audio per era; more *Gotham* margin notes.
+- Even out the content: Lenapehoking has 13 entries to the Antebellum era's
+  29, and 1919–1945 has no *Gotham* notes.
+- Carry the timeline past 1945 (Moses's expressways, public housing, the
+  fiscal crisis).
+- Audio per era.
 
 **Known rough edges**
 
