@@ -37,6 +37,7 @@ import { NeighborhoodLayer } from "./NeighborhoodLayer";
 import { LostLandscapeLayer } from "./LostLandscapeLayer";
 import { boroughLabels, type MapLabel } from "../data/mapLabels";
 import { hatchTile } from "../lib/hatch";
+import { MapKey, type MapKeyVisible } from "./MapKey";
 import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
@@ -706,6 +707,47 @@ function MapViewInner({
     });
   }, [showSettlements, year, popScope, projection, settlementFade, highlightGroup]);
 
+  const keyVisible: MapKeyVisible = useMemo(() => {
+    const streetsOn = roadFade > 0;
+    const live = (from: number, to?: number) => year >= from && (to === undefined || year <= to);
+    const features = streetsOn
+      ? colonialStreets.filter((st) => live(st.from, st.to) && streetFeatureActive(st, year))
+      : [];
+    const openStructures = structurePaths.filter((st) => live(st.open, st.close));
+    const openLines = infraFade > 0 ? infrastructurePaths.filter((l) => live(l.open, l.close)) : [];
+    const visibleParks = parkPaths.filter((pk) => year >= pk.from && (pk.major || minorParkFade > 0));
+    return {
+      builtUp: base.manhattan.length + base.other.length > 0,
+      streets: streetsOn,
+      // Only while some of the grid is still unbuilt (the frontier reaches
+      // the island's top by 1919).
+      survey: surveyOpacity > 0 && frontierAt(year).latW < 40.878,
+      wall: features.some((st) => st.feature === "wall"),
+      canal: features.some((st) => st.feature === "canal"),
+      parks: visibleParks.length > 0,
+      parkConstruction: visibleParks.some((pk) => pk.completed !== undefined && year < pk.completed),
+      bridges: openStructures.some((st) => st.kind === "bridge"),
+      ferries: ferryFade > 0 && openStructures.some((st) => st.kind === "ferry"),
+      elevated: openLines.some((l) => l.kind === "elevated"),
+      subway: openLines.some((l) => l.kind === "subway"),
+      aqueduct: openLines.some((l) => l.kind === "aqueduct"),
+      people: markers.some((m) => m.kind === "person"),
+      places: markers.some((m) => m.kind === "place"),
+      events: markers.some((m) => m.kind === "event"),
+      ghosts: ghostMarkers.some((m) => ghostOpacity(year, m.lifespan![1]!) > 0),
+      lenape: lenapeOpacity > 0,
+      enclaves: visibleSettlements.length > 0,
+      lostLandscape: showLostLandscape,
+      overlay: overlayFrames.length
+        ? overlayFrames.reduce((a, b) => (b.weight > a.weight ? b : a)).overlay.label
+        : null,
+    };
+  }, [
+    year, roadFade, surveyOpacity, infraFade, ferryFade, minorParkFade, base,
+    structurePaths, infrastructurePaths, parkPaths, markers, ghostMarkers,
+    lenapeOpacity, visibleSettlements, showLostLandscape, overlayFrames,
+  ]);
+
   if (!width || !height) return <div className="map-view" ref={ref} />;
 
   return (
@@ -1180,6 +1222,7 @@ function MapViewInner({
             <button className="tl-btn" onClick={resetZoom} title="Reset map view">
               ⌖
             </button>
+            <MapKey visible={keyVisible} />
           </div>
           <div className="map-attribution">
             Boundaries: U.S. Census Bureau &amp; NYC Open Data · Content: Wikipedia ·

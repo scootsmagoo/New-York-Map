@@ -43,6 +43,8 @@ npm run dev      # open http://localhost:5173
   buried streams and ponds such as the Collect and Minetta Brook.
 - **Share a view:** ⋯ → *Copy link to this view*, or *Copy link* on any
   entry card. `#entry=vj-day` opens that entry directly.
+- **Key** (top right of the map) explains what's drawn, listing only what's
+  on screen in the current year and zoom.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
 
 ## Status (as of 2026-09-23)
@@ -72,8 +74,6 @@ https://scootsmagoo.github.io/New-York-Map/. 57 unit tests pass.
 **Next up** (candidates; details in PROJECT.md → Future features)
 
 *Making it easier to understand*
-- A map key: a small collapsible legend for what's on screen (hatching,
-  dashed shorelines, stipple, marker shapes, ghosts). *In progress.*
 - A one-time "Things to try" card pointing to tours, Then & Now, map
   layers, and search, which are all tucked away in the ⋯ menu or ⌘K.
 
