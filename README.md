@@ -50,9 +50,9 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-23)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 72 unit tests and 11 browser
+https://scootsmagoo.github.io/New-York-Map/. 72 unit tests and 10 browser
 tests (in WebKit and Chromium) run on every push, and a failure stops the
-deploy.
+deploy. A pan frame-rate check runs locally (CI has no GPU).
 
 **Where things stand**
 
@@ -125,7 +125,7 @@ sources and caveats, lessons learned, and the future-features roadmap.
 | `npm run build` | typecheck + static production build (`dist/`) |
 | `npm run preview` | serve the production build locally |
 | `npm test` | unit tests (timescale, grid, labels, compare, links, content, tours, neighborhoods) |
-| `npm run test:e2e` | browser tests in WebKit and Chromium against the build (`npm run build` first); `PERF_FLOOR=45` to hold the pan frame rate |
+| `npm run test:e2e` | browser tests in WebKit and Chromium against the build (`npm run build` first); the pan frame-rate check runs locally only (`PERF_FLOOR=45` to hold the line) |
 | `npm run validate:wiki` | verify every Wikipedia title resolves |
 | `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources |
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |

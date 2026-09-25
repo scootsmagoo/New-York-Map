@@ -2,15 +2,16 @@ import { expect, test } from "@playwright/test";
 import { open, zoomMap } from "./helpers";
 
 /**
- * Pan frame rate, zoomed into 1940 Manhattan with every layer on. CI runners
- * have no GPU, so the floor there is only a tripwire for large regressions
- * (the ones this project has hit ran at a third of normal speed); run locally
- * with PERF_FLOOR=45 to hold the line.
+ * Pan frame rate, zoomed into 1940 Manhattan with every layer on. Local only:
+ * CI runners have no GPU, and WebKit there renders in software at 2–3 fps
+ * whatever the map does, so a floor would measure the runner, not the app.
+ * Raise the floor with PERF_FLOOR=45 to hold the line.
  */
-const FLOOR = Number(process.env.PERF_FLOOR ?? (process.env.CI ? 8 : 30));
+const FLOOR = Number(process.env.PERF_FLOOR ?? 30);
 
 test("the map pans smoothly with every layer on", async ({ page, browserName }) => {
   test.skip(browserName !== "webkit", "WebKit is where the frame-rate trouble lives");
+  test.skip(!!process.env.CI, "no GPU on CI runners; run locally");
   await page.addInitScript(() => {
     for (const k of ["streetLabels", "neighborhoods", "lostLandscape"]) {
       localStorage.setItem(`nycmap:settings:${k}`, "true");
