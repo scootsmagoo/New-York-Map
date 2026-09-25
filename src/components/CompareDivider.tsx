@@ -30,6 +30,8 @@ function YearField({
   onCommit: (year: number) => void;
 }) {
   const [draft, setDraft] = useState<string | null>(null);
+  // Set on focus, cleared by the mouseup that follows it.
+  const justFocused = useRef(false);
 
   const commit = () => {
     if (draft === null) return;
@@ -51,10 +53,15 @@ function YearField({
         value={draft ?? String(year)}
         onFocus={(e) => {
           setDraft(String(year));
-          // Select after the click has placed its caret, or WebKit keeps the
-          // caret and typing lands in the middle of the old year.
-          const input = e.target;
-          requestAnimationFrame(() => input.select());
+          e.target.select();
+          justFocused.current = true;
+        }}
+        onMouseUp={(e) => {
+          // The click that focused the field would otherwise drop a caret
+          // into the selection, and typing would land mid-year. (Selecting a
+          // frame later instead lost the first keystroke of fast typing.)
+          if (justFocused.current) e.preventDefault();
+          justFocused.current = false;
         }}
         onChange={(e) => setDraft(e.target.value)}
         onBlur={commit}
