@@ -75,8 +75,6 @@ https://scootsmagoo.github.io/New-York-Map/. 57 unit tests pass.
 
 **Known rough edges**
 
-- The Ratzer (1767) and Castello (1660) overlays are placed as stretched
-  rectangles and don't line up; they need the landmark fit Viele now uses.
 - Some early-colonial comparisons in Then & Now look alike at whole-city
   zoom, because the city was tiny. Zoom into lower Manhattan to see them.
 - The 1930 and 1940 population breakdowns (apart from the Black and Puerto

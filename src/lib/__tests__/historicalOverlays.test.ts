@@ -15,17 +15,19 @@ describe("overlay placement", () => {
     expect(fitAffine([[0, 0], [1, 1]], [[0, 0], [1, 1]])).toBeNull();
   });
 
-  it("places the Viele sheet by its landmarks, within ~100 m of each", () => {
-    const viele = HISTORICAL_OVERLAYS.find((o) => o.id === "viele")!;
+  it("places every sheet by landmarks, within ~100 m of each", () => {
     // A local equirectangular "projection" in meters.
     const project = ([lon, lat]: [number, number]): [number, number] => [lon * 84310, -lat * 111320];
-    const p = overlayPlacement(project, viele)!;
-    expect(p.transform).toMatch(/^matrix\(/);
-    const [a, b, c, d, e, f] = p.transform!.slice(7, -1).split(",").map(Number);
-    for (const g of viele.gcps!) {
-      const [x, y] = g.px;
-      const [tx, ty] = project(g.lonlat);
-      expect(Math.hypot(a * x + c * y + e - tx, b * x + d * y + f - ty), g.place).toBeLessThan(100);
+    for (const overlay of HISTORICAL_OVERLAYS) {
+      expect(overlay.gcps?.length, overlay.id).toBeGreaterThanOrEqual(4);
+      const p = overlayPlacement(project, overlay)!;
+      expect(p.transform).toMatch(/^matrix\(/);
+      const [a, b, c, d, e, f] = p.transform!.slice(7, -1).split(",").map(Number);
+      for (const g of overlay.gcps!) {
+        const [x, y] = g.px;
+        const [tx, ty] = project(g.lonlat);
+        expect(Math.hypot(a * x + c * y + e - tx, b * x + d * y + f - ty), g.place).toBeLessThan(100);
+      }
     }
   });
 });

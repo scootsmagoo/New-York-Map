@@ -35,7 +35,15 @@ export const HISTORICAL_OVERLAYS: HistoricalOverlay[] = [
     shortLabel: "Castello",
     year: 1660,
     src: "./overlays/castello.jpg",
-    // Lower Manhattan — hand-tuned to Adams/Stokes redraw; shorelines are approximate.
+    // A bird's-eye view, but close to a plan: placed by landmarks, fit error
+    // ≤ 22 m. The sheet's "up" is about 32° off north.
+    size: [1323, 1800],
+    gcps: [
+      { place: "Fort Amsterdam (the Custom House today)", px: [545, 1345], lonlat: [-74.0137, 40.70415] },
+      { place: "Land gate: the wall at Broadway", px: [385, 432], lonlat: [-74.0114, 40.7075] },
+      { place: "Water gate: the wall at Pearl Street", px: [1225, 432], lonlat: [-74.00745, 40.70583] },
+      { place: "Heere Gracht mouth: Broad and Pearl Streets", px: [968, 1193], lonlat: [-74.0112, 40.7034] },
+    ],
     bounds: { west: -74.0178, south: 40.7008, east: -73.9685, north: 40.7162 },
     window: { from: 1635, peak: 1660, to: 1710 },
     attribution: "Castello Plan redraw, Adams & Stokes (1916), via Wikimedia Commons",
@@ -46,7 +54,16 @@ export const HISTORICAL_OVERLAYS: HistoricalOverlay[] = [
     shortLabel: "Ratzer",
     year: 1767,
     src: "./overlays/ratzer.jpg",
-    // Full sheet includes Brooklyn/Bay vignette; Manhattan clip hides the rest.
+    // Drawn about 8° off north. Placed by landmarks; fit error ≤ 45 m.
+    // The Brooklyn shore on the sheet is hidden by the Manhattan clip.
+    size: [2000, 1313],
+    gcps: [
+      { place: "Fort George (the Custom House today)", px: [329, 991], lonlat: [-74.0137, 40.7042] },
+      { place: "Trinity Church", px: [418, 810], lonlat: [-74.0121, 40.7081] },
+      { place: "St. Paul's Chapel", px: [505, 645], lonlat: [-74.0091, 40.7113] },
+      { place: "Collect Pond (the Fresh Water)", px: [855, 455], lonlat: [-74.0004, 40.7156] },
+      { place: "Brooklyn ferry landing", px: [1052, 1167], lonlat: [-73.9945, 40.7032] },
+    ],
     bounds: { west: -74.048, south: 40.618, east: -73.878, north: 40.848 },
     window: { from: 1745, peak: 1767, to: 1835 },
     attribution: "Bernard Ratzer, Plan of the City of New York (1776 state), via Wikimedia Commons",
