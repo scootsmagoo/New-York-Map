@@ -300,6 +300,14 @@ header, theme, footprint, markers, panel — derives from it.
     affine over a few known squares) fixes any rotation and gives the error
     as a number.
 
+23. **A `patternTransform` is a per-frame cost in WebKit.** Zoomed into the
+    1940 city, panning ran at 32–38 fps; hiding layers one at a time found
+    the outer-borough street hatch alone cost a third of that, and within
+    it the pattern's rotate/scale transform. Building the angle into the
+    tile (lines at θ and spacing s repeat in an s/sin θ × s/cos θ tile) and
+    sizing it in map units per zoom put panning at 53 fps — the same as no
+    hatch at all.
+
 ## Future features
 
 - [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the

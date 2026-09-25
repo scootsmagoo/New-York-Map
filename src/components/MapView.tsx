@@ -36,6 +36,7 @@ import { StreetLabelLayer } from "./StreetLabelLayer";
 import { NeighborhoodLayer } from "./NeighborhoodLayer";
 import { LostLandscapeLayer } from "./LostLandscapeLayer";
 import { boroughLabels, type MapLabel } from "../data/mapLabels";
+import { hatchTile } from "../lib/hatch";
 import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
@@ -113,6 +114,47 @@ const HATCH_ANGLES: Record<string, number> = {
   Bronx: 2,
   "Staten Island": 35,
 };
+
+/**
+ * Parallel-line fill with a constant on-screen pitch. The angle is built into
+ * the tile rather than a patternTransform, which WebKit re-rasterizes on
+ * every pan frame (see lib/hatch.ts).
+ */
+function HatchPattern({
+  id,
+  angle,
+  pitch,
+  stroke,
+  k,
+  lineClass = "hatch-line",
+  bgClass,
+}: {
+  id: string;
+  angle: number;
+  pitch: number;
+  stroke: number;
+  k: number;
+  lineClass?: string;
+  bgClass?: string;
+}) {
+  const t = hatchTile(angle, pitch, stroke, k);
+  return (
+    <pattern id={id} width={t.width} height={t.height} patternUnits="userSpaceOnUse">
+      {bgClass && <rect width={t.width} height={t.height} className={bgClass} />}
+      {t.lines.map(([x1, y1, x2, y2], i) => (
+        <line
+          key={i}
+          x1={x1}
+          y1={y1}
+          x2={x2}
+          y2={y2}
+          className={lineClass}
+          style={{ strokeWidth: t.strokeWidth }}
+        />
+      ))}
+    </pattern>
+  );
+}
 
 /** Linear fade for zoom-based level of detail. */
 function fade(k: number, from: number, to: number): number {
@@ -703,50 +745,33 @@ function MapViewInner({
           <clipPath id="notgrid-clip">
             <path d={notGridD} clipRule="evenodd" />
           </clipPath>
-          <pattern
-            id="hatch-Manhattan"
-            width={5}
-            height={5}
-            patternUnits="userSpaceOnUse"
-            patternTransform={`rotate(8) scale(${1 / k})`}
-          >
-            <line x1={0} y1={2.5} x2={5} y2={2.5} className="hatch-line" />
-          </pattern>
+          <HatchPattern id="hatch-Manhattan" angle={8} pitch={5} stroke={0.5} k={k} />
           <clipPath id="built-clip">
             <path d={builtClipD} />
           </clipPath>
           {Object.entries(HATCH_ANGLES).map(([boro, angle]) => (
-            <pattern
+            <HatchPattern
               key={boro}
               id={`hatch-${boro.replace(/ /g, "-")}`}
-              width={5}
-              height={5}
-              patternUnits="userSpaceOnUse"
-              patternTransform={`rotate(${angle}) scale(${1 / k})`}
-            >
-              <line x1={0} y1={2.5} x2={5} y2={2.5} className="hatch-line" />
-            </pattern>
+              angle={angle}
+              pitch={5}
+              stroke={0.5}
+              k={k}
+            />
           ))}
-          <pattern
-            id="made-land"
-            width={4}
-            height={4}
-            patternUnits="userSpaceOnUse"
-            patternTransform={`scale(${1 / k})`}
-          >
-            <circle cx={1} cy={1} r={0.55} className="made-land-dot" />
-            <circle cx={3} cy={3} r={0.55} className="made-land-dot" />
+          <pattern id="made-land" width={4 / k} height={4 / k} patternUnits="userSpaceOnUse">
+            <circle cx={1 / k} cy={1 / k} r={0.55 / k} className="made-land-dot" />
+            <circle cx={3 / k} cy={3 / k} r={0.55 / k} className="made-land-dot" />
           </pattern>
-          <pattern
+          <HatchPattern
             id="construction-hatch"
-            width={6}
-            height={6}
-            patternUnits="userSpaceOnUse"
-            patternTransform={`rotate(45) scale(${1 / k})`}
-          >
-            <rect width={6} height={6} className="construction-bg" />
-            <line x1={0} y1={3} x2={6} y2={3} className="construction-line" />
-          </pattern>
+            angle={45}
+            pitch={6}
+            stroke={0.7}
+            k={k}
+            lineClass="construction-line"
+            bgClass="construction-bg"
+          />
         </defs>
 
         <rect className="map-water" width={width} height={height} />
