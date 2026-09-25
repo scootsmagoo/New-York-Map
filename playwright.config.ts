@@ -18,8 +18,17 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   projects: [
-    { name: "webkit", use: { ...devices["Desktop Safari"], viewport: { width: 1400, height: 900 } } },
-    { name: "chromium", use: { ...devices["Desktop Chrome"], viewport: { width: 1400, height: 900 } } },
+    {
+      name: "webkit",
+      testIgnore: /phone\.spec/,
+      use: { ...devices["Desktop Safari"], viewport: { width: 1400, height: 900 } },
+    },
+    {
+      name: "chromium",
+      testIgnore: /phone\.spec/,
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1400, height: 900 } },
+    },
+    { name: "iphone", testMatch: /phone\.spec/, use: { ...devices["iPhone 14"] } },
   ],
   webServer: {
     command: "npx vite preview --port 4173 --strictPort",

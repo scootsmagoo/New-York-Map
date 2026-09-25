@@ -1,4 +1,5 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
+import { announcePanelOpen, onOtherPanelOpen } from "../lib/mapPanels";
 import { usePersistedState } from "../lib/usePersistedState";
 
 /** What's drawn on the map right now; the key lists only these. */
@@ -84,6 +85,7 @@ interface Row {
 
 function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
   const [open, setOpen] = usePersistedState("mapKeyOpen", false);
+  useEffect(() => onOtherPanelOpen("key", () => setOpen(false)), [setOpen]);
 
   const clip = (id: string) => (
     <clipPath id={id}>
@@ -235,7 +237,10 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
         className="tl-btn map-key-btn"
         aria-expanded={open}
         aria-controls="map-key-panel"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+          if (!open) announcePanelOpen("key");
+          setOpen(!open);
+        }}
         title={open ? "Hide the map key" : "What's on the map?"}
       >
         Key

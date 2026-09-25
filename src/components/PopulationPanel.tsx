@@ -1,4 +1,5 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
+import { announcePanelOpen, onOtherPanelOpen } from "../lib/mapPanels";
 import {
   formatPopulation,
   populationAt,
@@ -35,9 +36,19 @@ function PopulationPanelInner({
     setOpen((o) => {
       const next = !o;
       onOpenChange(next);
+      if (next) announcePanelOpen("population");
       return next;
     });
   };
+
+  useEffect(
+    () =>
+      onOtherPanelOpen("population", () => {
+        setOpen(false);
+        onOpenChange(false);
+      }),
+    [onOpenChange]
+  );
 
   const hoveredSettlements = useMemo(() => {
     if (!highlightGroup || !open) return [];

@@ -96,6 +96,15 @@ export default function App() {
   );
   const [comparePos, setComparePos] = useState(0.5);
   const cameraLink = useMemo(() => createCameraLink(), []);
+
+  // iOS raises the keyboard only for a focus() made during the tap itself,
+  // and the search box appears a moment later. Focus a hidden field now;
+  // the keyboard stays up as focus moves on to the real one.
+  const focusProxy = useRef<HTMLInputElement>(null);
+  const openSearch = useCallback(() => {
+    focusProxy.current?.focus({ preventScroll: true });
+    setSearchOpen(true);
+  }, []);
   const compareRef = useRef(compareYear);
   compareRef.current = compareYear;
 
@@ -390,7 +399,7 @@ export default function App() {
       <Header
         year={year}
         era={era}
-        onSearch={() => setSearchOpen(true)}
+        onSearch={openSearch}
         onExploreEra={() => setPanelOpen((o) => !o)}
         onAbout={() => setAboutOpen(true)}
         onStartTour={startTour}
@@ -524,6 +533,14 @@ export default function App() {
           />
         </Suspense>
       )}
+      <input
+        ref={focusProxy}
+        className="focus-proxy"
+        type="text"
+        aria-hidden="true"
+        tabIndex={-1}
+        autoComplete="off"
+      />
       {aboutOpen && (
         <Suspense fallback={null}>
           <AboutModal onClose={() => setAboutOpen(false)} />

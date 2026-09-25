@@ -50,9 +50,10 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-23)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 72 unit tests and 10 browser
-tests (in WebKit and Chromium) run on every push, and a failure stops the
-deploy. A pan frame-rate check runs locally (CI has no GPU).
+https://scootsmagoo.github.io/New-York-Map/. 73 unit tests and 14 browser
+tests (desktop WebKit and Chromium, plus an emulated iPhone) run on every
+push, and a failure stops the deploy. A pan frame-rate check runs locally
+(CI has no GPU).
 
 **Where things stand**
 
@@ -80,8 +81,8 @@ deploy. A pan frame-rate check runs locally (CI has no GPU).
   layers, and search, which are all tucked away in the ⋯ menu or ⌘K.
 
 *Keeping it working*
-- A phone pass on the newer features (Then & Now, layer menu, tour card,
-  search) on a small touch screen.
+- Check search on a real iPhone: the keyboard should come up on the first
+  tap. Emulators can't show the iOS rule this works around.
 
 *More history*
 - Lost landscape for Brooklyn and Queens (Gowanus Creek, Wallabout Bay,

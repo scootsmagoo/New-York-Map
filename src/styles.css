@@ -861,7 +861,7 @@ button {
   opacity: 0.65;
 }
 
-.marker circle:not(.marker-halo),
+.marker circle:not(.marker-halo):not(.marker-hit),
 .marker rect,
 .marker path {
   fill: #fdf7e7;
@@ -901,7 +901,7 @@ button {
   stroke: var(--ink);
 }
 
-.marker-ghost circle:not(.marker-halo),
+.marker-ghost circle:not(.marker-halo):not(.marker-hit),
 .marker-ghost rect,
 .marker-ghost path {
   fill: transparent;
@@ -2126,5 +2126,40 @@ a {
   .map-key-panel {
     width: min(232px, calc(100vw - 32px));
     max-height: 45vh;
+  }
+}
+
+/* ----- Phones ----- */
+
+/* Holds the iOS keyboard open while search loads (see App's openSearch). */
+.focus-proxy {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  font-size: 16px; /* smaller text makes iOS zoom the page on focus */
+  pointer-events: none;
+}
+
+/* A finger-sized target around each map marker, on touch screens only. */
+.marker-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+@media (pointer: fine) {
+  .marker-hit {
+    display: none;
+  }
+}
+
+/* The credit line would sit under the map buttons; About carries it. */
+@media (max-width: 640px) {
+  .map-attribution {
+    display: none;
   }
 }

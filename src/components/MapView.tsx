@@ -1182,6 +1182,7 @@ function MapViewInner({
                 onClick={() => onSelectEntry(m)}
                 onKeyDown={activateOnKey(() => onSelectEntry(m))}
               >
+                <circle className="marker-hit" r={22} />
                 <circle className="marker-halo" r={11} />
                 {KIND_SYMBOL[m.kind](9)}
                 <text className="marker-label marker-label-ghost" y={-12}>
@@ -1207,6 +1208,7 @@ function MapViewInner({
                 onClick={() => onSelectEntry(m)}
                 onKeyDown={activateOnKey(() => onSelectEntry(m))}
               >
+                <circle className="marker-hit" r={22} />
                 <circle className="marker-halo" r={11} />
                 {KIND_SYMBOL[m.kind](9)}
                 <text className="marker-label" y={-12}>
