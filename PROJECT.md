@@ -338,9 +338,9 @@ header, theme, footprint, markers, panel — derives from it.
       mouth (≤ 22 m); Ratzer by the fort, Trinity, St. Paul's, the Collect,
       and the Brooklyn ferry (≤ 45 m); Viele by seven squares (≤ 80 m).
 - [ ] More layers: streetcar lines, real outer-borough street lines.
-- [x] Guided "tours": scripted camera+timeline paths — shipped: four tours
+- [x] Guided "tours": scripted camera+timeline paths — shipped: five tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
-      water, Robert Moses's bridges and fair) with animated timeline flights, map camera moves, and
+      water, Robert Moses's bridges and fair, the island remade by landfill) with animated timeline flights, map camera moves, and
       `#tour=<id>` deep links. Adding one is a data entry in `tours.ts`.
 - [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
       timeline there; `#entry=<id>` opens an entry; *Copy link* on entry

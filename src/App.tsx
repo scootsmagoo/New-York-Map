@@ -245,10 +245,15 @@ export default function App() {
       setSelectedEntry(null);
       setFocusStreet(null);
       setCompareYear(null);
+      for (const layer of t.layers ?? []) {
+        if (layer === "lostLandscape") setShowLostLandscape(true);
+        else if (layer === "neighborhoods") setShowNeighborhoods(true);
+        else setShowStreetLabels(true);
+      }
       setTour({ tour: t, step: 0 });
       showTourStop(t, 0);
     },
-    [showTourStop]
+    [showTourStop, setShowLostLandscape, setShowNeighborhoods, setShowStreetLabels]
   );
 
   const stepTour = useCallback(

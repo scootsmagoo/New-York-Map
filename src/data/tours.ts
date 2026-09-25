@@ -22,11 +22,15 @@ export interface TourStop {
   entryId?: string;
 }
 
+export type TourLayer = "lostLandscape" | "neighborhoods" | "streetLabels";
+
 export interface Tour {
   id: string;
   title: string;
   subtitle: string;
   stops: TourStop[];
+  /** Map layers the tour turns on when it starts. */
+  layers?: TourLayer[];
 }
 
 export const tours: Tour[] = [
@@ -235,6 +239,73 @@ export const tours: Tour[] = [
         text:
           "By V-J Day Moses had built more public works than anyone else in the city's history, and the largest were still ahead: the expressways, the housing projects, and the neighborhoods cleared to make room for them. This timeline stops here, in 1945.",
         entryId: "vj-day",
+      },
+    ],
+  },
+  {
+    id: "island-remade",
+    title: "The Island Remade",
+    subtitle: "Ponds filled, streams buried, a shoreline pushed into the rivers",
+    layers: ["lostLandscape"],
+    stops: [
+      {
+        year: 1640,
+        title: "Mannahatta's edge",
+        text:
+          "The dashed line is the island's own shore. Pearl Street was the waterfront (its name came from the oyster shells on the beach), and the Hudson lapped at what is now Greenwich Street. Everything drawn as river inside today's outline would be made by hand.",
+        focus: { coords: [-74.009, 40.7075], k: 5 },
+      },
+      {
+        year: 1730,
+        title: "Water lots",
+        text:
+          "The city sold 'water lots' of river bottom to merchants, who sank timber cribs and old ships, filled them with earth and refuse, and built on top. Water Street was made this way by about 1700, Front Street by the 1790s. Watch the East River shore step outward as you move through the century.",
+        focus: { coords: [-74.0055, 40.7065], k: 5.5 },
+      },
+      {
+        year: 1795,
+        title: "The Fresh Water, fouled",
+        text:
+          "The Collect Pond was the city's drinking water for a century, then its sewer: tanneries, breweries, and slaughterhouses lined the shore. It drained west through Lispenard Meadows along a ditch that became Canal Street.",
+        focus: { coords: [-74.003, 40.717], k: 6 },
+        entryId: "collect-pond-colonial",
+      },
+      {
+        year: 1813,
+        title: "Filling the Collect",
+        text:
+          "The city leveled Bayard's Mount and dumped it into the pond between 1803 and 1811. The ground settled and seeped, respectable families left, and Five Points grew on the damp fill. The pond's outline stays on the map as a ghost.",
+        focus: { coords: [-74.0004, 40.7156], k: 7 },
+        entryId: "five-points-emerges",
+      },
+      {
+        year: 1815,
+        title: "A fort offshore",
+        text:
+          "Castle Clinton was built from 1808 to 1811 on a rock about 200 feet out in the harbor, joined to the Battery by a wooden bridge. Filling pushed the Battery out to meet it by the 1850s; it became Castle Garden, the immigrant station before Ellis Island.",
+        focus: { coords: [-74.0168, 40.7036], k: 7 },
+        entryId: "castle-clinton",
+      },
+      {
+        year: 1826,
+        title: "Minetta Brook goes underground",
+        text:
+          "The Village's trout stream ran from near Madison Square past Washington Square to the Hudson. As the grid came through in the 1820s it was put in a culvert. It still runs under the streets; basements along its old course flood to this day.",
+        focus: { coords: [-73.9985, 40.7305], k: 6 },
+      },
+      {
+        year: 1850,
+        title: "West Street and the waterfront",
+        text:
+          "By mid-century filling on the Hudson had reached West Street, with piers reaching past it. South Street on the East River was the busiest waterfront in the country. Lower Manhattan was now a third wider than the island the Lenape knew.",
+        focus: { coords: [-74.011, 40.7135], k: 4.5 },
+      },
+      {
+        year: 1940,
+        title: "Still growing",
+        text:
+          "Riverside Park was extended into the Hudson over the West Side rail line, and the East River Drive went in on new fill; at East 25th Street, ships brought rubble from bombed Bristol as ballast, and it was dumped into the river there. The strip still drawn as river along the Hudson below Chambers Street is Battery Park City, built in the 1970s on the earth dug for the World Trade Center.",
+        focus: { coords: [-74.005, 40.735], k: 2.6 },
       },
     ],
   },

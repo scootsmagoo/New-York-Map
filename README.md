@@ -31,9 +31,9 @@ npm run dev      # open http://localhost:5173
 - Arrow keys pan time; `+` / `-` zoom; the map pans and zooms independently.
 - **Guided tours** (⋯ menu) walk the timeline and camera through a story —
   the grid marching north, crossing the East River, fire and Croton water,
-  and Robert Moses's bridges and World's Fair.
+  Robert Moses's bridges and World's Fair, and the island remade by landfill.
   Deep-link one with `#tour=grid`, `#tour=east-river`, `#tour=fire-water`,
-  or `#tour=moses`.
+  `#tour=moses`, or `#tour=island-remade`.
 - **Then & Now** (⋯ menu) wipes between two years with a draggable line.
   Type either year, or scrub the timeline to change Now. Deep-link with
   `#year=1900&compare=1776`.
