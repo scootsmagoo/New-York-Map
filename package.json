@@ -11,7 +11,8 @@
     "validate:wiki": "node scripts/validate-wiki-titles.mjs",
     "prepare:overlays": "node scripts/prepare-overlays.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "d3-geo": "^3.1.1",
@@ -22,6 +23,7 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/d3-geo": "^3.1.1",
     "@types/d3-selection": "^3.0.11",
     "@types/d3-transition": "^3.0.9",

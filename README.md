@@ -50,7 +50,9 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-23)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 57 unit tests pass.
+https://scootsmagoo.github.io/New-York-Map/. 72 unit tests and 11 browser
+tests (in WebKit and Chromium) run on every push, and a failure stops the
+deploy.
 
 **Where things stand**
 
@@ -78,8 +80,6 @@ https://scootsmagoo.github.io/New-York-Map/. 57 unit tests pass.
   layers, and search, which are all tucked away in the ⋯ menu or ⌘K.
 
 *Keeping it working*
-- Browser tests in CI: load the page, run a tour, search, turn on each
-  layer, and check pan speed in WebKit on every push. *In progress.*
 - A phone pass on the newer features (Then & Now, layer menu, tour card,
   search) on a small touch screen.
 - A lighter first load: the main bundle is ~590 KB, mostly geometry every
@@ -125,6 +125,7 @@ sources and caveats, lessons learned, and the future-features roadmap.
 | `npm run build` | typecheck + static production build (`dist/`) |
 | `npm run preview` | serve the production build locally |
 | `npm test` | unit tests (timescale, grid, labels, compare, links, content, tours, neighborhoods) |
+| `npm run test:e2e` | browser tests in WebKit and Chromium against the build (`npm run build` first); `PERF_FLOOR=45` to hold the pan frame rate |
 | `npm run validate:wiki` | verify every Wikipedia title resolves |
 | `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources |
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |

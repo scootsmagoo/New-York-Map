@@ -308,6 +308,11 @@ header, theme, footprint, markers, panel — derives from it.
     sizing it in map units per zoom put panning at 53 fps — the same as no
     hatch at all.
 
+24. **Test in the browser the bug you'd miss by hand.** The first browser
+    test run found the Then & Now year field eating the first digit of fast
+    typing in Chromium: the field selected its text a frame after focus.
+    Hand testing in WebKit had passed, typing at human speed.
+
 ## Future features
 
 - [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the
