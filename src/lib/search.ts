@@ -7,8 +7,22 @@ import {
 } from "../data/streets";
 import { eras, formatYear } from "../data/eras";
 import { allEntries } from "../data/entries";
+import { neighborhoods } from "../data/neighborhoods";
+import { lostWaters } from "../data/lostWaters";
 
-export type SearchItemKind = EntryKind | "street";
+export type SearchItemKind = EntryKind | "street" | "neighborhood" | "water";
+
+/** Where a map-layer result lives: fly there, at a year it exists, with its layer on. */
+export interface MapLocation {
+  coords: [number, number];
+  /** Zoom to fly to (d3 scale). */
+  k: number;
+  /** A year when the thing exists, used if the current year is outside `range`. */
+  year: number;
+  /** Years it's on the map. */
+  range: [number, number];
+  layer: "neighborhoods" | "lostLandscape";
+}
 
 /** A single searchable record — extend `source` as new map content types ship. */
 export interface SearchItem {
@@ -20,7 +34,8 @@ export interface SearchItem {
   haystack: string;
   source:
     | { type: "entry"; entry: Entry }
-    | { type: "street"; street: ColonialStreet };
+    | { type: "street"; street: ColonialStreet }
+    | { type: "location"; location: MapLocation };
 }
 
 export interface SearchHit {
@@ -28,13 +43,15 @@ export interface SearchHit {
   score: number;
 }
 
-const KIND_ORDER: SearchItemKind[] = ["person", "place", "event", "street"];
+const KIND_ORDER: SearchItemKind[] = ["person", "place", "event", "street", "neighborhood", "water"];
 
 const KIND_LABEL: Record<SearchItemKind, string> = {
   person: "People",
   place: "Places",
   event: "Events",
   street: "Streets",
+  neighborhood: "Neighborhoods",
+  water: "Lost waters",
 };
 
 const eraName = new Map(eras.map((e) => [e.id, e.name]));
@@ -103,7 +120,7 @@ function scoreItem(query: string, item: SearchItem): number {
 
   const tokenScore = tokens * (words.length > 1 ? 0.92 : 1);
   let score = Math.max(phrase, tokenScore);
-  if (item.kind === "street") score *= 0.92;
+  if (item.kind !== "person" && item.kind !== "place" && item.kind !== "event") score *= 0.92;
   return score;
 }
 
@@ -135,6 +152,57 @@ function streetSearchItem(street: ColonialStreet): SearchItem {
   };
 }
 
+function neighborhoodSearchItems(): SearchItem[] {
+  return neighborhoods.map((nb) => {
+    const current = nb.names[nb.names.length - 1].name;
+    const first = nb.names[0].from;
+    const end = nb.to ?? 1945;
+    const earlier = nb.names.slice(0, -1).map((n) => n.name);
+    return {
+      id: `neighborhood:${nb.id}`,
+      kind: "neighborhood" as const,
+      title: current,
+      subtitle: `${nb.to ? `${formatYear(first)}–${formatYear(nb.to)}` : `from ${formatYear(first)}`}${
+        earlier.length ? ` · earlier ${earlier.join(", ")}` : ""
+      }`,
+      haystack: [...nb.names.map((n) => n.name), "neighborhood village"].join(" "),
+      source: {
+        type: "location" as const,
+        location: {
+          coords: nb.coords,
+          k: nb.major ? 3 : 4.5,
+          // Show it under the name it's best known by.
+          year: Math.max(nb.names[nb.names.length - 1].from + 5, Math.min(end, first + 5)),
+          range: [first, end] as [number, number],
+          layer: "neighborhoods" as const,
+        },
+      },
+    };
+  });
+}
+
+function waterSearchItems(): SearchItem[] {
+  const KIND_WORD = { pond: "pond", marsh: "marsh meadow", stream: "stream brook creek" };
+  return lostWaters.map((w) => ({
+    id: `water:${w.id}`,
+    kind: "water" as const,
+    title: w.name,
+    subtitle: `${w.kind === "stream" ? "buried" : "filled"} ${formatYear(w.until)}`,
+    haystack: [w.name, w.aka, KIND_WORD[w.kind], "lost landscape water"].filter(Boolean).join(" "),
+    source: {
+      type: "location" as const,
+      location: {
+        coords: w.coords,
+        // Ponds are a block or two across; streams run a mile.
+        k: w.kind === "stream" ? 6 : 7,
+        year: w.until - 10,
+        range: [1609, w.until] as [number, number],
+        layer: "lostLandscape" as const,
+      },
+    },
+  }));
+}
+
 /** Build the search index from all registered content sources. */
 export function buildSearchIndex(): SearchItem[] {
   const entries = allEntries.map((entry) => {
@@ -159,7 +227,12 @@ export function buildSearchIndex(): SearchItem[] {
       source: { type: "entry" as const, entry },
     };
   });
-  return [...entries, ...colonialStreets.map(streetSearchItem)];
+  return [
+    ...entries,
+    ...colonialStreets.map(streetSearchItem),
+    ...neighborhoodSearchItems(),
+    ...waterSearchItems(),
+  ];
 }
 
 const INDEX = buildSearchIndex();

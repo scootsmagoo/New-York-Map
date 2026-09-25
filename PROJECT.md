@@ -345,8 +345,8 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
       timeline there; `#entry=<id>` opens an entry; *Copy link* on entry
       cards and in the ⋯ menu.
-- [x] ~~Search across entries~~ — shipped: fuzzy palette over entries and
-      streets (⌘K).
+- [x] ~~Search across entries~~ — shipped: fuzzy palette over entries,
+      streets, neighborhoods (every historical name), and lost waters (⌘K).
 - [x] Then & Now: a pinned year beside the live one, split by a draggable
       seam, with a shared camera and `#compare=<year>` deep links.
 - [ ] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.

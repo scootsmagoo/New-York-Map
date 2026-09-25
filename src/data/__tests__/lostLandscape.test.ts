@@ -29,3 +29,17 @@ describe("lost landscape data", () => {
     }
   });
 });
+
+import { lostWaters } from "../lostWaters";
+
+describe("lost waters for search", () => {
+  it("match the layer's data by id, name, and date", () => {
+    const byId = new Map(data.water.map((w) => [w.id, w]));
+    for (const w of lostWaters) {
+      const geo = byId.get(w.id);
+      expect(geo, w.id).toBeDefined();
+      expect(geo!.name).toBe(w.name);
+      expect(geo!.until).toBe(w.until);
+    }
+  });
+});

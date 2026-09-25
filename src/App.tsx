@@ -37,6 +37,7 @@ import { footprints } from "./data/footprints";
 import { entryIdFromHash, viewUrl } from "./lib/viewLink";
 import { allEntries } from "./data/entries";
 import { tourById, type MapFocus, type Tour } from "./data/tours";
+import type { MapLocation } from "./lib/search";
 import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
 import { useThrottledValue } from "./lib/useThrottledValue";
@@ -336,6 +337,25 @@ export default function App() {
     [year]
   );
 
+  // Search results from the map layers: fly there, move the timeline into
+  // the years it exists if it isn't on the map now, and show its layer.
+  const goToLocation = useCallback(
+    (loc: MapLocation) => {
+      setPlaying(false);
+      setSearchOpen(false);
+      setSelectedEntry(null);
+      setFocusStreet(null);
+      if (loc.layer === "neighborhoods") setShowNeighborhoods(true);
+      else setShowLostLandscape(true);
+      if (year < loc.range[0] || year > loc.range[1]) {
+        setWin((w) => windowAround(unitOfYear(loc.year), Math.min(w.u1 - w.u0, 0.18)));
+      }
+      setFocusPoint({ coords: loc.coords, k: loc.k });
+      setFocusPointToken((n) => n + 1);
+    },
+    [year, setShowNeighborhoods, setShowLostLandscape]
+  );
+
   const goToEntry = useCallback(
     (entry: Entry) => {
       setPlaying(false);
@@ -488,6 +508,7 @@ export default function App() {
           onClose={() => setSearchOpen(false)}
           onSelectEntry={goToEntry}
           onSelectStreet={goToStreet}
+          onSelectLocation={goToLocation}
         />
       )}
     </div>

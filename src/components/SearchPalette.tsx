@@ -4,6 +4,7 @@ import type { ColonialStreet } from "../data/streets";
 import {
   groupSearchHits,
   searchEntries,
+  type MapLocation,
   type SearchHit,
   type SearchItemKind,
 } from "../lib/search";
@@ -14,31 +15,33 @@ const KIND_GLYPH: Record<SearchItemKind, string> = {
   place: "■",
   event: "◆",
   street: "╱",
+  neighborhood: "⌂",
+  water: "≈",
 };
 
 interface SearchPaletteProps {
   onClose: () => void;
   onSelectEntry: (entry: Entry) => void;
   onSelectStreet: (street: ColonialStreet) => void;
+  onSelectLocation: (location: MapLocation) => void;
 }
 
-function selectHit(
-  hit: SearchHit,
-  onSelectEntry: (entry: Entry) => void,
-  onSelectStreet: (street: ColonialStreet) => void
-) {
-  if (hit.item.source.type === "entry") {
-    onSelectEntry(hit.item.source.entry);
-  } else {
-    onSelectStreet(hit.item.source.street);
-  }
+type Handlers = Pick<SearchPaletteProps, "onSelectEntry" | "onSelectStreet" | "onSelectLocation">;
+
+function selectHit(hit: SearchHit, h: Handlers) {
+  const src = hit.item.source;
+  if (src.type === "entry") h.onSelectEntry(src.entry);
+  else if (src.type === "street") h.onSelectStreet(src.street);
+  else h.onSelectLocation(src.location);
 }
 
 export function SearchPalette({
   onClose,
   onSelectEntry,
   onSelectStreet,
+  onSelectLocation,
 }: SearchPaletteProps) {
+  const handlers = { onSelectEntry, onSelectStreet, onSelectLocation };
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -75,12 +78,13 @@ export function SearchPalette({
       } else if (e.key === "Enter") {
         e.preventDefault();
         const hit = flat[activeIndex];
-        if (hit) selectHit(hit, onSelectEntry, onSelectStreet);
+        if (hit) selectHit(hit, handlers);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [flat, activeIndex, onClose, onSelectEntry, onSelectStreet]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flat, activeIndex, onClose, onSelectEntry, onSelectStreet, onSelectLocation]);
 
   useEffect(() => {
     const el = document.querySelector(".search-result.is-active");
@@ -106,7 +110,7 @@ export function SearchPalette({
             className="search-input"
             type="search"
             enterKeyHint="search"
-            placeholder="People, places, events, streets…"
+            placeholder="People, places, events, streets, neighborhoods…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-autocomplete="list"
@@ -128,8 +132,9 @@ export function SearchPalette({
         <div id="search-results" className="search-results" role="listbox">
           {!query.trim() && (
             <p className="search-empty">
-              Search people, places, events, and streets — try{" "}
-              <em>Pearl Street</em>, <em>Wall Street</em>, or <em>Tweed</em>.
+              Search people, places, events, streets, neighborhoods, and lost
+              waters — try <em>Tweed</em>, <em>Five Points</em>, or{" "}
+              <em>Collect Pond</em>.
             </p>
           )}
           {query.trim() && flat.length === 0 && (
@@ -152,7 +157,7 @@ export function SearchPalette({
                         aria-selected={active}
                         className={`search-result${active ? " is-active" : ""}`}
                         onMouseEnter={() => setActiveIndex(index)}
-                        onClick={() => selectHit(hit, onSelectEntry, onSelectStreet)}
+                        onClick={() => selectHit(hit, handlers)}
                       >
                         <span className="search-result-title">{hit.item.title}</span>
                         <span className="search-result-sub">{hit.item.subtitle}</span>

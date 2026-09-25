@@ -22,6 +22,10 @@ npm run dev      # open http://localhost:5173
   center line drives the map.
 - **Click an era band** to zoom to that era; press **▶** (or space) to play
   through time.
+- **Search** (⌘K) finds people, places, events, streets, neighborhoods (by
+  any of their names: *Vlissingen* finds Flushing), and lost waters like
+  the Collect Pond. Picking a neighborhood or a lost water flies there,
+  moves the timeline to a year it existed, and turns its layer on.
 - **Explore this era** lists the era's people, places, and events; click
   anything — timeline marks, map markers, panel rows — for the full story.
 - Arrow keys pan time; `+` / `-` zoom; the map pans and zooms independently.
