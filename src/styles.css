@@ -2172,3 +2172,85 @@ a {
   overflow: hidden;
   clip-path: inset(50%);
 }
+
+/* ----- View transitions (React <ViewTransition>) ----- */
+
+/* Only the panels animate. Leaving the page itself out of the transition
+   keeps the map live and interactive underneath, instead of a still
+   snapshot for the length of the animation. */
+:root {
+  view-transition-name: none;
+}
+
+/* And let the pointer through the transition's overlay, so a pan or click
+   that starts while a panel animates out isn't swallowed (Chromium; Safari
+   ignores this, see App's pointerdown handler). */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Closing: panels and dialogs had an entry animation but vanished at once. */
+::view-transition-old(.vt-fade-out) {
+  animation: vt-fade-out 0.16s ease-in both;
+}
+
+::view-transition-old(.vt-panel-out) {
+  animation: vt-to-right 0.22s ease-in both;
+}
+
+::view-transition-old(.vt-card-out) {
+  animation: vt-card-out 0.2s ease-in both;
+}
+
+@media (max-width: 640px) {
+  /* The era panel is a bottom sheet on phones. */
+  ::view-transition-old(.vt-panel-out) {
+    animation-name: vt-sheet-down;
+  }
+}
+
+/* Tour steps slide the way you're going. */
+::view-transition-old(.vt-to-left) {
+  animation: vt-to-left 0.22s ease-in both;
+}
+::view-transition-new(.vt-from-right) {
+  animation: vt-from-right 0.26s ease-out both;
+}
+::view-transition-old(.vt-to-right) {
+  animation: vt-to-right 0.22s ease-in both;
+}
+::view-transition-new(.vt-from-left) {
+  animation: vt-from-left 0.26s ease-out both;
+}
+
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-card-out {
+  to { opacity: 0; transform: translateY(12px); }
+}
+@keyframes vt-sheet-down {
+  to { opacity: 0; transform: translateY(40px); }
+}
+@keyframes vt-to-left {
+  to { opacity: 0; transform: translateX(-28px); }
+}
+@keyframes vt-to-right {
+  to { opacity: 0; transform: translateX(28px); }
+}
+@keyframes vt-from-right {
+  from { opacity: 0; transform: translateX(28px); }
+}
+@keyframes vt-from-left {
+  from { opacity: 0; transform: translateX(-28px); }
+}
+
+/* React doesn't honor reduced motion by itself, and the global rule above
+   doesn't reach these pseudo-elements. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

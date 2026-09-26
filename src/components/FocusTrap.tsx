@@ -1,6 +1,6 @@
 import {
   Fragment,
-  useEffect,
+  useLayoutEffect,
   useRef,
   type FragmentInstance,
   type ReactNode,
@@ -38,12 +38,15 @@ export function FocusTrap({
 }: FocusTrapProps) {
   const fragment = useRef<FragmentInstance>(null);
 
-  useEffect(() => {
+  // A layout effect, so focus moves at once: passive effects wait for any
+  // view transition to finish.
+  useLayoutEffect(() => {
     const previous =
       returnFocusTo ?? (document.activeElement as HTMLElement | null);
+    // Kept for cleanup, when the ref has already been detached.
+    const frag = fragment.current as PositionedFragment | null;
     const inside = () => {
       const active = document.activeElement;
-      const frag = fragment.current as PositionedFragment | null;
       return (
         !!active &&
         active !== document.body &&
@@ -54,13 +57,15 @@ export function FocusTrap({
       );
     };
     // Children focus themselves first if they want to (search's input).
-    if (!inside()) fragment.current?.focus({ preventScroll: true });
+    if (!inside()) frag?.focus({ preventScroll: true });
     return () => {
-      // Give focus back, unless it has already moved elsewhere on purpose,
-      // or it came from something that shouldn't get it back (the hidden
-      // field that holds the iOS keyboard open).
+      // Give focus back if it's leaving with the dialog (this runs just
+      // before the dialog's nodes are removed) or already fell to the page,
+      // unless it came from something that shouldn't get it back (the
+      // hidden field that holds the iOS keyboard open).
       const active = document.activeElement;
-      const lost = !active || active === document.body || !active.isConnected;
+      const lost =
+        !active || active === document.body || !active.isConnected || inside();
       if (
         lost &&
         previous?.isConnected &&

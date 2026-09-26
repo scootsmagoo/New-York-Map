@@ -74,19 +74,19 @@ export function EraPanel({ era, onClose, onSelectEntry }: EraPanelProps) {
               if (!hit.isIntersecting) continue;
               observer?.unobserve(hit.target);
               const entry = byId.get(
-                (hit.target as HTMLElement).dataset.entryId ?? "",
+                (hit.target as HTMLElement).dataset.entryId ?? ""
               );
               if (!entry) continue;
               runWikiQueued(() => getWikiSummary(entry.wikiTitle)).then(
                 (summary) => {
                   const url = summary?.thumbnailUrl;
                   if (url) setThumbs((t) => ({ ...t, [entry.id]: url }));
-                },
+                }
               );
             }
           },
-          { rootMargin: "80px" },
-        ),
+          { rootMargin: "80px" }
+        )
   );
   useEffect(() => () => observer?.disconnect(), [observer]);
   const observeRows = useCallback(
@@ -95,7 +95,7 @@ export function EraPanel({ era, onClose, onSelectEntry }: EraPanelProps) {
       rows.observeUsing(observer);
       return () => rows.unobserveUsing(observer);
     },
-    [observer],
+    [observer]
   );
 
   return (
@@ -148,7 +148,7 @@ export function EraPanel({ era, onClose, onSelectEntry }: EraPanelProps) {
           <footer className="era-panel-footer">
             <a
               href={`https://en.wikipedia.org/wiki/${encodeURIComponent(
-                era.wikiTitle.replace(/ /g, "_"),
+                era.wikiTitle.replace(/ /g, "_")
               )}`}
               target="_blank"
               rel="noopener noreferrer"

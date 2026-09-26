@@ -113,7 +113,7 @@ export function EntryModal({ entry, onClose, onJumpToYear }: EntryModalProps) {
               href={
                 summary?.pageUrl ??
                 `https://en.wikipedia.org/wiki/${encodeURIComponent(
-                  entry.wikiTitle.replace(/ /g, "_"),
+                  entry.wikiTitle.replace(/ /g, "_")
                 )}`
               }
               target="_blank"

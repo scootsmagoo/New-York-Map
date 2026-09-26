@@ -1,4 +1,11 @@
-import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { Entry } from "../types";
 import type { ColonialStreet } from "../data/streets";
 import {
@@ -27,6 +34,8 @@ interface SearchPaletteProps {
   onSelectLocation: (location: MapLocation) => void;
   /** What had focus before search opened, to give it back on close. */
   returnFocusTo?: HTMLElement | null;
+  /** Letters typed before the box appeared (into the iOS keyboard proxy). */
+  takeTyped?: () => string;
 }
 
 type Handlers = Pick<
@@ -47,6 +56,7 @@ export function SearchPalette({
   onSelectStreet,
   onSelectLocation,
   returnFocusTo,
+  takeTyped,
 }: SearchPaletteProps) {
   const handlers = { onSelectEntry, onSelectStreet, onSelectLocation };
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,13 +66,20 @@ export function SearchPalette({
 
   const groups = useMemo(
     () => groupSearchHits(searchEntries(debouncedQuery)),
-    [debouncedQuery],
+    [debouncedQuery]
   );
   const flat = useMemo(() => groups.flatMap((g) => g.hits), [groups]);
 
-  useEffect(() => {
+  // A layout effect: passive effects wait for any view transition to finish,
+  // and keystrokes in between would be lost.
+  // Letters typed before the box existed went to the keyboard proxy; take
+  // them once, at mount (not in render, which may run more than once).
+  useLayoutEffect(() => {
+    const typed = takeTyped?.();
+    if (typed) setQuery((q) => q + typed);
     inputRef.current?.focus();
-  }, []);
+    // takeTyped is stable; this is a mount-only hand-off.
+  }, [takeTyped]);
 
   useEffect(() => {
     setActiveIndex(0);

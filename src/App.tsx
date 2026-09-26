@@ -3,6 +3,9 @@ import {
   useDeferredValue,
   useEffect,
   useEffectEvent,
+  startTransition,
+  addTransitionType,
+  ViewTransition,
   useMemo,
   useRef,
   useState,
@@ -52,6 +55,7 @@ import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
 import { useThrottledValue } from "./lib/useThrottledValue";
 import { usePersistedState } from "./lib/usePersistedState";
+import { useAnimatedState } from "./lib/useAnimatedState";
 
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -70,9 +74,11 @@ function initialWindow(): TimeWindow {
 
 export default function App() {
   const [win, setWin] = useState<TimeWindow>(initialWindow);
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
-  const [aboutOpen, setAboutOpen] = useState(false);
+  // Panels and dialogs open and close as transitions, so <ViewTransition>
+  // can animate them. Map and timeline state stays urgent.
+  const [panelOpen, setPanelOpen] = useAnimatedState(false);
+  const [selectedEntry, setSelectedEntry] = useAnimatedState<Entry | null>(null);
+  const [aboutOpen, setAboutOpen] = useAnimatedState(false);
   const [playing, setPlaying] = useState(false);
   const [popOpen, setPopOpen] = useState(false);
   const [showSettlements, setShowSettlements] = usePersistedState("settlements", true);
@@ -80,7 +86,7 @@ export default function App() {
   const [focusToken, setFocusToken] = useState(0);
   const [focusStreet, setFocusStreet] = useState<ColonialStreet | null>(null);
   const [streetFocusToken, setStreetFocusToken] = useState(0);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useAnimatedState(false);
   // Layer preferences survive reloads; everything else starts fresh.
   const [overlaysEnabled, setOverlaysEnabled] = usePersistedState("overlays", false);
   const [overlaysAuto, setOverlaysAuto] = usePersistedState("overlaysAuto", true);
@@ -88,7 +94,7 @@ export default function App() {
   const [showStreetLabels, setShowStreetLabels] = usePersistedState("streetLabels", false);
   const [showNeighborhoods, setShowNeighborhoods] = usePersistedState("neighborhoods", false);
   const [showLostLandscape, setShowLostLandscape] = usePersistedState("lostLandscape", false);
-  const [tour, setTour] = useState<{ tour: Tour; step: number } | null>(null);
+  const [tour, setTour] = useAnimatedState<{ tour: Tour; step: number } | null>(null);
   const [focusPoint, setFocusPoint] = useState<MapFocus | null>(null);
   const [focusPointToken, setFocusPointToken] = useState(0);
   // Then & Now: a pinned year on the left of a draggable seam.
@@ -107,6 +113,14 @@ export default function App() {
     searchOpener.current = document.activeElement as HTMLElement | null;
     focusProxy.current?.focus({ preventScroll: true });
     setSearchOpen(true);
+  }, [setSearchOpen]);
+  /** Anything typed into the proxy before search appeared, to carry over. */
+  const takeTyped = useCallback(() => {
+    const proxy = focusProxy.current;
+    if (!proxy) return "";
+    const typed = proxy.value;
+    proxy.value = "";
+    return typed;
   }, []);
   const compareRef = useRef(compareYear);
   compareRef.current = compareYear;
@@ -195,6 +209,17 @@ export default function App() {
     return () => cancelAnimationFrame(raf);
   }, [playing, cancelFly]);
 
+  // A press during a panel's closing animation ends the animation at once:
+  // it's cosmetic. (Chrome passes that press on to the map; Safari sends it
+  // to the page root, so there it just ends the animation.)
+  useEffect(() => {
+    const skip = () =>
+      (document as Document & { activeViewTransition?: { skipTransition(): void } | null })
+        .activeViewTransition?.skipTransition();
+    window.addEventListener("pointerdown", skip, true);
+    return () => window.removeEventListener("pointerdown", skip, true);
+  }, []);
+
   // Trackpad pinch (ctrl+wheel) outside the map zooms the whole browser page,
   // which scrolls the header out of view. Keep pinch app-only; the map's own
   // d3-zoom still receives the event and handles pinch-zoom over the SVG.
@@ -282,13 +307,17 @@ export default function App() {
       if (!tour) return;
       if (index < 0 || index >= tour.tour.stops.length) return;
       setSelectedEntry(null);
-      setTour({ tour: tour.tour, step: index });
+      startTransition(() => {
+        // The card's text slides forward or back (see TourCard).
+        addTransitionType(index > tour.step ? "tour-next" : "tour-back");
+        setTour({ tour: tour.tour, step: index });
+      });
       showTourStop(tour.tour, index);
     },
-    [tour, showTourStop]
+    [tour, showTourStop, setSelectedEntry, setTour]
   );
 
-  const endTour = useCallback(() => setTour(null), []);
+  const endTour = useCallback(() => setTour(null), [setTour]);
 
   // #tour=<id> deep link starts a tour on load; #entry=<id> opens an entry.
   const openDeepLink = useEffectEvent(() => {
@@ -340,9 +369,12 @@ export default function App() {
 
   const selectEntry = useCallback((entry: Entry) => {
     setFocusStreet(null);
-    setSelectedEntry(entry);
-    setFocusToken((t) => t + 1);
-  }, []);
+    // In one transition, so the map flies once, to the new entry.
+    startTransition(() => {
+      setSelectedEntry(entry);
+      setFocusToken((t) => t + 1);
+    });
+  }, [setSelectedEntry]);
 
   const goToStreet = useCallback(
     (street: ColonialStreet) => {
@@ -497,25 +529,29 @@ export default function App() {
           onOpenChange={setPopOpen}
         />
         {tour && (
-          <Suspense fallback={null}>
-            <TourCard
-              tour={tour.tour}
-              step={tour.step}
-              onStep={stepTour}
-              onClose={endTour}
-              onReadMore={selectEntry}
-              escapeCloses={!selectedEntry && !aboutOpen && !searchOpen}
-            />
-          </Suspense>
+          <ViewTransition enter="none" exit="vt-card-out" default="none">
+  <Suspense fallback={null}>
+              <TourCard
+                tour={tour.tour}
+                step={tour.step}
+                onStep={stepTour}
+                onClose={endTour}
+                onReadMore={selectEntry}
+                escapeCloses={!selectedEntry && !aboutOpen && !searchOpen}
+              />
+            </Suspense>
+          </ViewTransition>
         )}
         {panelOpen && (
-          <Suspense fallback={null}>
-            <EraPanel
-              era={era}
-              onClose={() => setPanelOpen(false)}
-              onSelectEntry={selectEntry}
-            />
-          </Suspense>
+          <ViewTransition enter="none" exit="vt-panel-out" default="none">
+  <Suspense fallback={null}>
+              <EraPanel
+                era={era}
+                onClose={() => setPanelOpen(false)}
+                onSelectEntry={selectEntry}
+              />
+            </Suspense>
+          </ViewTransition>
         )}
       </main>
 
@@ -528,13 +564,15 @@ export default function App() {
       />
 
       {selectedEntry && (
-        <Suspense fallback={null}>
-          <EntryModal
-            entry={selectedEntry}
-            onClose={() => setSelectedEntry(null)}
-            onJumpToYear={jumpToYear}
-          />
-        </Suspense>
+        <ViewTransition enter="none" exit="vt-fade-out" default="none">
+  <Suspense fallback={null}>
+            <EntryModal
+              entry={selectedEntry}
+              onClose={() => setSelectedEntry(null)}
+              onJumpToYear={jumpToYear}
+            />
+          </Suspense>
+        </ViewTransition>
       )}
       <input
         ref={focusProxy}
@@ -545,20 +583,25 @@ export default function App() {
         autoComplete="off"
       />
       {aboutOpen && (
-        <Suspense fallback={null}>
-          <AboutModal onClose={() => setAboutOpen(false)} />
-        </Suspense>
+        <ViewTransition enter="none" exit="vt-fade-out" default="none">
+  <Suspense fallback={null}>
+            <AboutModal onClose={() => setAboutOpen(false)} />
+          </Suspense>
+        </ViewTransition>
       )}
       {searchOpen && (
-        <Suspense fallback={null}>
-          <SearchPalette
-            onClose={() => setSearchOpen(false)}
-            onSelectEntry={goToEntry}
-            onSelectStreet={goToStreet}
-            onSelectLocation={goToLocation}
-            returnFocusTo={searchOpener.current}
-          />
-        </Suspense>
+        <ViewTransition enter="none" exit="vt-fade-out" default="none">
+  <Suspense fallback={null}>
+            <SearchPalette
+              onClose={() => setSearchOpen(false)}
+              onSelectEntry={goToEntry}
+              onSelectStreet={goToStreet}
+              onSelectLocation={goToLocation}
+              returnFocusTo={searchOpener.current}
+              takeTyped={takeTyped}
+            />
+          </Suspense>
+        </ViewTransition>
       )}
     </div>
   );

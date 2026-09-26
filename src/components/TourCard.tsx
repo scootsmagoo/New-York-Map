@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, ViewTransition } from "react";
 import type { Entry } from "../types";
 import type { Tour } from "../data/tours";
 import { allEntries } from "../data/entries";
@@ -52,11 +52,30 @@ export function TourCard({
           {step + 1} of {tour.stops.length}
         </span>
       </div>
-      <h3 className="tour-card-title">
-        <span className="tour-card-year">{stop.year}</span>
-        {stop.title}
-      </h3>
-      <p className="tour-card-text">{stop.text}</p>
+      {/* Keyed by step: the old stop slides out as the new one slides in,
+          in the direction App marks with addTransitionType. */}
+      <ViewTransition
+        key={step}
+        enter={{
+          "tour-next": "vt-from-right",
+          "tour-back": "vt-from-left",
+          default: "none",
+        }}
+        exit={{
+          "tour-next": "vt-to-left",
+          "tour-back": "vt-to-right",
+          default: "none",
+        }}
+        default="none"
+      >
+        <div className="tour-card-body">
+          <h3 className="tour-card-title">
+            <span className="tour-card-year">{stop.year}</span>
+            {stop.title}
+          </h3>
+          <p className="tour-card-text">{stop.text}</p>
+        </div>
+      </ViewTransition>
       <div className="tour-card-footer">
         <div className="tour-card-dots" aria-label="Tour stops">
           {tour.stops.map((s, i) => (
