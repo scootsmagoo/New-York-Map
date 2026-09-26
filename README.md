@@ -143,6 +143,10 @@ The site will be served at `https://scootsmagoo.github.io/New-York-Map/`.
 
 See [PROJECT.md](PROJECT.md) for the project outline, architecture, data
 sources and caveats, lessons learned, and the future-features roadmap.
+See [docs/BOOK_REFERENCE.md](docs/BOOK_REFERENCE.md) before adding content:
+it maps *Gotham* and *Greater Gotham* chapters to eras, explains how to
+search your own copies of the books with citations, and lists candidate
+additions.
 
 ## Scripts
 
@@ -157,6 +161,7 @@ sources and caveats, lessons learned, and the future-features roadmap.
 | `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources (then packs it with `scripts/pack-geo.mjs`) |
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |
 | `node --experimental-strip-types scripts/prepare-streets.mjs` | street names and the Manhattan grid table from NYC street centerlines |
+| `python3 scripts/books/extract-epub.py <epub> <slug>` / `scripts/books/find.py "<regex>"` | extract your own copy of a book to gitignored text, then search it with chapter/page citations |
 
 ## Credits
 
