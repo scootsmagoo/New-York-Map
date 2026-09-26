@@ -1,27 +1,29 @@
-# Book reference: *Gotham* and *Greater Gotham*
+# Book reference: the *Gotham* trilogy
 
-A working guide for adding or checking content against the two books the
-map is built around:
+A working guide for adding or checking content against the three books
+the map is built around:
 
 | Book | Covers | App eras | Citable by |
 | --- | --- | --- | --- |
 | Edwin G. Burrows & Mike Wallace, *Gotham: A History of New York City to 1898* (Oxford, 1999) | Ice Age → consolidation, 69 chapters, 1,236 pp. of text | `lenape` → `civilWarGilded` | chapter + print page |
 | Mike Wallace, *Greater Gotham: A History of New York City from 1898 to 1919* (Oxford, 2017) | 1898 → 1919, 24 chapters | `greaterNY` | chapter + section (the EPUB has no page numbers) |
-| Mike Wallace, *Gotham at War: A History of New York City from 1933 to 1945* (Oxford, 2025) | 1933 → 1945 | `capitalWorld` (from 1933) | **not extracted yet**: EPUB still to come |
+| Mike Wallace, *Gotham at War: A History of New York City from 1933 to 1945* (Oxford, 2025) | 1933 → 1945, 22 thematic parts (168 short numbered sections) | `capitalWorld` (from 1933) | part + print page |
 
-The series skips **1919–1932**. *Gotham at War* opens in 1933 with La
-Guardia and the New Deal, so the 1920s part of `capitalWorld`
+The series skips **1919–1932**, so the 1920s part of `capitalWorld`
 (Prohibition, the Harlem Renaissance, the skyscraper race, the Crash,
 Jimmy Walker) has no volume behind it. Those entries stay sourced from
-Wikipedia and general histories, with no margin notes. Entries from
-1933 on can get *Gotham at War* notes once the book is extracted:
+Wikipedia and general histories, with no margin notes.
 
-```sh
-python3 scripts/books/extract-epub.py ~/Downloads/<Gotham at War>.epub gotham-at-war
-```
-
-Then add its chapter guide below, and check whether that EPUB has page
-numbers (`grep -c "\[p\. " data-raw/books/gotham-at-war/all.txt`).
+*Gotham at War* is also a different kind of book from the first two. It
+isn't a chronicle of the city's growth. It follows how New York argued
+about, prepared for, and fought the war: Nazis and émigrés, Italians and
+Ethiopia, Catholics and Spain, isolationists vs. interventionists, Wall
+Street, the port, radar and the Manhattan Project, the home front, race,
+and the Holocaust. The domestic city-building story (La Guardia, Moses,
+housing, the Fair) is mostly in one part, *Planning the Postwar City*, and
+it's told as planning for 1945 and after. Some map entries have little or
+no coverage: Hooverville and First Houses get no mentions, and the 1939
+World's Fair about ten.
 
 ## Rules for using the books
 
@@ -48,11 +50,13 @@ Extract each EPUB once (needs only Python 3):
 ```sh
 python3 scripts/books/extract-epub.py ~/Downloads/Gotham*.epub gotham
 python3 scripts/books/extract-epub.py ~/Downloads/"The History of New York City #2"*.epub greater-gotham
+python3 scripts/books/extract-epub.py ~/Downloads/"Gotham at War"*.epub gotham-at-war
 ```
 
 This writes one text file per chapter (or per section, for *Greater
-Gotham*) plus an `all.txt` for each book. *Gotham*'s print page numbers
-become inline `[p. 253]` markers.
+Gotham*, per part for *Gotham at War*) plus an `all.txt` for each book.
+Print page numbers in *Gotham* and *Gotham at War* become inline
+`[p. 253]` markers.
 
 Search with citations:
 
@@ -70,6 +74,9 @@ Tips:
 - The books' spellings are period-accurate and sometimes differ from
   Wikipedia's: *Jan Rodrigues* (not Juan Rodriguez), *Petrus Stuyvesant*
   in the index, *Lenapes* as the plural. Try both.
+- *Gotham at War*'s 168 numbered sections aren't in its EPUB table of
+  contents, so `find.py` reports the part and page. The section list is in
+  `data-raw/books/gotham-at-war/004-contents.txt`.
 - The indexes weight coverage. A name with 40+ page refs is a major
   figure in the book; 2–3 is a walk-on.
 
@@ -201,6 +208,35 @@ as `8. Arteries › Trains and Tunnels`. Cite them the same way.
 | 23 | Over There? | neutrality, Lusitania, sabotage (Black Tom, 1916), preparedness |
 | 24 | Over Here | mobilization, Liberty Loans, the influenza, the 1919 homecoming |
 
+## Chapter guide: *Gotham at War* (2025)
+
+Page = first page of the part. Section numbers are the book's own (1–168).
+
+| Part | p. | Sections | What's in it, for the map |
+| --- | --: | --: | --- |
+| Nazis and New York | 1 | 1–8 | the 1933 boycott, émigré scholars, Yorkville and the Bund, Kristallnacht protests, refugees in Washington Heights and Williamsburg, enemy-alien registration |
+| Italians | 37 | 9–15 | Mussolini's fans and foes, Harlem's Ethiopia protests (1935), Louis v. Schmeling at Yankee Stadium |
+| The Irish | 61 | 16–27 | the Church, the Spanish Civil War, the Transport Workers Union, the Christian Front, Spellman, Polish New York |
+| Asian New York | 101 | 28–29 | Japanese and Chinese New York, pickets against scrap-iron shipments to Japan (p. 109) |
+| In Uno Plures | 111 | 30–38 | pluralism campaigns, "Americans All," the World's Fair (p. 131, 142) |
+| Study War no More | 145 | 39–50 | pacifists, the Popular Front, the Spanish volunteers, anti-Communists, spies |
+| Fighting Liberals | 199 | 51–60 | interventionist writers, radio, *War of the Worlds*, Winchell, *PM* |
+| Wall Street Warriors | 241 | 61–79 | bankers and the war, British intelligence at Rockefeller Center, America First, Willkie |
+| Gotham Girds for War | 311 | 80–86 | defense contracts, **the Navy Yard buildup (p. 314)**, the 1941 Harlem bus boycott, civil defense, La Guardia's third term, Pearl Harbor |
+| Under the Gun | 355 | 87–95 | U-boats offshore, the *Normandie* fire at Pier 88 (1942), the mob on the waterfront, the dim-out |
+| War Port | 395 | 96–97 | the port at war; **the Navy Yard at its peak (p. 415)** |
+| Science in the City | 419 | 98–100 | radar, **the Manhattan Project's New York roots (Columbia, p. 422)** |
+| Selling the War | 443 | 101–106 | bond drives, propaganda, war songs, comic books |
+| Home Front | 479 | 107–112 | women in war work (Navy Yard hires women, 1942, p. 487), rationing, rent control |
+| Blacks | 521 | 113–121 | job discrimination, Stuyvesant Town's exclusion, the Double V, **the 1943 Harlem riot** |
+| Holocaust | 555 | 122–124 | news of the killing, Zionism, the Madison Square Garden rallies |
+| Jews and Blacks | 587 | 125–130 | alliances, housing and jobs fights, Jackie Robinson's signing (1945, p. 616) |
+| On the Town | 619 | 131–141 | nightclubs, Sinatra at the Paramount, bebop at Minton's, Latin music, Peggy Guggenheim, publishing, Broadway, fashion |
+| Planning the Postwar City | 701 | 142–151 | **Moses and La Guardia's postwar plans**: housing, highways, the port, Idlewild, the Port Authority, headquarters |
+| Planning the Postwar Nation | 757 | 152–161 | the fate of the New Deal, the 1944 election, the "last Subway Series," the Cold War begins |
+| Planning the Postwar World | 799 | 162–168 | free trade, empire, India, China, **Puerto Rico**, the United Nations |
+| Epilogs | 845 | — | V-J Day in Times Square (p. 851), the UN comes to Manhattan |
+
 ## Audit of the current `gotham` notes (2026-09-26)
 
 Checked all twelve existing notes and their blurbs against the book.
@@ -218,6 +254,16 @@ Checked all twelve existing notes and their blurbs against the book.
 | Madame Restell | Matches: in 1857 she bought Fifth Ave. at 52nd St., outbidding Archbishop Hughes (ch. 45, p. 810). | — |
 | Consolidation | "1,236 pages" is right: the text ends on p. 1236. | — |
 | Henry George, The Lenape | Consistent with ch. 62 and ch. 1. | — |
+
+**1933–1945 entries, checked against *Gotham at War*:**
+
+| Entry | Finding | Suggested fix |
+| --- | --- | --- |
+| The els come down | **Wrong.** The blurb says much of the scrap steel was sold to Japan and "came back in the war." The book says Borough President Stanley Isaacs wrote a clause into the Sixth Avenue El demolition contract *forbidding* export of its 18,742 tons of scrap. It was aimed at Germany and Japan, while Chinese New Yorkers were picketing scrap shipments from Bush Terminal (Asian New York, p. 109). The "came back as bombs" story is a popular legend. | Say the city barred the scrap from export, and optionally mention the pickets. Don't repeat the legend as fact. |
+| The Navy Yard at war | Blurb says 70,000 workers; the book says 75,000 civilian and naval personnel at the peak, working three shifts (p. 415). Women were hired in 1942, the first in 141 years (p. 487). | Use 75,000. |
+| V-J Day in Times Square | Matches: two million people by 10 p.m. on August 14, 1945 (Epilogs, p. 851). | — |
+| Harlem riot of 1935 | Mentioned only in passing. The book's focus is the 1943 riot. | Fine as is. Consider a 1943 entry (below). |
+| Hooverville, First Houses | Not in the book. | Keep sourced elsewhere. No margin notes. |
 
 ## Candidate additions, with where to read
 
@@ -278,3 +324,31 @@ notes yet:
 
 Each `greaterNY` entry can now take a `gotham` note sourced from *Greater
 Gotham*.
+
+**Places and events for `capitalWorld`, 1933–45** (from *Gotham at War*):
+
+- The German American Bund in Yorkville, and its 1939 Madison Square
+  Garden rally (Nazis and New York, p. 13–18)
+- Refugee New York: Washington Heights ("the Fourth Reich") and the
+  Williamsburg Hasidim (Nazis and New York)
+- Louis v. Schmeling at Yankee Stadium, 1938. Could be a `gotham` note on
+  the existing Yankee Stadium entry (Italians).
+- The 1941 Harlem bus boycott, led by Adam Clayton Powell Jr. (Gotham
+  Girds for War, p. 347–48)
+- The *Normandie* burns at Pier 88, 1942 (Under the Gun, p. 360)
+- The dim-out and U-boats off the harbor, 1942 (Under the Gun, p. 381)
+- Columbia and the Manhattan Project (Science in the City, p. 422)
+- Stuyvesant Town, 1943: the contract, and the exclusion of Black
+  tenants (Blacks, p. 532; Jews and Blacks, p. 605–07)
+- The 1943 Harlem riot (Blacks)
+- Sinatra mania at the Paramount; bebop at Minton's (On the Town,
+  p. 637)
+- Idlewild airport planned (Planning the Postwar City)
+- The UN chooses Manhattan (Epilogs). This is 1946, just past the
+  timeline's end; a candidate if the timeline ever goes past 1945.
+
+**Heavily indexed local figures with no entry yet:** Thomas Dewey (32;
+the racket-busting D.A.), Herbert Lehman (28), A. Philip Randolph (24),
+Vito Marcantonio (22; East Harlem), Adam Clayton Powell Jr. (22), Walter
+Winchell (18), Sidney Hillman (16), Paul Robeson (16). La Guardia and
+Moses, who already have entries, are the book's most-cited New Yorkers.
