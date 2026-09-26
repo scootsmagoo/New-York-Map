@@ -22,7 +22,7 @@ export interface TourStop {
   entryId?: string;
 }
 
-export type TourLayer = "lostLandscape" | "neighborhoods" | "streetLabels";
+export type TourLayer = "lostLandscape" | "neighborhoods" | "streetLabels" | "calamities";
 
 export interface Tour {
   id: string;
@@ -134,6 +134,7 @@ export const tours: Tour[] = [
     id: "fire-water",
     title: "Fire and Water",
     subtitle: "How cholera and a great fire brought the Croton to Manhattan",
+    layers: ["calamities"],
     stops: [
       {
         year: 1832,
@@ -145,7 +146,7 @@ export const tours: Tour[] = [
       {
         year: 1835,
         title: "The Great Fire",
-        text: "On a December night so cold the hydrants and wells froze, fire took nearly 700 buildings in the merchant district below Wall Street. Firemen watched the East River freeze around their engines. The city needed water it could count on.",
+        text: "On a December night so cold the hydrants and wells froze, fire took nearly 700 buildings in the merchant district from Maiden Lane to Coenties Slip. Firemen watched the East River freeze around their engines. The city needed water it could count on.",
         focus: { coords: [-74.008, 40.705], k: 4.5 },
         entryId: "great-fire-1835",
       },

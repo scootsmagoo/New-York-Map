@@ -100,6 +100,26 @@ test("search finds a lost water and takes the map to it", async ({ page }) => {
   await expect(page.locator(".lost-landscape")).toBeAttached();
 });
 
+test("fires and epidemics show in their years, with key rows, and search flies to them", async ({ page }) => {
+  await open(page, "#year=1835");
+  await toggleLayer(page, "Fires & epidemics");
+  await expect(page.locator(".calamity-fire")).toHaveCount(1);
+  await page.getByRole("button", { name: "Key" }).click();
+  await expect(page.locator(".map-key-panel")).toContainText("Burned in a great fire");
+  await page.getByRole("button", { name: "Key" }).click();
+  await page.keyboard.press("Control+k");
+  await page.getByRole("combobox", { name: "Search Gotham" }).fill("infected district");
+  await page.getByRole("option", { name: /infected district.*epidemic/i }).click();
+  await expect.poll(() => year(page)).toBe("1822");
+  await expect(page.locator(".calamity-epidemic")).toHaveCount(1);
+  await expect(page.locator(".calamity-fire")).toHaveCount(0);
+});
+
+test("the Fire and Water tour turns on fires & epidemics", async ({ page }) => {
+  await open(page, "#tour=fire-water");
+  await expect(page.locator(".calamity-epidemic")).toHaveCount(1);
+});
+
 test("street and neighborhood names appear when their layers are on", async ({ page }) => {
   await open(page, "#year=1940&span=0.05");
   await toggleLayer(page, "Street names");

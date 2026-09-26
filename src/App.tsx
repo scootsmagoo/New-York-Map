@@ -101,6 +101,7 @@ export default function App() {
   const [showStreetLabels, setShowStreetLabels] = usePersistedState("streetLabels", false);
   const [showNeighborhoods, setShowNeighborhoods] = usePersistedState("neighborhoods", false);
   const [showLostLandscape, setShowLostLandscape] = usePersistedState("lostLandscape", false);
+  const [showCalamities, setShowCalamities] = usePersistedState("calamities", false);
   // The first-visit tips card; a deep link is someone else's tour, so skip it.
   const [tipsSeen, setTipsSeen] = usePersistedState(
     "tipsSeen",
@@ -312,12 +313,13 @@ export default function App() {
       for (const layer of t.layers ?? []) {
         if (layer === "lostLandscape") setShowLostLandscape(true);
         else if (layer === "neighborhoods") setShowNeighborhoods(true);
+        else if (layer === "calamities") setShowCalamities(true);
         else setShowStreetLabels(true);
       }
       setTour({ tour: t, step: 0 });
       showTourStop(t, 0);
     },
-    [showTourStop, setShowLostLandscape, setShowNeighborhoods, setShowStreetLabels]
+    [showTourStop, setShowLostLandscape, setShowNeighborhoods, setShowCalamities, setShowStreetLabels]
   );
 
   const stepTour = useCallback(
@@ -422,6 +424,7 @@ export default function App() {
       setSelectedEntry(null);
       setFocusStreet(null);
       if (loc.layer === "neighborhoods") setShowNeighborhoods(true);
+      else if (loc.layer === "calamities") setShowCalamities(true);
       else setShowLostLandscape(true);
       if (year < loc.range[0] || year > loc.range[1]) {
         setWin((w) => windowAround(unitOfYear(loc.year), Math.min(w.u1 - w.u0, 0.18)));
@@ -429,7 +432,7 @@ export default function App() {
       setFocusPoint({ coords: loc.coords, k: loc.k });
       setFocusPointToken((n) => n + 1);
     },
-    [year, setShowNeighborhoods, setShowLostLandscape]
+    [year, setShowNeighborhoods, setShowLostLandscape, setShowCalamities]
   );
 
   const goToEntry = useCallback(
@@ -472,6 +475,8 @@ export default function App() {
         onShowNeighborhoodsChange={setShowNeighborhoods}
         showLostLandscape={showLostLandscape}
         onShowLostLandscapeChange={setShowLostLandscape}
+        showCalamities={showCalamities}
+        onShowCalamitiesChange={setShowCalamities}
       />
 
       <main
@@ -497,6 +502,7 @@ export default function App() {
           showStreetLabels={showStreetLabels}
           showNeighborhoods={showNeighborhoods}
           showLostLandscape={showLostLandscape}
+          showCalamities={showCalamities}
           cameraLink={cameraLink}
         />
         {compareYear !== null && (
@@ -521,6 +527,7 @@ export default function App() {
                 showStreetLabels={showStreetLabels}
                 showNeighborhoods={showNeighborhoods}
                 showLostLandscape={showLostLandscape}
+                showCalamities={showCalamities}
                 cameraLink={cameraLink}
                 chrome={false}
               />

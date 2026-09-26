@@ -23,6 +23,8 @@ export interface MapKeyVisible {
   lenape: boolean;
   enclaves: boolean;
   lostLandscape: boolean;
+  fires: boolean;
+  epidemics: boolean;
   /** Label of the historical map sheet showing, if any. */
   overlay: string | null;
 }
@@ -222,6 +224,28 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
             <g className="ll-pond ll-gone">
               <path d={ellipseD(W / 2, H / 2, 10, 5)} />
             </g>
+          </g>
+        </Swatch>
+      ),
+    },
+    {
+      show: v.fires,
+      label: "Burned in a great fire",
+      swatch: (
+        <Swatch>
+          <g className="calamity calamity-fire">
+            <rect x={1} y={1} width={W - 2} height={H - 2} rx={2} />
+          </g>
+        </Swatch>
+      ),
+    },
+    {
+      show: v.epidemics,
+      label: "Epidemic's worst-hit blocks",
+      swatch: (
+        <Swatch>
+          <g className="calamity calamity-epidemic">
+            <rect x={1} y={1} width={W - 2} height={H - 2} rx={2} />
           </g>
         </Swatch>
       ),

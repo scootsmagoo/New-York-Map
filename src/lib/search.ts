@@ -9,8 +9,9 @@ import { eras, formatYear } from "../data/eras";
 import { allEntries } from "../data/entries";
 import { neighborhoods } from "../data/neighborhoods";
 import { lostWaters } from "../data/lostWaters";
+import { CALAMITY_FADE, calamities, calamityCenter } from "../data/calamities";
 
-export type SearchItemKind = EntryKind | "street" | "neighborhood" | "water";
+export type SearchItemKind = EntryKind | "street" | "neighborhood" | "water" | "calamity";
 
 /** Where a map-layer result lives: fly there, at a year it exists, with its layer on. */
 export interface MapLocation {
@@ -21,7 +22,7 @@ export interface MapLocation {
   year: number;
   /** Years it's on the map. */
   range: [number, number];
-  layer: "neighborhoods" | "lostLandscape";
+  layer: "neighborhoods" | "lostLandscape" | "calamities";
 }
 
 /** A single searchable record — extend `source` as new map content types ship. */
@@ -43,7 +44,7 @@ export interface SearchHit {
   score: number;
 }
 
-const KIND_ORDER: SearchItemKind[] = ["person", "place", "event", "street", "neighborhood", "water"];
+const KIND_ORDER: SearchItemKind[] = ["person", "place", "event", "street", "neighborhood", "water", "calamity"];
 
 const KIND_LABEL: Record<SearchItemKind, string> = {
   person: "People",
@@ -52,6 +53,7 @@ const KIND_LABEL: Record<SearchItemKind, string> = {
   street: "Streets",
   neighborhood: "Neighborhoods",
   water: "Lost waters",
+  calamity: "Fires & epidemics",
 };
 
 const eraName = new Map(eras.map((e) => [e.id, e.name]));
@@ -203,6 +205,40 @@ function waterSearchItems(): SearchItem[] {
   }));
 }
 
+/** Zoom that shows an area a few hundred pixels across: a block to a mile. */
+function calamityZoom(ring: [number, number][]): number {
+  const lons = ring.map((p) => p[0]);
+  const lats = ring.map((p) => p[1]);
+  const span = Math.max(
+    (Math.max(...lons) - Math.min(...lons)) * 0.76,
+    Math.max(...lats) - Math.min(...lats)
+  );
+  // About 1,800 px per degree at k = 1 on a laptop screen.
+  return Math.max(3, Math.min(16, 180 / (span * 1800)));
+}
+
+function calamitySearchItems(): SearchItem[] {
+  return calamities.map((c) => ({
+    id: `calamity:${c.id}`,
+    kind: "calamity" as const,
+    title: c.name,
+    subtitle: `${c.kind === "fire" ? "burned district" : "epidemic"}, ${formatYear(c.from)}`,
+    haystack: [c.name, c.aka, c.note, c.kind === "fire" ? "fire" : "epidemic disease"]
+      .filter(Boolean)
+      .join(" "),
+    source: {
+      type: "location" as const,
+      location: {
+        coords: calamityCenter(c),
+        k: calamityZoom(c.ring),
+        year: c.from,
+        range: [c.from, c.to + CALAMITY_FADE - 1] as [number, number],
+        layer: "calamities" as const,
+      },
+    },
+  }));
+}
+
 /** Build the search index from all registered content sources. */
 export function buildSearchIndex(): SearchItem[] {
   const entries = allEntries.map((entry) => {
@@ -232,6 +268,7 @@ export function buildSearchIndex(): SearchItem[] {
     ...colonialStreets.map(streetSearchItem),
     ...neighborhoodSearchItems(),
     ...waterSearchItems(),
+    ...calamitySearchItems(),
   ];
 }
 

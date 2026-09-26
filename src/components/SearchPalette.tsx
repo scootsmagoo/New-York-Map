@@ -25,6 +25,7 @@ const KIND_GLYPH: Record<SearchItemKind, string> = {
   street: "╱",
   neighborhood: "⌂",
   water: "≈",
+  calamity: "✶",
 };
 
 interface SearchPaletteProps {
@@ -169,8 +170,8 @@ export function SearchPalette({
           <div className="search-results">
             {!query.trim() && (
               <p className="search-empty">
-                Search people, places, events, streets, neighborhoods, and lost
-                waters — try <em>Tweed</em>, <em>Five Points</em>, or{" "}
+                Search people, places, events, streets, neighborhoods, lost
+                waters, fires, and epidemics — try <em>Tweed</em>, <em>Five Points</em>, or{" "}
                 <em>Collect Pond</em>.
               </p>
             )}

@@ -28,6 +28,14 @@ describe("search", () => {
     expect(loc.range[1]).toBe(1811);
   });
 
+  it("finds a fire or epidemic and sends the map to its year, with its layer", () => {
+    const hit = searchEntries("cholera").find((h) => h.item.kind === "calamity")!;
+    if (hit.item.source.type !== "location") throw new Error("not a location");
+    expect(hit.item.source.location.layer).toBe("calamities");
+    expect([1832, 1849]).toContain(hit.item.source.location.year);
+    expect(searchEntries("Canvas Town").some((h) => h.item.id === "calamity:fire-1776")).toBe(true);
+  });
+
   it("opens a renamed neighborhood under its later name", () => {
     const hit = searchEntries("Times Square").find((h) => h.item.kind === "neighborhood")!;
     if (hit.item.source.type !== "location") throw new Error("not a location");

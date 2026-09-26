@@ -35,6 +35,8 @@ import {
 import { StreetLabelLayer } from "./StreetLabelLayer";
 import { NeighborhoodLayer } from "./NeighborhoodLayer";
 import { LostLandscapeLayer } from "./LostLandscapeLayer";
+import { CalamityLayer } from "./CalamityLayer";
+import { calamities, calamityOpacity } from "../data/calamities";
 import { boroughLabels, type MapLabel } from "../data/mapLabels";
 import { hatchTile } from "../lib/hatch";
 import { MapKey, type MapKeyVisible } from "./MapKey";
@@ -66,6 +68,7 @@ interface MapViewProps {
   showStreetLabels?: boolean;
   showNeighborhoods?: boolean;
   showLostLandscape?: boolean;
+  showCalamities?: boolean;
   /** Keeps pan/zoom in step with other maps sharing the link (compare mode). */
   cameraLink?: CameraLink;
   /** Reset button and attribution; off for the second map in compare mode. */
@@ -287,6 +290,7 @@ function MapViewInner({
   showStreetLabels = false,
   showNeighborhoods = false,
   showLostLandscape = false,
+  showCalamities = false,
   cameraLink,
   chrome = true,
 }: MapViewProps) {
@@ -744,6 +748,8 @@ function MapViewInner({
       lenape: lenapeOpacity > 0,
       enclaves: visibleSettlements.length > 0,
       lostLandscape: showLostLandscape,
+      fires: showCalamities && calamities.some((c) => c.kind === "fire" && calamityOpacity(c, year) > 0),
+      epidemics: showCalamities && calamities.some((c) => c.kind === "epidemic" && calamityOpacity(c, year) > 0),
       overlay: overlayFrames.length
         ? overlayFrames.reduce((a, b) => (b.weight > a.weight ? b : a)).overlay.label
         : null,
@@ -751,7 +757,7 @@ function MapViewInner({
   }, [
     year, roadFade, surveyOpacity, infraFade, ferryFade, minorParkFade, base,
     structurePaths, infrastructurePaths, parkPaths, markers, ghostMarkers,
-    lenapeOpacity, visibleSettlements, showLostLandscape, overlayFrames,
+    lenapeOpacity, visibleSettlements, showLostLandscape, showCalamities, overlayFrames,
   ]);
 
   if (!width || !height) return <div className="map-view" ref={ref} />;
@@ -1045,6 +1051,11 @@ function MapViewInner({
 
             {/* The original shoreline and waters; unmade land drawn as river */}
             {showLostLandscape && <LostLandscapeLayer project={projection} year={year} k={k} />}
+
+            {/* Great fires and epidemics, in the years they struck */}
+            {showCalamities && (
+              <CalamityLayer project={projection} year={year} k={k} onSelectEntry={onSelectEntry} />
+            )}
 
             {/* Street names — every named street, decluttered to what fits */}
             {showStreetLabels && (

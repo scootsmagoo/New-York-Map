@@ -24,6 +24,11 @@ const states: [string, string, (p: Page) => Promise<unknown>, { tips?: boolean }
   ["the map key", "#year=1900", (p) => p.getByRole("button", { name: /key/i }).first().click()],
   ["the population panel", "#year=1900", (p) => p.locator(".population-toggle").click()],
   ["the tips card", "", async () => {}, { tips: true }],
+  ["fires & epidemics", "#year=1835", async (p) => {
+    await openMenu(p);
+    await p.getByLabel("Fires & epidemics", { exact: true }).click();
+    await p.keyboard.press("Escape");
+  }],
 ];
 
 for (const [name, hash, act, opts] of states) {
