@@ -240,8 +240,8 @@ export const bookRefs: Record<string, BookRef> = {
   },
   "great-fire-1776": {
     book: "gotham",
-    chapter: "16. The Gibraltar of North America",
-    pages: "255–56",
+    chapter: "15. Revolution",
+    pages: "241–42",
   },
   "prison-ships": {
     book: "gotham",
