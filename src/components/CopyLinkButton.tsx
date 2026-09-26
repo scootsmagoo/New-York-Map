@@ -6,14 +6,13 @@ interface CopyLinkButtonProps {
   getUrl: () => string;
   label: string;
   className?: string;
-  role?: string;
 }
 
 /**
  * Copies a link and says so. The link also goes into the address bar, which
  * is where it ends up if the browser won't allow clipboard access.
  */
-export function CopyLinkButton({ getUrl, label, className, role }: CopyLinkButtonProps) {
+export function CopyLinkButton({ getUrl, label, className }: CopyLinkButtonProps) {
   const [status, setStatus] = useState<"idle" | "copied" | "address-bar">("idle");
 
   useEffect(() => {
@@ -28,13 +27,22 @@ export function CopyLinkButton({ getUrl, label, className, role }: CopyLinkButto
     setStatus((await copyText(url)) ? "copied" : "address-bar");
   };
 
+  const message =
+    status === "copied"
+      ? "Link copied ✓"
+      : status === "address-bar"
+        ? "Link is in the address bar"
+        : null;
+
   return (
-    <button type="button" className={className} role={role} onClick={onClick}>
-      {status === "copied"
-        ? "Link copied ✓"
-        : status === "address-bar"
-          ? "Link is in the address bar"
-          : label}
-    </button>
+    <>
+      <button type="button" className={className} onClick={onClick}>
+        {message ?? label}
+      </button>
+      {/* Screen readers don't reliably announce a button relabeling itself. */}
+      <span className="visually-hidden" role="status">
+        {message}
+      </span>
+    </>
   );
 }

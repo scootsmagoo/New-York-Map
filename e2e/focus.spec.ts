@@ -57,3 +57,40 @@ test("the era panel takes focus when it opens and gives it back when it closes",
   await expect(page.locator(".era-panel")).toBeHidden();
   await expect(explore).toBeFocused();
 });
+
+test("the playhead is a keyboard slider for the year", async ({ page }) => {
+  await open(page, "#year=1850");
+  const slider = page.getByRole("slider", { name: "Year" });
+  await expect(slider).toHaveAttribute("aria-valuetext", /^1850, Antebellum/);
+  await slider.focus();
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  await expect.poll(async () => Number(await slider.getAttribute("aria-valuenow"))).toBeGreaterThan(1850);
+  await page.keyboard.press("End");
+  await expect(slider).toHaveAttribute("aria-valuenow", "1945");
+});
+
+test("Space on a map marker opens it without starting playback", async ({ page }) => {
+  await open(page, "#year=1850");
+  const marker = page.locator(".marker:not(.marker-ghost)").first();
+  await marker.focus();
+  await page.keyboard.press(" ");
+  await expect(page.locator(".modal")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Play through time" })).toBeVisible();
+});
+
+test("focusing a population group shows its enclaves, like hovering", async ({ page }) => {
+  await open(page, "#year=1900");
+  await page.locator(".population-toggle").click();
+  await page.locator(".population-legend-row").first().focus();
+  await expect(page.locator(".population-legend-row-active")).toHaveCount(1);
+});
+
+test("Escape closes the ⋯ menu and returns focus to its button", async ({ page }) => {
+  await open(page, "#year=1850");
+  await page.locator(".header-menu-btn").click();
+  await page.locator(".header-menu-panel button").first().focus();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".header-menu-panel")).toBeHidden();
+  await expect(page.locator(".header-menu-btn")).toBeFocused();
+});

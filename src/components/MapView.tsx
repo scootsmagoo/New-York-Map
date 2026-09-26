@@ -763,7 +763,7 @@ function MapViewInner({
         className="map-svg"
         width={width}
         height={height}
-        role="img"
+        role="group"
         aria-label={`Map of New York City in ${year}`}
       >
         <defs>
@@ -825,346 +825,351 @@ function MapViewInner({
         <rect className="map-water" width={width} height={height} />
 
         <g ref={contentRef} className="map-content">
-          {/* Surrounding land */}
-          {surroundPaths.map((d: string, i: number) => (
-            <path key={`s${i}`} className="map-surround" d={d} />
-          ))}
-
-          {/* The five boroughs */}
-          {boroughPaths.map((b: { boro: string; d: string }) => (
-            <path key={b.boro} className="map-land" d={b.d}>
-              <title>{b.boro}</title>
-            </path>
-          ))}
-
-          {/* Built-up footprint, clipped to the real shoreline */}
-          {renderFootprint(basePaths)}
-          {next && renderFootprint(nextPaths, 0.25 + 0.75 * progress)}
-
-          {/* Georeferenced historical map sheets (Manhattan only) */}
-          {overlayFrames.length > 0 && (
-            <g className="historical-overlays" clipPath="url(#manhattan-clip)">
-              {overlayFrames.map(({ overlay, placement, weight }) => (
-                <image
-                  key={overlay.id}
-                  className="historical-overlay"
-                  href={overlay.src}
-                  x={placement!.x}
-                  y={placement!.y}
-                  width={placement!.width}
-                  height={placement!.height}
-                  transform={placement!.transform}
-                  preserveAspectRatio="none"
-                  opacity={overlayOpacity * weight}
-                >
-                  <title>{overlay.label}</title>
-                </image>
-              ))}
-            </g>
-          )}
-
-          {/* Street-hatch texture over the outer-borough footprint */}
-          {roadFade > 0 &&
-            base.other.length > 0 &&
-            Object.keys(HATCH_ANGLES).map((boro) => (
-              <g
-                key={boro}
-                clipPath={`url(#clip-${boro.replace(/ /g, "-")})`}
-                style={{ opacity: roadFade }}
-              >
-                <path
-                  d={basePaths.other}
-                  fill={`url(#hatch-${boro.replace(/ /g, "-")})`}
-                  stroke="none"
-                />
-              </g>
+          {/* Everything but the markers is scenery to a screen reader: the
+              shoreline, streets, and thousands of labels would bury the
+              markers, which are the map's only controls. */}
+          <g aria-hidden="true">
+            {/* Surrounding land */}
+            {surroundPaths.map((d: string, i: number) => (
+              <path key={`s${i}`} className="map-surround" d={d} />
             ))}
 
-          {/* Crooked-street hatch for built Manhattan outside the grid zone */}
-          {roadFade > 0 && base.manhattan.length > 0 && (
-            <g clipPath="url(#manhattan-clip)" style={{ opacity: roadFade }}>
-              <g clipPath="url(#notgrid-clip)">
-                <path
-                  d={basePaths.manhattan}
-                  fill="url(#hatch-Manhattan)"
-                  stroke="none"
-                />
-              </g>
-            </g>
-          )}
+            {/* The five boroughs */}
+            {boroughPaths.map((b: { boro: string; d: string }) => (
+              <path key={b.boro} className="map-land" d={b.d}>
+                <title>{b.boro}</title>
+              </path>
+            ))}
 
-          {/* The 1811 grid: faint survey lines, then built streets sweeping north */}
-          {surveyOpacity > 0 && (
-            <g clipPath="url(#manhattan-clip)">
-              <g clipPath="url(#gridzone-clip)">
-                <path
-                  className="grid-survey"
-                  d={gridD}
-                  style={{ opacity: surveyOpacity * 0.5 }}
-                />
-                <g clipPath="url(#built-clip)">
-                  <path
-                    className="grid-built"
-                    d={gridD}
-                    style={{ opacity: roadFade }}
-                  />
-                </g>
-              </g>
-            </g>
-          )}
+            {/* Built-up footprint, clipped to the real shoreline */}
+            {renderFootprint(basePaths)}
+            {next && renderFootprint(nextPaths, 0.25 + 0.75 * progress)}
 
-          {/* Colonial roads */}
-          {roadFade > 0 &&
-            streetPaths
-              .filter((s) => year >= s.from && (s.to === undefined || year <= s.to))
-              .map((s) => {
-                const featureOn = streetFeatureActive(s, year);
-                const focused = focusStreet?.id === s.id;
-                const streetClass = [
-                  "street",
-                  featureOn && s.feature === "wall" ? "street-wall" : "",
-                  featureOn && s.feature === "canal" ? "street-canal" : "",
-                  focused ? "street-focused" : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ");
-                return (
-                  <g key={s.id} style={{ opacity: roadFade }}>
-                    <path className={streetClass} d={s.d} />
-                    <title>{streetTooltip(s, year)}</title>
-                  </g>
-                );
-              })}
-
-          {/* Parks */}
-          {parkPaths
-            .filter((p) => year >= p.from)
-            .map((p) => {
-              const constructing = p.completed !== undefined && year < p.completed;
-              const visible = p.major ? 1 : minorParkFade;
-              if (visible <= 0) return null;
-              return (
-                <g key={p.id} style={{ opacity: visible }}>
-                  <path
-                    className={constructing ? "park park-construction" : "park"}
-                    d={p.d}
+            {/* Georeferenced historical map sheets (Manhattan only) */}
+            {overlayFrames.length > 0 && (
+              <g className="historical-overlays" clipPath="url(#manhattan-clip)">
+                {overlayFrames.map(({ overlay, placement, weight }) => (
+                  <image
+                    key={overlay.id}
+                    className="historical-overlay"
+                    href={overlay.src}
+                    x={placement!.x}
+                    y={placement!.y}
+                    width={placement!.width}
+                    height={placement!.height}
+                    transform={placement!.transform}
+                    preserveAspectRatio="none"
+                    opacity={overlayOpacity * weight}
                   >
-                    <title>
-                      {p.name}
-                      {constructing ? " (under construction)" : ""}
-                    </title>
-                  </path>
-                  {labelFade > 0 && (
-                    <text
-                      className="park-label"
-                      transform={`translate(${p.center[0]},${p.center[1]}) scale(${1 / k})`}
-                      style={{ opacity: labelFade }}
-                    >
-                      {p.name}
-                    </text>
-                  )}
-                </g>
-              );
-            })}
+                    <title>{overlay.label}</title>
+                  </image>
+                ))}
+              </g>
+            )}
 
-          {/* Ferries and bridges */}
-          {structurePaths
-            .filter(
-              (s) =>
-                year >= s.open && (s.close === undefined || year <= s.close)
-            )
-            .map((s) => {
-              const opacity = s.kind === "ferry" ? ferryFade * 0.8 : 1;
-              if (opacity <= 0) return null;
-              const entry = s.entryId
-                ? allEntries.find((e) => e.id === s.entryId)
-                : undefined;
-              return (
-                <g key={s.id} style={{ opacity }}>
+            {/* Street-hatch texture over the outer-borough footprint */}
+            {roadFade > 0 &&
+              base.other.length > 0 &&
+              Object.keys(HATCH_ANGLES).map((boro) => (
+                <g
+                  key={boro}
+                  clipPath={`url(#clip-${boro.replace(/ /g, "-")})`}
+                  style={{ opacity: roadFade }}
+                >
                   <path
-                    className={s.kind === "ferry" ? "ferry" : "bridge"}
-                    d={s.d}
-                    onClick={entry ? () => onSelectEntry(entry) : undefined}
-                    style={entry ? { cursor: "pointer" } : undefined}
+                    d={basePaths.other}
+                    fill={`url(#hatch-${boro.replace(/ /g, "-")})`}
+                    stroke="none"
                   />
-                  <title>{s.name}</title>
-                  {s.kind === "bridge" && labelFade > 0 && (
-                    <text
-                      className="bridge-label"
-                      transform={`translate(${s.mid[0]},${s.mid[1]}) rotate(${s.angle}) scale(${1 / k})`}
-                      style={{ opacity: labelFade }}
-                      y={-5}
-                    >
-                      {s.name}
-                    </text>
-                  )}
                 </g>
-              );
-            })}
-
-          {/* Els, subway, and Croton Aqueduct */}
-          {infrastructurePaths
-            .filter(
-              (line) =>
-                year >= line.open &&
-                (line.close === undefined || year <= line.close)
-            )
-            .map((line) => {
-              if (infraFade <= 0) return null;
-              const entry = line.entryId
-                ? allEntries.find((e) => e.id === line.entryId)
-                : undefined;
-              const clip =
-                line.kind === "aqueduct" ? undefined : "url(#manhattan-clip)";
-              return (
-                <g key={line.id} clipPath={clip} style={{ opacity: infraFade }}>
-                  <path
-                    className={`infra infra-${line.kind}`}
-                    d={line.d}
-                    onClick={entry ? () => onSelectEntry(entry) : undefined}
-                    style={entry ? { cursor: "pointer" } : undefined}
-                  />
-                  <title>{line.name}</title>
-                  {labelFade > 0 && line.kind !== "aqueduct" && (
-                    <text
-                      className="infra-label"
-                      transform={`translate(${line.mid[0]},${line.mid[1]}) rotate(${line.angle}) scale(${1 / k})`}
-                      style={{ opacity: labelFade * 0.85 }}
-                      y={line.kind === "subway" ? 6 : -5}
-                    >
-                      {line.name}
-                    </text>
-                  )}
-                </g>
-              );
-            })}
-
-          {/* The original shoreline and waters; unmade land drawn as river */}
-          {showLostLandscape && <LostLandscapeLayer project={projection} year={year} k={k} />}
-
-          {/* Street names — every named street, decluttered to what fits */}
-          {showStreetLabels && (
-            <StreetLabelLayer
-              project={projection}
-              year={year}
-              k={k}
-              width={width}
-              height={height}
-              getTransform={getTransform}
-              onViewSettled={onViewSettled}
-              fade={roadFade}
-            />
-          )}
-
-          {showNeighborhoods && (
-            <NeighborhoodLayer project={projection} year={year} k={k} />
-          )}
-
-          {/* Lenapehoking layer */}
-          {lenapeOpacity > 0 && (
-            <g className="lenape-layer" style={{ opacity: lenapeOpacity }}>
-              {lenapeTrails.map((trail, i) => (
-                <path
-                  key={`t${i}`}
-                  className="lenape-trail"
-                  d={trail
-                    .map((p, j) => {
-                      const [x, y] = projection!(p)!;
-                      return `${j === 0 ? "M" : "L"}${x},${y}`;
-                    })
-                    .join(" ")}
-                />
               ))}
-              {lenapeSites.map((site) => {
-                const [x, y] = projection!(site.coords)!;
+
+            {/* Crooked-street hatch for built Manhattan outside the grid zone */}
+            {roadFade > 0 && base.manhattan.length > 0 && (
+              <g clipPath="url(#manhattan-clip)" style={{ opacity: roadFade }}>
+                <g clipPath="url(#notgrid-clip)">
+                  <path
+                    d={basePaths.manhattan}
+                    fill="url(#hatch-Manhattan)"
+                    stroke="none"
+                  />
+                </g>
+              </g>
+            )}
+
+            {/* The 1811 grid: faint survey lines, then built streets sweeping north */}
+            {surveyOpacity > 0 && (
+              <g clipPath="url(#manhattan-clip)">
+                <g clipPath="url(#gridzone-clip)">
+                  <path
+                    className="grid-survey"
+                    d={gridD}
+                    style={{ opacity: surveyOpacity * 0.5 }}
+                  />
+                  <g clipPath="url(#built-clip)">
+                    <path
+                      className="grid-built"
+                      d={gridD}
+                      style={{ opacity: roadFade }}
+                    />
+                  </g>
+                </g>
+              </g>
+            )}
+
+            {/* Colonial roads */}
+            {roadFade > 0 &&
+              streetPaths
+                .filter((s) => year >= s.from && (s.to === undefined || year <= s.to))
+                .map((s) => {
+                  const featureOn = streetFeatureActive(s, year);
+                  const focused = focusStreet?.id === s.id;
+                  const streetClass = [
+                    "street",
+                    featureOn && s.feature === "wall" ? "street-wall" : "",
+                    featureOn && s.feature === "canal" ? "street-canal" : "",
+                    focused ? "street-focused" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ");
+                  return (
+                    <g key={s.id} style={{ opacity: roadFade }}>
+                      <path className={streetClass} d={s.d} />
+                      <title>{streetTooltip(s, year)}</title>
+                    </g>
+                  );
+                })}
+
+            {/* Parks */}
+            {parkPaths
+              .filter((p) => year >= p.from)
+              .map((p) => {
+                const constructing = p.completed !== undefined && year < p.completed;
+                const visible = p.major ? 1 : minorParkFade;
+                if (visible <= 0) return null;
                 return (
-                  <g
-                    key={site.name}
-                    transform={`translate(${x},${y}) scale(${1 / k})`}
-                    className="lenape-site"
-                  >
-                    <path d="M 0 -4.5 L 4 2.5 L -4 2.5 Z" />
-                    <text y={-8}>{site.name}</text>
-                    <title>{`${site.name} — ${site.note}`}</title>
+                  <g key={p.id} style={{ opacity: visible }}>
+                    <path
+                      className={constructing ? "park park-construction" : "park"}
+                      d={p.d}
+                    >
+                      <title>
+                        {p.name}
+                        {constructing ? " (under construction)" : ""}
+                      </title>
+                    </path>
+                    {labelFade > 0 && (
+                      <text
+                        className="park-label"
+                        transform={`translate(${p.center[0]},${p.center[1]}) scale(${1 / k})`}
+                        style={{ opacity: labelFade }}
+                      >
+                        {p.name}
+                      </text>
+                    )}
                   </g>
                 );
               })}
-              {lenapeTerritories.map((t) => {
-                const [x, y] = projection!(t.coords)!;
+
+            {/* Ferries and bridges */}
+            {structurePaths
+              .filter(
+                (s) =>
+                  year >= s.open && (s.close === undefined || year <= s.close)
+              )
+              .map((s) => {
+                const opacity = s.kind === "ferry" ? ferryFade * 0.8 : 1;
+                if (opacity <= 0) return null;
+                const entry = s.entryId
+                  ? allEntries.find((e) => e.id === s.entryId)
+                  : undefined;
+                return (
+                  <g key={s.id} style={{ opacity }}>
+                    <path
+                      className={s.kind === "ferry" ? "ferry" : "bridge"}
+                      d={s.d}
+                      onClick={entry ? () => onSelectEntry(entry) : undefined}
+                      style={entry ? { cursor: "pointer" } : undefined}
+                    />
+                    <title>{s.name}</title>
+                    {s.kind === "bridge" && labelFade > 0 && (
+                      <text
+                        className="bridge-label"
+                        transform={`translate(${s.mid[0]},${s.mid[1]}) rotate(${s.angle}) scale(${1 / k})`}
+                        style={{ opacity: labelFade }}
+                        y={-5}
+                      >
+                        {s.name}
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
+
+            {/* Els, subway, and Croton Aqueduct */}
+            {infrastructurePaths
+              .filter(
+                (line) =>
+                  year >= line.open &&
+                  (line.close === undefined || year <= line.close)
+              )
+              .map((line) => {
+                if (infraFade <= 0) return null;
+                const entry = line.entryId
+                  ? allEntries.find((e) => e.id === line.entryId)
+                  : undefined;
+                const clip =
+                  line.kind === "aqueduct" ? undefined : "url(#manhattan-clip)";
+                return (
+                  <g key={line.id} clipPath={clip} style={{ opacity: infraFade }}>
+                    <path
+                      className={`infra infra-${line.kind}`}
+                      d={line.d}
+                      onClick={entry ? () => onSelectEntry(entry) : undefined}
+                      style={entry ? { cursor: "pointer" } : undefined}
+                    />
+                    <title>{line.name}</title>
+                    {labelFade > 0 && line.kind !== "aqueduct" && (
+                      <text
+                        className="infra-label"
+                        transform={`translate(${line.mid[0]},${line.mid[1]}) rotate(${line.angle}) scale(${1 / k})`}
+                        style={{ opacity: labelFade * 0.85 }}
+                        y={line.kind === "subway" ? 6 : -5}
+                      >
+                        {line.name}
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
+
+            {/* The original shoreline and waters; unmade land drawn as river */}
+            {showLostLandscape && <LostLandscapeLayer project={projection} year={year} k={k} />}
+
+            {/* Street names — every named street, decluttered to what fits */}
+            {showStreetLabels && (
+              <StreetLabelLayer
+                project={projection}
+                year={year}
+                k={k}
+                width={width}
+                height={height}
+                getTransform={getTransform}
+                onViewSettled={onViewSettled}
+                fade={roadFade}
+              />
+            )}
+
+            {showNeighborhoods && (
+              <NeighborhoodLayer project={projection} year={year} k={k} />
+            )}
+
+            {/* Lenapehoking layer */}
+            {lenapeOpacity > 0 && (
+              <g className="lenape-layer" style={{ opacity: lenapeOpacity }}>
+                {lenapeTrails.map((trail, i) => (
+                  <path
+                    key={`t${i}`}
+                    className="lenape-trail"
+                    d={trail
+                      .map((p, j) => {
+                        const [x, y] = projection!(p)!;
+                        return `${j === 0 ? "M" : "L"}${x},${y}`;
+                      })
+                      .join(" ")}
+                  />
+                ))}
+                {lenapeSites.map((site) => {
+                  const [x, y] = projection!(site.coords)!;
+                  return (
+                    <g
+                      key={site.name}
+                      transform={`translate(${x},${y}) scale(${1 / k})`}
+                      className="lenape-site"
+                    >
+                      <path d="M 0 -4.5 L 4 2.5 L -4 2.5 Z" />
+                      <text y={-8}>{site.name}</text>
+                      <title>{`${site.name} — ${site.note}`}</title>
+                    </g>
+                  );
+                })}
+                {lenapeTerritories.map((t) => {
+                  const [x, y] = projection!(t.coords)!;
+                  return (
+                    <text
+                      key={t.name}
+                      className="territory-label"
+                      transform={`translate(${x},${y}) scale(${1 / k})`}
+                    >
+                      {t.name}
+                    </text>
+                  );
+                })}
+              </g>
+            )}
+
+            {/* Borough labels fade in as the Lenape world fades out */}
+            <g style={{ opacity: 1 - lenapeOpacity }}>
+              {boroughLabels(year).map((l) => {
+                const [x, y] = projection!(l.coords)!;
                 return (
                   <text
-                    key={t.name}
-                    className="territory-label"
-                    transform={`translate(${x},${y}) scale(${1 / k})`}
+                    key={l.text}
+                    className="boro-label"
+                    transform={`translate(${x},${y}) rotate(${l.rotate ?? 0}) scale(${1 / k})`}
                   >
-                    {t.name}
+                    {l.text}
                   </text>
                 );
               })}
             </g>
-          )}
 
-          {/* Borough labels fade in as the Lenape world fades out */}
-          <g style={{ opacity: 1 - lenapeOpacity }}>
-            {boroughLabels(year).map((l) => {
+            {/* Water labels */}
+            {WATER_LABELS.map((l) => {
               const [x, y] = projection!(l.coords)!;
               return (
                 <text
                   key={l.text}
-                  className="boro-label"
+                  className="water-label"
                   transform={`translate(${x},${y}) rotate(${l.rotate ?? 0}) scale(${1 / k})`}
                 >
                   {l.text}
                 </text>
               );
             })}
+
+            {/* Immigrant & community enclaves (population panel) */}
+            {visibleSettlements.length > 0 && (
+              <g className="settlement-layer">
+                {visibleSettlements.map((s) => (
+                  <g
+                    key={s.id}
+                    transform={`translate(${s.pos[0]},${s.pos[1]})`}
+                    style={{ opacity: s.opacity }}
+                  >
+                    <circle
+                      className="settlement-blob"
+                      r={s.r}
+                      fill={s.color}
+                      stroke={s.color}
+                      style={{ strokeOpacity: s.strokeOpacity }}
+                    />
+                    {labelFade > 0 && (
+                      <text
+                        className="settlement-label"
+                        y={-s.r - 4}
+                        transform={`scale(${1 / k})`}
+                        style={{ opacity: labelFade }}
+                      >
+                        {s.name}
+                      </text>
+                    )}
+                    <title>{`${s.name} (${s.from}${s.to ? `–${s.to}` : "–"}) — ${s.note}`}</title>
+                  </g>
+                ))}
+              </g>
+            )}
           </g>
-
-          {/* Water labels */}
-          {WATER_LABELS.map((l) => {
-            const [x, y] = projection!(l.coords)!;
-            return (
-              <text
-                key={l.text}
-                className="water-label"
-                transform={`translate(${x},${y}) rotate(${l.rotate ?? 0}) scale(${1 / k})`}
-              >
-                {l.text}
-              </text>
-            );
-          })}
-
-          {/* Immigrant & community enclaves (population panel) */}
-          {visibleSettlements.length > 0 && (
-            <g className="settlement-layer">
-              {visibleSettlements.map((s) => (
-                <g
-                  key={s.id}
-                  transform={`translate(${s.pos[0]},${s.pos[1]})`}
-                  style={{ opacity: s.opacity }}
-                >
-                  <circle
-                    className="settlement-blob"
-                    r={s.r}
-                    fill={s.color}
-                    stroke={s.color}
-                    style={{ strokeOpacity: s.strokeOpacity }}
-                  />
-                  {labelFade > 0 && (
-                    <text
-                      className="settlement-label"
-                      y={-s.r - 4}
-                      transform={`scale(${1 / k})`}
-                      style={{ opacity: labelFade }}
-                    >
-                      {s.name}
-                    </text>
-                  )}
-                  <title>{`${s.name} (${s.from}${s.to ? `–${s.to}` : "–"}) — ${s.note}`}</title>
-                </g>
-              ))}
-            </g>
-          )}
 
           {/* Demolished landmark ghosts */}
           {ghostMarkers.map((m) => {
@@ -1227,7 +1232,12 @@ function MapViewInner({
       {chrome && (
         <>
           <div className="map-controls">
-            <button className="tl-btn" onClick={resetZoom} title="Reset map view">
+            <button
+              className="tl-btn"
+              onClick={resetZoom}
+              title="Reset map view"
+              aria-label="Reset map view"
+            >
               ⌖
             </button>
             <MapKey visible={keyVisible} />

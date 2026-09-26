@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef } from "react";
 import type { Entry } from "../types";
-import { eras, formatYear } from "../data/eras";
+import { eras, eraForYear, formatYear, TIME_MAX, TIME_MIN } from "../data/eras";
 import { allEntries } from "../data/entries";
 import {
   clampWindow,
@@ -8,6 +8,7 @@ import {
   ticksFor,
   unitOfYear,
   xToYear,
+  yearOfUnit,
   yearToX,
   zoomWindow,
   type TimeWindow,
@@ -248,6 +249,22 @@ export function Timeline({
     flyTo(zoomWindow(win, factor, uCenter));
   };
 
+  const playheadYear = Math.round(yearOfUnit((win.u0 + win.u1) / 2));
+  const onPlayheadKey = (e: React.KeyboardEvent) => {
+    const span = win.u1 - win.u0;
+    const step: Record<string, number> = {
+      ArrowLeft: -0.08 * span,
+      ArrowRight: 0.08 * span,
+      PageDown: -0.5 * span,
+      PageUp: 0.5 * span,
+      Home: -1,
+      End: 1,
+    };
+    if (!(e.key in step)) return;
+    e.preventDefault();
+    onWindowChange(clampWindow(panWindow(win, step[e.key])));
+  };
+
   return (
     <div className="timeline" ref={ref}>
       <div className="timeline-controls">
@@ -255,19 +272,21 @@ export function Timeline({
           className="tl-btn"
           onClick={onTogglePlay}
           title={playing ? "Pause" : "Play through time"}
+          aria-label={playing ? "Pause" : "Play through time"}
         >
           {playing ? "❚❚" : "▶"}
         </button>
-        <button className="tl-btn" onClick={() => zoomBy(1.6)} title="Zoom in">
+        <button className="tl-btn" onClick={() => zoomBy(1.6)} title="Zoom in" aria-label="Zoom timeline in">
           +
         </button>
-        <button className="tl-btn" onClick={() => zoomBy(1 / 1.6)} title="Zoom out">
+        <button className="tl-btn" onClick={() => zoomBy(1 / 1.6)} title="Zoom out" aria-label="Zoom timeline out">
           −
         </button>
         <button
           className="tl-btn tl-btn-wide"
           onClick={() => flyTo({ u0: 0, u1: 1 })}
           title="Show all of time"
+          aria-label="Show all of time"
         >
           ⟲ All
         </button>
@@ -388,8 +407,22 @@ export function Timeline({
             );
           })}
 
-          {/* Center playhead */}
-          <g transform={`translate(${centerX},0)`}>
+          {/* Center playhead: also the keyboard and screen-reader slider
+              for the year, since dragging the strip isn't either. */}
+          <g
+            className="playhead-slider"
+            transform={`translate(${centerX},0)`}
+            role="slider"
+            tabIndex={0}
+            aria-label="Year"
+            aria-orientation="horizontal"
+            aria-valuemin={TIME_MIN}
+            aria-valuemax={TIME_MAX}
+            aria-valuenow={playheadYear}
+            aria-valuetext={`${formatYear(playheadYear)}, ${eraForYear(playheadYear).name}`}
+            onKeyDown={onPlayheadKey}
+          >
+            <rect className="playhead-focus" x={-8} y={0} width={16} height={HEIGHT} />
             <line className="playhead" y1={0} y2={HEIGHT} />
             <path className="playhead-caret" d={`M -6 0 L 6 0 L 0 8 Z`} />
           </g>

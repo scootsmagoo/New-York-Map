@@ -144,8 +144,14 @@ export function SearchPalette({
               placeholder="People, places, events, streets, neighborhoods…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              role="combobox"
+              aria-label="Search Gotham"
+              aria-expanded={flat.length > 0}
               aria-autocomplete="list"
               aria-controls="search-results"
+              aria-activedescendant={
+                flat.length > 0 ? `search-option-${activeIndex}` : undefined
+              }
               autoComplete="off"
               autoCorrect="off"
               spellCheck={false}
@@ -160,7 +166,7 @@ export function SearchPalette({
             </button>
           </div>
 
-          <div id="search-results" className="search-results" role="listbox">
+          <div className="search-results">
             {!query.trim() && (
               <p className="search-empty">
                 Search people, places, events, streets, neighborhoods, and lost
@@ -171,42 +177,59 @@ export function SearchPalette({
             {query.trim() && flat.length === 0 && (
               <p className="search-empty">No matches for “{query.trim()}”.</p>
             )}
-            {groups.map((group) => (
-              <section key={group.kind} className="search-group">
-                <h3 className="search-group-title">
-                  <span aria-hidden>{KIND_GLYPH[group.kind]}</span>{" "}
-                  {group.label}
-                </h3>
-                <ul className="search-group-list">
-                  {group.hits.map((hit) => {
-                    const index = row++;
-                    const active = index === activeIndex;
-                    return (
-                      <li key={hit.item.id}>
-                        <button
-                          type="button"
-                          role="option"
-                          aria-selected={active}
-                          className={`search-result${active ? " is-active" : ""}`}
-                          onMouseEnter={() => setActiveIndex(index)}
-                          onClick={() => selectHit(hit, handlers)}
-                        >
-                          <span className="search-result-title">
-                            {hit.item.title}
-                          </span>
-                          <span className="search-result-sub">
-                            {hit.item.subtitle}
-                          </span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            ))}
+            <div id="search-results" role="listbox" aria-label="Results">
+              {groups.map((group) => (
+                <section
+                  key={group.kind}
+                  className="search-group"
+                  role="group"
+                  aria-labelledby={`search-group-${group.kind}`}
+                >
+                  <div
+                    className="search-group-title"
+                    id={`search-group-${group.kind}`}
+                  >
+                    <span aria-hidden>{KIND_GLYPH[group.kind]}</span>{" "}
+                    {group.label}
+                  </div>
+                  <ul className="search-group-list" role="presentation">
+                    {group.hits.map((hit) => {
+                      const index = row++;
+                      const active = index === activeIndex;
+                      return (
+                        <li key={hit.item.id} role="presentation">
+                          {/* Options aren't focusable: focus stays in the input,
+                            which points at the active one (combobox pattern). */}
+                          <div
+                            id={`search-option-${index}`}
+                            role="option"
+                            aria-selected={active}
+                            className={`search-result${active ? " is-active" : ""}`}
+                            onMouseEnter={() => setActiveIndex(index)}
+                            onClick={() => selectHit(hit, handlers)}
+                          >
+                            <span className="search-result-title">
+                              {hit.item.title}
+                            </span>
+                            <span className="search-result-sub">
+                              {hit.item.subtitle}
+                            </span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              ))}
+            </div>
           </div>
+          <p className="visually-hidden" aria-live="polite">
+            {query.trim()
+              ? `${flat.length} ${flat.length === 1 ? "result" : "results"}`
+              : ""}
+          </p>
 
-          <footer className="search-hint">
+          <footer className="search-hint" aria-hidden>
             <span>↑↓ navigate</span>
             <span>↵ select</span>
             <span>esc close</span>

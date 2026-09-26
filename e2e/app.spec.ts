@@ -40,7 +40,7 @@ test("arrow keys scrub the timeline", async ({ page }) => {
 test("Then & Now opens on two different years, and both can be typed", async ({ page }) => {
   await open(page, "#year=1900");
   await openMenu(page);
-  await page.getByRole("menuitem", { name: /Then & Now/ }).click();
+  await page.getByRole("button", { name: /Then & Now/ }).click();
   const then = page.getByRole("textbox", { name: /^Then year/ });
   const now = page.getByRole("textbox", { name: /^Now year/ });
   await expect(then).toHaveValue("1840");
@@ -71,7 +71,7 @@ test("a tour steps through time and turns on its layer", async ({ page }) => {
 test("search finds a lost water and takes the map to it", async ({ page }) => {
   await open(page, "#year=1900");
   await page.keyboard.press("Control+k");
-  await page.getByRole("searchbox").fill("Collect");
+  await page.getByRole("combobox", { name: "Search Gotham" }).fill("Collect");
   await page.getByRole("option", { name: /Collect Pond.*filled/ }).click();
   await expect.poll(async () => Number(await year(page))).toBeLessThan(1811);
   await expect(page.locator(".lost-landscape")).toBeAttached();
@@ -123,7 +123,7 @@ test("scrolling on the timeline zooms it, and sideways scrolling pans it", async
 test("search results can be picked with the arrow keys", async ({ page }) => {
   await open(page, "#year=1900");
   await page.keyboard.press("Control+k");
-  await page.getByRole("searchbox").fill("Tweed");
+  await page.getByRole("combobox", { name: "Search Gotham" }).fill("Tweed");
   const options = page.getByRole("option");
   await expect(options.nth(1)).toBeVisible();
   await page.keyboard.press("ArrowDown");
@@ -136,19 +136,19 @@ test("search results can be picked with the arrow keys", async ({ page }) => {
 test("Escape closes search", async ({ page }) => {
   await open(page);
   await page.keyboard.press("Control+k");
-  await expect(page.getByRole("searchbox")).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "Search Gotham" })).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("searchbox")).toHaveCount(0);
+  await expect(page.getByRole("combobox", { name: "Search Gotham" })).toHaveCount(0);
 });
 
 test("search remembers its last query, selected so typing replaces it", async ({ page }) => {
   await open(page, "#year=1900");
   await page.keyboard.press("Control+k");
-  await page.getByRole("searchbox").fill("Tweed");
+  await page.getByRole("combobox", { name: "Search Gotham" }).fill("Tweed");
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("searchbox")).toHaveCount(0);
+  await expect(page.getByRole("combobox", { name: "Search Gotham" })).toHaveCount(0);
   await page.keyboard.press("Control+k");
-  const box = page.getByRole("searchbox");
+  const box = page.getByRole("combobox", { name: "Search Gotham" });
   await expect(box).toHaveValue("Tweed");
   await expect(page.getByRole("option").first()).toBeVisible();
   await page.keyboard.type("Minetta");

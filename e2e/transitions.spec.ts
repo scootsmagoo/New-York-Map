@@ -56,5 +56,5 @@ test("letters typed right after opening search aren't lost", async ({ page }) =>
   await open(page, "#year=1900");
   await page.keyboard.press("Control+k");
   await page.keyboard.type("Collect", { delay: 0 });
-  await expect(page.getByRole("searchbox")).toHaveValue("Collect");
+  await expect(page.getByRole("combobox", { name: "Search Gotham" })).toHaveValue("Collect");
 });

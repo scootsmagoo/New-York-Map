@@ -39,10 +39,13 @@ export function TourCard({
   return (
     <section
       className="tour-card"
-      role="dialog"
+      role="region"
       aria-label={`Guided tour: ${tour.title}`}
-      aria-live="polite"
     >
+      {/* Announce each new stop once, not the whole card with its buttons. */}
+      <p className="visually-hidden" aria-live="polite">
+        {`Stop ${step + 1} of ${tour.stops.length}: ${stop.year}, ${stop.title}. ${stop.text}`}
+      </p>
       <button className="modal-close" onClick={onClose} aria-label="End tour">
         ×
       </button>
@@ -77,7 +80,7 @@ export function TourCard({
         </div>
       </ViewTransition>
       <div className="tour-card-footer">
-        <div className="tour-card-dots" aria-label="Tour stops">
+        <div className="tour-card-dots" role="group" aria-label="Tour stops">
           {tour.stops.map((s, i) => (
             <button
               key={s.year + s.title}

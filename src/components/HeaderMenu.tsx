@@ -55,7 +55,12 @@ export function HeaderMenu({
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      // Hand focus back to the toggle if it was somewhere in the panel.
+      if (rootRef.current?.contains(document.activeElement)) {
+        rootRef.current.querySelector<HTMLButtonElement>(".header-menu-btn")?.focus();
+      }
     };
     window.addEventListener("pointerdown", onPointer);
     window.addEventListener("keydown", onKey);
@@ -72,18 +77,20 @@ export function HeaderMenu({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        aria-haspopup="menu"
+        aria-controls="header-menu-panel"
+        aria-label="Menu: tours, layers, and more"
         title="Menu"
       >
         ⋯
       </button>
 
       {open && (
-        <div className="header-menu-panel" role="menu">
+        <div className="header-menu-panel" id="header-menu-panel">
+          {/* A disclosure, not an ARIA menu: it holds checkboxes and a
+              slider, and Tab (not arrow keys) moves through it. */}
           <button
             className="header-menu-item"
             type="button"
-            role="menuitem"
             onClick={() => {
               setOpen(false);
               onAbout();
@@ -95,7 +102,6 @@ export function HeaderMenu({
           <button
             className="header-menu-item"
             type="button"
-            role="menuitem"
             onClick={() => {
               setOpen(false);
               onToggleCompare();
@@ -111,7 +117,6 @@ export function HeaderMenu({
 
           <CopyLinkButton
             className="header-menu-item"
-            role="menuitem"
             label="Copy link to this view"
             getUrl={getViewUrl}
           />
@@ -128,7 +133,6 @@ export function HeaderMenu({
                 key={tour.id}
                 className="header-menu-tour"
                 type="button"
-                role="menuitem"
                 onClick={() => {
                   setOpen(false);
                   onStartTour(tour);

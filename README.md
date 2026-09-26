@@ -50,7 +50,7 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-26)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 76 unit tests and 27 browser
+https://scootsmagoo.github.io/New-York-Map/. 76 unit tests and 47 browser
 tests (desktop WebKit and Chromium, plus an emulated iPhone) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
 (CI has no GPU).
@@ -65,6 +65,12 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
   The 1920s fall between the volumes and have neither. Blurbs were
   checked against the books; see
   [docs/BOOK_REFERENCE.md](docs/BOOK_REFERENCE.md).
+- **Accessibility (WCAG 2.2 AA pass, 2026-09-26).** Every main screen is
+  checked by axe in the browser tests. Text and map labels meet 4.5:1
+  contrast, the timeline's playhead is a keyboard slider (arrows, Page
+  Up/Down, Home/End) that reads out the year and era, search follows the
+  combobox pattern, tours announce each stop, and single-key shortcuts
+  work only when the map or timeline has focus.
 - **Nine tours** (⋯ menu, or `#tour=<id>`): the grid, the East River,
   fire and water, Moses, the island remade, *Slavery and Freedom*,
   *New York at War*, *A City of Riots*, and *The Rich Move Uptown*.

@@ -62,6 +62,7 @@ function PopulationPanelInner({
         onClick={toggleOpen}
         aria-expanded={open}
         title={open ? "Hide population" : "Show population"}
+        aria-label={`Population ${pop.estimate ? "about " : ""}${formatPopulation(pop.total, !open)}`}
       >
         <span className="population-toggle-icon" aria-hidden>
           ◉
@@ -76,7 +77,20 @@ function PopulationPanelInner({
       </button>
 
       {open && (
-        <div className="population-body">
+        <div
+          className="population-body"
+          onBlur={(e) => {
+            // Keyboard users highlight a group by focusing its row, then may
+            // Tab on into its enclave list; clear only when focus leaves both.
+            const next = e.relatedTarget as Node | null;
+            if (
+              highlightGroup &&
+              !(next instanceof Element && next.closest(".population-legend, .population-enclaves"))
+            ) {
+              onHighlightGroup(null);
+            }
+          }}
+        >
           <div className="population-header">
             <span className="population-title">Population</span>
             <span className="population-scope">{scopeLabel(pop.scope)}</span>
@@ -144,7 +158,7 @@ function PopulationPanelInner({
               <div className="population-enclaves-title">
                 {segmentLabel(highlightGroup, year)} enclaves
               </div>
-              <ul>
+              <ul tabIndex={0} aria-label={`${segmentLabel(highlightGroup, year)} enclaves`}>
                 {hoveredSettlements.map((s) => (
                   <li key={s.id}>
                     <strong>{s.name}</strong>
@@ -187,6 +201,9 @@ function LegendRow({
       className={`population-legend-row${active ? " population-legend-row-active" : ""}`}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
+      // Focus shows the same enclaves on the map that hover does.
+      tabIndex={0}
+      onFocus={onEnter}
     >
       <span
         className="population-swatch"

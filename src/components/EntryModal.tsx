@@ -78,6 +78,7 @@ export function EntryModal({ entry, onClose, onJumpToYear }: EntryModalProps) {
                 className="year-chip"
                 onClick={() => onJumpToYear(entry.year)}
                 title="Center the timeline here"
+                aria-label={`${entry.yearLabel ?? formatYear(entry.year)}: center the timeline here`}
               >
                 {entry.yearLabel ?? formatYear(entry.year)}
               </button>

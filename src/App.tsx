@@ -253,9 +253,15 @@ export default function App() {
         openSearch();
         return;
       }
-      if (searchOpen) return;
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "BUTTON") return;
+      if (searchOpen || e.defaultPrevented) return;
+      // Single-key shortcuts apply only to the map and timeline (WCAG 2.1.4):
+      // not while a control, a panel, or a dialog has focus.
+      const target = e.target as Element | null;
+      const onPage = !target || target === document.body;
+      const onCanvas = target?.closest(".map-view, .timeline") && !target.closest(
+        "button, input, a, select, textarea, [role=button], [role=dialog]"
+      );
+      if (!onPage && !onCanvas) return;
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         const dir = e.key === "ArrowLeft" ? -1 : 1;
         cancelFly();

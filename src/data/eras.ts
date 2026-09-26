@@ -17,7 +17,7 @@ export const eras: Era[] = [
     subtitle: "The island before the city",
     start: TIME_MIN,
     end: 1609,
-    color: "#5b6e4f",
+    color: "#586a4c",
     summary:
       "For thousands of years the estuary belonged to Munsee-speaking Lenape peoples — Wecquaesgeek, Canarsee, Rockaway, Hackensack, Raritan and others — who moved seasonally among planting fields, shell-fisheries, and hunting grounds. Mannahatta, 'the island of many hills,' carried a web of trails and villages from the Battery to Inwood. European contact began with Verrazzano's visit of 1524, eight decades before any colonist stayed.",
     wikiTitle: "Lenape",
@@ -28,7 +28,7 @@ export const eras: Era[] = [
     subtitle: "A Dutch company town, 1609–1664",
     start: 1609,
     end: 1664,
-    color: "#c4762c",
+    color: "#925821",
     summary:
       "After Henry Hudson's 1609 voyage, the Dutch West India Company planted a fur-trading post at Manhattan's tip. New Amsterdam grew into a polyglot port of perhaps 1,500 souls — Dutch, Walloon, English, African (enslaved and half-free), Jewish — ruled at the last by Peter Stuyvesant, walled at its northern edge, and surrendered to the English without a shot in 1664.",
     wikiTitle: "New Amsterdam",
@@ -50,7 +50,7 @@ export const eras: Era[] = [
     subtitle: "Liberty poles, fire, and exile, 1763–1783",
     start: 1763,
     end: 1783,
-    color: "#7d5ba6",
+    color: "#77569f",
     summary:
       "New York led resistance to the Stamp Act, then paid dearly: Washington's army was routed across Brooklyn and Manhattan in 1776, fire gutted a quarter of the town, and the British held the city for seven years as their North American headquarters. More Americans died in the prison ships of Wallabout Bay than in every battle of the war combined. The British sailed away on Evacuation Day, November 25, 1783.",
     wikiTitle: "New York and New Jersey campaign",
@@ -61,7 +61,7 @@ export const eras: Era[] = [
     subtitle: "Capital, port, and grid, 1783–1825",
     start: 1783,
     end: 1825,
-    color: "#2e6e8e",
+    color: "#2d6c8b",
     summary:
       "Briefly the capital of the United States — Washington took the first presidential oath on Wall Street — New York rebuilt, banked, speculated, and surged past Philadelphia to become the nation's busiest port. The Commissioners' Plan of 1811 ruled its future in a relentless street grid, and the Erie Canal's opening in 1825 married the harbor to the continent's interior.",
     wikiTitle: "History of New York City (1784–1854)",
@@ -72,7 +72,7 @@ export const eras: Era[] = [
     subtitle: "Immigrant city of extremes, 1825–1861",
     start: 1825,
     end: 1861,
-    color: "#4f7a4a",
+    color: "#486f43",
     summary:
       "Irish and German immigration remade the city; Five Points became a byword for slum poverty while merchant princes built marble palaces a mile north. The era brought Croton water, the penny press, P.T. Barnum, riots over abolition and actors alike, an independent City of Brooklyn, and — carved from squatters' land at the island's heart — Central Park.",
     wikiTitle: "History of New York City (1784–1854)",
@@ -83,7 +83,7 @@ export const eras: Era[] = [
     subtitle: "Draft riots to consolidation, 1861–1898",
     start: 1861,
     end: 1898,
-    color: "#8a6d1f",
+    color: "#7b611c",
     summary:
       "The bloodiest riot in American history tore through Manhattan in 1863; Boss Tweed perfected municipal plunder; Morgan, Gould, and Vanderbilt made Wall Street the world's counting-house. Elevated railroads, tenements, the Brooklyn Bridge, and the Statue of Liberty defined the skyline of 'the other half' and the half above it, until Greater New York united five boroughs on January 1, 1898.",
     wikiTitle: "Gilded Age",
