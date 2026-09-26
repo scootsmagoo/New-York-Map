@@ -47,20 +47,27 @@ npm run dev      # open http://localhost:5173
   on screen in the current year and zoom.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
 
-## Status (as of 2026-09-23)
+## Status (as of 2026-09-26)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 73 unit tests and 25 browser
+https://scootsmagoo.github.io/New-York-Map/. 76 unit tests and 27 browser
 tests (desktop WebKit and Chromium, plus an emulated iPhone) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
 (CI has no GPU).
 
 **Where things stand**
 
-- The timeline runs from Lenapehoking to 1945 across nine eras. The last
-  era, *Capital of the World* (1919–1945), has no margin notes yet.
-  Wallace's *Gotham at War* (2025) covers 1933–1945; 1919–1932 falls
-  between the volumes.
+- The timeline runs from Lenapehoking to 1945 across nine eras, with about
+  200 entries.
+- **Built on the *Gotham* trilogy.** Entry cards cite the chapter and
+  pages that cover them in *Gotham*, *Greater Gotham*, or *Gotham at War*
+  ("Read more:"), and margin notes say how that volume treats the subject.
+  The 1920s fall between the volumes and have neither. Blurbs were
+  checked against the books; see
+  [docs/BOOK_REFERENCE.md](docs/BOOK_REFERENCE.md).
+- **Nine tours** (⋯ menu, or `#tour=<id>`): the grid, the East River,
+  fire and water, Moses, the island remade, *Slavery and Freedom*,
+  *New York at War*, *A City of Riots*, and *The Rich Move Uptown*.
 - **Then & Now** compares any two years. It opens on two different years,
   and both can be typed.
 - **Street names** cover every named street in all five boroughs, from
@@ -92,8 +99,10 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 - Real street lines outside Manhattan at high zoom, in place of the hatch
   texture.
 - Even out the content: Lenapehoking has 13 entries to the Antebellum era's
-  29, and 1919–1945 has no *Gotham* notes yet (*Gotham at War* can
-  supply them from 1933 on).
+  30. The candidate list in docs/BOOK_REFERENCE.md has more, with where
+  to read up on each.
+- Map layers the books support: epidemics and great fires as dated areas,
+  and the working waterfront (markets, slips, shipyards, sugar houses).
 - Carry the timeline past 1945 (Moses's expressways, public housing, the
   fiscal crisis).
 - Audio per era.

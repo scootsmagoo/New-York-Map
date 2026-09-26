@@ -340,8 +340,8 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the
       World: Jazz Age, Depression, war), 26 entries, the Moses-era bridges,
       the IND, the els coming down, a 1945 footprint, and 1930/1940 census
-      population. The books end at 1919, so these entries carry no margin
-      notes.
+      population. Gotham at War (2025) covers 1933–45; the 1920s fall
+      between the volumes.
 - [ ] Carry on past 1945 (Moses's expressways, the fiscal crisis, the
       modern city).
 - [x] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
@@ -376,10 +376,12 @@ header, theme, footprint, markers, panel — derives from it.
       streets, neighborhoods (every historical name), and lost waters (⌘K).
 - [x] Then & Now: a pinned year beside the live one, split by a draggable
       seam, with a shared camera and `#compare=<year>` deep links.
-- [ ] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
+- [x] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
 - [ ] Audio: ambient soundscapes per era (gulls and surf → harbor bells →
       els and steam → ragtime).
-- [ ] More *Gotham* margin notes; chapter cross-references per entry.
+- [x] More *Gotham* margin notes; chapter cross-references per entry —
+      shipped: citations for ~185 entries (`src/data/bookRefs.ts`) and
+      notes for 1898–1919 and 1933–45 (docs/BOOK_REFERENCE.md).
 
 ## Running locally
 

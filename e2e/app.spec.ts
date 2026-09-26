@@ -20,6 +20,16 @@ test("an entry link opens its card", async ({ page }) => {
   await expect(page.locator(".modal h2")).toHaveText("V-J Day in Times Square");
 });
 
+test("entry cards name the volume in the margin note and cite the book", async ({ page }) => {
+  await open(page, "#entry=vj-day");
+  await expect(page.locator(".modal .gotham-mark")).toHaveText("Gotham at War:");
+  await expect(page.locator(".modal-bookref")).toContainText("Gotham at War, Epilogs, p. 851");
+  await open(page, "#entry=prison-ships");
+  await expect(page.locator(".modal-bookref")).toContainText(
+    "Gotham, ch. 16, The Gibraltar of North America, pp. 253–55"
+  );
+});
+
 test("arrow keys scrub the timeline", async ({ page }) => {
   await open(page, "#year=1850");
   for (let i = 0; i < 5; i++) await page.keyboard.press("ArrowRight");
