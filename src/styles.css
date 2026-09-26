@@ -449,6 +449,11 @@ button {
   right: 0;
   z-index: 20;
   width: min(280px, calc(100vw - 28px));
+  /* Tours and layers outgrow a laptop screen: scroll inside the panel,
+     without the wheel leaking out to the page behind it. */
+  max-height: calc(100dvh - 76px); /* panel opens ~61px down */
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 8px 0;
   border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
   border-radius: 10px;

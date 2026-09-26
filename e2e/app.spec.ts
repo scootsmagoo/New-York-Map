@@ -167,3 +167,15 @@ test("the era panel keeps its scroll position when closed and reopened", async (
   await expect(scroller).toBeVisible();
   expect(await scroller.evaluate((el) => el.scrollTop)).toBe(400);
 });
+
+test("the ⋯ menu scrolls when it's taller than a laptop screen", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 800 });
+  await open(page, "#year=1850");
+  await page.locator(".header-menu-btn").click();
+  const panel = page.locator(".header-menu-panel");
+  const box = (await panel.boundingBox())!;
+  expect(box.y + box.height).toBeLessThanOrEqual(800);
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.wheel(0, 3000);
+  await expect(page.getByLabel("Show overlays")).toBeInViewport();
+});
