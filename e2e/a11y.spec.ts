@@ -29,7 +29,27 @@ for (const [name, hash, act] of states) {
   test(`no axe violations: ${name}`, async ({ page }) => {
     await open(page, hash);
     await act(page);
-    await page.waitForTimeout(700);
+    // Scan the settled screen: mid-fade text is partly transparent, and on
+    // CI's GPU-less WebKit a 0.2s fade can still be running a second later.
+    await page.waitForFunction(
+      () =>
+        !(document as Document & { activeViewTransition?: unknown }).activeViewTransition &&
+        document.getAnimations().every((a) => a.playState !== "running" || a.effect?.getTiming().iterations === Infinity),
+      null,
+      { timeout: 10_000 }
+    );
+    // Tours and deep links fly the timeline by script, which isn't a Web
+    // Animation: also wait for the year to hold still.
+    let last = "";
+    await expect
+      .poll(async () => {
+        const now = await page.locator(".year-now").textContent();
+        const settled = now === last;
+        last = now ?? "";
+        return settled;
+      }, { intervals: [250], timeout: 10_000 })
+      .toBe(true);
+    await page.waitForTimeout(250);
     let axe = new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]);
     // Search results scroll with the arrow keys from the input (the combobox
     // pattern keeps focus there), which this rule can't see.
