@@ -423,6 +423,73 @@ export const tours: Tour[] = [
       },
     ],
   },
+  {
+    id: "riots",
+    title: "A City of Riots",
+    subtitle: "Who fought whom in New York's streets, and what it cost",
+    stops: [
+      {
+        year: 1788,
+        title: "The Doctors' Riot",
+        text: "Rumors that medical students were digging up bodies from graveyards, including the Black burial ground, brought a crowd to the hospital on Broadway and then to the jail where the doctors hid. Militia fired and killed three. Gotham marks a first: no colonial official had ever ordered soldiers to fire on a crowd.",
+        focus: { coords: [-74.0058, 40.7155], k: 5.5 },
+        entryId: "doctors-riot",
+      },
+      {
+        year: 1834,
+        title: "Against the abolitionists",
+        text: "In July 1834 crowds of butcher boys and laborers, egged on by well-dressed merchants, gutted Lewis Tappan's house on Rose Street and burned his furniture in the street. Then they stoned Black churches and homes. About five hundred Black New Yorkers fled their homes.",
+        focus: { coords: [-74.0025, 40.7105], k: 5.5 },
+      },
+      {
+        year: 1849,
+        title: "Astor Place",
+        text: 'Fans of the American actor Edwin Forrest hounded the English star Macready off the stage of the Astor Opera House, crying down the "codfish aristocracy." When he tried again on May 10, a crowd of thousands besieged the theater and the militia fired into it. Twenty-two were killed.',
+        focus: { coords: [-73.991, 40.7295], k: 5.5 },
+        entryId: "astor-place-riot",
+      },
+      {
+        year: 1857,
+        title: "Police against police",
+        text: "When Albany replaced Mayor Wood's police with a state-run Metropolitan force, the city had two police departments. In June 1857 the Metropolitans marched on City Hall to arrest the mayor, and Wood's Municipals clubbed them down the steps.",
+        focus: { coords: [-74.006, 40.7127], k: 5.5 },
+        entryId: "city-hall-1812",
+      },
+      {
+        year: 1863,
+        title: "The Draft Riots",
+        text: "Four days in July 1863 began as a protest at a draft office on Third Avenue and became a hunt for Black New Yorkers and the rich. People believed a thousand had died; 119 deaths were verified. Even the smaller number made it the largest civil disorder in American history.",
+        focus: { coords: [-73.9755, 40.7515], k: 3.5 },
+        entryId: "draft-riots",
+      },
+      {
+        year: 1871,
+        title: "The Orange Riots",
+        text: "On July 12, 1871, Protestant Irish Orangemen marched down Eighth Avenue under militia guard. When stones flew, the guardsmen fired into the Catholic Irish crowd around 24th Street. More than sixty civilians were killed.",
+        focus: { coords: [-73.9985, 40.747], k: 5 },
+        entryId: "orange-riots",
+      },
+      {
+        year: 1874,
+        title: "Tompkins Square",
+        text: "In the depression after 1873, unemployed workers rallied in Tompkins Square on January 13, 1874, to march on City Hall for relief. Mounted police charged and clubbed them for hours. Few were badly hurt, but Gotham calls it a turning point that hardened both sides of the class divide.",
+        focus: { coords: [-73.9818, 40.7265], k: 5.5 },
+      },
+      {
+        year: 1900,
+        title: "The Tenderloin, 1900",
+        text: "After a Black man killed a plainclothes policeman who had attacked him, white mobs on August 15, 1900, pulled Black passengers off Eighth Avenue trolleys and beat them. Police joined in. Seventy Black New Yorkers were badly hurt, and no one was indicted. Many moved uptown, to Harlem.",
+        focus: { coords: [-73.9905, 40.7575], k: 5 },
+      },
+      {
+        year: 1943,
+        title: "Harlem, 1935 and 1943",
+        text: "Twice in eight years a rumor that police had killed someone set off rioting along 125th Street: a boy caught shoplifting in 1935, a Black soldier in 1943. Both times, the damage fell on stores, and the causes lay in jobs, housing, and policing.",
+        focus: { coords: [-73.9493, 40.8105], k: 4.5 },
+        entryId: "harlem-riot-1943",
+      },
+    ],
+  },
 ];
 
 export function tourById(id: string): Tour | undefined {
