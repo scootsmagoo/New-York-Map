@@ -322,6 +322,19 @@ header, theme, footprint, markers, panel — derives from it.
     (141 → 50 KB) and lazy-loading the dialogs did the rest: 402 → 311 KB
     in all, map on screen 1.63 → 1.50 s, fully loaded 3.28 → 2.81 s.
 
+26. **With `<ViewTransition>`, decide what may *not* be a transition.**
+    `useDeferredValue` renders are transitions, and the map follows the
+    timeline through one, so anything inside a `<ViewTransition>` that
+    reads the map's year would start a view transition on every scrub
+    frame. Only panel open/close state is a transition, and a test counts
+    `startViewTransition` calls during a scrub (it must stay at zero).
+27. **View transitions change effect timing.** Passive effects wait for the
+    animation, so focus handling moved to layout effects, and a layout
+    effect's cleanup runs *before* the node leaves the DOM (focus is still
+    inside it). And with `<Activity>`, the `<ViewTransition>` must sit
+    inside the Activity for hiding to play the exit animation, despite
+    what the docs' wording suggests. Browser tests caught both.
+
 ## Future features
 
 - [x] Extend past 1919 — shipped to 1945: a ninth era (Capital of the

@@ -50,7 +50,7 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-23)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 73 unit tests and 14 browser
+https://scootsmagoo.github.io/New-York-Map/. 73 unit tests and 24 browser
 tests (desktop WebKit and Chromium, plus an emulated iPhone) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
 (CI has no GPU).
@@ -96,76 +96,33 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
   fiscal crisis).
 - Audio per era.
 
-**Planned: upgrade to React 19.3** (researched 2026-09-26; not started)
+**Done: React 19.3** (2026-09-26). Upgraded from 19.2.7, following the
+plan researched from the [release post](https://react.dev/blog/2026/09/09/react-19-3)
+and [changelog](https://github.com/facebook/react/blob/main/CHANGELOG.md):
 
-We're on React 19.2.7. [React 19.3](https://react.dev/blog/2026/09/09/react-19-3)
-(2026-09-09) has no breaking changes. Its two headline features,
-[`<ViewTransition>`](https://react.dev/reference/react/ViewTransition) and
-[Fragment refs](https://react.dev/reference/react/Fragment), are now stable.
-Full list in the [changelog](https://github.com/facebook/react/blob/main/CHANGELOG.md).
-Steps, in order, each its own commit, with `npm test`, `npm run test:e2e`,
-and the local WebKit pan check (`PERF_FLOOR=45`) after each:
-
-1. **Bump the packages.** `react`, `react-dom`, `@types/react`,
-   `@types/react-dom` to `19.3.0`; `@vitejs/plugin-react` 6.0.2 → 6.1.1.
-   Nothing in our code should need changing. Fixes we benefit from without
-   doing anything:
-   - a fix for `useDeferredValue` getting stuck, which is how the map
-     follows the timeline;
-   - Fast Refresh now works with `lazy()` components, which the dialogs
-     now are;
-   - transitions render independently, so a slow one no longer holds up
-     the others.
-2. **`useEffectEvent`** (stable since 19.2; 19.3 fixes it inside `memo()`
-   components like MapView). Replace the "copy the latest value into a
-   ref" workarounds that effects read from: `winRef` and `widthRef` in
-   Timeline's wheel handler, the zoom setup in MapView, and the load-time
-   deep-link effect in App. Also remove most of the five
-   `eslint-disable exhaustive-deps` comments. Keep refs that are read in
-   ordinary event handlers (for example `getViewUrl`), since
-   `useEffectEvent` is only for effects.
-3. **Fragment refs for keyboard focus in dialogs.** The entry card,
-   search, About, and the era panel don't keep keyboard focus inside while
-   open, and don't return it to where it was when they close. A small
-   `FocusTrap` built on `<Fragment ref>` (its `focus()` and `focusLast()`
-   go to the first and last focusable elements, with no wrapper element)
-   fixes that. Add browser tests that tab through each dialog. Elsewhere
-   the app already has the wrapper elements Fragment refs would replace
-   (for example `useElementSize`'s div), so nothing else changes.
-4. **`<ViewTransition>` for panels, not the map.** It animates only
-   updates wrapped in `startTransition`, and while it runs the page is a
-   still snapshot. So:
-   - Use it on discrete UI: the era panel, entry card, search, map key,
-     and Then & Now opening and *closing*. Today they fade in but vanish
-     instantly on close.
-   - Tour steps slide forward or back using `addTransitionType("next" |
-     "back")`.
-   - **Never** on timeline scrubbing, autoplay, or map pan/zoom. Those
-     update every frame and must stay urgent (not transitions).
-   - Keep the rest of the page out of the animation
-     (`view-transition-name: none` on the root), so the map stays live
-     under an opening panel.
-   - Add reduced-motion rules for the `::view-transition-*`
-     pseudo-elements. React doesn't honor `prefers-reduced-motion` on its
-     own, and our existing `*` rule doesn't reach those pseudo-elements.
-   - Delete the CSS keyframes this replaces.
-   - Browser support: Chrome 111+, Safari and iOS 18+ (18.2 for classes
-     and types), Firefox 144+. Older browsers skip the animation with no
-     errors.
-   - Measure WebKit frame rate while a panel animates over a zoomed map.
-5. **`<Activity>`** (stable since 19.2): keep search and the era panel
-   mounted but hidden when closed, so a reopened search keeps its query
-   and the era panel keeps its scroll position. Hidden trees clean up
-   their effects, so search's key listeners won't stay active. Optionally
-   pre-render search in a hidden Activity so its first open is instant.
-   The iOS focus proxy stays, because a hidden input can't take focus.
-
-*Doesn't apply here:* `browser()` and the Server Components changes (this
-is a client-only app); Trusted Types (only matters with a CSP header, which
-GitHub Pages can't set). *Optional, separately:* the React Compiler
-(supported by `@vitejs/plugin-react` 6.1) could replace our hand-written
-`memo`/`useMemo`/`useCallback`. That memoization is what keeps the map fast
-in Safari, so only with before-and-after WebKit measurements.
+- **`<ViewTransition>`:** the era panel, entry card, search, About, and
+  the tour card now animate *closed* (before, they faded in but vanished).
+  Tour steps slide forward or back, using `addTransitionType`. Only panel
+  state is a transition (`useAnimatedState`); the map and timeline never
+  are, and a browser test checks that scrubbing starts no view transitions.
+  The page itself is left out of the animation, so the map stays live
+  underneath. Reduced motion turns it all off.
+- **Fragment refs:** a `FocusTrap` keeps keyboard focus inside dialogs
+  and gives it back on close. The era panel's thumbnails share one
+  IntersectionObserver through `observeUsing`, instead of one per row.
+- **`<Activity>`:** search and the era panel stay mounted but hidden
+  after first use, so search keeps its query and the panel its scroll.
+- **`useEffectEvent`:** replaces ref workarounds and four of the five
+  suppressed lint warnings.
+- Costs and limits: React 19.3 adds ~9 KB gzipped to the first download.
+  In Safari, a press within the ~0.2 s of a closing animation ends the
+  animation instead of starting a map drag (Chrome passes it through).
+  `@types/react-dom` 19.3.0 lacks `FragmentInstance.compareDocumentPosition`,
+  so `FocusTrap` casts for it.
+- Not used: the React Compiler (would replace our hand-tuned memoization,
+  which is what keeps the map fast in Safari; try only with before/after
+  WebKit numbers), `browser()` and the Server Components changes (client-
+  only app), Trusted Types (needs a CSP header GitHub Pages can't set).
 
 **Known rough edges**
 
