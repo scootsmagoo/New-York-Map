@@ -36,6 +36,8 @@ export const capitalWorldEntries: Entry[] = [
     year: 1933,
     blurb:
       "Bohemian journalist turned Catholic radical who launched the Catholic Worker at a penny a copy in Union Square on May Day 1933 and ran houses of hospitality for the Depression's destitute.",
+    gotham:
+      "Gotham at War singles her out as one of the first Catholic voices in New York to break with the Church's support for Franco, in the Catholic Worker in 1936.",
   },
   {
     id: "la-guardia",
@@ -47,6 +49,8 @@ export const capitalWorldEntries: Entry[] = [
     yearLabel: "1934–1945",
     blurb:
       "The Little Flower: East Harlem's former congressman, Fusion mayor for three terms, who broke Tammany, unified the subways, courted New Deal dollars from Washington, and read the funny papers on the radio during a 1945 newspaper strike.",
+    gotham:
+      "Gotham at War follows him from New Deal builder to war mayor, courting defense contracts for the city and running civil defense.",
   },
   {
     id: "robert-moses",
@@ -57,6 +61,8 @@ export const capitalWorldEntries: Entry[] = [
     year: 1934,
     blurb:
       "Parks commissioner, Triborough chief, and holder of a dozen posts at once, who used New Deal money to build bridges, parkways, beaches, and swimming pools at a pace no one has matched since.",
+    gotham:
+      "Gotham at War catches him stalled by the war, with rationing emptying his bridges and Roosevelt blocking his Brooklyn–Battery bridge, and planning the postwar city instead.",
   },
 
   // ----- Events -----
@@ -137,6 +143,8 @@ export const capitalWorldEntries: Entry[] = [
     coords: [-73.9446, 40.8095],
     blurb:
       "A false rumor that a teenage shoplifter had been beaten to death in the Kress store on 125th Street set off a night of rioting. La Guardia's commission blamed the job discrimination, bad housing, and policing that Harlem had lived with for years.",
+    gotham:
+      "Gotham at War reads it as the Depression's strain on the city's Black–Jewish frontiers, made plain.",
   },
   {
     id: "els-come-down",
@@ -148,6 +156,8 @@ export const capitalWorldEntries: Entry[] = [
     yearLabel: "1938–1942",
     blurb:
       "Once the new subway ran beneath them, the Sixth Avenue (1938), Ninth Avenue (1940), and Second Avenue (1942) elevated lines were torn down. Legend says the scrap went to Japan and came back as bombs, but the Sixth Avenue contract barred exporting its 18,742 tons, a clause aimed at Japan and Germany.",
+    gotham:
+      "Gotham at War sets the demolition beside Chinese New Yorkers' pickets against scrap shipments to Japan. The city's contract kept the el's steel at home.",
   },
   {
     id: "worlds-fair-1939",
@@ -159,6 +169,8 @@ export const capitalWorldEntries: Entry[] = [
     coords: [-73.8448, 40.7466],
     blurb:
       "'The World of Tomorrow' rose around the Trylon and Perisphere on the Corona ash dumps that F. Scott Fitzgerald had called a 'valley of ashes.' Futurama sold 45 million visitors a motorway America, and the war in Europe began during its first season.",
+    gotham:
+      "Gotham at War looks at the Fair's pluralism: in 1940 it held twenty-four folk festivals, one immigrant group a week, as the country redefined itself as a nation of immigrants.",
   },
   {
     id: "navy-yard-war",
@@ -170,6 +182,8 @@ export const capitalWorldEntries: Entry[] = [
     coords: [-73.9712, 40.7022],
     blurb:
       "At its peak 75,000 people worked the Brooklyn Navy Yard in three shifts around the clock, among them women, hired in 1942 for the first time in the Yard's 141 years, and Black New Yorkers. It launched the battleships Iowa and Missouri, and the port shipped out millions of troops and tons of supplies.",
+    gotham:
+      "Gotham at War tracks the buildup from 1937: the North Carolina launched before 50,000 people in 1940, the Iowa next, and 20,000 workers by mid-1941.",
   },
   {
     id: "vj-day",
@@ -181,6 +195,8 @@ export const capitalWorldEntries: Entry[] = [
     coords: [-73.9855, 40.758],
     blurb:
       "On August 14, 1945, two million people packed Times Square for the news of Japan's surrender, and Alfred Eisenstaedt photographed a sailor kissing a woman in white. New York came out of the war as the richest city on earth.",
+    gotham:
+      "Gotham at War's epilog opens here: the Motogram on the Times tower confirmed Japan's surrender at 7:03 p.m., and two million people filled the square.",
   },
 
   // ----- Places -----
@@ -267,6 +283,8 @@ export const capitalWorldEntries: Entry[] = [
     lifespan: [1933, null],
     blurb:
       "John D. Rockefeller Jr. was left holding a Columbia University lease when the Metropolitan Opera pulled out after the crash, and built fourteen Art Deco buildings on it anyway. It was the largest private building project of the Depression, and Diego Rivera's lobby mural was chiseled off the wall.",
+    gotham:
+      "Gotham at War points out who else worked there: Britain's secret intelligence office for the Americas, behind a door marked 'Rough Diamonds, Ltd.'",
   },
   {
     id: "apollo",
@@ -303,6 +321,8 @@ export const capitalWorldEntries: Entry[] = [
     lifespan: [1936, null],
     blurb:
       "Three bridges and a viaduct meeting on Randalls Island link Manhattan, Queens, and the Bronx. Its tolls funded Robert Moses's Triborough Authority, which turned it into a power base no mayor could touch.",
+    gotham:
+      "Gotham at War notes that wartime rationing cut traffic on the Triborough Authority's bridges by 56 percent in 1942, nearly pushing Moses's agency into default.",
   },
   {
     id: "laguardia-airport",
@@ -315,5 +335,7 @@ export const capitalWorldEntries: Entry[] = [
     lifespan: [1939, null],
     blurb:
       "La Guardia refused to land at Newark on a ticket that said 'New York,' and got the city its own airport on the old North Beach airfield in Queens, built with WPA money. It opened in 1939 and later took his name.",
+    gotham:
+      "Gotham at War notes it was the country's busiest airport almost from the start, and by 1945 too small and sinking into Flushing Bay, which is why the city planned Idlewild.",
   },
 ];

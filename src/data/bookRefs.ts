@@ -686,8 +686,8 @@ export const bookRefs: Record<string, BookRef> = {
   },
   triborough: {
     book: "gothamAtWar",
-    chapter: "Planning the Postwar City",
-    pages: "720–21",
+    chapter: "War Port",
+    pages: "399",
   },
   "laguardia-airport": {
     book: "gothamAtWar",
