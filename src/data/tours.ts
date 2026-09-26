@@ -362,6 +362,67 @@ export const tours: Tour[] = [
       },
     ],
   },
+  {
+    id: "new-york-at-war",
+    title: "New York at War",
+    subtitle: "Nazis in the Garden, a U-boat at the harbor mouth, and V-J Day",
+    stops: [
+      {
+        year: 1939,
+        title: "Fission on 120th Street",
+        text: "In January 1939 John Dunning and Enrico Fermi, a refugee from Mussolini's Italy, split uranium atoms with the cyclotron in the basement of Columbia's Pupin Hall. Three years later the Army's bomb project took an office at 270 Broadway and the borough's name: the Manhattan Engineer District.",
+        focus: { coords: [-73.9615, 40.8101], k: 5 },
+        entryId: "columbia-fission",
+      },
+      {
+        year: 1939,
+        title: "Nazis in the Garden",
+        text: "On February 20, 1939, the German American Bund packed Madison Square Garden, then on Eighth Avenue at 50th Street, with swastikas flanking George Washington. Outside, about a hundred thousand protesters filled the avenue. It was the Bund's last big show.",
+        focus: { coords: [-73.9872, 40.7622], k: 5.5 },
+        entryId: "bund-rally-1939",
+      },
+      {
+        year: 1940,
+        title: "Battleships in Brooklyn",
+        text: "The Navy Yard launched the battleship North Carolina in June 1940 before 50,000 people, and laid the keel of the even bigger Iowa two weeks later. It had 9,000 workers in 1939, over 20,000 by mid-1941, and 75,000 at its wartime peak.",
+        focus: { coords: [-73.9712, 40.7022], k: 5 },
+        entryId: "navy-yard-war",
+      },
+      {
+        year: 1942,
+        title: "A U-boat at the door",
+        text: "Five weeks after Pearl Harbor, U-123 sank a tanker off Long Island on January 14, 1942, then crept toward the harbor and lay on the bottom all day, its crew listening to New York radio. Dozens of ships went down along the coast that winter.",
+        focus: { coords: [-73.98, 40.55], k: 2.2 },
+      },
+      {
+        year: 1942,
+        title: "The Normandie rolls over",
+        text: "On February 9, 1942, a worker's torch lit a pile of kapok life jackets aboard the Normandie, being turned into a troopship at Pier 88. Fireboats poured in water until she capsized in the Hudson. Investigators found carelessness, but the city suspected sabotage.",
+        focus: { coords: [-73.9985, 40.7652], k: 5.5 },
+        entryId: "normandie-fire",
+      },
+      {
+        year: 1942,
+        title: "The lights go down",
+        text: "From April 29, 1942, Times Square went dark for the duration: 265,000 bulbs and 65 miles of neon switched off so ships offshore wouldn't be silhouetted for U-boats. The Statue of Liberty's torch was dimmed too, and Coney Island went black.",
+        focus: { coords: [-73.9855, 40.758], k: 5 },
+      },
+      {
+        year: 1943,
+        title: "A war at home",
+        text: "In April 1943 Met Life announced that Stuyvesant Town would be for whites only. On August 1 a policeman at a Harlem hotel shot a Black soldier, and a rumor that he had died set off a night of rioting along 125th Street.",
+        focus: { coords: [-73.9493, 40.8105], k: 4.5 },
+        entryId: "harlem-riot-1943",
+      },
+      {
+        year: 1945,
+        title: "V-J Day",
+        text: "At 7:03 p.m. on August 14, 1945, the moving sign on the Times tower confirmed Japan's surrender. By ten o'clock two million people filled Times Square.",
+        focus: { coords: [-73.9855, 40.758], k: 4 },
+        entryId: "vj-day",
+      },
+    ],
+  },
 ];
 
 export function tourById(id: string): Tour | undefined {
