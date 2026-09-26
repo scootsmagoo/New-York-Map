@@ -694,4 +694,29 @@ export const bookRefs: Record<string, BookRef> = {
     chapter: "Planning the Postwar City",
     pages: "733",
   },
+  "bund-rally-1939": {
+    book: "gothamAtWar",
+    chapter: "Nazis and New York",
+    pages: "33",
+  },
+  "columbia-fission": {
+    book: "gothamAtWar",
+    chapter: "Science in the City",
+    pages: "428–33",
+  },
+  "normandie-fire": {
+    book: "gothamAtWar",
+    chapter: "Under the Gun",
+    pages: "360–62",
+  },
+  "stuyvesant-town": {
+    book: "gothamAtWar",
+    chapter: "Blacks",
+    pages: "531–32",
+  },
+  "harlem-riot-1943": {
+    book: "gothamAtWar",
+    chapter: "Blacks",
+    pages: "546–47",
+  },
 };

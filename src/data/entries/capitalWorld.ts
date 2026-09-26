@@ -201,6 +201,72 @@ export const capitalWorldEntries: Entry[] = [
 
   // ----- Places -----
   {
+    id: "bund-rally-1939",
+    era: "capitalWorld",
+    kind: "event",
+    title: "The Bund at Madison Square Garden",
+    wikiTitle: "1939 Nazi rally at Madison Square Garden",
+    year: 1939,
+    blurb:
+      "On February 20, 1939, the German American Bund filled the Garden, billed as a George Washington's Birthday rally: storm troopers in gray shirts, Washington's portrait between swastikas, and Fritz Kuhn denouncing the \"Jew Deal.\" Outside, some hundred thousand protesters packed Eighth Avenue.",
+    gotham:
+      "Gotham at War calls the rally the Bund's swan song: the crowd inside was dwarfed by the one outside, and the Nazi leadership had already lost patience with it.",
+    coords: [-73.9872, 40.7622],
+  },
+  {
+    id: "columbia-fission",
+    era: "capitalWorld",
+    kind: "event",
+    title: "Splitting the atom at Columbia",
+    wikiTitle: "Pupin Hall",
+    year: 1939,
+    yearLabel: "1939–1942",
+    blurb:
+      "On January 25, 1939, in Pupin Hall's basement, John Dunning and the refugee Enrico Fermi split uranium atoms with Columbia's cyclotron. Fermi and Leo Szilárd then stacked a uranium-graphite \"pile\" on its floors. The Army's bomb project, set up in 1942 with offices at 270 Broadway, took its name from the borough: the Manhattan Engineer District.",
+    gotham:
+      "Gotham at War argues the bomb had New York roots: exiles the city took in, a Columbia lab, and a Corps of Engineers office downtown.",
+    coords: [-73.9615, 40.8101],
+  },
+  {
+    id: "normandie-fire",
+    era: "capitalWorld",
+    kind: "event",
+    title: "The Normandie burns",
+    wikiTitle: "SS Normandie",
+    year: 1942,
+    blurb:
+      "The world's most glamorous liner, laid up at Pier 88 since 1939 and seized for conversion to a troopship, caught fire on February 9, 1942, when a worker's torch lit a pile of life vests. Flooded by fireboats, she rolled over in the Hudson ice before dawn.",
+    gotham:
+      "Gotham at War shows how quickly New Yorkers saw sabotage in the fire, though investigators found carelessness, and how it pushed the Navy toward a deal with the waterfront mob.",
+    coords: [-73.9985, 40.7652],
+  },
+  {
+    id: "stuyvesant-town",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Stuyvesant Town, whites only",
+    wikiTitle: "Stuyvesant Town–Peter Cooper Village",
+    year: 1943,
+    blurb:
+      "In 1943 the city let Metropolitan Life clear a 72-acre tract of the Gas House District, on Peter Stuyvesant's old bouwerie, for 8,755 apartments. Then Met Life's president announced they would be for whites only. The fight over it launched the city's campaign for fair-housing laws.",
+    gotham:
+      "Gotham at War makes Stuyvesant Town its test case: Moses's promise of private capital for housing arrived with a color line attached.",
+    coords: [-73.9776, 40.7318],
+  },
+  {
+    id: "harlem-riot-1943",
+    era: "capitalWorld",
+    kind: "event",
+    title: "Harlem riot of 1943",
+    wikiTitle: "Harlem riot of 1943",
+    year: 1943,
+    blurb:
+      "On August 1, 1943, a white policeman at the Braddock Hotel on 126th Street shot and wounded Robert Bandy, a Black soldier on leave. A rumor that he had been killed brought crowds into the streets, and stores were smashed and looted from 110th to 145th Streets.",
+    gotham:
+      "Gotham at War sets the riot at the end of a war of Jim Crow jobs, housing, and military service, when a Black soldier shot by a white policeman seemed all too believable.",
+    coords: [-73.9493, 40.8105],
+  },
+  {
     id: "yankee-stadium",
     era: "capitalWorld",
     kind: "place",
