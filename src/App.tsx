@@ -39,6 +39,7 @@ const AboutModal = named(() => import("./components/AboutModal"), "AboutModal");
 const SearchPalette = named(() => import("./components/SearchPalette"), "SearchPalette");
 const TourCard = named(() => import("./components/TourCard"), "TourCard");
 const CompareDivider = named(() => import("./components/CompareDivider"), "CompareDivider");
+const TipsCard = named(() => import("./components/TipsCard"), "TipsCard");
 import { MapView } from "./components/MapView";
 import { Timeline } from "./components/Timeline";
 import { PopulationPanel } from "./components/PopulationPanel";
@@ -100,6 +101,11 @@ export default function App() {
   const [showStreetLabels, setShowStreetLabels] = usePersistedState("streetLabels", false);
   const [showNeighborhoods, setShowNeighborhoods] = usePersistedState("neighborhoods", false);
   const [showLostLandscape, setShowLostLandscape] = usePersistedState("lostLandscape", false);
+  // The first-visit tips card; a deep link is someone else's tour, so skip it.
+  const [tipsSeen, setTipsSeen] = usePersistedState(
+    "tipsSeen",
+    /(tour|entry|compare)=/.test(window.location.hash)
+  );
   const [tour, setTour] = useAnimatedState<{ tour: Tour; step: number } | null>(null);
   const [focusPoint, setFocusPoint] = useState<MapFocus | null>(null);
   const [focusPointToken, setFocusPointToken] = useState(0);
@@ -553,6 +559,16 @@ export default function App() {
               />
             </Suspense>
           </ViewTransition>
+        )}
+        {!tipsSeen && !tour && compareYear === null && (
+          <Suspense fallback={null}>
+            <TipsCard
+              onStartTour={startTour}
+              onCompare={toggleCompare}
+              onSearch={openSearch}
+              onDismiss={() => setTipsSeen(true)}
+            />
+          </Suspense>
         )}
         {/* Once opened, the era panel stays mounted but hidden when closed,
             keeping its scroll position and loaded thumbnails. */}

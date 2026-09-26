@@ -8,6 +8,29 @@ test("loads the map and timeline without errors", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("first visit shows the tips card once; its buttons do what they say", async ({ page }) => {
+  await open(page, "", { tips: true });
+  const card = page.getByRole("region", { name: "Things to try" });
+  await expect(card).toBeVisible();
+  await card.getByRole("button", { name: /Then & Now/ }).click();
+  await expect(page.locator(".compare-divider")).toBeVisible();
+  await expect(card).toHaveCount(0);
+  // Seen: gone after a reload too.
+  await page.reload();
+  await expect(page.locator(".map-svg").first()).toBeVisible();
+  await expect(page.locator(".tips-card")).toHaveCount(0);
+});
+
+test("the tips card opens the ⋯ menu, and deep links skip it", async ({ page }) => {
+  await open(page, "", { tips: true });
+  await page.getByRole("button", { name: /Map layers/ }).click();
+  await expect(page.getByRole("group", { name: "Map layers" })).toBeVisible();
+  await page.evaluate(() => localStorage.clear());
+  await open(page, "#entry=vj-day", { tips: true });
+  await expect(page.locator(".modal h2")).toHaveText("V-J Day in Times Square");
+  await expect(page.locator(".tips-card")).toHaveCount(0);
+});
+
 test("deep links open the right year", async ({ page }) => {
   await open(page, "#year=1776");
   expect(await year(page)).toBe("1776");

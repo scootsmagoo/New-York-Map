@@ -1,8 +1,20 @@
 import { expect, type Page } from "@playwright/test";
 
-/** Open the app at a hash, failing the test on any page error. */
-export async function open(page: Page, hash = "") {
+/**
+ * Open the app at a hash, failing the test on any page error. The
+ * first-visit tips card is marked seen unless `tips` is set.
+ */
+export async function open(page: Page, hash = "", { tips = false } = {}) {
   const errors: string[] = [];
+  if (!tips) {
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem("nycmap:settings:tipsSeen", "true");
+      } catch {
+        // about:blank has no storage.
+      }
+    });
+  }
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => {
     // Wikipedia summaries are fetched live; offline CI may fail them.

@@ -4,7 +4,7 @@ import { open, openMenu } from "./helpers";
 
 // Every main screen must pass axe's WCAG 2.2 A/AA rules. Map and SVG label
 // contrast isn't measured by axe; it was checked by hand (see styles.css).
-const states: [string, string, (p: Page) => Promise<unknown>][] = [
+const states: [string, string, (p: Page) => Promise<unknown>, { tips?: boolean }?][] = [
   ["Lenapehoking", "#year=1200", async () => {}],
   ["New Amsterdam", "#year=1650", async () => {}],
   ["the Revolution", "#year=1776", async () => {}],
@@ -23,11 +23,12 @@ const states: [string, string, (p: Page) => Promise<unknown>][] = [
   ["Then & Now", "#year=1900&compare=1776", async () => {}],
   ["the map key", "#year=1900", (p) => p.getByRole("button", { name: /key/i }).first().click()],
   ["the population panel", "#year=1900", (p) => p.locator(".population-toggle").click()],
+  ["the tips card", "", async () => {}, { tips: true }],
 ];
 
-for (const [name, hash, act] of states) {
+for (const [name, hash, act, opts] of states) {
   test(`no axe violations: ${name}`, async ({ page }) => {
-    await open(page, hash);
+    await open(page, hash, opts);
     await act(page);
     // Scan the settled screen: mid-fade text is partly transparent, and on
     // CI's GPU-less WebKit a 0.2s fade can still be running a second later.

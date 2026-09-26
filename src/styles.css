@@ -2329,3 +2329,77 @@ a {
   outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
+
+/* ----- Things to try (first visit) ----- */
+
+.tips-card {
+  padding-bottom: 14px;
+}
+
+.tips-card-lead {
+  margin: 6px 0 10px;
+}
+
+.tips-card-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tips-card-btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.tips-card-btn:hover {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.tips-card-btn-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.tips-card-btn-sub {
+  display: block;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+/* The list can run under the close button's column. */
+.tips-card-list {
+  margin-right: -26px;
+}
+
+@media (max-width: 640px) {
+  .tips-card-lead {
+    font-size: 12.5px;
+  }
+
+  /* On a phone the card would cover the map: titles only. */
+  .tips-card-btn-sub {
+    display: none;
+  }
+
+  .tips-card-btn {
+    padding: 8px 10px;
+  }
+}
+
+/* The tips card sits where the attribution line lives; yield to it. */
+.app-main:has(.tips-card) .map-attribution {
+  display: none;
+}
