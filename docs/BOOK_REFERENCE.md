@@ -34,11 +34,15 @@ World's Fair about ten.
   quote *is* the point (a period nickname, a slogan).
 - **Cite when you use it.** Put the chapter and page in the commit message
   (e.g. "Gotham ch. 16, p. 253–54"). That makes a later fact-check fast.
+- **Citations** live in `src/data/bookRefs.ts` (entry id → book, chapter,
+  pages) and show as "Read more:" on the card. Add one for every new entry
+  from a covered period; a test checks the volume matches the era.
 - **The `gotham` field** is the "Gotham:" margin note on the entry card:
   one sentence on how the book treats the subject, not a second blurb. It
   should be something the book actually argues or emphasizes; check it
   with `find.py` before writing it. For `greaterNY` entries, the note is
-  about *Greater Gotham* (the card label still says "Gotham:").
+  about *Greater Gotham*, and for 1933–45 about *Gotham at War*; the card
+  labels it with the right volume's title.
 - When the book and Wikipedia disagree on a number, say which you used in
   the commit message. The books are sometimes the more careful source
   (see the audit below).
@@ -238,6 +242,8 @@ Page = first page of the part. Section numbers are the book's own (1–168).
 | Epilogs | 845 | — | V-J Day in Times Square (p. 851), the UN comes to Manhattan |
 
 ## Audit of the current `gotham` notes (2026-09-26)
+
+All the fixes suggested below were applied on 2026-09-26.
 
 Checked all twelve existing notes and their blurbs against the book.
 

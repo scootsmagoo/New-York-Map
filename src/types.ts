@@ -42,6 +42,21 @@ export interface Entry {
   gotham?: string;
 }
 
+/** The three volumes of the Gotham history of New York City. */
+export type BookId = "gotham" | "greaterGotham" | "gothamAtWar";
+
+/** Where a book covers an entry: "Read more" on the entry card. */
+export interface BookRef {
+  book: BookId;
+  /** Chapter as printed, e.g. "16. The Gibraltar of North America"; Greater
+   * Gotham adds its section ("8. Arteries › Trains and Tunnels"); Gotham at
+   * War names its part ("War Port"). */
+  chapter: string;
+  /** Print pages, e.g. "253–55". Absent for Greater Gotham (no page numbers
+   * in the edition we checked). */
+  pages?: string;
+}
+
 export interface FootprintSnapshot {
   /** Year the snapshot represents; snapshots are cumulative. */
   year: number;

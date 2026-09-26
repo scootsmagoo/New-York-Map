@@ -172,7 +172,7 @@ export const antebellumEntries: Entry[] = [
     era: "antebellum",
     kind: "event",
     title: "Emancipation Day, 1827",
-    wikiTitle: "Mother African Methodist Episcopal Zion Church",
+    wikiTitle: "History of slavery in New York (state)",
     year: 1827,
     yearLabel: "July 4–5, 1827",
     blurb:

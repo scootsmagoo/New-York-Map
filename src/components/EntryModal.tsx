@@ -3,6 +3,12 @@ import type { Entry, WikiSummary } from "../types";
 import { eras, formatYear } from "../data/eras";
 import { getWikiSummary } from "../lib/wikipedia";
 import { viewUrl } from "../lib/viewLink";
+import {
+  BOOK_TITLE,
+  bookRefFor,
+  formatBookLocation,
+  noteBook,
+} from "../lib/books";
 import { CopyLinkButton } from "./CopyLinkButton";
 import { FocusTrap } from "./FocusTrap";
 
@@ -21,6 +27,7 @@ const KIND_LABEL: Record<Entry["kind"], string> = {
 export function EntryModal({ entry, onClose, onJumpToYear }: EntryModalProps) {
   const [summary, setSummary] = useState<WikiSummary | null>(null);
   const [wikiLoading, setWikiLoading] = useState(true);
+  const bookRef = bookRefFor(entry);
 
   useEffect(() => {
     let alive = true;
@@ -103,7 +110,17 @@ export function EntryModal({ entry, onClose, onJumpToYear }: EntryModalProps) {
               )}
             {entry.gotham && (
               <p className="modal-gotham">
-                <span className="gotham-mark">Gotham:</span> {entry.gotham}
+                <span className="gotham-mark">
+                  {BOOK_TITLE[noteBook(entry)]}:
+                </span>{" "}
+                {entry.gotham}
+              </p>
+            )}
+            {bookRef && (
+              <p className="modal-bookref">
+                <span className="bookref-mark">Read more:</span>{" "}
+                <cite>{BOOK_TITLE[bookRef.book]}</cite>,{" "}
+                {formatBookLocation(bookRef)}
               </p>
             )}
           </div>

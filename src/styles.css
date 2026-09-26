@@ -1589,6 +1589,18 @@ button {
   letter-spacing: 1px;
 }
 
+.modal-bookref {
+  clear: both;
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.bookref-mark {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
 .modal-footer {
   display: flex;
   justify-content: space-between;

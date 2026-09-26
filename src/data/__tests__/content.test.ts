@@ -3,6 +3,8 @@ import { allEntries } from "../entries";
 import { eras, TIME_MAX, TIME_MIN, eraForYear } from "../eras";
 import { footprintAt, footprints, frontierAt } from "../footprints";
 import { colonialStreets } from "../streets";
+import { bookRefs } from "../bookRefs";
+import { formatBookLocation } from "../../lib/books";
 
 describe("eras", () => {
   it("tile the whole timeline without gaps or overlaps", () => {
@@ -14,7 +16,17 @@ describe("eras", () => {
   });
 
   it("resolve every year to exactly one era", () => {
-    for (const year of [TIME_MIN, -500, 1608, 1609, 1664, 1783, 1898, 1919, 1945]) {
+    for (const year of [
+      TIME_MIN,
+      -500,
+      1608,
+      1609,
+      1664,
+      1783,
+      1898,
+      1919,
+      1945,
+    ]) {
       const era = eraForYear(year);
       expect(era.start).toBeLessThanOrEqual(year);
       expect(year).toBeLessThanOrEqual(era.end);
@@ -102,5 +114,57 @@ describe("colonial streets", () => {
       expect(s.pts.length, s.id).toBeGreaterThanOrEqual(2);
       if (s.to !== undefined) expect(s.to, s.id).toBeGreaterThan(s.from);
     }
+  });
+});
+
+describe("book refs", () => {
+  const byId = new Map(allEntries.map((e) => [e.id, e]));
+
+  it("point at real entries, in the volume that covers their years", () => {
+    for (const [id, ref] of Object.entries(bookRefs)) {
+      const entry = byId.get(id);
+      expect(entry, `bookRefs has unknown entry ${id}`).toBeDefined();
+      const expected =
+        entry!.era === "greaterNY"
+          ? "greaterGotham"
+          : entry!.era === "capitalWorld"
+            ? "gothamAtWar"
+            : "gotham";
+      expect(ref.book, id).toBe(expected);
+      // No volume covers 1919–1932.
+      if (entry!.era === "capitalWorld") {
+        expect(entry!.year, id).toBeGreaterThanOrEqual(1933);
+      }
+    }
+  });
+
+  it("carry print pages except for Greater Gotham", () => {
+    for (const [id, ref] of Object.entries(bookRefs)) {
+      if (ref.book === "greaterGotham") expect(ref.pages, id).toBeUndefined();
+      else expect(ref.pages, id).toMatch(/^\d+(–\d+)?(, \d+)?$/);
+    }
+  });
+
+  it("format chapters, sections, and page ranges", () => {
+    expect(
+      formatBookLocation({
+        book: "gotham",
+        chapter: "16. The Gibraltar of North America",
+        pages: "253–55",
+      })
+    ).toBe("ch. 16, The Gibraltar of North America, pp. 253–55");
+    expect(
+      formatBookLocation({
+        book: "gothamAtWar",
+        chapter: "War Port",
+        pages: "415",
+      })
+    ).toBe("War Port, p. 415");
+    expect(
+      formatBookLocation({
+        book: "greaterGotham",
+        chapter: "8. Arteries › Trains and Tunnels",
+      })
+    ).toBe("ch. 8, Arteries › Trains and Tunnels");
   });
 });
