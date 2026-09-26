@@ -151,6 +151,18 @@ export const earlyRepublicEntries: Entry[] = [
       "Clinton poured Lake Erie water into the harbor in November 1825. Freight costs to the interior fell ninety percent, and New York became the Atlantic gateway of the continent.",
   },
   {
+    id: "gradual-emancipation",
+    era: "earlyRepublic",
+    kind: "event",
+    title: "Gradual emancipation act",
+    wikiTitle: "New York Manumission Society",
+    year: 1799,
+    blurb:
+      "After three years of lobbying by the Manumission Society of John Jay and Alexander Hamilton, the legislature passed a gradual emancipation law in 1799, over the protests of Dutch members from Long Island. It freed no one then enslaved. Children born after July 4 were free in name but bound to their mother's owner until 25 for girls or 28 for boys.",
+    gotham:
+      "Gotham stresses how carefully the law protected slaveowners: it cost them almost nothing and freed no one then enslaved.",
+  },
+  {
     id: "federal-hall",
     era: "earlyRepublic",
     kind: "place",

@@ -168,6 +168,20 @@ export const antebellumEntries: Entry[] = [
       "After the city seized 770 acres of rocky commons — evicting Seneca Village and the shanty districts — Olmsted and Vaux's 'Greensward' won the 1857 design competition and 20,000 workers set to moving five million cubic yards of earth.",
   },
   {
+    id: "emancipation-day-1827",
+    era: "antebellum",
+    kind: "event",
+    title: "Emancipation Day, 1827",
+    wikiTitle: "Mother African Methodist Episcopal Zion Church",
+    year: 1827,
+    yearLabel: "July 4–5, 1827",
+    blurb:
+      "Slavery ended in New York State on July 4, 1827. Black churches held services of thanksgiving, the largest at African Zion Church on Church and Leonard. The next day four thousand people marched from St. John's Park through the city to City Hall.",
+    gotham:
+      "Gotham tells it as two days: prayer on the Fourth, while white crowds held the streets, and a parade on the Fifth, which Black New Yorkers proposed keeping as their own day.",
+    coords: [-74.0053, 40.7174],
+  },
+  {
     id: "astor-opera-house",
     era: "antebellum",
     kind: "place",
