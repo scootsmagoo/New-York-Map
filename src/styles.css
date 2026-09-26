@@ -2209,18 +2209,19 @@ a {
   }
 }
 
-/* Tour steps slide the way you're going. */
+/* Tour steps slide the way you're going: the old stop leaves quickly, and
+   the new one follows it in, so the two texts don't overlap. */
 ::view-transition-old(.vt-to-left) {
-  animation: vt-to-left 0.22s ease-in both;
+  animation: vt-to-left 0.12s ease-in both;
 }
 ::view-transition-new(.vt-from-right) {
-  animation: vt-from-right 0.26s ease-out both;
+  animation: vt-from-right 0.22s 0.1s ease-out both;
 }
 ::view-transition-old(.vt-to-right) {
-  animation: vt-to-right 0.22s ease-in both;
+  animation: vt-to-right 0.12s ease-in both;
 }
 ::view-transition-new(.vt-from-left) {
-  animation: vt-from-left 0.26s ease-out both;
+  animation: vt-from-left 0.22s 0.1s ease-out both;
 }
 
 @keyframes vt-fade-out {
