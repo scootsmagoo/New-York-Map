@@ -50,7 +50,7 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-23)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 73 unit tests and 24 browser
+https://scootsmagoo.github.io/New-York-Map/. 73 unit tests and 25 browser
 tests (desktop WebKit and Chromium, plus an emulated iPhone) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
 (CI has no GPU).
