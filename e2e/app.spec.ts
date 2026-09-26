@@ -95,3 +95,38 @@ test("the map key lists only what's on screen", async ({ page }) => {
   await zoomMap(page, 725, 390, 14);
   await expect(page.locator(".map-key-panel")).toContainText("Subway");
 });
+
+test("scrolling on the timeline zooms it, and sideways scrolling pans it", async ({ page }) => {
+  await open(page, "#year=1850");
+  const strip = page.locator(".timeline svg").first();
+  const box = (await strip.boundingBox())!;
+  const ticks = () => page.locator(".timeline text").allTextContents();
+  const before = await ticks();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  for (let i = 0; i < 6; i++) await page.mouse.wheel(0, -200);
+  await expect.poll(ticks).not.toEqual(before);
+  const zoomedYear = await year(page);
+  for (let i = 0; i < 6; i++) await page.mouse.wheel(300, 0);
+  await expect.poll(() => year(page)).not.toBe(zoomedYear);
+});
+
+test("search results can be picked with the arrow keys", async ({ page }) => {
+  await open(page, "#year=1900");
+  await page.keyboard.press("Control+k");
+  await page.getByRole("searchbox").fill("Tweed");
+  const options = page.getByRole("option");
+  await expect(options.nth(1)).toBeVisible();
+  await page.keyboard.press("ArrowDown");
+  await expect(options.nth(1)).toHaveAttribute("aria-selected", "true");
+  const title = await options.nth(1).locator(".search-result-title").textContent();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".modal h2")).toHaveText(title!);
+});
+
+test("Escape closes search", async ({ page }) => {
+  await open(page);
+  await page.keyboard.press("Control+k");
+  await expect(page.getByRole("searchbox")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("searchbox")).toHaveCount(0);
+});

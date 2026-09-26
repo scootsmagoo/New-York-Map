@@ -2,6 +2,7 @@ import {
   useCallback,
   useDeferredValue,
   useEffect,
+  useEffectEvent,
   useMemo,
   useRef,
   useState,
@@ -288,15 +289,15 @@ export default function App() {
   const endTour = useCallback(() => setTour(null), []);
 
   // #tour=<id> deep link starts a tour on load; #entry=<id> opens an entry.
-  useEffect(() => {
+  const openDeepLink = useEffectEvent(() => {
     const m = window.location.hash.match(/tour=([\w-]+)/);
     const t = m ? tourById(m[1]) : undefined;
     if (t) startTour(t);
     const entryId = entryIdFromHash(window.location.hash);
     const entry = entryId ? allEntries.find((e) => e.id === entryId) : undefined;
     if (entry && !t) goToEntry(entry);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
+  useEffect(() => openDeepLink(), []);
 
   const toggleCompare = useCallback(() => {
     setCompareYear((c) =>

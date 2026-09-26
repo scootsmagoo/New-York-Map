@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef } from "react";
 import type { Entry } from "../types";
 import { eras, formatYear } from "../data/eras";
 import { allEntries } from "../data/entries";
@@ -59,10 +59,10 @@ export function Timeline({
   const wasDrag = useRef(false);
   const anim = useRef<number | null>(null);
 
+  // The window as of the last event, ahead of React: pointer moves that
+  // arrive between renders must build on each other, not on the stale prop.
   const winRef = useRef(win);
   winRef.current = win;
-  const widthRef = useRef(width);
-  widthRef.current = width;
 
   const cancelAnim = useCallback(() => {
     if (anim.current !== null) {
@@ -98,29 +98,34 @@ export function Timeline({
 
   useEffect(() => cancelAnim, [cancelAnim]);
 
-  // Wheel needs passive:false to preventDefault, so attach manually.
+  const onWheel = useEffectEvent((e: WheelEvent) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    e.preventDefault();
+    cancelAnim();
+    const w = winRef.current;
+    const wd = width;
+    if (!wd) return;
+    const rect = svg.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (e.ctrlKey || Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      const factor = Math.pow(2, -e.deltaY * (e.ctrlKey ? 0.012 : 0.0022));
+      const uFixed = w.u0 + (x / wd) * (w.u1 - w.u0);
+      onWindowChange(zoomWindow(w, factor, uFixed));
+    } else {
+      onWindowChange(panWindow(w, (e.deltaX / wd) * (w.u1 - w.u0)));
+    }
+  });
+
+  // Wheel needs passive:false to preventDefault, so attach manually, once
+  // the strip has measured itself and its SVG exists.
+  const hasSvg = width > 0;
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      cancelAnim();
-      const w = winRef.current;
-      const wd = widthRef.current;
-      if (!wd) return;
-      const rect = svg.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      if (e.ctrlKey || Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        const factor = Math.pow(2, -e.deltaY * (e.ctrlKey ? 0.012 : 0.0022));
-        const uFixed = w.u0 + (x / wd) * (w.u1 - w.u0);
-        onWindowChange(zoomWindow(w, factor, uFixed));
-      } else {
-        onWindowChange(panWindow(w, (e.deltaX / wd) * (w.u1 - w.u0)));
-      }
-    };
     svg.addEventListener("wheel", onWheel, { passive: false });
     return () => svg.removeEventListener("wheel", onWheel);
-  }, [cancelAnim, onWindowChange]);
+  }, [hasSvg]);
 
   const pinchState = () => {
     const [a, b] = [...pointers.current.values()];

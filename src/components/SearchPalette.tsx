@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import type { Entry } from "../types";
 import type { ColonialStreet } from "../data/streets";
 import {
@@ -61,30 +61,32 @@ export function SearchPalette({
     setActiveIndex(0);
   }, [debouncedQuery]);
 
+  // Reads the latest results and selection without re-subscribing on each
+  // keystroke.
+  const onKey = useEffectEvent((e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      onClose();
+      return;
+    }
+    if (flat.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % flat.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i - 1 + flat.length) % flat.length);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const hit = flat[activeIndex];
+      if (hit) selectHit(hit, handlers);
+    }
+  });
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onClose();
-        return;
-      }
-      if (flat.length === 0) return;
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setActiveIndex((i) => (i + 1) % flat.length);
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setActiveIndex((i) => (i - 1 + flat.length) % flat.length);
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        const hit = flat[activeIndex];
-        if (hit) selectHit(hit, handlers);
-      }
-    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flat, activeIndex, onClose, onSelectEntry, onSelectStreet, onSelectLocation]);
+  }, []);
 
   useEffect(() => {
     const el = document.querySelector(".search-result.is-active");

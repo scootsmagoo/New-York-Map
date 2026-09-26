@@ -235,6 +235,18 @@ function toGeo(rings: [number, number][][]): GeoJSON {
   };
 }
 
+/** A footprint snapshot as SVG path strings for Manhattan and the rest. */
+function projectSnapshot(
+  snapshot: FootprintSnapshot | null,
+  path: ((g: GeoJSON) => string | null) | null
+) {
+  if (!snapshot || !path) return { manhattan: "", other: "" };
+  return {
+    manhattan: snapshot.manhattan.length ? (path(toGeo(snapshot.manhattan)) ?? "") : "",
+    other: snapshot.other.length ? (path(toGeo(snapshot.other)) ?? "") : "",
+  };
+}
+
 function ringCentroid(ring: [number, number][]): [number, number] {
   let x = 0;
   let y = 0;
@@ -492,17 +504,8 @@ function MapViewInner({
 
   // Snapshots are shared objects, so these only recompute when the playhead
   // crosses into a new snapshot interval (14 times across the whole timeline).
-  const projectSnapshot = (snapshot: FootprintSnapshot | null) => {
-    if (!snapshot || !path) return { manhattan: "", other: "" };
-    return {
-      manhattan: snapshot.manhattan.length ? (path(toGeo(snapshot.manhattan)) ?? "") : "",
-      other: snapshot.other.length ? (path(toGeo(snapshot.other)) ?? "") : "",
-    };
-  };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const basePaths = useMemo(() => projectSnapshot(base), [path, base]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const nextPaths = useMemo(() => projectSnapshot(next), [path, next]);
+  const basePaths = useMemo(() => projectSnapshot(base, path), [path, base]);
+  const nextPaths = useMemo(() => projectSnapshot(next, path), [path, next]);
 
   // The brown wash recedes as street detail fades in, so lines stay legible.
   const washFade = 1 - fade(k, 1.5, 2.6) * 0.45;
