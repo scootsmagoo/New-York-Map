@@ -42,48 +42,42 @@ export const tours: Tour[] = [
       {
         year: 1811,
         title: "Twelve avenues, 155 streets, almost no parks",
-        text:
-          "The Commissioners' Plan ruled Manhattan into rectangles from Houston Street to 155th. Surveyor John Randel Jr. drove marble markers through farms and hills whose owners sometimes set their dogs on him. Zoom in: the faint dashed lines are the survey, and solid streets follow only as they are actually opened.",
+        text: "The Commissioners' Plan ruled Manhattan into rectangles from Houston Street to 155th. Surveyor John Randel Jr. drove marble markers through farms and hills whose owners sometimes set their dogs on him. Zoom in: the faint dashed lines are the survey, and solid streets follow only as they are actually opened.",
         focus: { coords: [-73.987, 40.742], k: 3.2 },
         entryId: "grid-plan",
       },
       {
         year: 1835,
         title: "Filling in below Fourteenth Street",
-        text:
-          "Erie Canal money and a land boom pushed the built city past Union Square. Hills were leveled and the leveled earth dumped into marshes, so the survey lines could become streets. The panic of 1837 stalled it all for a few years.",
+        text: "Erie Canal money and a land boom pushed the built city past Union Square. Hills were leveled and the leveled earth dumped into marshes, so the survey lines could become streets. The panic of 1837 stalled it all for a few years.",
         focus: { coords: [-73.99, 40.733], k: 3.6 },
         entryId: "erie-canal",
       },
       {
         year: 1858,
         title: "A hole punched in the grid",
-        text:
-          "The plan had made almost no room for parks, so in 1853 the state took more than 700 acres between 59th and 106th Streets. Seneca Village and other settlements were cleared, and Olmsted and Vaux's Greensward plan won the design competition in 1858. The park draws itself in construction hatching until it is finished in 1873.",
+        text: "The plan had made almost no room for parks, so in 1853 the state took more than 700 acres between 59th and 106th Streets. Seneca Village and other settlements were cleared, and Olmsted and Vaux's Greensward plan won the design competition in 1858. The park draws itself in construction hatching until it is finished in 1873.",
         focus: { coords: [-73.9665, 40.782], k: 3.4 },
         entryId: "central-park-begun",
       },
       {
         year: 1880,
         title: "The els open the upper island",
-        text:
-          "Elevated railroads up Ninth, Sixth, Third, and Second Avenues let a clerk live at 100th Street and work on Wall Street. The built frontier, which had crept a few blocks a decade, jumps north through the 1880s.",
+        text: "Elevated railroads up Ninth, Sixth, Third, and Second Avenues let a clerk live at 100th Street and work on Wall Street. The built frontier, which had crept a few blocks a decade, jumps north through the 1880s.",
         focus: { coords: [-73.972, 40.78], k: 3.2 },
         entryId: "el-railroads",
       },
       {
         year: 1905,
         title: "Subway to Harlem",
-        text:
-          "The IRT ran from City Hall to 145th Street on its opening day in 1904. Harlem's brownstones, overbuilt in the 1890s boom, went unrented until Philip Payton's Afro-American Realty Company began leasing them to Black families.",
+        text: "The IRT ran from City Hall to 145th Street on its opening day in 1904. Harlem's brownstones, overbuilt in the 1890s boom, went unrented until Philip Payton's Afro-American Realty Company began leasing them to Black families.",
         focus: { coords: [-73.945, 40.812], k: 3.2 },
         entryId: "subway-opens",
       },
       {
         year: 1919,
         title: "The plan fulfilled",
-        text:
-          "By 1919 the grid was built solid from the Battery to the Harlem River, and Greater New York held five and a half million people across five boroughs. Randel's marble markers were long buried under asphalt.",
+        text: "By 1919 the grid was built solid from the Battery to the Harlem River, and Greater New York held five and a half million people across five boroughs. Randel's marble markers were long buried under asphalt.",
         entryId: "harlem-rising",
       },
     ],
@@ -96,48 +90,42 @@ export const tours: Tour[] = [
       {
         year: 1642,
         title: "Dircksen's ferry",
-        text:
-          "Cornelis Dircksen rowed passengers from a landing near Peck Slip to the Long Island shore, blowing a horn to summon him from his farm. Breuckelen was chartered four years later. The dashed line on the map is that crossing.",
+        text: "Cornelis Dircksen rowed passengers from a landing near Peck Slip to the Long Island shore, blowing a horn to summon him from his farm. Breuckelen was chartered four years later. The dashed line on the map is that crossing.",
         focus: { coords: [-73.997, 40.706], k: 4 },
         entryId: "breuckelen",
       },
       {
         year: 1814,
         title: "Fulton's steam ferry",
-        text:
-          "Robert Fulton's Nassau began steam service in 1814, crossing in about twelve minutes regardless of wind and tide. Brooklyn Heights became something new in America: a suburb of commuters.",
+        text: "Robert Fulton's Nassau began steam service in 1814, crossing in about twelve minutes regardless of wind and tide. Brooklyn Heights became something new in America: a suburb of commuters.",
         focus: { coords: [-73.995, 40.703], k: 4 },
         entryId: "fulton",
       },
       {
         year: 1856,
         title: "Crossing Brooklyn Ferry",
-        text:
-          "Walt Whitman, a Brooklyn printer and editor, published his ferry poem in 1856: \"Flood-tide below me! I see you face to face!\" He wrote for the passengers of a hundred years hence, who he was sure would cross the same water.",
+        text: 'Walt Whitman, a Brooklyn printer and editor, published his ferry poem in 1856: "Flood-tide below me! I see you face to face!" He wrote for the passengers of a hundred years hence, who he was sure would cross the same water.',
         focus: { coords: [-73.99, 40.7], k: 3.8 },
         entryId: "whitman",
       },
       {
         year: 1870,
         title: "Roebling's towers rise",
-        text:
-          "John Roebling died of tetanus in 1869 after a ferry crushed his foot while he surveyed the site. His son Washington took over and sank the caissons in 1870; working in compressed air on the riverbed gave the men the bends, and eventually crippled Washington himself.",
+        text: "John Roebling died of tetanus in 1869 after a ferry crushed his foot while he surveyed the site. His son Washington took over and sank the caissons in 1870; working in compressed air on the riverbed gave the men the bends, and eventually crippled Washington himself.",
         focus: { coords: [-73.9965, 40.7061], k: 4.2 },
         entryId: "brooklyn-bridge-opens",
       },
       {
         year: 1883,
         title: "The bridge opens",
-        text:
-          "On May 24, 1883, the longest suspension bridge in the world opened with fireworks and a presidential visit. A week later a stampede on the promenade killed twelve people. Watch the Fulton Ferry's dashed line fade as the bridge takes its traffic.",
+        text: "On May 24, 1883, the longest suspension bridge in the world opened with fireworks and a presidential visit. A week later a stampede on the promenade killed twelve people. Watch the Fulton Ferry's dashed line fade as the bridge takes its traffic.",
         focus: { coords: [-73.9965, 40.7061], k: 3.5 },
         entryId: "brooklyn-bridge-opens",
       },
       {
         year: 1898,
         title: "One city",
-        text:
-          "Brooklyn, the nation's fourth-largest city, approved consolidation in 1894 by a few hundred votes. On January 1, 1898, Greater New York was born, and the East River became a boundary between boroughs rather than cities.",
+        text: "Brooklyn, the nation's fourth-largest city, approved consolidation in 1894 by a few hundred votes. On January 1, 1898, Greater New York was born, and the East River became a boundary between boroughs rather than cities.",
         entryId: "low",
       },
     ],
@@ -150,40 +138,35 @@ export const tours: Tour[] = [
       {
         year: 1832,
         title: "Cholera at Five Points",
-        text:
-          "Cholera arrived in June 1832 and killed some 3,500 New Yorkers, hitting Five Points hardest. The neighborhood sat on the filled Collect Pond, and its wells drew from the same wet ground as its privies. Anyone who could afford to fled the city.",
+        text: "Cholera arrived in June 1832 and killed some 3,500 New Yorkers, hitting Five Points hardest. The neighborhood sat on the filled Collect Pond, and its wells drew from the same wet ground as its privies. Anyone who could afford to fled the city.",
         focus: { coords: [-74.0005, 40.7145], k: 4.5 },
         entryId: "five-points",
       },
       {
         year: 1835,
         title: "The Great Fire",
-        text:
-          "On a December night so cold the hydrants and wells froze, fire took nearly 700 buildings in the merchant district below Wall Street. Firemen watched the East River freeze around their engines. The city needed water it could count on.",
+        text: "On a December night so cold the hydrants and wells froze, fire took nearly 700 buildings in the merchant district below Wall Street. Firemen watched the East River freeze around their engines. The city needed water it could count on.",
         focus: { coords: [-74.008, 40.705], k: 4.5 },
         entryId: "great-fire-1835",
       },
       {
         year: 1842,
         title: "Croton water arrives",
-        text:
-          "Water from the Croton River, forty miles up the Hudson valley, reached the Distributing Reservoir on Murray Hill on July 4, 1842. The October celebration ran a parade five miles long. The aqueduct's line crosses the map from the north.",
+        text: "Water from the Croton River, forty miles up the Hudson valley, reached the Distributing Reservoir on Murray Hill on July 4, 1842. The October celebration ran a parade five miles long. The aqueduct's line crosses the map from the north.",
         focus: { coords: [-73.9836, 40.7536], k: 3.6 },
         entryId: "croton",
       },
       {
         year: 1848,
         title: "High Bridge",
-        text:
-          "The aqueduct crossed the Harlem River on stone arches modeled on Roman work, finished in 1848. It was the city's first bridge to the mainland still standing, and a favorite Sunday walk for a century.",
+        text: "The aqueduct crossed the Harlem River on stone arches modeled on Roman work, finished in 1848. It was the city's first bridge to the mainland still standing, and a favorite Sunday walk for a century.",
         focus: { coords: [-73.93, 40.842], k: 4 },
         entryId: "highbridge",
       },
       {
         year: 1900,
         title: "From reservoir to library",
-        text:
-          "The reservoir's Egyptian-style walls, a promenade with views to both rivers, came down in 1899 once larger reservoirs in Central Park took over. The Public Library opened on the site in 1911. The map keeps a faint ghost where it stood.",
+        text: "The reservoir's Egyptian-style walls, a promenade with views to both rivers, came down in 1899 once larger reservoirs in Central Park took over. The Public Library opened on the site in 1911. The map keeps a faint ghost where it stood.",
         focus: { coords: [-73.9836, 40.7536], k: 4.5 },
         entryId: "croton-reservoir",
       },
@@ -197,47 +180,41 @@ export const tours: Tour[] = [
       {
         year: 1931,
         title: "A bridge twice as long as any before",
-        text:
-          "The Port Authority opened Othmar Ammann's George Washington Bridge in 1931, early in the Depression. Its 3,500-foot span was nearly double the old record. It was the new scale of building that Robert Moses would make his own.",
+        text: "The Port Authority opened Othmar Ammann's George Washington Bridge in 1931, early in the Depression. Its 3,500-foot span was nearly double the old record. It was the new scale of building that Robert Moses would make his own.",
         focus: { coords: [-73.953, 40.852], k: 3.4 },
         entryId: "gw-bridge",
       },
       {
         year: 1934,
         title: "One man, a dozen jobs",
-        text:
-          "When La Guardia took office in 1934 he made Moses parks commissioner of all five boroughs. Moses already ran the Long Island State Park Commission, and soon he ran the Triborough Bridge Authority too. With federal relief money he put tens of thousands of men to work rebuilding nearly every park in the city within a year.",
+        text: "When La Guardia took office in 1934 he made Moses parks commissioner of all five boroughs. Moses already ran the Long Island State Park Commission, and soon he ran the Triborough Bridge Authority too. With federal relief money he put tens of thousands of men to work rebuilding nearly every park in the city within a year.",
         entryId: "robert-moses",
       },
       {
         year: 1936,
         title: "Three boroughs and a toll booth",
-        text:
-          "The Triborough Bridge joined Manhattan, Queens, and the Bronx at Randalls Island in July 1936, the same summer eleven huge new swimming pools opened. Its tolls paid Moses's authority year after year, money that no mayor or governor could touch.",
+        text: "The Triborough Bridge joined Manhattan, Queens, and the Bronx at Randalls Island in July 1936, the same summer eleven huge new swimming pools opened. Its tolls paid Moses's authority year after year, money that no mayor or governor could touch.",
         focus: { coords: [-73.926, 40.791], k: 4.2 },
         entryId: "triborough",
       },
       {
         year: 1939,
         title: "The World of Tomorrow on an ash dump",
-        text:
-          "Moses backed the World's Fair so the Corona ash dumps would be filled, graded, and handed back as a park. The map hatches Flushing Meadows as a construction site until the fair opens in April 1939.",
+        text: "Moses backed the World's Fair so the Corona ash dumps would be filled, graded, and handed back as a park. The map hatches Flushing Meadows as a construction site until the fair opens in April 1939.",
         focus: { coords: [-73.845, 40.745], k: 3.6 },
         entryId: "worlds-fair-1939",
       },
       {
         year: 1940,
         title: "Roads to the suburbs",
-        text:
-          "The Bronx–Whitestone Bridge opened in time for fairgoers, and the new municipal airport at North Beach opened in December 1939. Parkways ran out toward Long Island's beaches, built for private cars at a time when most New Yorkers rode the subway.",
+        text: "The Bronx–Whitestone Bridge opened in time for fairgoers, and the new municipal airport at North Beach opened in December 1939. Parkways ran out toward Long Island's beaches, built for private cars at a time when most New Yorkers rode the subway.",
         focus: { coords: [-73.85, 40.795], k: 3 },
         entryId: "laguardia-airport",
       },
       {
         year: 1945,
         title: "The expressway years ahead",
-        text:
-          "By V-J Day Moses had built more public works than anyone else in the city's history, and the largest were still ahead: the expressways, the housing projects, and the neighborhoods cleared to make room for them. This timeline stops here, in 1945.",
+        text: "By V-J Day Moses had built more public works than anyone else in the city's history, and the largest were still ahead: the expressways, the housing projects, and the neighborhoods cleared to make room for them. This timeline stops here, in 1945.",
         entryId: "vj-day",
       },
     ],
@@ -245,67 +222,143 @@ export const tours: Tour[] = [
   {
     id: "island-remade",
     title: "The Island Remade",
-    subtitle: "Ponds filled, streams buried, a shoreline pushed into the rivers",
+    subtitle:
+      "Ponds filled, streams buried, a shoreline pushed into the rivers",
     layers: ["lostLandscape"],
     stops: [
       {
         year: 1640,
         title: "Mannahatta's edge",
-        text:
-          "The dashed line is the island's own shore. Pearl Street was the waterfront (its name came from the oyster shells on the beach), and the Hudson lapped at what is now Greenwich Street. Everything drawn as river inside today's outline would be made by hand.",
+        text: "The dashed line is the island's own shore. Pearl Street was the waterfront (its name came from the oyster shells on the beach), and the Hudson lapped at what is now Greenwich Street. Everything drawn as river inside today's outline would be made by hand.",
         focus: { coords: [-74.009, 40.7075], k: 5 },
       },
       {
         year: 1730,
         title: "Water lots",
-        text:
-          "The city sold 'water lots' of river bottom to merchants, who sank timber cribs and old ships, filled them with earth and refuse, and built on top. Water Street was made this way by about 1700, Front Street by the 1790s. Watch the East River shore step outward as you move through the century.",
+        text: "The city sold 'water lots' of river bottom to merchants, who sank timber cribs and old ships, filled them with earth and refuse, and built on top. Water Street was made this way by about 1700, Front Street by the 1790s. Watch the East River shore step outward as you move through the century.",
         focus: { coords: [-74.0055, 40.7065], k: 5.5 },
       },
       {
         year: 1795,
         title: "The Fresh Water, fouled",
-        text:
-          "The Collect Pond was the city's drinking water for a century, then its sewer: tanneries, breweries, and slaughterhouses lined the shore. It drained west through Lispenard Meadows along a ditch that became Canal Street.",
+        text: "The Collect Pond was the city's drinking water for a century, then its sewer: tanneries, breweries, and slaughterhouses lined the shore. It drained west through Lispenard Meadows along a ditch that became Canal Street.",
         focus: { coords: [-74.003, 40.717], k: 6 },
         entryId: "collect-pond-colonial",
       },
       {
         year: 1813,
         title: "Filling the Collect",
-        text:
-          "The city leveled Bayard's Mount and dumped it into the pond between 1803 and 1811. The ground settled and seeped, respectable families left, and Five Points grew on the damp fill. The pond's outline stays on the map as a ghost.",
+        text: "The city leveled Bayard's Mount and dumped it into the pond between 1803 and 1811. The ground settled and seeped, respectable families left, and Five Points grew on the damp fill. The pond's outline stays on the map as a ghost.",
         focus: { coords: [-74.0004, 40.7156], k: 7 },
         entryId: "five-points-emerges",
       },
       {
         year: 1815,
         title: "A fort offshore",
-        text:
-          "Castle Clinton was built from 1808 to 1811 on a rock about 200 feet out in the harbor, joined to the Battery by a wooden bridge. Filling pushed the Battery out to meet it by the 1850s; it became Castle Garden, the immigrant station before Ellis Island.",
+        text: "Castle Clinton was built from 1808 to 1811 on a rock about 200 feet out in the harbor, joined to the Battery by a wooden bridge. Filling pushed the Battery out to meet it by the 1850s; it became Castle Garden, the immigrant station before Ellis Island.",
         focus: { coords: [-74.0168, 40.7036], k: 7 },
         entryId: "castle-clinton",
       },
       {
         year: 1826,
         title: "Minetta Brook goes underground",
-        text:
-          "The Village's trout stream ran from near Madison Square past Washington Square to the Hudson. As the grid came through in the 1820s it was put in a culvert. It still runs under the streets; basements along its old course flood to this day.",
+        text: "The Village's trout stream ran from near Madison Square past Washington Square to the Hudson. As the grid came through in the 1820s it was put in a culvert. It still runs under the streets; basements along its old course flood to this day.",
         focus: { coords: [-73.9985, 40.7305], k: 6 },
       },
       {
         year: 1850,
         title: "West Street and the waterfront",
-        text:
-          "By mid-century filling on the Hudson had reached West Street, with piers reaching past it. South Street on the East River was the busiest waterfront in the country. Lower Manhattan was now a third wider than the island the Lenape knew.",
+        text: "By mid-century filling on the Hudson had reached West Street, with piers reaching past it. South Street on the East River was the busiest waterfront in the country. Lower Manhattan was now a third wider than the island the Lenape knew.",
         focus: { coords: [-74.011, 40.7135], k: 4.5 },
       },
       {
         year: 1940,
         title: "Still growing",
-        text:
-          "Riverside Park was extended into the Hudson over the West Side rail line, and the East River Drive went in on new fill; at East 25th Street, ships brought rubble from bombed Bristol as ballast, and it was dumped into the river there. The strip still drawn as river along the Hudson below Chambers Street is Battery Park City, built in the 1970s on the earth dug for the World Trade Center.",
+        text: "Riverside Park was extended into the Hudson over the West Side rail line, and the East River Drive went in on new fill; at East 25th Street, ships brought rubble from bombed Bristol as ballast, and it was dumped into the river there. The strip still drawn as river along the Hudson below Chambers Street is Battery Park City, built in the 1970s on the earth dug for the World Trade Center.",
         focus: { coords: [-74.005, 40.735], k: 2.6 },
+      },
+    ],
+  },
+  {
+    id: "slavery-freedom",
+    title: "Slavery and Freedom",
+    subtitle:
+      "Two centuries of bondage in a northern city, and what came after",
+    stops: [
+      {
+        year: 1626,
+        title: "The Company's slaves",
+        text: "In 1625 or 1626 the West India Company brought eleven enslaved African men to build its fort, among them Paulo d'Angola, Simon Congo, and Anthony Portuguese. Slavery in New York is as old as the town itself.",
+        focus: { coords: [-74.0137, 40.7043], k: 6 },
+        entryId: "first-enslaved",
+      },
+      {
+        year: 1644,
+        title: "Half-freedom",
+        text: 'After 18 or 19 years of labor, nine of the Company\'s men petitioned for freedom and got "half-freedom": small farms north of the town, in return for a yearly tribute of grain and a hog, work whenever the Company called, and children who stayed enslaved.',
+        focus: { coords: [-73.998, 40.725], k: 4 },
+      },
+      {
+        year: 1712,
+        title: "A market and a revolt",
+        text: "In 1711 the city made the Meal Market at the foot of Wall Street its official place to buy and hire slaves. The next April about two dozen enslaved men, most of them recently brought from the Gold Coast, set a fire and ambushed the whites who came to fight it, killing nine. Twenty were hanged and three burned alive.",
+        focus: { coords: [-74.0075, 40.7057], k: 6 },
+        entryId: "slave-revolt-1712",
+      },
+      {
+        year: 1741,
+        title: "The conspiracy trials",
+        text: "By 1741 nearly one New Yorker in five was Black. After a string of fires, the courts believed a tavern plot of slaves and Catholics: seventeen Black men were hanged and thirteen burned at the stake, and seventy-two were banished from the colony.",
+        focus: { coords: [-74.0055, 40.7138], k: 5.5 },
+        entryId: "conspiracy-1741",
+      },
+      {
+        year: 1779,
+        title: "Behind British lines",
+        text: "British proclamations promised freedom to slaves of rebels who reached their lines, and thousands ran to occupied New York. When the British left in 1783 their commander refused Washington's demand to return them, and perhaps four thousand sailed away free.",
+        focus: { coords: [-74.009, 40.711], k: 4.5 },
+        entryId: "evacuation-day",
+      },
+      {
+        year: 1799,
+        title: "Gradual emancipation",
+        text: "The state's 1799 law freed no one then enslaved. Children born after July 4 were free in name, but bound to their mother's owner until 25 or 28. Slaveowners were spared almost every cost.",
+        entryId: "gradual-emancipation",
+      },
+      {
+        year: 1827,
+        title: "Emancipation Day",
+        text: "Slavery ended in New York on July 4, 1827. Black churches gave thanks that day; on July 5, four thousand people marched from St. John's Park past Zion Church to City Hall.",
+        focus: { coords: [-74.0053, 40.7174], k: 6 },
+        entryId: "emancipation-day-1827",
+      },
+      {
+        year: 1835,
+        title: "Vigilance",
+        text: "Kidnappers seized free Black New Yorkers and sold them south. In 1835 David Ruggles set up the Committee of Vigilance to fight them in court and on the street, and sheltered fugitives on their way north, among them the young Frederick Douglass in 1838.",
+        focus: { coords: [-74.004, 40.718], k: 5 },
+        entryId: "ruggles-david",
+      },
+      {
+        year: 1855,
+        title: "Owning land",
+        text: "Owning $250 of property gave a Black man the vote, and land was cheapest at the city's edge. Seneca Village, in the West 80s, held churches, a school, and Irish neighbors when the state took it for Central Park. In Brooklyn, Weeksville grew on old farmland.",
+        focus: { coords: [-73.968, 40.7841], k: 4.5 },
+        entryId: "seneca-village",
+      },
+      {
+        year: 1863,
+        title: "The Draft Riots",
+        text: "In July 1863 mobs protesting the Civil War draft turned on Black New Yorkers. They burned the Colored Orphan Asylum on Fifth Avenue at 43rd Street, whose 237 children escaped, and lynched men in the streets. Many Black families left Manhattan for good.",
+        focus: { coords: [-73.9805, 40.7545], k: 5 },
+        entryId: "draft-riots",
+      },
+      {
+        year: 1915,
+        title: "Harlem",
+        text: "Pushed from the Tenderloin and San Juan Hill, Black New Yorkers found room in Harlem's overbuilt brownstones. By the 1910s it was becoming the capital of Black America.",
+        focus: { coords: [-73.9442, 40.8116], k: 3.4 },
+        entryId: "harlem-rising",
       },
     ],
   },
