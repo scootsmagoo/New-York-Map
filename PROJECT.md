@@ -121,6 +121,11 @@ header, theme, footprint, markers, panel — derives from it.
   traced by hand. When each strip of land was made is estimated from its
   distance to the older shore — see `scripts/lost-landscape/README.md`.
   Manhattan only.
+- **Fires & epidemics:** outlines follow the streets *Gotham* names for
+  each (Maiden Lane to Coenties Slip, William Street to the river for
+  1835; the Chambers Street barricade for 1822), with corners taken from
+  the city's street centerlines. Epidemics are drawn where they started
+  or struck hardest; they reached much of the city.
 - **Neighborhood names:** hand-dated from standard neighborhood histories
   (`neighborhoods.ts`); dates mark common use, not incorporation, and
   positions are label anchors, not boundaries.
@@ -365,9 +370,12 @@ header, theme, footprint, markers, panel — derives from it.
       mouth (≤ 22 m); Ratzer by the fort, Trinity, St. Paul's, the Collect,
       and the Brooklyn ferry (≤ 45 m); Viele by seven squares (≤ 80 m).
 - [ ] More layers: streetcar lines, real outer-borough street lines.
-- [ ] Fires & epidemics layer: burned districts (1776, 1835, 1845) and
-      the epidemics' worst quarters (yellow fever 1798 and 1822, cholera
-      1832 and 1849, …) as dated areas, cited to the books.
+- [x] Fires & epidemics layer — shipped: burned districts (1776, 1835,
+      1845) and the epidemics' worst quarters (yellow fever 1798 and 1822,
+      cholera 1832 and 1849, the 1903 lung block) as dated areas that fade
+      out after, cited to the books (`src/data/calamities.ts`). Not yet:
+      the 1866 cholera the new Board of Health contained, the 1916 polio
+      and 1918 flu (citywide, so not an area).
 - [ ] Working-waterfront layer: markets, slips, shipyards, sugar houses,
       piers — dated points along the shore.
 - [ ] Lost landscape beyond Manhattan: Gowanus Creek, Wallabout Bay, the
@@ -384,8 +392,8 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Then & Now: a pinned year beside the live one, split by a draggable
       seam, with a shared camera and `#compare=<year>` deep links.
 - [x] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
-- [ ] Things to try: a one-time card for first visits pointing to tours,
-      Then & Now, search, and the map layers.
+- [x] Things to try — shipped: a one-time card for first visits pointing
+      to a tour, Then & Now, search, and the map layers.
 - [ ] Even out the eras: Lenapehoking has 13 entries to Antebellum's 30;
       docs/BOOK_REFERENCE.md lists candidates with chapters to read.
 - [ ] Audio: ambient soundscapes per era (gulls and surf → harbor bells →

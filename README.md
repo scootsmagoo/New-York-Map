@@ -24,7 +24,8 @@ npm run dev      # open http://localhost:5173
   through time.
 - **Search** (⌘K) finds people, places, events, streets, neighborhoods (by
   any of their names: *Vlissingen* finds Flushing), and lost waters like
-  the Collect Pond. Picking a neighborhood or a lost water flies there,
+  the Collect Pond, and fires and epidemics. Picking a neighborhood, a
+  lost water, a fire, or an epidemic flies there,
   moves the timeline to a year it existed, and turns its layer on.
 - **Explore this era** lists the era's people, places, and events; click
   anything — timeline marks, map markers, panel rows — for the full story.
@@ -41,6 +42,13 @@ npm run dev      # open http://localhost:5173
   neighborhood names as they were in each year, and the **lost landscape**:
   Manhattan's 1609 shoreline, land drawn as river until it was filled, and
   buried streams and ponds such as the Collect and Minetta Brook.
+  **Fires & epidemics** draws the great fires' burned districts (1776,
+  1835, 1845) and the epidemics' worst-hit blocks (yellow fever 1798 and
+  1822, cholera 1832 and 1849, the 1903 "lung block") in the years they
+  struck, each with a note cited to *Gotham*. The *Fire and Water* tour
+  turns it on.
+- **Things to try:** a first visit gets a small card pointing to a tour,
+  Then & Now, search, and the map layers. It shows once.
 - **Share a view:** ⋯ → *Copy link to this view*, or *Copy link* on any
   entry card. `#entry=vj-day` opens that entry directly.
 - **Key** (top right of the map) explains what's drawn, listing only what's
@@ -50,7 +58,7 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-26)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 76 unit tests and 47 browser
+https://scootsmagoo.github.io/New-York-Map/. 80 unit tests and 53 browser
 tests (desktop WebKit and Chromium, plus an emulated iPhone) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
 (CI has no GPU).
@@ -90,12 +98,8 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Next up** (details in PROJECT.md → Future features)
 
-*In progress*
-- A one-time "Things to try" card pointing to tours, Then & Now, map
-  layers, and search, which are all tucked away in the ⋯ menu or ⌘K.
-- A *Fires & epidemics* map layer: the great fires' burned districts and
-  the epidemics' hardest-hit quarters as dated areas, with notes cited to
-  the *Gotham* books.
+*Done 2026-09-26:* the "Things to try" card and the *Fires & epidemics*
+layer (above).
 
 *Keeping it working*
 - Check search on a real iPhone: the keyboard should come up on the first

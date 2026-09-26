@@ -59,7 +59,7 @@ export function TipsCard({ onStartTour, onCompare, onSearch, onDismiss }: TipsCa
         <li>
           <button className="tips-card-btn" onClick={act(openMenu)}>
             <span className="tips-card-btn-title">Map layers</span>
-            <span className="tips-card-btn-sub">Street names, neighborhoods, old maps, more tours</span>
+            <span className="tips-card-btn-sub">Street names, old maps, fires & epidemics, more tours</span>
           </button>
         </li>
       </ul>
