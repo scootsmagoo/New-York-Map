@@ -490,6 +490,65 @@ export const tours: Tour[] = [
       },
     ],
   },
+  {
+    id: "rich-uptown",
+    title: "The Rich Move Uptown",
+    subtitle:
+      "Two centuries of the wealthy running from commerce, up the island",
+    stops: [
+      {
+        year: 1750,
+        title: "The court end of town",
+        text: "In the colonial city the grandest houses stood around Bowling Green and lower Broadway: Van Cortlandts, Livingstons, De Lanceys. Gotham notes the Green was never big or exclusive enough to be a truly genteel square.",
+        focus: { coords: [-74.0134, 40.7048], k: 6 },
+        entryId: "bowling-green",
+      },
+      {
+        year: 1828,
+        title: "A fenced park",
+        text: "As shops, boardinghouses, and clerks crowded lower Broadway, the wealthy began their long, reluctant march uptown. In 1827 Trinity started selling lots around Hudson Square (St. John's Park), and buyers fenced the square and planted it. Hamiltons, Schuylers, and Tappans moved in.",
+        focus: { coords: [-74.0078, 40.7213], k: 6 },
+      },
+      {
+        year: 1833,
+        title: "Marble on Bond Street",
+        text: "Jonas Minturn's white marble house of 1820 set the style for Bond Street, lined with fine houses from Broadway to the Bowery by the mid-1830s. On Washington Square North, the row of Greek Revival houses went up from 1829 to 1833.",
+        focus: { coords: [-73.9955, 40.729], k: 5.5 },
+      },
+      {
+        year: 1859,
+        title: "Fifth Avenue",
+        text: "In 1834 Fifth Avenue above Washington Square was a nearly empty lane. By the late 1850s, when Caroline Astor's mansion went up at 34th Street beside her brother-in-law's, it was the richest street in America.",
+        focus: { coords: [-73.9865, 40.7465], k: 4.5 },
+        entryId: "mrs-astor",
+      },
+      {
+        year: 1883,
+        title: "Châteaux",
+        text: "New railroad money built bigger. Alva Vanderbilt's copy of the Château de Blois, at Fifth Avenue and 52nd Street, opened with a costume ball in 1883 meant to outshine Mrs. Astor's circle. To get her daughter invited, Mrs. Astor had to send her calling card up Fifth Avenue.",
+        focus: { coords: [-73.9763, 40.7597], k: 5 },
+      },
+      {
+        year: 1902,
+        title: "The Highlands of Fifth Avenue",
+        text: "As hotels and stores pushed up Fifth Avenue, most of the rich moved on. Andrew Carnegie built a 64-room mansion at 91st Street, among farms and shanties, and sold the lots around it only to neighbors he approved of. Otto Kahn built a Roman palazzo at 91st Street too.",
+        focus: { coords: [-73.9578, 40.7843], k: 4.5 },
+      },
+      {
+        year: 1906,
+        title: "Holding out",
+        text: "Some refused to move. J. P. Morgan stayed in his brownstone at Madison Avenue and 36th Street and built his library next door in 1906. The Rockefellers dug in on West 54th Street.",
+        focus: { coords: [-73.9814, 40.7493], k: 5 },
+        entryId: "morgan",
+      },
+      {
+        year: 1915,
+        title: "Millionaires' Row",
+        text: "By the 1910s Fifth Avenue was lined with mansions from the Rockefellers at 54th Street to Carnegie at 91st, and the side streets east of the park were full. In two centuries the fashionable city had moved about five miles north.",
+        focus: { coords: [-73.968, 40.773], k: 2.6 },
+      },
+    ],
+  },
 ];
 
 export function tourById(id: string): Tour | undefined {
