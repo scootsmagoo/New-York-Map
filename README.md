@@ -88,29 +88,32 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 - Street and neighborhood names had no measurable effect on panning or
   scrubbing speed in Safari's engine.
 
-**Next up** (candidates; details in PROJECT.md → Future features)
+**Next up** (details in PROJECT.md → Future features)
 
-*Making it easier to understand*
+*In progress*
 - A one-time "Things to try" card pointing to tours, Then & Now, map
   layers, and search, which are all tucked away in the ⋯ menu or ⌘K.
+- A *Fires & epidemics* map layer: the great fires' burned districts and
+  the epidemics' hardest-hit quarters as dated areas, with notes cited to
+  the *Gotham* books.
 
 *Keeping it working*
 - Check search on a real iPhone: the keyboard should come up on the first
   tap. Emulators can't show the iOS rule this works around.
 
 *More history*
-- Lost landscape for Brooklyn and Queens (Gowanus Creek, Wallabout Bay,
-  Jamaica Bay marshes), from an 1840s U.S. Coast Survey chart.
-- Streetcar lines, 1832–1945.
-- Real street lines outside Manhattan at high zoom, in place of the hatch
-  texture.
 - Even out the content: Lenapehoking has 13 entries to the Antebellum era's
   30. The candidate list in docs/BOOK_REFERENCE.md has more, with where
   to read up on each.
-- Map layers the books support: epidemics and great fires as dated areas,
-  and the working waterfront (markets, slips, shipyards, sugar houses).
+- The working waterfront as a layer: markets, slips, shipyards, sugar
+  houses, and the piers, dated.
+- Lost landscape for Brooklyn and Queens (Gowanus Creek, Wallabout Bay,
+  Jamaica Bay marshes), from an 1840s U.S. Coast Survey chart.
+- Streetcar lines, 1832–1945.
 - Carry the timeline past 1945 (Moses's expressways, public housing, the
   fiscal crisis).
+- Real street lines outside Manhattan at high zoom, in place of the hatch
+  texture (benchmark in WebKit first).
 - Audio per era.
 
 **Done: React 19.3** (2026-09-26). Upgraded from 19.2.7, following the

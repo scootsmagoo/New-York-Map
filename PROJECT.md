@@ -365,6 +365,13 @@ header, theme, footprint, markers, panel — derives from it.
       mouth (≤ 22 m); Ratzer by the fort, Trinity, St. Paul's, the Collect,
       and the Brooklyn ferry (≤ 45 m); Viele by seven squares (≤ 80 m).
 - [ ] More layers: streetcar lines, real outer-borough street lines.
+- [ ] Fires & epidemics layer: burned districts (1776, 1835, 1845) and
+      the epidemics' worst quarters (yellow fever 1798 and 1822, cholera
+      1832 and 1849, …) as dated areas, cited to the books.
+- [ ] Working-waterfront layer: markets, slips, shipyards, sugar houses,
+      piers — dated points along the shore.
+- [ ] Lost landscape beyond Manhattan: Gowanus Creek, Wallabout Bay, the
+      Jamaica Bay marshes, from an 1840s U.S. Coast Survey chart.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: nine tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair, the island remade by landfill, slavery and freedom, New York at war, a city of riots, the rich moving uptown) with animated timeline flights, map camera moves, and
@@ -377,6 +384,10 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Then & Now: a pinned year beside the live one, split by a draggable
       seam, with a shared camera and `#compare=<year>` deep links.
 - [x] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
+- [ ] Things to try: a one-time card for first visits pointing to tours,
+      Then & Now, search, and the map layers.
+- [ ] Even out the eras: Lenapehoking has 13 entries to Antebellum's 30;
+      docs/BOOK_REFERENCE.md lists candidates with chapters to read.
 - [ ] Audio: ambient soundscapes per era (gulls and surf → harbor bells →
       els and steam → ragtime).
 - [x] More *Gotham* margin notes; chapter cross-references per entry —
