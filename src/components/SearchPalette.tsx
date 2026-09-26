@@ -72,13 +72,17 @@ export function SearchPalette({
 
   // A layout effect: passive effects wait for any view transition to finish,
   // and keystrokes in between would be lost.
-  // Letters typed before the box existed went to the keyboard proxy; take
-  // them once, at mount (not in render, which may run more than once).
+  // Runs each time search appears: it stays mounted but hidden between
+  // uses (an <Activity> in App), keeping the last query. Letters typed
+  // before it appeared went to the keyboard proxy and replace that query;
+  // otherwise the old query is selected, so typing replaces it.
   useLayoutEffect(() => {
+    const input = inputRef.current;
+    if (!input) return;
     const typed = takeTyped?.();
-    if (typed) setQuery((q) => q + typed);
-    inputRef.current?.focus();
-    // takeTyped is stable; this is a mount-only hand-off.
+    if (typed) setQuery(typed);
+    input.focus();
+    if (!typed) input.select();
   }, [takeTyped]);
 
   useEffect(() => {

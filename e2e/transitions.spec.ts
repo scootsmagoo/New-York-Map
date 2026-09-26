@@ -41,7 +41,7 @@ test("closing a panel and stepping a tour animate once each", async ({ page }) =
   await expect(page.locator(".era-panel")).toBeVisible();
   let n = await count();
   await page.locator(".era-panel .modal-close").click();
-  await expect(page.locator(".era-panel")).toHaveCount(0);
+  await expect(page.locator(".era-panel")).toBeHidden();
   expect(await count()).toBe(n + 1);
 
   await open(page, "#tour=island-remade");

@@ -130,3 +130,30 @@ test("Escape closes search", async ({ page }) => {
   await page.keyboard.press("Escape");
   await expect(page.getByRole("searchbox")).toHaveCount(0);
 });
+
+test("search remembers its last query, selected so typing replaces it", async ({ page }) => {
+  await open(page, "#year=1900");
+  await page.keyboard.press("Control+k");
+  await page.getByRole("searchbox").fill("Tweed");
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("searchbox")).toHaveCount(0);
+  await page.keyboard.press("Control+k");
+  const box = page.getByRole("searchbox");
+  await expect(box).toHaveValue("Tweed");
+  await expect(page.getByRole("option").first()).toBeVisible();
+  await page.keyboard.type("Minetta");
+  await expect(box).toHaveValue("Minetta");
+});
+
+test("the era panel keeps its scroll position when closed and reopened", async ({ page }) => {
+  await open(page, "#year=1880");
+  await page.locator(".explore-btn").click();
+  const scroller = page.locator(".era-panel-scroll");
+  await expect(scroller).toBeVisible();
+  await scroller.evaluate((el) => (el.scrollTop = 400));
+  await page.locator(".era-panel .modal-close").click();
+  await expect(page.locator(".era-panel")).toBeHidden();
+  await page.locator(".explore-btn").click();
+  await expect(scroller).toBeVisible();
+  expect(await scroller.evaluate((el) => el.scrollTop)).toBe(400);
+});

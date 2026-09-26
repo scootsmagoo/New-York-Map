@@ -54,6 +54,6 @@ test("the era panel takes focus when it opens and gives it back when it closes",
   await expect.poll(() => activeInside(page, ".era-panel")).toBe(true);
   await page.locator(".era-panel .modal-close").focus();
   await page.keyboard.press("Enter");
-  await expect(page.locator(".era-panel")).toHaveCount(0);
+  await expect(page.locator(".era-panel")).toBeHidden();
   await expect(explore).toBeFocused();
 });

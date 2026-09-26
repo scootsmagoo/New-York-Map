@@ -6,6 +6,7 @@ import {
   startTransition,
   addTransitionType,
   ViewTransition,
+  Activity,
   useMemo,
   useRef,
   useState,
@@ -87,6 +88,11 @@ export default function App() {
   const [focusStreet, setFocusStreet] = useState<ColonialStreet | null>(null);
   const [streetFocusToken, setStreetFocusToken] = useState(0);
   const [searchOpen, setSearchOpen] = useAnimatedState(false);
+  // Search and the era panel mount on first open, then are only hidden.
+  const [searchEverOpened, setSearchEverOpened] = useState(false);
+  const [panelEverOpened, setPanelEverOpened] = useState(false);
+  if (searchOpen && !searchEverOpened) setSearchEverOpened(true);
+  if (panelOpen && !panelEverOpened) setPanelEverOpened(true);
   // Layer preferences survive reloads; everything else starts fresh.
   const [overlaysEnabled, setOverlaysEnabled] = usePersistedState("overlays", false);
   const [overlaysAuto, setOverlaysAuto] = usePersistedState("overlaysAuto", true);
@@ -530,7 +536,7 @@ export default function App() {
         />
         {tour && (
           <ViewTransition enter="none" exit="vt-card-out" default="none">
-  <Suspense fallback={null}>
+            <Suspense fallback={null}>
               <TourCard
                 tour={tour.tour}
                 step={tour.step}
@@ -542,16 +548,20 @@ export default function App() {
             </Suspense>
           </ViewTransition>
         )}
-        {panelOpen && (
-          <ViewTransition enter="none" exit="vt-panel-out" default="none">
-  <Suspense fallback={null}>
-              <EraPanel
-                era={era}
-                onClose={() => setPanelOpen(false)}
-                onSelectEntry={selectEntry}
-              />
-            </Suspense>
-          </ViewTransition>
+        {/* Once opened, the era panel stays mounted but hidden when closed,
+            keeping its scroll position and loaded thumbnails. */}
+        {panelEverOpened && (
+          <Activity mode={panelOpen ? "visible" : "hidden"}>
+            <ViewTransition enter="none" exit="vt-panel-out" default="none">
+              <Suspense fallback={null}>
+                <EraPanel
+                  era={era}
+                  onClose={() => setPanelOpen(false)}
+                  onSelectEntry={selectEntry}
+                />
+              </Suspense>
+            </ViewTransition>
+          </Activity>
         )}
       </main>
 
@@ -565,7 +575,7 @@ export default function App() {
 
       {selectedEntry && (
         <ViewTransition enter="none" exit="vt-fade-out" default="none">
-  <Suspense fallback={null}>
+          <Suspense fallback={null}>
             <EntryModal
               entry={selectedEntry}
               onClose={() => setSelectedEntry(null)}
@@ -584,24 +594,27 @@ export default function App() {
       />
       {aboutOpen && (
         <ViewTransition enter="none" exit="vt-fade-out" default="none">
-  <Suspense fallback={null}>
+          <Suspense fallback={null}>
             <AboutModal onClose={() => setAboutOpen(false)} />
           </Suspense>
         </ViewTransition>
       )}
-      {searchOpen && (
-        <ViewTransition enter="none" exit="vt-fade-out" default="none">
-  <Suspense fallback={null}>
-            <SearchPalette
-              onClose={() => setSearchOpen(false)}
-              onSelectEntry={goToEntry}
-              onSelectStreet={goToStreet}
-              onSelectLocation={goToLocation}
-              returnFocusTo={searchOpener.current}
-              takeTyped={takeTyped}
-            />
-          </Suspense>
-        </ViewTransition>
+      {/* Likewise search, which keeps its last query and results. */}
+      {searchEverOpened && (
+        <Activity mode={searchOpen ? "visible" : "hidden"}>
+          <ViewTransition enter="none" exit="vt-fade-out" default="none">
+            <Suspense fallback={null}>
+              <SearchPalette
+                onClose={() => setSearchOpen(false)}
+                onSelectEntry={goToEntry}
+                onSelectStreet={goToStreet}
+                onSelectLocation={goToLocation}
+                returnFocusTo={searchOpener.current}
+                takeTyped={takeTyped}
+              />
+            </Suspense>
+          </ViewTransition>
+        </Activity>
       )}
     </div>
   );
