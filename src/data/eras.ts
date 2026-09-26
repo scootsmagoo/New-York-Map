@@ -4,7 +4,8 @@ import type { Era } from "../types";
  * Era periodization loosely follows the part structure of Burrows & Wallace's
  * "Gotham: A History of New York City to 1898", extended to 1919 where the
  * sequel "Greater Gotham" leaves off, then on through the Depression and the
- * Second World War without the books as a guide.
+ * Second World War. Wallace's third volume, "Gotham at War" (2025), covers
+ * 1933–1945; the 1920s fall between the books.
  */
 export const TIME_MIN = -10000;
 export const TIME_MAX = 1945;

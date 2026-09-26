@@ -7,10 +7,21 @@ map is built around:
 | --- | --- | --- | --- |
 | Edwin G. Burrows & Mike Wallace, *Gotham: A History of New York City to 1898* (Oxford, 1999) | Ice Age → consolidation, 69 chapters, 1,236 pp. of text | `lenape` → `civilWarGilded` | chapter + print page |
 | Mike Wallace, *Greater Gotham: A History of New York City from 1898 to 1919* (Oxford, 2017) | 1898 → 1919, 24 chapters | `greaterNY` | chapter + section (the EPUB has no page numbers) |
+| Mike Wallace, *Gotham at War: A History of New York City from 1933 to 1945* (Oxford, 2025) | 1933 → 1945 | `capitalWorld` (from 1933) | **not extracted yet**: EPUB still to come |
 
-The `capitalWorld` era (1919–1945) has no *Gotham* volume behind it; its
-entries stay sourced from Wikipedia and general histories, with no
-margin notes.
+The series skips **1919–1932**. *Gotham at War* opens in 1933 with La
+Guardia and the New Deal, so the 1920s part of `capitalWorld`
+(Prohibition, the Harlem Renaissance, the skyscraper race, the Crash,
+Jimmy Walker) has no volume behind it. Those entries stay sourced from
+Wikipedia and general histories, with no margin notes. Entries from
+1933 on can get *Gotham at War* notes once the book is extracted:
+
+```sh
+python3 scripts/books/extract-epub.py ~/Downloads/<Gotham at War>.epub gotham-at-war
+```
+
+Then add its chapter guide below, and check whether that EPUB has page
+numbers (`grep -c "\[p\. " data-raw/books/gotham-at-war/all.txt`).
 
 ## Rules for using the books
 

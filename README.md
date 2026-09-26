@@ -58,8 +58,9 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 **Where things stand**
 
 - The timeline runs from Lenapehoking to 1945 across nine eras. The last
-  era, *Capital of the World* (1919–1945), goes past the *Gotham* books, so
-  its entries have no margin notes.
+  era, *Capital of the World* (1919–1945), has no margin notes yet.
+  Wallace's *Gotham at War* (2025) covers 1933–1945; 1919–1932 falls
+  between the volumes.
 - **Then & Now** compares any two years. It opens on two different years,
   and both can be typed.
 - **Street names** cover every named street in all five boroughs, from
@@ -91,7 +92,8 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 - Real street lines outside Manhattan at high zoom, in place of the hatch
   texture.
 - Even out the content: Lenapehoking has 13 entries to the Antebellum era's
-  29, and 1919–1945 has no *Gotham* notes.
+  29, and 1919–1945 has no *Gotham* notes yet (*Gotham at War* can
+  supply them from 1933 on).
 - Carry the timeline past 1945 (Moses's expressways, public housing, the
   fiscal crisis).
 - Audio per era.
