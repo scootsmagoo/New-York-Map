@@ -2163,3 +2163,12 @@ a {
     display: none;
   }
 }
+
+/* Invisible tab stops that keep keyboard focus inside a dialog. */
+.focus-sentinel {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

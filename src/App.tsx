@@ -102,7 +102,9 @@ export default function App() {
   // and the search box appears a moment later. Focus a hidden field now;
   // the keyboard stays up as focus moves on to the real one.
   const focusProxy = useRef<HTMLInputElement>(null);
+  const searchOpener = useRef<HTMLElement | null>(null);
   const openSearch = useCallback(() => {
+    searchOpener.current = document.activeElement as HTMLElement | null;
     focusProxy.current?.focus({ preventScroll: true });
     setSearchOpen(true);
   }, []);
@@ -217,7 +219,7 @@ export default function App() {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setSearchOpen(true);
+        openSearch();
         return;
       }
       if (searchOpen) return;
@@ -241,7 +243,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [searchOpen, cancelFly]);
+  }, [searchOpen, cancelFly, openSearch]);
 
   // ----- Guided tours -----
   const showTourStop = useCallback(
@@ -554,6 +556,7 @@ export default function App() {
             onSelectEntry={goToEntry}
             onSelectStreet={goToStreet}
             onSelectLocation={goToLocation}
+            returnFocusTo={searchOpener.current}
           />
         </Suspense>
       )}

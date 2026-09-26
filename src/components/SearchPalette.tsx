@@ -9,6 +9,7 @@ import {
   type SearchItemKind,
 } from "../lib/search";
 import { useDebouncedValue } from "../lib/useDebouncedValue";
+import { FocusTrap } from "./FocusTrap";
 
 const KIND_GLYPH: Record<SearchItemKind, string> = {
   person: "●",
@@ -24,9 +25,14 @@ interface SearchPaletteProps {
   onSelectEntry: (entry: Entry) => void;
   onSelectStreet: (street: ColonialStreet) => void;
   onSelectLocation: (location: MapLocation) => void;
+  /** What had focus before search opened, to give it back on close. */
+  returnFocusTo?: HTMLElement | null;
 }
 
-type Handlers = Pick<SearchPaletteProps, "onSelectEntry" | "onSelectStreet" | "onSelectLocation">;
+type Handlers = Pick<
+  SearchPaletteProps,
+  "onSelectEntry" | "onSelectStreet" | "onSelectLocation"
+>;
 
 function selectHit(hit: SearchHit, h: Handlers) {
   const src = hit.item.source;
@@ -40,6 +46,7 @@ export function SearchPalette({
   onSelectEntry,
   onSelectStreet,
   onSelectLocation,
+  returnFocusTo,
 }: SearchPaletteProps) {
   const handlers = { onSelectEntry, onSelectStreet, onSelectLocation };
   const inputRef = useRef<HTMLInputElement>(null);
@@ -49,7 +56,7 @@ export function SearchPalette({
 
   const groups = useMemo(
     () => groupSearchHits(searchEntries(debouncedQuery)),
-    [debouncedQuery]
+    [debouncedQuery],
   );
   const flat = useMemo(() => groups.flatMap((g) => g.hits), [groups]);
 
@@ -97,87 +104,94 @@ export function SearchPalette({
 
   return (
     <div className="search-overlay" onClick={onClose}>
-      <div
-        className="search-palette"
-        role="dialog"
-        aria-label="Search Gotham"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="search-input-wrap">
-          <span className="search-input-icon" aria-hidden>
-            ⌕
-          </span>
-          <input
-            ref={inputRef}
-            className="search-input"
-            type="search"
-            enterKeyHint="search"
-            placeholder="People, places, events, streets, neighborhoods…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            aria-autocomplete="list"
-            aria-controls="search-results"
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck={false}
-          />
-          <button
-            className="search-close"
-            type="button"
-            onClick={onClose}
-            aria-label="Close search"
-          >
-            ×
-          </button>
-        </div>
+      <FocusTrap returnFocusTo={returnFocusTo}>
+        <div
+          className="search-palette"
+          role="dialog"
+          aria-label="Search Gotham"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="search-input-wrap">
+            <span className="search-input-icon" aria-hidden>
+              ⌕
+            </span>
+            <input
+              ref={inputRef}
+              className="search-input"
+              type="search"
+              enterKeyHint="search"
+              placeholder="People, places, events, streets, neighborhoods…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              aria-autocomplete="list"
+              aria-controls="search-results"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+            />
+            <button
+              className="search-close"
+              type="button"
+              onClick={onClose}
+              aria-label="Close search"
+            >
+              ×
+            </button>
+          </div>
 
-        <div id="search-results" className="search-results" role="listbox">
-          {!query.trim() && (
-            <p className="search-empty">
-              Search people, places, events, streets, neighborhoods, and lost
-              waters — try <em>Tweed</em>, <em>Five Points</em>, or{" "}
-              <em>Collect Pond</em>.
-            </p>
-          )}
-          {query.trim() && flat.length === 0 && (
-            <p className="search-empty">No matches for “{query.trim()}”.</p>
-          )}
-          {groups.map((group) => (
-            <section key={group.kind} className="search-group">
-              <h3 className="search-group-title">
-                <span aria-hidden>{KIND_GLYPH[group.kind]}</span> {group.label}
-              </h3>
-              <ul className="search-group-list">
-                {group.hits.map((hit) => {
-                  const index = row++;
-                  const active = index === activeIndex;
-                  return (
-                    <li key={hit.item.id}>
-                      <button
-                        type="button"
-                        role="option"
-                        aria-selected={active}
-                        className={`search-result${active ? " is-active" : ""}`}
-                        onMouseEnter={() => setActiveIndex(index)}
-                        onClick={() => selectHit(hit, handlers)}
-                      >
-                        <span className="search-result-title">{hit.item.title}</span>
-                        <span className="search-result-sub">{hit.item.subtitle}</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          ))}
-        </div>
+          <div id="search-results" className="search-results" role="listbox">
+            {!query.trim() && (
+              <p className="search-empty">
+                Search people, places, events, streets, neighborhoods, and lost
+                waters — try <em>Tweed</em>, <em>Five Points</em>, or{" "}
+                <em>Collect Pond</em>.
+              </p>
+            )}
+            {query.trim() && flat.length === 0 && (
+              <p className="search-empty">No matches for “{query.trim()}”.</p>
+            )}
+            {groups.map((group) => (
+              <section key={group.kind} className="search-group">
+                <h3 className="search-group-title">
+                  <span aria-hidden>{KIND_GLYPH[group.kind]}</span>{" "}
+                  {group.label}
+                </h3>
+                <ul className="search-group-list">
+                  {group.hits.map((hit) => {
+                    const index = row++;
+                    const active = index === activeIndex;
+                    return (
+                      <li key={hit.item.id}>
+                        <button
+                          type="button"
+                          role="option"
+                          aria-selected={active}
+                          className={`search-result${active ? " is-active" : ""}`}
+                          onMouseEnter={() => setActiveIndex(index)}
+                          onClick={() => selectHit(hit, handlers)}
+                        >
+                          <span className="search-result-title">
+                            {hit.item.title}
+                          </span>
+                          <span className="search-result-sub">
+                            {hit.item.subtitle}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ))}
+          </div>
 
-        <footer className="search-hint">
-          <span>↑↓ navigate</span>
-          <span>↵ select</span>
-          <span>esc close</span>
-        </footer>
-      </div>
+          <footer className="search-hint">
+            <span>↑↓ navigate</span>
+            <span>↵ select</span>
+            <span>esc close</span>
+          </footer>
+        </div>
+      </FocusTrap>
     </div>
   );
 }
