@@ -147,7 +147,7 @@ export const capitalWorldEntries: Entry[] = [
     year: 1939,
     yearLabel: "1938–1942",
     blurb:
-      "Once the new subway ran beneath them, the Sixth Avenue (1938), Ninth Avenue (1940), and Second Avenue (1942) elevated lines were torn down. Much of the scrap steel was sold to Japan, and New Yorkers said later that it came back in the war.",
+      "Once the new subway ran beneath them, the Sixth Avenue (1938), Ninth Avenue (1940), and Second Avenue (1942) elevated lines were torn down. Legend says the scrap went to Japan and came back as bombs, but the Sixth Avenue contract barred exporting its 18,742 tons, a clause aimed at Japan and Germany.",
   },
   {
     id: "worlds-fair-1939",
@@ -169,7 +169,7 @@ export const capitalWorldEntries: Entry[] = [
     year: 1942,
     coords: [-73.9712, 40.7022],
     blurb:
-      "Seventy thousand workers ran the Brooklyn Navy Yard around the clock, many of them women and Black New Yorkers hired for the first time. It launched the battleships Iowa and Missouri, and the port shipped out millions of troops and tons of supplies.",
+      "At its peak 75,000 people worked the Brooklyn Navy Yard in three shifts around the clock, among them women, hired in 1942 for the first time in the Yard's 141 years, and Black New Yorkers. It launched the battleships Iowa and Missouri, and the port shipped out millions of troops and tons of supplies.",
   },
   {
     id: "vj-day",

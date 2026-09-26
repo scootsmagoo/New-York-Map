@@ -138,7 +138,7 @@ export const earlyRepublicEntries: Entry[] = [
     blurb:
       "Twelve avenues and 155 cross streets ruled over hills, farms, and marshes to the Harlem River — 'right-angled houses' for a city of real estate, with almost no parks.",
     gotham:
-      "Gotham calls the grid the decisive act of the city's speculative imagination.",
+      "Gotham reads the grid as technique triumphing over topography: republican order laid on Manhattan's hills, streams, and meadows, with almost no room left for parks.",
   },
   {
     id: "erie-canal",

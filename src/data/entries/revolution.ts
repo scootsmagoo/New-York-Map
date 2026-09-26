@@ -145,7 +145,7 @@ export const revolutionEntries: Entry[] = [
     year: 1780,
     yearLabel: "1776–1783",
     blurb:
-      "In rotting hulks like the Jersey off Wallabout Bay, some 11,000 captured Americans died of fever and starvation — more than fell in every battle of the war combined.",
+      "In rotting hulks like the Jersey off Wallabout Bay, some 11,500 captured Americans died of fever and starvation — more than fell in every battle of the war combined.",
     coords: [-73.9721, 40.7022],
     gotham:
       "Gotham gives the prison ships their due as the Revolution's greatest atrocity, long memorialized in Fort Greene.",

@@ -88,7 +88,7 @@ export const lenapeEntries: Entry[] = [
     year: -9800,
     yearLabel: "c. 16,000 BCE",
     blurb:
-      "The Wisconsin ice sheet, which had buried the region under a mile of ice and dumped the moraine that forms Long Island, melted back — leaving the hills, kettle ponds, and drowned river valley that became the harbor.",
+      "The Wisconsin ice sheet, which had buried the region under ice some thousand feet thick and dumped the moraine that forms Long Island, melted back — leaving the hills, kettle ponds, and drowned river valley that became the harbor.",
     gotham: "Gotham's very first pages begin with the glacier.",
   },
   {

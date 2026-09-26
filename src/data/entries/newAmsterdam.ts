@@ -21,7 +21,7 @@ export const newAmsterdamEntries: Entry[] = [
     blurb:
       "A free Black Dominican sailor who left a Dutch ship in 1613 to trade on his own among the Lenape — the first recorded non-Native resident of Manhattan.",
     gotham:
-      "One of Gotham's signature recoveries: the city's first immigrant was a free Black man who arrived before any Dutch settler.",
+      "Gotham gives him a single aside, as Jan Rodrigues, 'a mulatto from San Domingo.' Later historians made him a landmark: the city's first immigrant was a free man of color who arrived before any Dutch settler.",
   },
   {
     id: "minuit",

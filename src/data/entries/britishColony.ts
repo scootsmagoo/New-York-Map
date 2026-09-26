@@ -19,7 +19,7 @@ export const britishColonyEntries: Entry[] = [
     wikiTitle: "William Kidd",
     year: 1696,
     blurb:
-      "Respectable New York shipmaster and pew-holder — he lent the runner's tackle that hoisted Trinity Church's stones — turned privateer, then hanged in London as a pirate. Half the city's merchant elite had quietly backed voyages like his.",
+      "Respectable New York shipmaster and pew-holder — he lent the block and tackle that hoisted Trinity Church's stones — turned privateer, then hanged in London as a pirate. Half the city's merchant elite had quietly backed voyages like his.",
     gotham:
       "Gotham relishes how piracy and 'legitimate' New York commerce were the same Atlantic business.",
   },
