@@ -32,9 +32,10 @@ npm run dev      # open http://localhost:5173
 - Arrow keys pan time; `+` / `-` zoom; the map pans and zooms independently.
 - **Guided tours** (⋯ menu) walk the timeline and camera through a story —
   the grid marching north, crossing the East River, fire and Croton water,
-  Robert Moses's bridges and World's Fair, and the island remade by landfill.
-  Deep-link one with `#tour=grid`, `#tour=east-river`, `#tour=fire-water`,
-  `#tour=moses`, or `#tour=island-remade`.
+  Robert Moses's bridges and World's Fair, the island remade by landfill,
+  slavery and freedom, the war years, the riots, the rich moving uptown,
+  and horsecar to bus. Deep-link one with `#tour=grid`,
+  `#tour=horsecar-to-bus`, and so on.
 - **Then & Now** (⋯ menu) wipes between two years with a draggable line.
   Type either year, or scrub the timeline to change Now. Deep-link with
   `#year=1900&compare=1776`.
@@ -46,7 +47,10 @@ npm run dev      # open http://localhost:5173
   1835, 1845) and the epidemics' worst-hit blocks (yellow fever 1798 and
   1822, cholera 1832 and 1849, the 1903 "lung block") in the years they
   struck, each with a note cited to *Gotham*. The *Fire and Water* tour
-  turns it on.
+  turns it on. **Working waterfront** marks markets, docks, shipyards, and
+  sugar houses while they worked. **Streetcars** draws 24 horsecar and
+  trolley lines from 1832 until buses replaced them, dotted while horses
+  pulled the cars and solid once they ran on electricity.
 - **Things to try:** a first visit gets a small card pointing to a tour,
   Then & Now, search, and the map layers. It shows once.
 - **Share a view:** ⋯ → *Copy link to this view*, or *Copy link* on any
@@ -58,7 +62,7 @@ npm run dev      # open http://localhost:5173
 ## Status (as of 2026-09-27)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 82 unit tests and 57 browser
+https://scootsmagoo.github.io/New-York-Map/. 89 unit tests and 60 browser
 tests (desktop WebKit and Chromium, plus an emulated iPhone upright and
 on its side) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
@@ -104,22 +108,19 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Next up** (details in PROJECT.md → Future features)
 
-*Done 2026-09-26:* the "Things to try" card and the *Fires & epidemics*
-layer (above).
+*Done 2026-09-26/27:* the "Things to try" card, *Fires & epidemics*,
+*Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
+out the early eras (above).
 
 *Keeping it working*
 - Check search on a real iPhone: the keyboard should come up on the first
   tap. Emulators can't show the iOS rule this works around.
 
 *More history*
-- Even out the content: Lenapehoking has 13 entries to the Antebellum era's
-  30. The candidate list in docs/BOOK_REFERENCE.md has more, with where
-  to read up on each.
-- The working waterfront as a layer: markets, slips, shipyards, sugar
-  houses, and the piers, dated.
+- More entries from the candidate list in docs/BOOK_REFERENCE.md,
+  especially *Greater Gotham*'s people and places for 1898–1919.
 - Lost landscape for Brooklyn and Queens (Gowanus Creek, Wallabout Bay,
   Jamaica Bay marshes), from an 1840s U.S. Coast Survey chart.
-- Streetcar lines, 1832–1945.
 - Carry the timeline past 1945 (Moses's expressways, public housing, the
   fiscal crisis).
 - Real street lines outside Manhattan at high zoom, in place of the hatch
@@ -195,6 +196,7 @@ additions.
 | `node scripts/prepare-geo.mjs` | regenerate map geometry from public sources (then packs it with `scripts/pack-geo.mjs`) |
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |
 | `node --experimental-strip-types scripts/prepare-streets.mjs` | street names and the Manhattan grid table from NYC street centerlines |
+| `node --experimental-strip-types scripts/prepare-streetcars.mjs` | streetcar routes from the legs in `src/data/streetcars.ts` (uses the centerlines `prepare-streets` downloads) |
 | `python3 scripts/books/extract-epub.py <epub> <slug>` / `scripts/books/find.py "<regex>"` | extract your own copy of a book to gitignored text, then search it with chapter/page citations |
 
 ## Credits

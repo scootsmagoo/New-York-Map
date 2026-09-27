@@ -121,6 +121,13 @@ header, theme, footprint, markers, panel — derives from it.
   traced by hand. When each strip of land was made is estimated from its
   distance to the older shore — see `scripts/lost-landscape/README.md`.
   Manhattan only.
+- **Streetcars:** opening and bus-conversion dates from Wikipedia's lists
+  of streetcar lines by borough. Routes are each line's main streets at
+  its longest, on today's street geometry; terminals and jogs varied. When
+  a line went electric is by borough (Bronx 1892, Brooklyn 1893, Queens
+  1895, Manhattan 1900) unless the line's own date is known: approximate.
+- **Working waterfront:** dates from the books where they give them,
+  otherwise Wikipedia; a site whose closing year neither gives stays open.
 - **Fires & epidemics:** outlines follow the streets *Gotham* names for
   each (Maiden Lane to Coenties Slip, William Street to the river for
   1835; the Chambers Street barricade for 1822), with corners taken from
@@ -369,20 +376,28 @@ header, theme, footprint, markers, panel — derives from it.
       affine): Castello by the fort, the wall's two gates, and the canal
       mouth (≤ 22 m); Ratzer by the fort, Trinity, St. Paul's, the Collect,
       and the Brooklyn ferry (≤ 45 m); Viele by seven squares (≤ 80 m).
-- [ ] More layers: streetcar lines, real outer-borough street lines.
+- [x] Streetcars — shipped: 24 horsecar and trolley lines in four
+      boroughs, 1832 to their bus conversions, dotted while horse-drawn and
+      solid once electric (`src/data/streetcars.ts`, geometry from the
+      street centerlines by `scripts/prepare-streetcars.mjs`), with a
+      Horsecar to Bus tour.
+- [ ] Real outer-borough street lines at high zoom.
 - [x] Fires & epidemics layer — shipped: burned districts (1776, 1835,
       1845) and the epidemics' worst quarters (yellow fever 1798 and 1822,
       cholera 1832 and 1849, the 1903 lung block) as dated areas that fade
       out after, cited to the books (`src/data/calamities.ts`). Not yet:
       the 1866 cholera the new Board of Health contained, the 1916 polio
       and 1918 flu (citywide, so not an area).
-- [ ] Working-waterfront layer: markets, slips, shipyards, sugar houses,
-      piers — dated points along the shore.
+- [x] Working waterfront — shipped: 14 markets, docks, shipyards, and
+      sugar houses as dated points (`src/data/waterfront.ts`); sites that
+      already have entry markers are left out.
 - [ ] Lost landscape beyond Manhattan: Gowanus Creek, Wallabout Bay, the
       Jamaica Bay marshes, from an 1840s U.S. Coast Survey chart.
-- [x] Guided "tours": scripted camera+timeline paths — shipped: nine tours
+- [x] Guided "tours": scripted camera+timeline paths — shipped: ten tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
-      water, Robert Moses's bridges and fair, the island remade by landfill, slavery and freedom, New York at war, a city of riots, the rich moving uptown) with animated timeline flights, map camera moves, and
+      water, Robert Moses's bridges and fair, the island remade by landfill,
+      slavery and freedom, New York at war, a city of riots, the rich moving
+      uptown, horsecar to bus) with animated timeline flights, map camera moves, and
       `#tour=<id>` deep links. Adding one is a data entry in `tours.ts`.
 - [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
       timeline there; `#entry=<id>` opens an entry; *Copy link* on entry
@@ -394,8 +409,9 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Mobile polish: touch pinch on the timeline, bottom-sheet era panel.
 - [x] Things to try — shipped: a one-time card for first visits pointing
       to a tour, Then & Now, search, and the map layers.
-- [ ] Even out the eras: Lenapehoking has 13 entries to Antebellum's 30;
-      docs/BOOK_REFERENCE.md lists candidates with chapters to read.
+- [x] Even out the eras — 14 entries from Gotham's early chapters: every
+      era before 1825 now has 17–24 (Lenapehoking was 13). More candidates
+      remain in docs/BOOK_REFERENCE.md.
 - [ ] Audio: ambient soundscapes per era (gulls and surf → harbor bells →
       els and steam → ragtime).
 - [x] More *Gotham* margin notes; chapter cross-references per entry —
@@ -412,6 +428,7 @@ npm run validate:wiki   # check all Wikipedia titles still resolve
 node scripts/prepare-geo.mjs  # regenerate geometry from sources
 node scripts/prepare-overlays.mjs  # download & compress historical map sheets
 node --experimental-strip-types scripts/prepare-streets.mjs  # street names + grid table
+node --experimental-strip-types scripts/prepare-streetcars.mjs  # streetcar routes (after prepare-streets)
 ```
 
 ## Credits
