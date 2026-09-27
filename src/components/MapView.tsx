@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { geoMercator, geoPath } from "d3-geo";
+import { geoMercator, geoPath, type GeoProjection } from "d3-geo";
 import { select } from "d3-selection";
 import "d3-transition";
 import {
@@ -43,6 +43,7 @@ import { MapKey, type MapKeyVisible } from "./MapKey";
 import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
+import { carryViewAcrossResize } from "../lib/resizeView";
 import packedBoroughs from "../data/geo/boroughs.packed.json";
 import { unpackBoroughs } from "../lib/geoPack";
 import surroundData from "../data/geo/surround.json";
@@ -303,6 +304,13 @@ function MapViewInner({
   const [zoomK, setZoomK] = useState(1);
   const cameraId = useRef(Symbol("map")).current;
   const adoptedCamera = useRef(false);
+  // The projection and box the current transform was made for, so a resize
+  // (a phone turning) can keep the same view rather than snap back out.
+  const viewBasis = useRef<{
+    projection: GeoProjection;
+    width: number;
+    height: number;
+  } | null>(null);
 
   const applyTransform = (t: typeof zoomIdentity) => {
     transformRef.current = t;
@@ -372,7 +380,7 @@ function MapViewInner({
 
   useEffect(() => {
     const svg = svgRef.current;
-    if (!svg || !width || !height) return;
+    if (!svg || !width || !height || !projection) return;
     // True while applying a transform that another map published, so it
     // isn't echoed back.
     let following = false;
@@ -395,8 +403,22 @@ function MapViewInner({
       });
     zoomRef.current = behavior;
     const sel = select(svg);
+    sel.interrupt();
     sel.call(behavior);
-    syncZoomK(zoomIdentity);
+    // Same place in the middle, same zoom, in the refitted projection. Set
+    // through the behavior so d3's own record of the transform agrees.
+    const basis = viewBasis.current;
+    const start =
+      basis && (basis.width !== width || basis.height !== height)
+        ? carryViewAcrossResize(transformRef.current, basis, { projection, width, height })
+        : basis
+          ? transformRef.current
+          : zoomIdentity;
+    following = true;
+    behavior.transform(sel, zoomIdentity.translate(start.x, start.y).scale(start.k));
+    following = false;
+    syncZoomK(transformRef.current);
+    viewBasis.current = { projection, width, height };
     const follow = (t: { k: number; x: number; y: number }, settled: boolean) => {
       const next = zoomIdentity.translate(t.x, t.y).scale(t.k);
       following = true;
@@ -418,7 +440,7 @@ function MapViewInner({
       sel.on(".end", null);
       zoomRef.current = null;
     };
-  }, [width, height, cameraLink, cameraId]);
+  }, [width, height, projection, cameraLink, cameraId]);
 
   // Pan/zoom to the selected entry or street.
   useEffect(() => {

@@ -36,6 +36,13 @@ html, body, #root {
   margin: 0;
 }
 
+html {
+  /* Safari enlarges text when a phone turns to landscape; the layout is
+     already sized for that. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--sans);
   color: var(--ink);
@@ -49,8 +56,16 @@ button {
 
 .app {
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100dvh;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  /* One column exactly as wide as the screen. The map and timeline draw at
+     measured pixel widths; left to size to content, the column kept the
+     landscape width after a phone turned back upright, pushing the map
+     off screen. */
+  grid-template-columns: minmax(0, 1fr);
+  /* Pinned to the screen: iOS can scroll a document even with overflow
+     hidden (after rotating, or when the keyboard opens). */
+  position: fixed;
+  inset: 0;
   background: var(--paper);
   color: var(--ink);
   transition: background-color 0.7s ease;
