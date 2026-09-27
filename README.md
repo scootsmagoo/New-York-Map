@@ -55,11 +55,12 @@ npm run dev      # open http://localhost:5173
   on screen in the current year and zoom.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
 
-## Status (as of 2026-09-26)
+## Status (as of 2026-09-27)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 80 unit tests and 53 browser
-tests (desktop WebKit and Chromium, plus an emulated iPhone) run on every
+https://scootsmagoo.github.io/New-York-Map/. 82 unit tests and 57 browser
+tests (desktop WebKit and Chromium, plus an emulated iPhone upright and
+on its side) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
 (CI has no GPU).
 
@@ -67,6 +68,11 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 
 - The timeline runs from Lenapehoking to 1945 across nine eras, with about
   200 entries.
+- **Phones, either way up.** Turned on its side, a phone gets a one-row
+  header and a slimmer timeline so the map has most of the screen; tour
+  cards dock to the side. Turning the phone keeps the map where it was
+  (it used to vanish until a reload). The map runs under an iPhone's
+  notch; the controls stay clear of it.
 - **Built on the *Gotham* trilogy.** Entry cards cite the chapter and
   pages that cover them in *Gotham*, *Greater Gotham*, or *Gotham at War*
   ("Read more:"), and margin notes say how that volume treats the subject.
@@ -149,6 +155,10 @@ and [changelog](https://github.com/facebook/react/blob/main/CHANGELOG.md):
   only app), Trusted Types (needs a CSP header GitHub Pages can't set).
 
 **Known rough edges**
+
+- Phone layouts are tested in emulated iPhones (WebKit), which can't show
+  a real notch or Safari's toolbars moving. Worth a look on a real phone
+  on its side.
 
 - Some early-colonial comparisons in Then & Now look alike at whole-city
   zoom, because the city was tiny. Zoom into lower Manhattan to see them.
