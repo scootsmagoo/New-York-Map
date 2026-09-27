@@ -2,6 +2,19 @@ import type { Entry } from "../../types";
 
 export const antebellumEntries: Entry[] = [
   {
+    id: "harlem-railroad",
+    era: "antebellum",
+    kind: "event",
+    title: "The first street railway",
+    wikiTitle: "New York and Harlem Railroad",
+    year: 1832,
+    blurb:
+      "In November 1832 the New York and Harlem Railroad began running horse-drawn cars on iron rails up the Bowery: a smoother, bigger ride than the omnibus, and the world's first street railway.",
+    gotham:
+      "Gotham credits the line up Fourth Avenue with opening the East Side toward Harlem in the 1830s.",
+    coords: [-73.9925, 40.7235],
+  },
+  {
     id: "hone",
     era: "antebellum",
     kind: "person",

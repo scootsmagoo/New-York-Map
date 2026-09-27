@@ -27,6 +27,8 @@ interface HeaderMenuProps {
   onShowCalamitiesChange: (v: boolean) => void;
   showWaterfront: boolean;
   onShowWaterfrontChange: (v: boolean) => void;
+  showStreetcars: boolean;
+  onShowStreetcarsChange: (v: boolean) => void;
 }
 
 export function HeaderMenu({
@@ -53,6 +55,8 @@ export function HeaderMenu({
   onShowCalamitiesChange,
   showWaterfront,
   onShowWaterfrontChange,
+  showStreetcars,
+  onShowStreetcarsChange,
 }: HeaderMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -217,6 +221,19 @@ export function HeaderMenu({
             </label>
             <p className="header-menu-section-note">
               Markets, shipyards, sugar houses, and docks, while they worked.
+            </p>
+
+            <label className="header-menu-check">
+              <input
+                type="checkbox"
+                checked={showStreetcars}
+                onChange={(e) => onShowStreetcarsChange(e.target.checked)}
+              />
+              Streetcars
+            </label>
+            <p className="header-menu-section-note">
+              Horsecar and trolley lines, from the first in 1832 until buses
+              replaced them.
             </p>
           </div>
 

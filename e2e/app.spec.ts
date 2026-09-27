@@ -130,6 +130,19 @@ test("the working waterfront shows the sites working that year, in the key and s
   await expect.poll(async () => Number(await year(page))).toBeLessThan(1822);
 });
 
+test("streetcars run on horses, then electricity, and the tour turns them on", async ({ page }) => {
+  await open(page, "#year=1880");
+  await toggleLayer(page, "Streetcars");
+  await expect(page.locator(".streetcar-horse").first()).toBeAttached();
+  await expect(page.locator(".streetcar-electric")).toHaveCount(0);
+  await open(page, "#year=1910");
+  // Only the Bleecker Street line still had horses.
+  await expect(page.locator(".streetcar-horse")).toHaveCount(1);
+  await expect(page.locator(".streetcar-electric").first()).toBeAttached();
+  await page.getByRole("button", { name: "Key" }).click();
+  await expect(page.locator(".map-key-panel")).toContainText("Electric trolley line");
+});
+
 test("the Fire and Water tour turns on fires & epidemics", async ({ page }) => {
   await open(page, "#tour=fire-water");
   await expect(page.locator(".calamity-epidemic")).toHaveCount(1);

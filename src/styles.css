@@ -853,6 +853,25 @@ button {
   opacity: 0.9;
 }
 
+/* Streetcars: dotted while horses pulled them, solid once electric. */
+.streetcar {
+  fill: none;
+  stroke: #a2412d;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.streetcar-horse {
+  stroke-width: 2;
+  stroke-dasharray: 0.1 4;
+}
+
+.streetcar-electric {
+  stroke-width: 1.6;
+  opacity: 0.9;
+}
+
 .infra-label {
   font-size: 9px;
   font-weight: 600;

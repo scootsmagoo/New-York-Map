@@ -753,4 +753,5 @@ export const bookRefs: Record<string, BookRef> = {
     pages: "286",
   },
   "mother-zion": { book: "gotham", chapter: "25. From Crowd to Class", pages: "398" },
+  "harlem-railroad": { book: "gotham", chapter: "53. City Building", pages: "929" },
 };

@@ -44,6 +44,14 @@ describe("search", () => {
     expect(hit.item.source.location.range[0]).toBe(1861);
   });
 
+  it("finds a streetcar line by its street", () => {
+    const hit = searchEntries("Bleecker horsecar").find((h) => h.item.kind === "streetcar")!;
+    expect(hit.item.title).toBe("Bleecker Street line");
+    if (hit.item.source.type !== "location") throw new Error("not a location");
+    expect(hit.item.source.location.layer).toBe("streetcars");
+    expect(hit.item.source.location.range).toEqual([1864, 1916]);
+  });
+
   it("opens a renamed neighborhood under its later name", () => {
     const hit = searchEntries("Times Square").find((h) => h.item.kind === "neighborhood")!;
     if (hit.item.source.type !== "location") throw new Error("not a location");

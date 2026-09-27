@@ -27,7 +27,8 @@ export type TourLayer =
   | "neighborhoods"
   | "streetLabels"
   | "calamities"
-  | "waterfront";
+  | "waterfront"
+  | "streetcars";
 
 export interface Tour {
   id: string;
@@ -222,6 +223,57 @@ export const tours: Tour[] = [
         title: "The expressway years ahead",
         text: "By V-J Day Moses had built more public works than anyone else in the city's history, and the largest were still ahead: the expressways, the housing projects, and the neighborhoods cleared to make room for them. This timeline stops here, in 1945.",
         entryId: "vj-day",
+      },
+    ],
+  },
+  {
+    id: "horsecar-to-bus",
+    title: "Horsecar to Bus",
+    subtitle: "A century of streetcars, 1832–1945",
+    layers: ["streetcars"],
+    stops: [
+      {
+        year: 1832,
+        title: "Rails on the Bowery",
+        text: "In November 1832 the New York and Harlem Railroad began running horse-drawn cars on iron rails up the Bowery, the first street railway anywhere. Rails made a smoother and bigger ride than the omnibus, and the line pushed on up Fourth Avenue toward Harlem. Dotted lines are horsecars.",
+        focus: { coords: [-73.9925, 40.7235], k: 4.2 },
+        entryId: "harlem-railroad",
+      },
+      {
+        year: 1856,
+        title: "Brooklyn rides out",
+        text: "From 1854 the Brooklyn City Railroad ran forty-passenger horsecars out Fulton and Myrtle Avenues from the ferries. Farmland in Bedford began selling to speculators, and Manhattan's avenues filled with lines of their own: Second, Third, Sixth, Eighth.",
+        focus: { coords: [-73.97, 40.7], k: 2.4 },
+      },
+      {
+        year: 1880,
+        title: "Four fares to cross town",
+        text: "Each line held a franchise cozened from the aldermen, paid the city little, and refused transfers to its rivals. Crossing Manhattan at 14th Street took three changes of car and four fares. Drivers worked sixteen-hour days for poor pay.",
+        focus: { coords: [-73.99, 40.74], k: 3 },
+      },
+      {
+        year: 1885,
+        title: "Jacob Sharp buys Broadway",
+        text: "For thirty years the Stewarts, Astors, and Goelets kept rails off lower Broadway. In 1884 Jacob Sharp spent some $200,000 on state legislators and half a million on the aldermen, and his cars ran down Broadway to the Battery the next year.",
+        focus: { coords: [-74.008, 40.714], k: 4 },
+      },
+      {
+        year: 1895,
+        title: "Trolleys, and a strike",
+        text: "Brooklyn went electric in the early 1890s, and its lines turned solid on the map. In January 1895 the trolley men struck every line; the mayor called out the militia, 7,500 soldiers in all, to keep the cars running.",
+        focus: { coords: [-73.95, 40.68], k: 2.2 },
+      },
+      {
+        year: 1916,
+        title: "The last horsecar",
+        text: "Manhattan's lines went electric around 1900 on current drawn from slots between the rails, but the Bleecker Street line kept its horses. When it closed in July 1917 it was the last horsecar line in New York.",
+        focus: { coords: [-74.0005, 40.7285], k: 5 },
+      },
+      {
+        year: 1945,
+        title: "The buses win",
+        text: "Most Manhattan lines gave way to buses in the 1930s. In 1945 La Guardia forced the Third Avenue line to buy 200 buses and its old cars were sold abroad; within two years Manhattan's trolleys were gone, and Brooklyn was their last stronghold.",
+        focus: { coords: [-73.96, 40.73], k: 1.6 },
       },
     ],
   },

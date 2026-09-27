@@ -11,6 +11,8 @@ import { neighborhoods } from "../data/neighborhoods";
 import { lostWaters } from "../data/lostWaters";
 import { CALAMITY_FADE, calamities, calamityCenter } from "../data/calamities";
 import { WATERFRONT_KIND_LABEL, waterfront, waterfrontDates } from "../data/waterfront";
+import { streetcarLines } from "../data/streetcars";
+import streetcarCenters from "../data/geo/streetcarCenters.json";
 
 export type SearchItemKind =
   | EntryKind
@@ -18,7 +20,8 @@ export type SearchItemKind =
   | "neighborhood"
   | "water"
   | "calamity"
-  | "waterfront";
+  | "waterfront"
+  | "streetcar";
 
 /** Where a map-layer result lives: fly there, at a year it exists, with its layer on. */
 export interface MapLocation {
@@ -29,7 +32,7 @@ export interface MapLocation {
   year: number;
   /** Years it's on the map. */
   range: [number, number];
-  layer: "neighborhoods" | "lostLandscape" | "calamities" | "waterfront";
+  layer: "neighborhoods" | "lostLandscape" | "calamities" | "waterfront" | "streetcars";
 }
 
 /** A single searchable record — extend `source` as new map content types ship. */
@@ -60,6 +63,7 @@ const KIND_ORDER: SearchItemKind[] = [
   "water",
   "calamity",
   "waterfront",
+  "streetcar",
 ];
 
 const KIND_LABEL: Record<SearchItemKind, string> = {
@@ -71,6 +75,7 @@ const KIND_LABEL: Record<SearchItemKind, string> = {
   water: "Lost waters",
   calamity: "Fires & epidemics",
   waterfront: "Waterfront",
+  streetcar: "Streetcar lines",
 };
 
 const eraName = new Map(eras.map((e) => [e.id, e.name]));
@@ -279,6 +284,31 @@ function waterfrontSearchItems(): SearchItem[] {
   }));
 }
 
+function streetcarSearchItems(): SearchItem[] {
+  const centers = streetcarCenters as unknown as Record<string, [number, number]>;
+  return streetcarLines
+    .filter((line) => centers[line.id])
+    .map((line) => ({
+      id: `streetcar:${line.id}`,
+      kind: "streetcar" as const,
+      title: line.name,
+      subtitle: `streetcar line, ${line.open}–${line.close ?? ""}`,
+      haystack: [line.name, line.note, line.legs.map((l) => l[0]).join(" "), "streetcar horsecar trolley tram"]
+        .join(" ")
+        .toLowerCase(),
+      source: {
+        type: "location" as const,
+        location: {
+          coords: centers[line.id],
+          k: 3,
+          year: line.open + 2,
+          range: [line.open, (line.close ?? TIME_MAX + 1) - 1] as [number, number],
+          layer: "streetcars" as const,
+        },
+      },
+    }));
+}
+
 /** Build the search index from all registered content sources. */
 export function buildSearchIndex(): SearchItem[] {
   const entries = allEntries.map((entry) => {
@@ -310,6 +340,7 @@ export function buildSearchIndex(): SearchItem[] {
     ...waterSearchItems(),
     ...calamitySearchItems(),
     ...waterfrontSearchItems(),
+    ...streetcarSearchItems(),
   ];
 }
 

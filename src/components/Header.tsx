@@ -31,6 +31,8 @@ interface HeaderProps {
   onShowCalamitiesChange: (v: boolean) => void;
   showWaterfront: boolean;
   onShowWaterfrontChange: (v: boolean) => void;
+  showStreetcars: boolean;
+  onShowStreetcarsChange: (v: boolean) => void;
 }
 
 function HeaderInner({
@@ -60,6 +62,8 @@ function HeaderInner({
   onShowCalamitiesChange,
   showWaterfront,
   onShowWaterfrontChange,
+  showStreetcars,
+  onShowStreetcarsChange,
 }: HeaderProps) {
   return (
     <header className="app-header">
@@ -125,6 +129,8 @@ function HeaderInner({
           onShowCalamitiesChange={onShowCalamitiesChange}
           showWaterfront={showWaterfront}
           onShowWaterfrontChange={onShowWaterfrontChange}
+          showStreetcars={showStreetcars}
+          onShowStreetcarsChange={onShowStreetcarsChange}
         />
       </div>
     </header>

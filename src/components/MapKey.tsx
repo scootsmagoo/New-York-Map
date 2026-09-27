@@ -27,6 +27,8 @@ export interface MapKeyVisible {
   lostLandscape: boolean;
   fires: boolean;
   epidemics: boolean;
+  horsecars: boolean;
+  trolleys: boolean;
   /** Waterfront kinds on the map now, comma-joined (a string compares by value). */
   waterfront: string;
   /** Label of the historical map sheet showing, if any. */
@@ -253,6 +255,16 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
           </g>
         </Swatch>
       ),
+    },
+    {
+      show: v.horsecars,
+      label: "Horsecar line",
+      swatch: <Swatch>{line("streetcar streetcar-horse")}</Swatch>,
+    },
+    {
+      show: v.trolleys,
+      label: "Electric trolley line",
+      swatch: <Swatch>{line("streetcar streetcar-electric")}</Swatch>,
     },
     ...(Object.keys(WATERFRONT_KIND_LABEL) as WaterfrontKind[]).map((kind) => ({
       show: v.waterfront.split(",").includes(kind),

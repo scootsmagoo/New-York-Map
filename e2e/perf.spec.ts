@@ -13,7 +13,7 @@ test("the map pans smoothly with every layer on", async ({ page, browserName }) 
   test.skip(browserName !== "webkit", "WebKit is where the frame-rate trouble lives");
   test.skip(!!process.env.CI, "no GPU on CI runners; run locally");
   await page.addInitScript(() => {
-    for (const k of ["streetLabels", "neighborhoods", "lostLandscape", "calamities"]) {
+    for (const k of ["streetLabels", "neighborhoods", "lostLandscape", "calamities", "waterfront", "streetcars"]) {
       localStorage.setItem(`nycmap:settings:${k}`, "true");
     }
   });

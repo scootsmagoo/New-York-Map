@@ -37,6 +37,8 @@ import { NeighborhoodLayer } from "./NeighborhoodLayer";
 import { LostLandscapeLayer } from "./LostLandscapeLayer";
 import { CalamityLayer } from "./CalamityLayer";
 import { WaterfrontLayer } from "./WaterfrontLayer";
+import { StreetcarLayer } from "./StreetcarLayer";
+import { streetcarLines, streetcarPower } from "../data/streetcars";
 import { waterfront, waterfrontOpacity } from "../data/waterfront";
 import { calamities, calamityOpacity } from "../data/calamities";
 import { boroughLabels, type MapLabel } from "../data/mapLabels";
@@ -73,6 +75,7 @@ interface MapViewProps {
   showLostLandscape?: boolean;
   showCalamities?: boolean;
   showWaterfront?: boolean;
+  showStreetcars?: boolean;
   /** Keeps pan/zoom in step with other maps sharing the link (compare mode). */
   cameraLink?: CameraLink;
   /** Reset button and attribution; off for the second map in compare mode. */
@@ -296,6 +299,7 @@ function MapViewInner({
   showLostLandscape = false,
   showCalamities = false,
   showWaterfront = false,
+  showStreetcars = false,
   cameraLink,
   chrome = true,
 }: MapViewProps) {
@@ -776,6 +780,8 @@ function MapViewInner({
       lostLandscape: showLostLandscape,
       fires: showCalamities && calamities.some((c) => c.kind === "fire" && calamityOpacity(c, year) > 0),
       epidemics: showCalamities && calamities.some((c) => c.kind === "epidemic" && calamityOpacity(c, year) > 0),
+      horsecars: showStreetcars && streetcarLines.some((l) => streetcarPower(l, year) === "horse"),
+      trolleys: showStreetcars && streetcarLines.some((l) => streetcarPower(l, year) === "electric"),
       waterfront: showWaterfront
         ? [...new Set(waterfront.filter((s) => waterfrontOpacity(s, year) > 0).map((s) => s.kind))]
             .sort()
@@ -789,7 +795,7 @@ function MapViewInner({
     year, roadFade, surveyOpacity, infraFade, ferryFade, minorParkFade, base,
     structurePaths, infrastructurePaths, parkPaths, markers, ghostMarkers,
     lenapeOpacity, visibleSettlements, showLostLandscape, showCalamities, showWaterfront,
-    overlayFrames,
+    showStreetcars, overlayFrames,
   ]);
 
   if (!width || !height) return <div className="map-view" ref={ref} />;
@@ -1043,6 +1049,9 @@ function MapViewInner({
                   </g>
                 );
               })}
+
+            {/* Horsecar and trolley lines, under the els that later rose over them */}
+            {showStreetcars && <StreetcarLayer project={projection} year={year} />}
 
             {/* Els, subway, and Croton Aqueduct */}
             {infrastructurePaths
