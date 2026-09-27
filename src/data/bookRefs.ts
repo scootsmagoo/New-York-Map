@@ -719,4 +719,38 @@ export const bookRefs: Record<string, BookRef> = {
     chapter: "Blacks",
     pages: "546–47",
   },
+  siwanoy: { book: "gotham", chapter: "1. First Impressions", pages: "5" },
+  moraine: { book: "gotham", chapter: "1. First Impressions", pages: "4" },
+  wampum: { book: "gotham", chapter: "2. The Men Who Bought Manhattan", pages: "22" },
+  sapohanikan: { book: "gotham", chapter: "1. First Impressions", pages: "6" },
+  "negroes-farms": { book: "gotham", chapter: "3. Company Town", pages: "32–33" },
+  "pavonia-massacre": { book: "gotham", chapter: "3. Company Town", pages: "38–39" },
+  "african-burial-ground": {
+    book: "gotham",
+    chapter: "25. From Crowd to Class",
+    pages: "386, 400",
+  },
+  "kings-bridge": {
+    book: "gotham",
+    chapter: "8. Heats and Animosityes",
+    pages: "105",
+  },
+  "sons-of-liberty": { book: "gotham", chapter: "13. Crises", pages: "200" },
+  "hickey-plot": { book: "gotham", chapter: "15. Revolution", pages: "231" },
+  "book-of-negroes": {
+    book: "gotham",
+    chapter: "16. The Gibraltar of North America",
+    pages: "259",
+  },
+  "manumission-society": {
+    book: "gotham",
+    chapter: "18. The Revolution Settlement",
+    pages: "285",
+  },
+  "african-free-school": {
+    book: "gotham",
+    chapter: "18. The Revolution Settlement",
+    pages: "286",
+  },
+  "mother-zion": { book: "gotham", chapter: "25. From Crowd to Class", pages: "398" },
 };

@@ -149,4 +149,58 @@ export const lenapeEntries: Entry[] = [
       "The harbor held some 350 square miles of oyster beds — half the world's oysters, by some counts. Lenape middens of discarded shells stood yards deep along both rivers.",
     coords: [-74.0431, 40.6892],
   },
+  {
+    id: "siwanoy",
+    era: "lenape",
+    kind: "person",
+    title: "The Siwanoy",
+    wikiTitle: "Siwanoy",
+    year: 1500,
+    yearLabel: "16th century",
+    blurb:
+      "Munsee-speaking people of the northern shore of the East River and Long Island Sound, from today's Bronx to the Connecticut line. Thomas Pell's 1654 purchase of what became Pelham was made with them.",
+    gotham:
+      "Gotham lists them among the loose, shifting bands of the region, rivals as often as allies, not tidy tribes.",
+  },
+  {
+    id: "moraine",
+    era: "lenape",
+    kind: "place",
+    title: "The terminal moraine",
+    wikiTitle: "Harbor Hill Moraine",
+    year: -9950,
+    yearLabel: "left c. 17,000 years ago",
+    blurb:
+      "The ridge of rubble the ice sheet dropped at its farthest reach, arcing from northern Queens through Crown Heights and Bay Ridge to Todt Hill on Staten Island, the highest point on the coast south of Maine.",
+    gotham:
+      "Gotham begins the city's story with this ridge and the flat outwash plain below it, where Flatbush and Flatlands would farm.",
+    coords: [-73.969, 40.6605],
+  },
+  {
+    id: "wampum",
+    era: "lenape",
+    kind: "event",
+    title: "Wampum",
+    wikiTitle: "Wampum",
+    year: 1600,
+    yearLabel: "before 1609",
+    blurb:
+      "Purple and white beads drilled from whelk and quahog shells, strung into belts that carried treaties, condolences, and tribute. The Dutch and English made them money.",
+    gotham:
+      "Gotham shows the Dutch discovering 'sewan' as the currency of the fur trade, and the Long Island shore as its mint.",
+  },
+  {
+    id: "sapohanikan",
+    era: "lenape",
+    kind: "place",
+    title: "Sapohanikan",
+    wikiTitle: "Sapohanikan",
+    year: 1500,
+    yearLabel: "16th century",
+    blurb:
+      "A fishing and planting place on the Hudson shore near today's Gansevoort Street, reached by a side path off the main trail down the island.",
+    gotham:
+      "Gotham walks the island's trail from south to north, naming each stop; this was the turn-off to the river.",
+    coords: [-74.008, 40.7335],
+  },
 ];

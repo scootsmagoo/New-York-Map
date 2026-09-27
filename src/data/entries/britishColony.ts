@@ -211,4 +211,32 @@ export const britishColonyEntries: Entry[] = [
     coords: [-74.0002, 40.7166],
     lifespan: [1664, 1813],
   },
+  {
+    id: "african-burial-ground",
+    era: "britishColony",
+    kind: "place",
+    title: "The Negro Burial Ground",
+    wikiTitle: "African Burial Ground National Monument",
+    year: 1697,
+    yearLabel: "c. 1690s–1794",
+    blurb:
+      "Barred from churchyards, Black New Yorkers buried their dead outside the town, north of the Common. Thousands lay here before the city sold it off for lots in the 1790s; it was rediscovered in 1991.",
+    gotham:
+      "Gotham traces it through the occupation's runaways and the 1788 petition against medical students robbing its graves.",
+    coords: [-74.0045, 40.7144],
+    lifespan: [1697, 1794],
+  },
+  {
+    id: "kings-bridge",
+    era: "britishColony",
+    kind: "place",
+    title: "King's Bridge",
+    wikiTitle: "Kingsbridge, Bronx",
+    year: 1693,
+    blurb:
+      "Frederick Philipse's toll bridge over Spuyten Duyvil Creek, for decades the only way off the island by land. Its monopoly held until a rival 'Free Bridge' opened in 1759.",
+    gotham:
+      "Gotham makes it a case of the anti-Leislerian spoils: a manor, a monopoly, and tolls everyone complained of.",
+    coords: [-73.9075, 40.8781],
+  },
 ];

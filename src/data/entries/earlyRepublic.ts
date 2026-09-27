@@ -234,4 +234,42 @@ export const earlyRepublicEntries: Entry[] = [
     coords: [-74.0001, 40.7148],
     lifespan: [1813, 1825],
   },
+  {
+    id: "manumission-society",
+    era: "earlyRepublic",
+    kind: "event",
+    title: "The Manumission Society",
+    wikiTitle: "New York Manumission Society",
+    year: 1785,
+    blurb:
+      "Thirty-two leading citizens, Jay and Hamilton among them, met at the Coffee House to fight the kidnapping and sale of free Black New Yorkers and to press for gradual abolition.",
+    gotham:
+      "Gotham notes that at least half the founders owned slaves; Governor Clinton alone owned eight.",
+  },
+  {
+    id: "african-free-school",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "African Free School",
+    wikiTitle: "African Free School",
+    year: 1787,
+    blurb:
+      "The Manumission Society's school opened in one room on Cliff Street. It grew into a system of schools whose pupils included Ira Aldridge and James McCune Smith.",
+    gotham:
+      "Gotham shows its founders offering it as proof that Black children could become 'safe and useful members' of society.",
+    coords: [-74.0055, 40.7085],
+  },
+  {
+    id: "mother-zion",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "Zion Chapel (Mother Zion)",
+    wikiTitle: "Mother African Methodist Episcopal Zion Church",
+    year: 1796,
+    blurb:
+      "Peter Williams, James Varick, and other Black Methodists began worshiping apart in a cabinetmaker's shop on Cross Street. By 1799 they had broken away; it became the mother church of the AME Zion denomination.",
+    gotham:
+      "Gotham presents Zion as one of the new institutions Black New Yorkers built for themselves in the 1790s.",
+    coords: [-74.0, 40.715],
+  },
 ];

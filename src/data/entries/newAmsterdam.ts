@@ -208,4 +208,30 @@ export const newAmsterdamEntries: Entry[] = [
       "Stuyvesant chartered this village on the island's northern flats in 1658, a day's walk from town up the Wickquasgeck road.",
     coords: [-73.9389, 40.8089],
   },
+  {
+    id: "negroes-farms",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Half-freedom and the Negroes' Farms",
+    wikiTitle: "Land of the blacks",
+    year: 1644,
+    blurb:
+      "In 1644 the company freed eleven of its enslaved men on conditions: a yearly tribute, work when called, and their children still in bondage. Their farms outside town were meant as a buffer against Lenape attack.",
+    gotham:
+      "Gotham reads half-freedom as company thrift: it shed the cost of older workers while keeping their labor on call.",
+    coords: [-73.9985, 40.726],
+  },
+  {
+    id: "pavonia-massacre",
+    era: "newAmsterdam",
+    kind: "event",
+    title: "The Pavonia massacre",
+    wikiTitle: "Pavonia, New Netherland",
+    year: 1643,
+    blurb:
+      "On the night of February 25, 1643, Kieft's soldiers fell on Lenape refugees camped at Pavonia and Corlear's Hook and killed scores of men, women, and children. The heads of more than eighty were brought back to town.",
+    gotham:
+      "Gotham quotes De Vries's horror at the killings, which united the lower Hudson's peoples in the war that nearly ended the colony.",
+    coords: [-74.037, 40.7165],
+  },
 ];

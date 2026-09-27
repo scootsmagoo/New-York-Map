@@ -204,4 +204,41 @@ export const revolutionEntries: Entry[] = [
       "The burnt-over district west of Broadway where the occupied city's poor, refugees, and camp followers lived under sailcloth stretched over charred walls.",
     coords: [-74.013, 40.706],
   },
+  {
+    id: "sons-of-liberty",
+    era: "revolution",
+    kind: "person",
+    title: "The Sons of Liberty",
+    wikiTitle: "Sons of Liberty",
+    year: 1765,
+    blurb:
+      "Formed in the fall of 1765 against the Stamp Act by Isaac Sears, Alexander McDougall, John Lamb, and other self-made men; they ran the crowds, the liberty poles, and the boycotts.",
+    gotham:
+      "Gotham casts them as newcomers to power, the kind of men who had carried little weight in city affairs before.",
+  },
+  {
+    id: "hickey-plot",
+    era: "revolution",
+    kind: "event",
+    title: "The Hickey plot",
+    wikiTitle: "Thomas Hickey (soldier)",
+    year: 1776,
+    blurb:
+      "One of Washington's own guards, Thomas Hickey, was caught in a plot to kidnap or kill the general, perhaps with the mayor's help. He was hanged before a huge crowd near the Common in June 1776.",
+    gotham:
+      "Gotham sets it amid the Conspiracy Committee's hunt for Tories as the British fleet gathered off the harbor.",
+    coords: [-74.0065, 40.7128],
+  },
+  {
+    id: "book-of-negroes",
+    era: "revolution",
+    kind: "event",
+    title: "The Book of Negroes",
+    wikiTitle: "Book of Negroes",
+    year: 1783,
+    blurb:
+      "As the British left, General Carleton refused to hand back those the Crown had freed. Some 3,000 Black Loyalists were listed in a ledger and sailed from the harbor, most for Nova Scotia.",
+    gotham:
+      "Gotham counts perhaps four thousand Black refugees escaping through the city, and follows them to a hard welcome in Canada.",
+  },
 ];
