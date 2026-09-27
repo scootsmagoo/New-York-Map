@@ -14,6 +14,7 @@ import {
   type TimeWindow,
 } from "../lib/timescale";
 import { useElementSize } from "../lib/useElementSize";
+import { SHORT_SCREEN, useMediaQuery } from "../lib/useMediaQuery";
 
 interface TimelineProps {
   window: TimeWindow;
@@ -23,12 +24,15 @@ interface TimelineProps {
   onTogglePlay: () => void;
 }
 
-const BAND_H = 30;
-const AXIS_H = 26;
-const MARKS_H = 78;
-const HEIGHT = BAND_H + AXIS_H + MARKS_H;
-const LANES = 4;
+/** Row heights; a phone on its side gets a slimmer timeline with two lanes. */
+const ROOMY = { BAND_H: 30, AXIS_H: 26, LANES: 4 };
+const SHORT = { BAND_H: 24, AXIS_H: 20, LANES: 2 };
 const LANE_STEP = 16;
+const layoutFor = (short: boolean) => {
+  const l = short ? SHORT : ROOMY;
+  const MARKS_H = l.LANES * LANE_STEP + 14;
+  return { ...l, MARKS_H, HEIGHT: l.BAND_H + l.AXIS_H + MARKS_H };
+};
 
 const KIND_GLYPH: Record<Entry["kind"], string> = {
   person: "●",
@@ -48,6 +52,7 @@ export function Timeline({
   onTogglePlay,
 }: TimelineProps) {
   const { ref, width } = useElementSize<HTMLDivElement>();
+  const { BAND_H, AXIS_H, LANES, HEIGHT } = layoutFor(useMediaQuery(SHORT_SCREEN));
   const svgRef = useRef<SVGSVGElement>(null);
   const drag = useRef<{ x: number; moved: boolean } | null>(null);
   // Every finger currently down, for two-finger pinch on touch screens.
@@ -242,7 +247,7 @@ export function Timeline({
       placed.push({ entry, x, lane, labeled });
     }
     return placed;
-  }, [win, width, showMarkLabels]);
+  }, [win, width, showMarkLabels, LANES]);
 
   const zoomBy = (factor: number) => {
     const uCenter = (win.u0 + win.u1) / 2;

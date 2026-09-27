@@ -4,6 +4,12 @@
    ============================================================ */
 
 :root {
+  /* A phone's notch and home bar (viewport-fit=cover in index.html lets
+     the map run under them). Through variables so tests can fake one. */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
   --paper: #efe5cf;
   --paper-deep: #e4d7b8;
   --ink: #2c2218;
@@ -37,6 +43,7 @@ html, body, #root {
 }
 
 html {
+  background: #e8dfca;
   /* Safari enlarges text when a phone turns to landscape; the layout is
      already sized for that. */
   -webkit-text-size-adjust: 100%;
@@ -383,6 +390,9 @@ button {
 .app-main {
   position: relative;
   overflow: hidden;
+  /* Panels over the map size themselves to it (cqh), not to the screen:
+     on a phone on its side the map is a small part of the screen. */
+  container: map / size;
 }
 
 .map-view {
@@ -1006,6 +1016,9 @@ button {
   top: 12px;
   z-index: 4;
   max-width: min(280px, calc(100% - 24px));
+  max-height: calc(100cqh - 24px);
+  overflow-y: auto;
+  scrollbar-width: thin;
   font-size: 12px;
 }
 
@@ -1540,7 +1553,7 @@ button {
 .modal {
   position: relative;
   width: min(580px, 94vw);
-  max-height: 86vh;
+  max-height: 86dvh;
   overflow-y: auto;
   background: var(--paper);
   border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
@@ -2188,7 +2201,7 @@ a {
   top: calc(100% + 6px);
   right: 0;
   width: 232px;
-  max-height: min(60vh, 480px);
+  max-height: min(calc(100cqh - 110px), 480px);
   overflow-y: auto;
   padding: 8px 10px;
   border-radius: 10px;
@@ -2233,7 +2246,6 @@ a {
 @media (max-width: 640px) {
   .map-key-panel {
     width: min(232px, calc(100vw - 32px));
-    max-height: 45vh;
   }
 }
 
@@ -2457,4 +2469,166 @@ a {
 /* The tips card sits where the attribution line lives; yield to it. */
 .app-main:has(.tips-card) .map-attribution {
   display: none;
+}
+
+/* ---------------- Notches and home bars ---------------- */
+
+/* The map runs edge to edge; the header, timeline, and anything pinned to
+   an edge keep clear. Transparent borders take the inset without touching
+   each element's own padding, and the background still paints under them. */
+.app-header {
+  background-origin: border-box;
+  border-top: var(--safe-t) solid transparent;
+  border-left: var(--safe-l) solid transparent;
+  border-right: var(--safe-r) solid transparent;
+}
+
+.timeline {
+  background-origin: border-box;
+  border-left: var(--safe-l) solid transparent;
+  border-right: var(--safe-r) solid transparent;
+  border-bottom: var(--safe-b) solid transparent;
+}
+
+.population-panel { left: calc(12px + var(--safe-l)); }
+.map-controls { right: calc(12px + var(--safe-r)); }
+.era-panel { border-right: var(--safe-r) solid transparent; }
+
+.overlay {
+  padding-left: max(18px, var(--safe-l));
+  padding-right: max(18px, var(--safe-r));
+}
+
+.search-overlay {
+  padding-left: max(16px, var(--safe-l));
+  padding-right: max(16px, var(--safe-r));
+}
+
+@media (max-width: 880px) {
+  .header-menu-panel {
+    top: calc(8px + var(--safe-t));
+    right: calc(8px + var(--safe-r));
+  }
+
+  .search-overlay {
+    padding-left: var(--safe-l);
+    padding-right: var(--safe-r);
+  }
+
+  .search-palette { padding-bottom: var(--safe-b); }
+}
+
+@media (max-width: 640px) {
+  .tour-card { bottom: calc(8px + var(--safe-b)); }
+}
+
+/* ---------------- Phones upright ---------------- */
+
+/* Narrowest phones: keep the header buttons on one line. */
+@media (max-width: 400px) {
+  .brand h1 { font-size: 19px; letter-spacing: 3px; }
+  .explore-btn { white-space: nowrap; padding: 8px 10px; font-size: 12px; }
+  .header-actions { gap: 6px; }
+}
+
+
+
+/* Two rows, not three: the name and the buttons share the top one. */
+@media (max-width: 640px) {
+  .app-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "brand actions" "year year";
+    align-items: center;
+    row-gap: 4px;
+    padding: 6px 12px 8px;
+  }
+
+  .brand { grid-area: brand; }
+  .header-actions { grid-area: actions; gap: 8px; }
+  .year-display { grid-area: year; justify-content: flex-start; }
+  .brand-sub { display: none; }
+  .year-now { min-width: 0; text-align: left; }
+}
+
+/* ---------------- Phones on their side ---------------- */
+
+/* Height is what's short: the header folds to one slim row, the timeline
+   to two lanes (Timeline.tsx), and cards dock to the side of the map
+   rather than across it. Matches SHORT_SCREEN in lib/useMediaQuery.ts. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .app-header {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 4px 12px;
+  }
+
+  .brand h1 { font-size: 17px; letter-spacing: 3px; }
+  .brand-sub { display: none; }
+  .year-display { gap: 10px; flex: 1; justify-content: center; }
+  .year-now { font-size: 24px; min-width: 0; }
+  .era-now { padding-left: 10px; }
+  .era-now-name { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .era-now-sub { display: none; }
+  .header-actions { gap: 8px; }
+  .search-btn,
+  .header-menu-btn { height: 32px; }
+  .header-menu-btn { width: 32px; }
+  .search-btn { padding: 0 10px; }
+  .search-btn-label,
+  .search-kbd { display: none; }
+  .explore-btn { padding: 7px 12px; font-size: 12.5px; }
+
+  .map-attribution { display: none; }
+
+  .map-controls { top: 8px; right: calc(8px + var(--safe-r)); }
+  .map-key-panel { max-height: calc(100cqh - 100px); }
+
+  /* Play and zoom move to the bottom-left corner (the credit line's, now
+     hidden), so the key can open down the right side without covering
+     them. The population panel stops short of them. */
+  .timeline-controls { right: auto; left: 8px; top: -40px; }
+  .population-panel { top: 8px; left: calc(8px + var(--safe-l)); max-height: calc(100cqh - 60px); }
+
+  /* Under a docked card they'd only peek out from its corner. */
+  .app-main-touring + .timeline .timeline-controls,
+  .app-main:has(.tips-card) + .timeline .timeline-controls { visibility: hidden; }
+
+  /* Tour and tips cards run down the left side, leaving the map beside
+     them in view. The text scrolls; the buttons stay put. */
+  .tour-card {
+    left: calc(8px + var(--safe-l));
+    top: 8px;
+    bottom: 8px;
+    transform: none;
+    width: min(380px, 50vw);
+    display: flex;
+    flex-direction: column;
+    padding: 10px 40px 10px 14px;
+  }
+
+  .tour-card-body,
+  .tips-card-lead {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .tour-card-title { font-size: 16px; margin: 4px 0; }
+  .tour-card-text { font-size: 12.5px; line-height: 1.45; margin-bottom: 6px; }
+  .tour-card-footer { flex: none; }
+  /* "1 of 5" in the corner says it; the text needs the row. */
+  .tour-card-dots { display: none; }
+
+  .tips-card-list { flex: none; margin-right: -26px; }
+  .tips-card-btn-sub { display: none; }
+  .tips-card-btn { padding: 6px 10px; }
+  .tips-card-btn-title { font-size: 13px; }
+
+  .era-panel { width: min(360px, 55vw); }
+  .era-panel-scroll { padding: 14px 16px 18px; }
+
+  .modal { padding: 16px 18px 14px; }
 }

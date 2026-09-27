@@ -60,3 +60,39 @@ test("turning the phone keeps the map on screen and where it was", async ({ page
     await expect(page.locator(".app-main .map-land").first()).toBeInViewport();
   }
 });
+
+// On its side, with Safari's toolbars showing: about 330 of 390 px tall.
+const LANDSCAPE = { width: 844, height: 330 };
+
+test("on its side, the map gets most of the screen", async ({ page }) => {
+  await page.setViewportSize(LANDSCAPE);
+  await open(page, "#year=1880");
+  const h = await page.evaluate(() => {
+    const r = (s: string) => document.querySelector(s)!.getBoundingClientRect().height;
+    return { header: r(".app-header"), map: r(".app-main"), screen: innerHeight };
+  });
+  expect(h.header).toBeLessThan(52);
+  expect(h.map / h.screen).toBeGreaterThan(0.55);
+});
+
+test("on its side, a tour's buttons stay in reach", async ({ page }) => {
+  await page.setViewportSize(LANDSCAPE);
+  await open(page, "#tour=fire-water");
+  const next = page.getByRole("button", { name: /next/i });
+  await expect(next).toBeInViewport({ ratio: 1 });
+  const first = await page.locator(".year-now").textContent();
+  await next.tap();
+  await expect.poll(() => page.locator(".year-now").textContent()).not.toBe(first);
+});
+
+test("on its side, the open key leaves play and zoom uncovered", async ({ page }) => {
+  await page.setViewportSize(LANDSCAPE);
+  await open(page, "#year=1900");
+  await page.getByRole("button", { name: "Key" }).tap();
+  const key = (await page.locator(".map-key-panel").boundingBox())!;
+  const play = (await page.locator(".timeline-controls").boundingBox())!;
+  const overlaps = key.x < play.x + play.width && play.x < key.x + key.width && key.y < play.y + play.height && play.y < key.y + key.height;
+  expect(overlaps).toBe(false);
+  await page.getByRole("button", { name: /play through time/i }).tap();
+  await expect(page.getByRole("button", { name: "Pause" })).toBeVisible();
+});
