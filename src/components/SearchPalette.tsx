@@ -26,6 +26,7 @@ const KIND_GLYPH: Record<SearchItemKind, string> = {
   neighborhood: "⌂",
   water: "≈",
   calamity: "✶",
+  waterfront: "⚓",
 };
 
 interface SearchPaletteProps {

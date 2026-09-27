@@ -1,6 +1,8 @@
 import { memo, useEffect } from "react";
 import { announcePanelOpen, onOtherPanelOpen } from "../lib/mapPanels";
 import { usePersistedState } from "../lib/usePersistedState";
+import { WATERFRONT_KIND_LABEL, type WaterfrontKind } from "../data/waterfront";
+import { WaterfrontGlyph } from "./WaterfrontLayer";
 
 /** What's drawn on the map right now; the key lists only these. */
 export interface MapKeyVisible {
@@ -25,6 +27,8 @@ export interface MapKeyVisible {
   lostLandscape: boolean;
   fires: boolean;
   epidemics: boolean;
+  /** Waterfront kinds on the map now, comma-joined (a string compares by value). */
+  waterfront: string;
   /** Label of the historical map sheet showing, if any. */
   overlay: string | null;
 }
@@ -250,6 +254,17 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
         </Swatch>
       ),
     },
+    ...(Object.keys(WATERFRONT_KIND_LABEL) as WaterfrontKind[]).map((kind) => ({
+      show: v.waterfront.split(",").includes(kind),
+      label: WATERFRONT_KIND_LABEL[kind],
+      swatch: (
+        <Swatch>
+          <g className={`waterfront-site waterfront-${kind}`} transform={`translate(${W / 2},${H / 2})`}>
+            <WaterfrontGlyph kind={kind} />
+          </g>
+        </Swatch>
+      ),
+    })),
   ];
 
   const shown = rows.filter((r) => r.show);

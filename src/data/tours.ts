@@ -22,7 +22,12 @@ export interface TourStop {
   entryId?: string;
 }
 
-export type TourLayer = "lostLandscape" | "neighborhoods" | "streetLabels" | "calamities";
+export type TourLayer =
+  | "lostLandscape"
+  | "neighborhoods"
+  | "streetLabels"
+  | "calamities"
+  | "waterfront";
 
 export interface Tour {
   id: string;

@@ -36,6 +36,8 @@ import { StreetLabelLayer } from "./StreetLabelLayer";
 import { NeighborhoodLayer } from "./NeighborhoodLayer";
 import { LostLandscapeLayer } from "./LostLandscapeLayer";
 import { CalamityLayer } from "./CalamityLayer";
+import { WaterfrontLayer } from "./WaterfrontLayer";
+import { waterfront, waterfrontOpacity } from "../data/waterfront";
 import { calamities, calamityOpacity } from "../data/calamities";
 import { boroughLabels, type MapLabel } from "../data/mapLabels";
 import { hatchTile } from "../lib/hatch";
@@ -70,6 +72,7 @@ interface MapViewProps {
   showNeighborhoods?: boolean;
   showLostLandscape?: boolean;
   showCalamities?: boolean;
+  showWaterfront?: boolean;
   /** Keeps pan/zoom in step with other maps sharing the link (compare mode). */
   cameraLink?: CameraLink;
   /** Reset button and attribution; off for the second map in compare mode. */
@@ -292,6 +295,7 @@ function MapViewInner({
   showNeighborhoods = false,
   showLostLandscape = false,
   showCalamities = false,
+  showWaterfront = false,
   cameraLink,
   chrome = true,
 }: MapViewProps) {
@@ -772,6 +776,11 @@ function MapViewInner({
       lostLandscape: showLostLandscape,
       fires: showCalamities && calamities.some((c) => c.kind === "fire" && calamityOpacity(c, year) > 0),
       epidemics: showCalamities && calamities.some((c) => c.kind === "epidemic" && calamityOpacity(c, year) > 0),
+      waterfront: showWaterfront
+        ? [...new Set(waterfront.filter((s) => waterfrontOpacity(s, year) > 0).map((s) => s.kind))]
+            .sort()
+            .join(",")
+        : "",
       overlay: overlayFrames.length
         ? overlayFrames.reduce((a, b) => (b.weight > a.weight ? b : a)).overlay.label
         : null,
@@ -779,7 +788,8 @@ function MapViewInner({
   }, [
     year, roadFade, surveyOpacity, infraFade, ferryFade, minorParkFade, base,
     structurePaths, infrastructurePaths, parkPaths, markers, ghostMarkers,
-    lenapeOpacity, visibleSettlements, showLostLandscape, showCalamities, overlayFrames,
+    lenapeOpacity, visibleSettlements, showLostLandscape, showCalamities, showWaterfront,
+    overlayFrames,
   ]);
 
   if (!width || !height) return <div className="map-view" ref={ref} />;
@@ -1078,6 +1088,9 @@ function MapViewInner({
             {showCalamities && (
               <CalamityLayer project={projection} year={year} k={k} onSelectEntry={onSelectEntry} />
             )}
+
+            {/* Markets, shipyards, sugar houses, and docks */}
+            {showWaterfront && <WaterfrontLayer project={projection} year={year} k={k} />}
 
             {/* Street names — every named street, decluttered to what fits */}
             {showStreetLabels && (

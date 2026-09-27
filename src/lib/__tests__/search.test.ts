@@ -36,6 +36,14 @@ describe("search", () => {
     expect(searchEntries("Canvas Town").some((h) => h.item.id === "calamity:fire-1776")).toBe(true);
   });
 
+  it("finds a waterfront site by what it made or did", () => {
+    const hit = searchEntries("Monitor ironclad").find((h) => h.item.kind === "waterfront")!;
+    expect(hit.item.title).toBe("Continental Iron Works");
+    if (hit.item.source.type !== "location") throw new Error("not a location");
+    expect(hit.item.source.location.layer).toBe("waterfront");
+    expect(hit.item.source.location.range[0]).toBe(1861);
+  });
+
   it("opens a renamed neighborhood under its later name", () => {
     const hit = searchEntries("Times Square").find((h) => h.item.kind === "neighborhood")!;
     if (hit.item.source.type !== "location") throw new Error("not a location");

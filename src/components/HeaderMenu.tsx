@@ -25,6 +25,8 @@ interface HeaderMenuProps {
   onShowLostLandscapeChange: (v: boolean) => void;
   showCalamities: boolean;
   onShowCalamitiesChange: (v: boolean) => void;
+  showWaterfront: boolean;
+  onShowWaterfrontChange: (v: boolean) => void;
 }
 
 export function HeaderMenu({
@@ -49,6 +51,8 @@ export function HeaderMenu({
   onShowLostLandscapeChange,
   showCalamities,
   onShowCalamitiesChange,
+  showWaterfront,
+  onShowWaterfrontChange,
 }: HeaderMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -201,6 +205,18 @@ export function HeaderMenu({
             <p className="header-menu-section-note">
               The great fires' burned districts and the epidemics' worst-hit
               blocks, in the years they struck.
+            </p>
+
+            <label className="header-menu-check">
+              <input
+                type="checkbox"
+                checked={showWaterfront}
+                onChange={(e) => onShowWaterfrontChange(e.target.checked)}
+              />
+              Working waterfront
+            </label>
+            <p className="header-menu-section-note">
+              Markets, shipyards, sugar houses, and docks, while they worked.
             </p>
           </div>
 

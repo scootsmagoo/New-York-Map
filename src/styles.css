@@ -753,6 +753,31 @@ button {
   fill: #5c520c;
 }
 
+/* ----- Working waterfront ----- */
+
+.waterfront-site path {
+  fill: #24566f;
+  stroke: var(--paper);
+  stroke-width: 1.2;
+  paint-order: stroke;
+}
+
+.waterfront-sugar path { fill: #7a4a1c; }
+.waterfront-market path { fill: #6b3a5a; }
+
+.waterfront-label {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: #1f4a60;
+  text-anchor: middle;
+  dominant-baseline: hanging;
+  stroke: var(--paper);
+  stroke-width: 2.5px;
+  paint-order: stroke;
+  pointer-events: none;
+}
+
 .neighborhood-label {
   font-family: var(--serif);
   font-size: 13px;

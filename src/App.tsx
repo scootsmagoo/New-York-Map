@@ -102,6 +102,7 @@ export default function App() {
   const [showNeighborhoods, setShowNeighborhoods] = usePersistedState("neighborhoods", false);
   const [showLostLandscape, setShowLostLandscape] = usePersistedState("lostLandscape", false);
   const [showCalamities, setShowCalamities] = usePersistedState("calamities", false);
+  const [showWaterfront, setShowWaterfront] = usePersistedState("waterfront", false);
   // The first-visit tips card; a deep link is someone else's tour, so skip it.
   const [tipsSeen, setTipsSeen] = usePersistedState(
     "tipsSeen",
@@ -314,12 +315,20 @@ export default function App() {
         if (layer === "lostLandscape") setShowLostLandscape(true);
         else if (layer === "neighborhoods") setShowNeighborhoods(true);
         else if (layer === "calamities") setShowCalamities(true);
+        else if (layer === "waterfront") setShowWaterfront(true);
         else setShowStreetLabels(true);
       }
       setTour({ tour: t, step: 0 });
       showTourStop(t, 0);
     },
-    [showTourStop, setShowLostLandscape, setShowNeighborhoods, setShowCalamities, setShowStreetLabels]
+    [
+      showTourStop,
+      setShowLostLandscape,
+      setShowNeighborhoods,
+      setShowCalamities,
+      setShowWaterfront,
+      setShowStreetLabels,
+    ]
   );
 
   const stepTour = useCallback(
@@ -425,6 +434,7 @@ export default function App() {
       setFocusStreet(null);
       if (loc.layer === "neighborhoods") setShowNeighborhoods(true);
       else if (loc.layer === "calamities") setShowCalamities(true);
+      else if (loc.layer === "waterfront") setShowWaterfront(true);
       else setShowLostLandscape(true);
       if (year < loc.range[0] || year > loc.range[1]) {
         setWin((w) => windowAround(unitOfYear(loc.year), Math.min(w.u1 - w.u0, 0.18)));
@@ -432,7 +442,7 @@ export default function App() {
       setFocusPoint({ coords: loc.coords, k: loc.k });
       setFocusPointToken((n) => n + 1);
     },
-    [year, setShowNeighborhoods, setShowLostLandscape, setShowCalamities]
+    [year, setShowNeighborhoods, setShowLostLandscape, setShowCalamities, setShowWaterfront]
   );
 
   const goToEntry = useCallback(
@@ -477,6 +487,8 @@ export default function App() {
         onShowLostLandscapeChange={setShowLostLandscape}
         showCalamities={showCalamities}
         onShowCalamitiesChange={setShowCalamities}
+        showWaterfront={showWaterfront}
+        onShowWaterfrontChange={setShowWaterfront}
       />
 
       <main
@@ -503,6 +515,7 @@ export default function App() {
           showNeighborhoods={showNeighborhoods}
           showLostLandscape={showLostLandscape}
           showCalamities={showCalamities}
+          showWaterfront={showWaterfront}
           cameraLink={cameraLink}
         />
         {compareYear !== null && (
@@ -528,6 +541,7 @@ export default function App() {
                 showNeighborhoods={showNeighborhoods}
                 showLostLandscape={showLostLandscape}
                 showCalamities={showCalamities}
+                showWaterfront={showWaterfront}
                 cameraLink={cameraLink}
                 chrome={false}
               />

@@ -115,6 +115,21 @@ test("fires and epidemics show in their years, with key rows, and search flies t
   await expect(page.locator(".calamity-fire")).toHaveCount(0);
 });
 
+test("the working waterfront shows the sites working that year, in the key and search", async ({ page }) => {
+  await open(page, "#year=1865");
+  await toggleLayer(page, "Working waterfront");
+  // Nine were working: not yet Bush Terminal and later, no longer the Fly
+  // Market or the Livingston sugar house.
+  await expect(page.locator(".waterfront-site")).toHaveCount(9);
+  await page.getByRole("button", { name: "Key" }).click();
+  await expect(page.locator(".map-key-panel")).toContainText("Shipyard or ironworks");
+  await page.getByRole("button", { name: "Key" }).click();
+  await page.keyboard.press("Control+k");
+  await page.getByRole("combobox", { name: "Search Gotham" }).fill("Fly Market");
+  await page.getByRole("option", { name: /Fly Market.*market/i }).click();
+  await expect.poll(async () => Number(await year(page))).toBeLessThan(1822);
+});
+
 test("the Fire and Water tour turns on fires & epidemics", async ({ page }) => {
   await open(page, "#tour=fire-water");
   await expect(page.locator(".calamity-epidemic")).toHaveCount(1);

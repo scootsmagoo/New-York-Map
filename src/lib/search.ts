@@ -5,13 +5,20 @@ import {
   streetMidpoint,
   streetTier,
 } from "../data/streets";
-import { eras, formatYear } from "../data/eras";
+import { eras, formatYear, TIME_MAX } from "../data/eras";
 import { allEntries } from "../data/entries";
 import { neighborhoods } from "../data/neighborhoods";
 import { lostWaters } from "../data/lostWaters";
 import { CALAMITY_FADE, calamities, calamityCenter } from "../data/calamities";
+import { WATERFRONT_KIND_LABEL, waterfront, waterfrontDates } from "../data/waterfront";
 
-export type SearchItemKind = EntryKind | "street" | "neighborhood" | "water" | "calamity";
+export type SearchItemKind =
+  | EntryKind
+  | "street"
+  | "neighborhood"
+  | "water"
+  | "calamity"
+  | "waterfront";
 
 /** Where a map-layer result lives: fly there, at a year it exists, with its layer on. */
 export interface MapLocation {
@@ -22,7 +29,7 @@ export interface MapLocation {
   year: number;
   /** Years it's on the map. */
   range: [number, number];
-  layer: "neighborhoods" | "lostLandscape" | "calamities";
+  layer: "neighborhoods" | "lostLandscape" | "calamities" | "waterfront";
 }
 
 /** A single searchable record — extend `source` as new map content types ship. */
@@ -44,7 +51,16 @@ export interface SearchHit {
   score: number;
 }
 
-const KIND_ORDER: SearchItemKind[] = ["person", "place", "event", "street", "neighborhood", "water", "calamity"];
+const KIND_ORDER: SearchItemKind[] = [
+  "person",
+  "place",
+  "event",
+  "street",
+  "neighborhood",
+  "water",
+  "calamity",
+  "waterfront",
+];
 
 const KIND_LABEL: Record<SearchItemKind, string> = {
   person: "People",
@@ -54,6 +70,7 @@ const KIND_LABEL: Record<SearchItemKind, string> = {
   neighborhood: "Neighborhoods",
   water: "Lost waters",
   calamity: "Fires & epidemics",
+  waterfront: "Waterfront",
 };
 
 const eraName = new Map(eras.map((e) => [e.id, e.name]));
@@ -239,6 +256,29 @@ function calamitySearchItems(): SearchItem[] {
   }));
 }
 
+function waterfrontSearchItems(): SearchItem[] {
+  return waterfront.map((s) => ({
+    id: `waterfront:${s.id}`,
+    kind: "waterfront" as const,
+    title: s.name,
+    subtitle: `${WATERFRONT_KIND_LABEL[s.kind].toLowerCase()}, ${waterfrontDates(s)}`,
+    haystack: [s.name, s.aka, s.note, WATERFRONT_KIND_LABEL[s.kind], "waterfront port harbor"]
+      .filter(Boolean)
+      .join(" "),
+    source: {
+      type: "location" as const,
+      location: {
+        coords: s.coords,
+        k: 7,
+        // A few years in, once it has faded in.
+        year: Math.min(s.from + 5, s.to ?? TIME_MAX),
+        range: [s.from, s.to ?? TIME_MAX] as [number, number],
+        layer: "waterfront" as const,
+      },
+    },
+  }));
+}
+
 /** Build the search index from all registered content sources. */
 export function buildSearchIndex(): SearchItem[] {
   const entries = allEntries.map((entry) => {
@@ -269,6 +309,7 @@ export function buildSearchIndex(): SearchItem[] {
     ...neighborhoodSearchItems(),
     ...waterSearchItems(),
     ...calamitySearchItems(),
+    ...waterfrontSearchItems(),
   ];
 }
 
