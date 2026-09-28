@@ -177,7 +177,7 @@ function inRing(pt, ring) {
 
 /** First footprint snapshot, through 1880, whose outer-borough built-up area covers a point. */
 function footprintYear(pt) {
-  for (const snap of handFootprints.filter((s) => s.year <= HAND_FOOTPRINTS_UNTIL)) {
+  for (const snap of handFootprints.filter((s) => s.year <= HAND_FOOTPRINTS_UNTIL && s.other.length)) {
     if (snap.other.some((ring) => inRing(pt, ring))) return snap.year;
   }
   return Infinity;

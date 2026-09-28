@@ -26,9 +26,10 @@ from skimage.measure import find_contours
 
 ROOT = Path(__file__).resolve().parents[2]
 GEO = ROOT / "src/data/geo"
-YEARS = [1880, 1898, 1919, 1945]  # the footprint snapshots from 1880 on
+YEARS = [1880, 1898, 1919, 1930, 1945]  # the footprint snapshots from 1880 on
 LON0, LON1, LAT0, LAT1 = -74.27, -73.69, 40.49, 40.92
 CELL_LON, CELL_LAT = 0.0015, 0.0011  # about 125 × 122 m
+DECADE_SHOWS_AT = 4  # a decade's streets count from its fifth year (BoroughStreetLayer.tsx)
 MIN_LENGTH_M = 150  # street length in a cell for it to count as built
 M_LON, M_LAT = 84310, 111320
 
@@ -78,7 +79,8 @@ land = unary_union(
 
 out = {}
 for year in YEARS:
-    total = sum(length[d] for d in decades if d <= year)
+    # Streets are kept by decade; count a decade from its middle, as the map does.
+    total = sum(length[d] for d in decades if d + DECADE_SHOWS_AT <= year)
     built = total >= MIN_LENGTH_M
     # Close gaps of a block or so; no hole filling, which would fill in all of
     # Staten Island once its shore towns ringed it.

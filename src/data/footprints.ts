@@ -487,6 +487,16 @@ const snapshots: FootprintSnapshot[] = [
   },
 
   {
+    // The 1920s built more of the outer boroughs than any decade before or
+    // since; this snapshot carries them, drawn from the streets like the
+    // others from 1880 (its hand outline is 1919's, which it only dates).
+    year: 1930,
+    frontier: { latW: 40.879, latE: 40.875 },
+    manhattan: [manhattanBelow(40.879, 40.875)],
+    other: [],
+  },
+
+  {
     year: 1945,
     frontier: { latW: 40.879, latE: 40.875 },
     manhattan: [manhattanBelow(40.879, 40.875)],
@@ -601,7 +611,9 @@ const derivedOther = outerFootprints as unknown as Record<string, Ring[][]>;
 /** The hand-drawn snapshots, as drawn (scripts/prepare-borough-streets.mjs dates by these). */
 export const handFootprints = snapshots;
 
-export const footprints: FootprintSnapshot[] = snapshots.map((s) => {
+export const footprints: FootprintSnapshot[] = snapshots.map((s, i) => {
+  // A snapshot without hand outlines borrows the previous one's for dating.
+  if (!s.other.length && i > 0) s = { ...s, other: snapshots[i - 1].other };
   const polygons = derivedOther[String(s.year)];
   return polygons ? { ...s, other: polygons.map((p) => p[0]), otherPolygons: polygons } : s;
 });

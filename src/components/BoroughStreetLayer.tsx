@@ -13,6 +13,9 @@ interface BoroughStreetFile {
 /** A tile's lines, decoded to lon/lat and grouped by the decade they were built. */
 type Tile = { x: number; y: number; decades: [number, [number, number][][]][] };
 
+/** Years into a decade before its streets appear. */
+const DECADE_SHOWS_AT = 4;
+
 const BOROUGH_FILES = {
   bk: () => import("../data/geo/streets-bk.json"),
   qn: () => import("../data/geo/streets-qn.json"),
@@ -128,8 +131,10 @@ function BoroughStreetLayerInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, projection, width, height, on, viewTick]);
 
-  // Tiles change by the decade, so scrubbing within one costs nothing.
-  const decade = Math.floor(year / 10) * 10;
+  // Streets are kept by the decade they were built; each decade's appear
+  // from its middle (matching scripts/borough-footprints/build.py), and
+  // scrubbing between those years costs nothing.
+  const decade = Math.floor((year - DECADE_SHOWS_AT) / 10) * 10;
   const paths = useMemo(() => {
     if (!projection) return [];
     return visible.map(([key, tile]) => {
