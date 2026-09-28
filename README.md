@@ -63,10 +63,10 @@ npm run dev      # open http://localhost:5173
   on screen in the current year and zoom.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
 
-## Status (as of 2026-09-27)
+## Status (as of 2026-09-28)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 89 unit tests and 60 browser
+https://scootsmagoo.github.io/New-York-Map/. 90 unit tests and 61 browser
 tests (desktop WebKit and Chromium, plus an emulated iPhone upright and
 on its side) run on every
 push, and a failure stops the deploy. A pan frame-rate check runs locally
