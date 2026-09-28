@@ -12,6 +12,7 @@ import { lostWaters } from "../data/lostWaters";
 import { CALAMITY_FADE, calamities, calamityCenter } from "../data/calamities";
 import { WATERFRONT_KIND_LABEL, waterfront, waterfrontDates } from "../data/waterfront";
 import { streetcarLines } from "../data/streetcars";
+import type { LayerId } from "./layers";
 import streetcarCenters from "../data/geo/streetcarCenters.json";
 
 export type SearchItemKind =
@@ -32,7 +33,7 @@ export interface MapLocation {
   year: number;
   /** Years it's on the map. */
   range: [number, number];
-  layer: "neighborhoods" | "lostLandscape" | "calamities" | "waterfront" | "streetcars";
+  layer: LayerId;
 }
 
 /** A single searchable record — extend `source` as new map content types ship. */

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { tours, type Tour } from "../data/tours";
 import { formatYear } from "../data/eras";
 import { CopyLinkButton } from "./CopyLinkButton";
+import { LAYERS, LAYER_GROUPS, type LayerId, type LayerVisibility } from "../lib/layers";
 
 interface HeaderMenuProps {
   year: number;
@@ -17,18 +18,8 @@ interface HeaderMenuProps {
   overlayOpacity: number;
   onOverlayOpacityChange: (v: number) => void;
   overlayActiveLabel: string;
-  showStreetLabels: boolean;
-  onShowStreetLabelsChange: (v: boolean) => void;
-  showNeighborhoods: boolean;
-  onShowNeighborhoodsChange: (v: boolean) => void;
-  showLostLandscape: boolean;
-  onShowLostLandscapeChange: (v: boolean) => void;
-  showCalamities: boolean;
-  onShowCalamitiesChange: (v: boolean) => void;
-  showWaterfront: boolean;
-  onShowWaterfrontChange: (v: boolean) => void;
-  showStreetcars: boolean;
-  onShowStreetcarsChange: (v: boolean) => void;
+  layers: LayerVisibility;
+  onLayerChange: (id: LayerId, on: boolean) => void;
 }
 
 export function HeaderMenu({
@@ -45,18 +36,8 @@ export function HeaderMenu({
   overlayOpacity,
   onOverlayOpacityChange,
   overlayActiveLabel,
-  showStreetLabels,
-  onShowStreetLabelsChange,
-  showNeighborhoods,
-  onShowNeighborhoodsChange,
-  showLostLandscape,
-  onShowLostLandscapeChange,
-  showCalamities,
-  onShowCalamitiesChange,
-  showWaterfront,
-  onShowWaterfrontChange,
-  showStreetcars,
-  onShowStreetcarsChange,
+  layers,
+  onLayerChange,
 }: HeaderMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -160,81 +141,26 @@ export function HeaderMenu({
 
           <div className="header-menu-section" role="group" aria-label="Map layers">
             <div className="header-menu-section-title">Map layers</div>
-
-            <label className="header-menu-check">
-              <input
-                type="checkbox"
-                checked={showStreetLabels}
-                onChange={(e) => onShowStreetLabelsChange(e.target.checked)}
-              />
-              Street names
-            </label>
-            <p className="header-menu-section-note">
-              Every street, named as the city reaches it. Zoom in for more.
-            </p>
-
-            <label className="header-menu-check">
-              <input
-                type="checkbox"
-                checked={showNeighborhoods}
-                onChange={(e) => onShowNeighborhoodsChange(e.target.checked)}
-              />
-              Neighborhood names
-            </label>
-            <p className="header-menu-section-note">
-              Villages and neighborhoods by the names they had then.
-            </p>
-
-            <label className="header-menu-check">
-              <input
-                type="checkbox"
-                checked={showLostLandscape}
-                onChange={(e) => onShowLostLandscapeChange(e.target.checked)}
-              />
-              Lost landscape
-            </label>
-            <p className="header-menu-section-note">
-              Manhattan's 1609 shoreline, landfill as it was made, and buried
-              streams and ponds (from the Viele map).
-            </p>
-
-            <label className="header-menu-check">
-              <input
-                type="checkbox"
-                checked={showCalamities}
-                onChange={(e) => onShowCalamitiesChange(e.target.checked)}
-              />
-              Fires &amp; epidemics
-            </label>
-            <p className="header-menu-section-note">
-              The great fires' burned districts and the epidemics' worst-hit
-              blocks, in the years they struck.
-            </p>
-
-            <label className="header-menu-check">
-              <input
-                type="checkbox"
-                checked={showWaterfront}
-                onChange={(e) => onShowWaterfrontChange(e.target.checked)}
-              />
-              Working waterfront
-            </label>
-            <p className="header-menu-section-note">
-              Markets, shipyards, sugar houses, and docks, while they worked.
-            </p>
-
-            <label className="header-menu-check">
-              <input
-                type="checkbox"
-                checked={showStreetcars}
-                onChange={(e) => onShowStreetcarsChange(e.target.checked)}
-              />
-              Streetcars
-            </label>
-            <p className="header-menu-section-note">
-              Horsecar and trolley lines, from the first in 1832 until buses
-              replaced them.
-            </p>
+            {LAYER_GROUPS.map((group) => (
+              <div key={group.id} className="header-menu-layer-group" role="group" aria-labelledby={`layer-group-${group.id}`}>
+                <div id={`layer-group-${group.id}`} className="header-menu-layer-group-title">
+                  {group.title}
+                </div>
+                {LAYERS.filter((l) => l.group === group.id).map((layer) => (
+                  <div key={layer.id}>
+                    <label className="header-menu-check">
+                      <input
+                        type="checkbox"
+                        checked={layers[layer.id]}
+                        onChange={(e) => onLayerChange(layer.id, e.target.checked)}
+                      />
+                      {layer.label}
+                    </label>
+                    <p className="header-menu-section-note">{layer.note}</p>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
 
           <div className="header-menu-divider" role="separator" />

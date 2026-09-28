@@ -57,6 +57,7 @@ import type { SegmentKey } from "./data/population";
 import { activeOverlayLabel, overlayAutoWeights } from "./lib/historicalOverlays";
 import { useThrottledValue } from "./lib/useThrottledValue";
 import { usePersistedState } from "./lib/usePersistedState";
+import { useLayers } from "./lib/layers";
 import { useAnimatedState } from "./lib/useAnimatedState";
 
 function easeInOutCubic(t: number): number {
@@ -98,12 +99,7 @@ export default function App() {
   const [overlaysEnabled, setOverlaysEnabled] = usePersistedState("overlays", false);
   const [overlaysAuto, setOverlaysAuto] = usePersistedState("overlaysAuto", true);
   const [overlayOpacity, setOverlayOpacity] = usePersistedState("overlayOpacity", 0.72);
-  const [showStreetLabels, setShowStreetLabels] = usePersistedState("streetLabels", false);
-  const [showNeighborhoods, setShowNeighborhoods] = usePersistedState("neighborhoods", false);
-  const [showLostLandscape, setShowLostLandscape] = usePersistedState("lostLandscape", false);
-  const [showCalamities, setShowCalamities] = usePersistedState("calamities", false);
-  const [showWaterfront, setShowWaterfront] = usePersistedState("waterfront", false);
-  const [showStreetcars, setShowStreetcars] = usePersistedState("streetcars", false);
+  const [layers, setLayer] = useLayers();
   // The first-visit tips card; a deep link is someone else's tour, so skip it.
   const [tipsSeen, setTipsSeen] = usePersistedState(
     "tipsSeen",
@@ -312,26 +308,11 @@ export default function App() {
       setSelectedEntry(null);
       setFocusStreet(null);
       setCompareYear(null);
-      for (const layer of t.layers ?? []) {
-        if (layer === "lostLandscape") setShowLostLandscape(true);
-        else if (layer === "neighborhoods") setShowNeighborhoods(true);
-        else if (layer === "calamities") setShowCalamities(true);
-        else if (layer === "waterfront") setShowWaterfront(true);
-        else if (layer === "streetcars") setShowStreetcars(true);
-        else setShowStreetLabels(true);
-      }
+      for (const layer of t.layers ?? []) setLayer(layer, true);
       setTour({ tour: t, step: 0 });
       showTourStop(t, 0);
     },
-    [
-      showTourStop,
-      setShowLostLandscape,
-      setShowNeighborhoods,
-      setShowCalamities,
-      setShowWaterfront,
-      setShowStreetcars,
-      setShowStreetLabels,
-    ]
+    [showTourStop, setLayer]
   );
 
   const stepTour = useCallback(
@@ -414,7 +395,7 @@ export default function App() {
       setPanelOpen(false);
       setSearchOpen(false);
       setSelectedEntry(null);
-      setShowStreetLabels(true);
+      setLayer("streetLabels", true);
       const targetYear = Math.max(year, street.from);
       setWin((w) => {
         const span = Math.min(w.u1 - w.u0, 0.18);
@@ -424,7 +405,7 @@ export default function App() {
       setFocusStreet(street);
       setStreetFocusToken((t) => t + 1);
     },
-    [year]
+    [year, setLayer]
   );
 
   // Search results from the map layers: fly there, move the timeline into
@@ -435,25 +416,14 @@ export default function App() {
       setSearchOpen(false);
       setSelectedEntry(null);
       setFocusStreet(null);
-      if (loc.layer === "neighborhoods") setShowNeighborhoods(true);
-      else if (loc.layer === "calamities") setShowCalamities(true);
-      else if (loc.layer === "waterfront") setShowWaterfront(true);
-      else if (loc.layer === "streetcars") setShowStreetcars(true);
-      else setShowLostLandscape(true);
+      setLayer(loc.layer, true);
       if (year < loc.range[0] || year > loc.range[1]) {
         setWin((w) => windowAround(unitOfYear(loc.year), Math.min(w.u1 - w.u0, 0.18)));
       }
       setFocusPoint({ coords: loc.coords, k: loc.k });
       setFocusPointToken((n) => n + 1);
     },
-    [
-      year,
-      setShowNeighborhoods,
-      setShowLostLandscape,
-      setShowCalamities,
-      setShowWaterfront,
-      setShowStreetcars,
-    ]
+    [year, setLayer]
   );
 
   const goToEntry = useCallback(
@@ -490,18 +460,8 @@ export default function App() {
         overlayOpacity={overlayOpacity}
         onOverlayOpacityChange={setOverlayOpacity}
         overlayActiveLabel={overlayActiveLabel}
-        showStreetLabels={showStreetLabels}
-        onShowStreetLabelsChange={setShowStreetLabels}
-        showNeighborhoods={showNeighborhoods}
-        onShowNeighborhoodsChange={setShowNeighborhoods}
-        showLostLandscape={showLostLandscape}
-        onShowLostLandscapeChange={setShowLostLandscape}
-        showCalamities={showCalamities}
-        onShowCalamitiesChange={setShowCalamities}
-        showWaterfront={showWaterfront}
-        onShowWaterfrontChange={setShowWaterfront}
-        showStreetcars={showStreetcars}
-        onShowStreetcarsChange={setShowStreetcars}
+        layers={layers}
+        onLayerChange={setLayer}
       />
 
       <main
@@ -524,12 +484,7 @@ export default function App() {
           overlaysEnabled={overlaysEnabled}
           overlaysAuto={overlaysAuto}
           overlayOpacity={overlayOpacity}
-          showStreetLabels={showStreetLabels}
-          showNeighborhoods={showNeighborhoods}
-          showLostLandscape={showLostLandscape}
-          showCalamities={showCalamities}
-          showWaterfront={showWaterfront}
-          showStreetcars={showStreetcars}
+          layers={layers}
           cameraLink={cameraLink}
         />
         {compareYear !== null && (
@@ -551,12 +506,7 @@ export default function App() {
                 overlaysEnabled={overlaysEnabled}
                 overlaysAuto={overlaysAuto}
                 overlayOpacity={overlayOpacity}
-                showStreetLabels={showStreetLabels}
-                showNeighborhoods={showNeighborhoods}
-                showLostLandscape={showLostLandscape}
-                showCalamities={showCalamities}
-                showWaterfront={showWaterfront}
-                showStreetcars={showStreetcars}
+                layers={layers}
                 cameraLink={cameraLink}
                 chrome={false}
               />

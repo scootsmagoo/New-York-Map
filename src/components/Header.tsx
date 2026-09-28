@@ -2,6 +2,7 @@ import { memo } from "react";
 import type { Era } from "../types";
 import { formatYear } from "../data/eras";
 import { HeaderMenu } from "./HeaderMenu";
+import type { LayerId, LayerVisibility } from "../lib/layers";
 import type { Tour } from "../data/tours";
 
 interface HeaderProps {
@@ -21,18 +22,8 @@ interface HeaderProps {
   overlayOpacity: number;
   onOverlayOpacityChange: (v: number) => void;
   overlayActiveLabel: string;
-  showStreetLabels: boolean;
-  onShowStreetLabelsChange: (v: boolean) => void;
-  showNeighborhoods: boolean;
-  onShowNeighborhoodsChange: (v: boolean) => void;
-  showLostLandscape: boolean;
-  onShowLostLandscapeChange: (v: boolean) => void;
-  showCalamities: boolean;
-  onShowCalamitiesChange: (v: boolean) => void;
-  showWaterfront: boolean;
-  onShowWaterfrontChange: (v: boolean) => void;
-  showStreetcars: boolean;
-  onShowStreetcarsChange: (v: boolean) => void;
+  layers: LayerVisibility;
+  onLayerChange: (id: LayerId, on: boolean) => void;
 }
 
 function HeaderInner({
@@ -52,18 +43,8 @@ function HeaderInner({
   overlayOpacity,
   onOverlayOpacityChange,
   overlayActiveLabel,
-  showStreetLabels,
-  onShowStreetLabelsChange,
-  showNeighborhoods,
-  onShowNeighborhoodsChange,
-  showLostLandscape,
-  onShowLostLandscapeChange,
-  showCalamities,
-  onShowCalamitiesChange,
-  showWaterfront,
-  onShowWaterfrontChange,
-  showStreetcars,
-  onShowStreetcarsChange,
+  layers,
+  onLayerChange,
 }: HeaderProps) {
   return (
     <header className="app-header">
@@ -119,18 +100,8 @@ function HeaderInner({
           overlayOpacity={overlayOpacity}
           onOverlayOpacityChange={onOverlayOpacityChange}
           overlayActiveLabel={overlayActiveLabel}
-          showStreetLabels={showStreetLabels}
-          onShowStreetLabelsChange={onShowStreetLabelsChange}
-          showNeighborhoods={showNeighborhoods}
-          onShowNeighborhoodsChange={onShowNeighborhoodsChange}
-          showLostLandscape={showLostLandscape}
-          onShowLostLandscapeChange={onShowLostLandscapeChange}
-          showCalamities={showCalamities}
-          onShowCalamitiesChange={onShowCalamitiesChange}
-          showWaterfront={showWaterfront}
-          onShowWaterfrontChange={onShowWaterfrontChange}
-          showStreetcars={showStreetcars}
-          onShowStreetcarsChange={onShowStreetcarsChange}
+          layers={layers}
+          onLayerChange={onLayerChange}
         />
       </div>
     </header>

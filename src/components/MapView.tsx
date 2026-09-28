@@ -48,6 +48,7 @@ import type { MapFocus } from "../data/tours";
 import type { CameraLink } from "../lib/mapCamera";
 import { useElementSize } from "../lib/useElementSize";
 import { carryViewAcrossResize } from "../lib/resizeView";
+import type { LayerVisibility } from "../lib/layers";
 import packedBoroughs from "../data/geo/boroughs.packed.json";
 import { unpackBoroughs } from "../lib/geoPack";
 import surroundData from "../data/geo/surround.json";
@@ -70,12 +71,8 @@ interface MapViewProps {
   overlaysEnabled?: boolean;
   overlaysAuto?: boolean;
   overlayOpacity?: number;
-  showStreetLabels?: boolean;
-  showNeighborhoods?: boolean;
-  showLostLandscape?: boolean;
-  showCalamities?: boolean;
-  showWaterfront?: boolean;
-  showStreetcars?: boolean;
+  /** Which optional layers are on (lib/layers.ts). */
+  layers?: Partial<LayerVisibility>;
   /** Keeps pan/zoom in step with other maps sharing the link (compare mode). */
   cameraLink?: CameraLink;
   /** Reset button and attribution; off for the second map in compare mode. */
@@ -294,15 +291,16 @@ function MapViewInner({
   overlaysEnabled = false,
   overlaysAuto = true,
   overlayOpacity = 0.72,
-  showStreetLabels = false,
-  showNeighborhoods = false,
-  showLostLandscape = false,
-  showCalamities = false,
-  showWaterfront = false,
-  showStreetcars = false,
+  layers = {},
   cameraLink,
   chrome = true,
 }: MapViewProps) {
+  const showStreetLabels = !!layers.streetLabels;
+  const showNeighborhoods = !!layers.neighborhoods;
+  const showLostLandscape = !!layers.lostLandscape;
+  const showCalamities = !!layers.calamities;
+  const showWaterfront = !!layers.waterfront;
+  const showStreetcars = !!layers.streetcars;
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
   const contentRef = useRef<SVGGElement>(null);

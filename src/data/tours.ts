@@ -4,6 +4,8 @@
  * at a zoom level; stops may link to an entry for the full Wikipedia card.
  */
 
+import type { LayerId } from "../lib/layers";
+
 export interface MapFocus {
   coords: [number, number];
   /** d3-zoom scale factor, 1 (whole city) to 16. */
@@ -22,13 +24,7 @@ export interface TourStop {
   entryId?: string;
 }
 
-export type TourLayer =
-  | "lostLandscape"
-  | "neighborhoods"
-  | "streetLabels"
-  | "calamities"
-  | "waterfront"
-  | "streetcars";
+export type TourLayer = LayerId;
 
 export interface Tour {
   id: string;
