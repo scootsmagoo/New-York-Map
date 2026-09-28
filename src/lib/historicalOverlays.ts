@@ -105,7 +105,12 @@ export function overlayAutoWeight(year: number, overlay: HistoricalOverlay): num
   return 1 - smoothstep(peak, to, year);
 }
 
-/** Normalized auto weights for all overlays at a given year. */
+/**
+ * Auto weights for all overlays at a given year. Each sheet eases in toward
+ * its date and out after; only where two windows overlap are they scaled
+ * down to share. (Scaling a lone sheet up to 1 made it pop on and off at
+ * the edges of its window.)
+ */
 export function overlayAutoWeights(year: number): Map<string, number> {
   const raw = HISTORICAL_OVERLAYS.map((o) => ({
     id: o.id,
@@ -114,13 +119,38 @@ export function overlayAutoWeights(year: number): Map<string, number> {
   const sum = raw.reduce((s, x) => s + x.w, 0);
   const out = new Map<string, number>();
   if (sum <= 0) return out;
+  const scale = sum > 1 ? 1 / sum : 1;
   for (const { id, w } of raw) {
-    if (w > 0) out.set(id, w / sum);
+    if (w > 0) out.set(id, w * scale);
   }
   return out;
 }
 
-/** Manual mode: show only the overlay whose peak year is nearest. */
+/** Years over which manual mode crossfades from one sheet to the next. */
+const MANUAL_CROSSFADE = 16;
+
+/**
+ * Manual mode: always a sheet, the nearest by date, crossfading into the
+ * next over the years around the midpoint between them.
+ */
+export function overlayManualWeights(year: number): Map<string, number> {
+  const sheets = [...HISTORICAL_OVERLAYS].sort((a, b) => a.year - b.year);
+  const out = new Map<string, number>();
+  for (let i = 0; i < sheets.length; i++) {
+    const prev = sheets[i - 1];
+    const next = sheets[i + 1];
+    // Fully on between the midpoints to its neighbors, fading across each.
+    const rise = prev ? smoothstep(mid(prev, sheets[i]) - MANUAL_CROSSFADE / 2, mid(prev, sheets[i]) + MANUAL_CROSSFADE / 2, year) : 1;
+    const fall = next ? 1 - smoothstep(mid(sheets[i], next) - MANUAL_CROSSFADE / 2, mid(sheets[i], next) + MANUAL_CROSSFADE / 2, year) : 1;
+    const w = Math.min(rise, fall);
+    if (w > 0) out.set(sheets[i].id, w);
+  }
+  return out;
+}
+
+const mid = (a: HistoricalOverlay, b: HistoricalOverlay) => (a.year + b.year) / 2;
+
+/** Manual mode's main sheet: the one whose date is nearest. */
 export function overlayManualPick(year: number): string | null {
   let best: HistoricalOverlay | null = null;
   let bestDist = Infinity;

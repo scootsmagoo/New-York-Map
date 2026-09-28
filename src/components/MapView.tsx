@@ -29,7 +29,7 @@ import { settlementsAt } from "../data/settlements";
 import { HISTORICAL_OVERLAYS } from "../data/historicalOverlays";
 import {
   overlayAutoWeights,
-  overlayManualPick,
+  overlayManualWeights,
   overlayPlacement,
 } from "../lib/historicalOverlays";
 import { StreetLabelLayer } from "./StreetLabelLayer";
@@ -724,21 +724,22 @@ function MapViewInner({
 
   const overlayWeights = useMemo(() => {
     if (!overlaysEnabled) return new Map<string, number>();
-    if (overlaysAuto) return overlayAutoWeights(year);
-    const id = overlayManualPick(year);
-    const weights = new Map<string, number>();
-    if (id) weights.set(id, 1);
-    return weights;
+    return overlaysAuto ? overlayAutoWeights(year) : overlayManualWeights(year);
   }, [overlaysEnabled, overlaysAuto, year]);
 
+  // Sheets stay mounted once the overlays have been turned on, so a jump in
+  // the year, or the checkbox, fades them (styles.css) rather than cutting.
+  const [overlaysLoaded, setOverlaysLoaded] = useState(overlaysEnabled);
+  if (overlaysEnabled && !overlaysLoaded) setOverlaysLoaded(true);
+
   const overlayFrames = useMemo(() => {
-    if (!projection || !overlaysEnabled) return [];
+    if (!projection || !overlaysLoaded) return [];
     return HISTORICAL_OVERLAYS.map((overlay) => ({
       overlay,
       placement: overlayPlacement(projection, overlay),
       weight: overlayWeights.get(overlay.id) ?? 0,
-    })).filter((f) => f.placement && f.weight > 0);
-  }, [projection, overlaysEnabled, overlayWeights]);
+    })).filter((f) => f.placement);
+  }, [projection, overlaysLoaded, overlayWeights]);
 
   const visibleSettlements = useMemo(() => {
     if (!showSettlements || !projection) return [];
@@ -800,7 +801,7 @@ function MapViewInner({
             .sort()
             .join(",")
         : "",
-      overlay: overlayFrames.length
+      overlay: overlayFrames.some((f) => f.weight > 0.05)
         ? overlayFrames.reduce((a, b) => (b.weight > a.weight ? b : a)).overlay.label
         : null,
     };
@@ -908,7 +909,7 @@ function MapViewInner({
                 {overlayFrames.map(({ overlay, placement, weight }) => (
                   <image
                     key={overlay.id}
-                    className="historical-overlay"
+                    className={`historical-overlay${weight > 0.005 ? "" : " historical-overlay-off"}`}
                     href={overlay.src}
                     x={placement!.x}
                     y={placement!.y}
@@ -916,7 +917,7 @@ function MapViewInner({
                     height={placement!.height}
                     transform={placement!.transform}
                     preserveAspectRatio="none"
-                    opacity={overlayOpacity * weight}
+                    style={{ opacity: overlayOpacity * weight }}
                   >
                     <title>{overlay.label}</title>
                   </image>

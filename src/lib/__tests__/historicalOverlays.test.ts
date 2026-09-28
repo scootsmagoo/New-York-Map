@@ -31,3 +31,32 @@ describe("overlay placement", () => {
     }
   });
 });
+
+import { overlayAutoWeights, overlayManualWeights } from "../historicalOverlays";
+
+describe("overlay fades", () => {
+  it("eases a lone sheet in and out rather than switching it at full strength", () => {
+    const ratzer = (y: number) => overlayAutoWeights(y).get("ratzer") ?? 0;
+    expect(ratzer(1744)).toBe(0);
+    expect(ratzer(1748)).toBeGreaterThan(0);
+    expect(ratzer(1748)).toBeLessThan(0.2);
+    expect(ratzer(1767)).toBeCloseTo(1);
+    expect(ratzer(1830)).toBeLessThan(0.1);
+    // Nothing between the Ratzer and Viele windows.
+    expect(overlayAutoWeights(1840).size).toBe(0);
+    // Never more than full strength in all.
+    for (let y = 1600; y <= 1945; y++) {
+      const total = [...overlayAutoWeights(y).values()].reduce((a, b) => a + b, 0);
+      expect(total, String(y)).toBeLessThanOrEqual(1.0001);
+    }
+  });
+
+  it("crossfades between sheets in manual mode instead of switching at the midpoint", () => {
+    const mid = (1660 + 1767) / 2;
+    const at = overlayManualWeights(mid);
+    expect(at.get("castello")).toBeGreaterThan(0.3);
+    expect(at.get("ratzer")).toBeGreaterThan(0.3);
+    expect(overlayManualWeights(1700).get("castello")).toBe(1);
+    expect(overlayManualWeights(1900).get("viele")).toBe(1);
+  });
+});

@@ -449,6 +449,22 @@ button {
   pointer-events: none;
   mix-blend-mode: multiply;
   image-rendering: auto;
+  /* Scrubbing moves the weights smoothly already; this covers jumps (a
+     search result, an era click) and the checkbox. */
+  transition: opacity 0.35s ease, visibility 0s;
+}
+
+/* Faded all the way out: stop painting it once the fade has finished. */
+.historical-overlay-off {
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .historical-overlay,
+  .historical-overlay-off {
+    transition: none;
+  }
 }
 
 /* ---------------- Header menu ---------------- */
