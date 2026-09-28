@@ -46,7 +46,7 @@ export const LAYERS: LayerDef[] = [
     id: "lostLandscape",
     group: "land",
     label: "Lost landscape",
-    note: "The old shorelines, land made by filling, and buried streams, ponds, and marshes.",
+    note: "Manhattan's 1609 shore and buried streams; every borough's marshes and shallows, until they were filled.",
   },
   {
     id: "waterfront",

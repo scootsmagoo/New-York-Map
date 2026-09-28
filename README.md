@@ -42,7 +42,11 @@ npm run dev      # open http://localhost:5173
 - **Map layers** (⋯ menu): street names for every street in the city,
   neighborhood names as they were in each year, and the **lost landscape**:
   Manhattan's 1609 shoreline, land drawn as river until it was filled, and
-  buried streams and ponds such as the Collect and Minetta Brook.
+  buried streams and ponds such as the Collect and Minetta Brook; in the
+  other boroughs, the tidal marshes and shallows of the 1890s surveys
+  (Flushing Meadows, Barren Island, Jamaica Bay, Fresh Kills) until they
+  were filled. Zoomed in, Brooklyn, Queens, the Bronx, and Staten Island
+  show every street, appearing as its blocks were built up.
   **Fires & epidemics** draws the great fires' burned districts (1776,
   1835, 1845) and the epidemics' worst-hit blocks (yellow fever 1798 and
   1822, cholera 1832 and 1849, the 1903 "lung block") in the years they
@@ -112,6 +116,12 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
 
+*Done 2026-09-28:* the outer boroughs brought up toward Manhattan's
+detail: every street in Brooklyn, Queens, the Bronx, and Staten Island,
+dated block by block; the built-up areas drawn from them; their marshes
+and shallows in the lost landscape; 78 new entries; and the map layers
+grouped in the ⋯ menu.
+
 *Keeping it working*
 - Check search on a real iPhone: the keyboard should come up on the first
   tap. Emulators can't show the iOS rule this works around.
@@ -119,12 +129,12 @@ out the early eras (above).
 *More history*
 - More entries from the candidate list in docs/BOOK_REFERENCE.md,
   especially *Greater Gotham*'s people and places for 1898–1919.
-- Lost landscape for Brooklyn and Queens (Gowanus Creek, Wallabout Bay,
-  Jamaica Bay marshes), from an 1840s U.S. Coast Survey chart.
+- Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
+  marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
+- More outer-borough entries and tours now that the streets are there: a
+  Brooklyn tour, a Queens tour.
 - Carry the timeline past 1945 (Moses's expressways, public housing, the
   fiscal crisis).
-- Real street lines outside Manhattan at high zoom, in place of the hatch
-  texture (benchmark in WebKit first).
 - Audio per era.
 
 **Done: React 19.3** (2026-09-26). Upgraded from 19.2.7, following the

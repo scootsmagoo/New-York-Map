@@ -1,5 +1,6 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
+import { lostWaters } from "../data/lostWaters";
 
 /** As written by scripts/lost-landscape (see its README). */
 interface LostLandscapeData {
@@ -24,11 +25,24 @@ interface LostLandscapeLayerProps {
   k: number;
 }
 
-let dataPromise: Promise<LostLandscapeData> | null = null;
-function loadLostLandscape(): Promise<LostLandscapeData> {
-  dataPromise ??= import("../data/geo/lostLandscape.json").then(
-    (m) => m.default as unknown as LostLandscapeData
-  );
+/**
+ * The other four boroughs, from the USGS surveys of 1891–98
+ * (scripts/lost-landscape-outer): marsh and water then that is land now,
+ * with the year it was filled, or none if still wet in 1945.
+ */
+interface OuterLostLandscapeData {
+  fill: { until: number; kind: "water" | "marsh"; rings: [number, number][][] }[];
+  wet1945: { kind: "water" | "marsh"; rings: [number, number][][] }[];
+}
+
+let dataPromise: Promise<[LostLandscapeData, OuterLostLandscapeData]> | null = null;
+function loadLostLandscape() {
+  dataPromise ??= Promise.all([
+    import("../data/geo/lostLandscape.json").then((m) => m.default as unknown as LostLandscapeData),
+    import("../data/geo/lostLandscapeOuter.json").then(
+      (m) => m.default as unknown as OuterLostLandscapeData
+    ),
+  ]);
   return dataPromise;
 }
 
@@ -69,14 +83,21 @@ const FADE_YEARS = 6;
 /**
  * Manhattan's original shoreline and waters, from the Viele map (1865):
  * unfilled land drawn as water until the year it was made, ponds and
- * streams until they were filled or buried, then as faint ghosts.
+ * streams until they were filled or buried, then as faint ghosts. The
+ * other boroughs' marshes and shallows of the 1890s, from the USGS
+ * surveys, drawn the same way until filled.
  */
 function LostLandscapeLayerInner({ project, year, k }: LostLandscapeLayerProps) {
   const [data, setData] = useState<LostLandscapeData | null>(null);
+  const [outer, setOuter] = useState<OuterLostLandscapeData | null>(null);
 
   useEffect(() => {
     let alive = true;
-    loadLostLandscape().then((d) => alive && setData(d));
+    loadLostLandscape().then(([d, o]) => {
+      if (!alive) return;
+      setData(d);
+      setOuter(o);
+    });
     return () => {
       alive = false;
     };
@@ -100,7 +121,11 @@ function LostLandscapeLayerInner({ project, year, k }: LostLandscapeLayerProps) 
           return `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`;
         })
         .join("");
+    const outerFill = (outer?.fill ?? []).map((f) => ({ ...f, d: f.rings.map(ringD).join("") }));
+    const outerWet = (outer?.wet1945 ?? []).map((f) => ({ ...f, d: f.rings.map(ringD).join("") }));
     return {
+      outerFill,
+      outerWet,
       shoreline: data.shoreline1609.map(ringD).join(""),
       fill: data.fill.map((f) => ({ year: f.year, d: f.rings.map(ringD).join("") })),
       water: data.water.map((w) => {
@@ -119,19 +144,42 @@ function LostLandscapeLayerInner({ project, year, k }: LostLandscapeLayerProps) 
         };
       }),
     };
-  }, [data, project]);
+  }, [data, outer, project]);
 
-  // Land not yet made in `year` is still river; land already made is stippled.
-  const { unfilled, made } = useMemo(() => {
-    if (!paths) return { unfilled: "", made: "" };
+  // Land not yet made in `year` is still river (or, outside Manhattan, the
+  // marsh it was); land already made is stippled.
+  const { unfilled, made, marsh } = useMemo(() => {
+    if (!paths) return { unfilled: "", made: "", marsh: "" };
     let unfilled = "";
     let made = "";
+    let marsh = "";
     for (const f of paths.fill) {
       if (f.year > year) unfilled += f.d;
       else made += f.d;
     }
-    return { unfilled, made };
+    for (const f of paths.outerFill) {
+      if (f.until > year) {
+        if (f.kind === "water") unfilled += f.d;
+        else marsh += f.d;
+      } else made += f.d;
+    }
+    for (const f of paths.outerWet) {
+      if (f.kind === "water") unfilled += f.d;
+      else marsh += f.d;
+    }
+    return { unfilled, made, marsh };
   }, [paths, year]);
+
+  // Named outer-borough waters, labeled while still wet.
+  const outerLabels = useMemo(
+    () =>
+      project
+        ? lostWaters
+            .filter((w) => w.outer && year <= w.until)
+            .map((w) => ({ w, at: project(w.coords) }))
+        : [],
+    [project, year]
+  );
 
   if (!paths) return null;
   const labelOpacity = Math.max(0, Math.min(1, (k - 2.6) / 0.8));
@@ -140,6 +188,13 @@ function LostLandscapeLayerInner({ project, year, k }: LostLandscapeLayerProps) 
     <g className="lost-landscape">
       {made && <path className="ll-made" d={made} />}
       {unfilled && <path className="ll-unfilled" d={unfilled} />}
+      {marsh && (
+        <g className="ll-marsh ll-outer-marsh">
+          <path d={marsh}>
+            <title>Tidal marsh in the U.S. Geological Survey of the 1890s, later filled</title>
+          </path>
+        </g>
+      )}
       <path className="ll-shoreline" d={paths.shoreline} />
       {paths.water.map((w) => {
         const gone = year > w.until;
@@ -167,6 +222,20 @@ function LostLandscapeLayerInner({ project, year, k }: LostLandscapeLayerProps) 
           </g>
         );
       })}
+      {labelOpacity > 0 &&
+        outerLabels.map(
+          ({ w, at }) =>
+            at && (
+              <text
+                key={w.id}
+                className="ll-label"
+                transform={`translate(${at[0]},${at[1]}) scale(${1 / k})`}
+                style={{ opacity: labelOpacity }}
+              >
+                {w.name}
+              </text>
+            )
+        )}
     </g>
   );
 }

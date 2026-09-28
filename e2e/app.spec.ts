@@ -148,6 +148,15 @@ test("the Fire and Water tour turns on fires & epidemics", async ({ page }) => {
   await expect(page.locator(".calamity-epidemic")).toHaveCount(1);
 });
 
+test("search finds a lost marsh outside Manhattan", async ({ page }) => {
+  await open(page, "#year=1940");
+  await page.keyboard.press("Control+k");
+  await page.getByRole("combobox", { name: "Search Gotham" }).fill("Barren Island");
+  await page.getByRole("option", { name: /Barren Island.*filled/ }).click();
+  await expect.poll(async () => Number(await year(page))).toBeLessThan(1930);
+  await expect(page.locator(".ll-outer-marsh")).toBeAttached();
+});
+
 test("street and neighborhood names appear when their layers are on", async ({ page }) => {
   await open(page, "#year=1940&span=0.05");
   await toggleLayer(page, "Street names");

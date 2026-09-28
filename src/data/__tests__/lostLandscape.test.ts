@@ -35,11 +35,26 @@ import { lostWaters } from "../lostWaters";
 describe("lost waters for search", () => {
   it("match the layer's data by id, name, and date", () => {
     const byId = new Map(data.water.map((w) => [w.id, w]));
-    for (const w of lostWaters) {
+    for (const w of lostWaters.filter((w) => !w.outer)) {
       const geo = byId.get(w.id);
       expect(geo, w.id).toBeDefined();
       expect(geo!.name).toBe(w.name);
       expect(geo!.until).toBe(w.until);
     }
+  });
+});
+
+import outer from "../geo/lostLandscapeOuter.json";
+
+describe("the other boroughs' lost landscape", () => {
+  it("is filled after the surveys and by 1945, or still wet, and lies off Manhattan", () => {
+    const inCity = ([lon, lat]: number[]) => lon > -74.27 && lon < -73.69 && lat > 40.49 && lat < 40.92;
+    expect(outer.fill.length).toBeGreaterThan(10);
+    for (const f of outer.fill) {
+      expect(f.until, "filled after the 1890s surveys").toBeGreaterThanOrEqual(1893);
+      expect(f.until).toBeLessThanOrEqual(1945);
+      for (const ring of f.rings) for (const p of ring) expect(inCity(p)).toBe(true);
+    }
+    expect(outer.wet1945.length).toBeGreaterThan(0);
   });
 });

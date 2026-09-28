@@ -115,6 +115,18 @@ header, theme, footprint, markers, panel — derives from it.
   before 1880–90, Richmond Turnpike, East River Drive…); obscure renamings
   and a few post-1945 streets on already-built land will slip through. The
   same data places the Manhattan grid's streets and avenues.
+- **Outer-borough streets:** every street segment in the other four
+  boroughs (CSCL) dated by the tax lots along it (NYC PLUTO year built,
+  15th percentile, so surviving old houses outvote rebuilding), by the
+  hand-drawn village footprints through 1880 (never before 1820), and by
+  known dates for colonial roads and turnpikes
+  (`scripts/prepare-borough-streets.mjs`). PLUTO dates buildings standing
+  today, so neighborhoods rebuilt wholesale read later than they were
+  first built. From 1880 the outer boroughs' built-up wash is drawn from
+  these streets (`scripts/borough-footprints/build.py`).
+- **Outer-borough lost landscape:** USGS topographic sheets of 1891–98,
+  georeferenced by USGS; wet areas picked by color and dated by the
+  streets that reached them (`scripts/lost-landscape-outer/README.md`).
 - **Lost landscape:** Viele (1865), registered by seven landmarks (~45 m
   error); made land and marshes picked by his map colors, Collect Pond,
   Lispenard Meadows, Minetta Brook, and Stuyvesant's creek and meadows
@@ -381,7 +393,8 @@ header, theme, footprint, markers, panel — derives from it.
       solid once electric (`src/data/streetcars.ts`, geometry from the
       street centerlines by `scripts/prepare-streetcars.mjs`), with a
       Horsecar to Bus tour.
-- [ ] Real outer-borough street lines at high zoom.
+- [x] Real outer-borough streets — shipped: every street in the four
+      boroughs, dated block by block from PLUTO, replacing the hatch.
 - [x] Fires & epidemics layer — shipped: burned districts (1776, 1835,
       1845) and the epidemics' worst quarters (yellow fever 1798 and 1822,
       cholera 1832 and 1849, the 1903 lung block) as dated areas that fade
@@ -391,8 +404,11 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Working waterfront — shipped: 14 markets, docks, shipyards, and
       sugar houses as dated points (`src/data/waterfront.ts`); sites that
       already have entry markers are left out.
-- [ ] Lost landscape beyond Manhattan: Gowanus Creek, Wallabout Bay, the
-      Jamaica Bay marshes, from an 1840s U.S. Coast Survey chart.
+- [x] Lost landscape beyond Manhattan — shipped from the USGS surveys of
+      1891–98: the marshes and shallows filled since (Flushing Meadows,
+      Barren Island, North Beach, Jamaica Bay, Fresh Kills). Still open:
+      what was filled before the 1890s (Gowanus, Wallabout), which needs
+      an 1840s Coast Survey chart.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: ten tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair, the island remade by landfill,

@@ -657,6 +657,18 @@ button {
 
 /* ----- Lost landscape ----- */
 
+/* Outer-borough areas come as outlines with holes (islands in a marsh). */
+.ll-unfilled,
+.ll-made,
+.ll-outer-marsh path {
+  fill-rule: evenodd;
+}
+
+/* Pieces with different fill dates meet edge to edge; no seams between. */
+.ll-outer-marsh path {
+  stroke: none;
+}
+
 .ll-unfilled {
   fill: var(--water);
 }
