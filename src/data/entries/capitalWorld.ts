@@ -404,4 +404,104 @@ export const capitalWorldEntries: Entry[] = [
     gotham:
       "Gotham at War notes it was the country's busiest airport almost from the start, and by 1945 too small and sinking into Flushing Bay, which is why the city planned Idlewild.",
   },
+  {
+    id: "floyd-bennett",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Floyd Bennett Field",
+    wikiTitle: "Floyd Bennett Field",
+    year: 1931,
+    blurb:
+      "The city's first municipal airport, built by joining Barren Island to the mainland with sand pumped from Jamaica Bay. Record-setting fliers like Wiley Post and Howard Hughes took off from it.",
+    coords: [-73.8906, 40.591],
+  },
+  {
+    id: "astoria-studios",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Astoria studios",
+    wikiTitle: "Kaufman Astoria Studios",
+    year: 1920,
+    blurb:
+      "Famous Players–Lasky (soon Paramount) built its East Coast film studio in Astoria in 1920, near Broadway's stage talent; the Marx Brothers made their first films here.",
+    coords: [-73.9247, 40.7567],
+  },
+  {
+    id: "armstrong-house",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Louis Armstrong House",
+    wikiTitle: "Louis Armstrong House",
+    year: 1943,
+    blurb:
+      "Louis Armstrong and his wife Lucille settled in a modest house in Corona in 1943 and lived there the rest of his life.",
+    coords: [-73.8619, 40.7556],
+    lifespan: [1943, null],
+  },
+  {
+    id: "paradise-theater",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Loew's Paradise",
+    wikiTitle: "Paradise Theater (Bronx)",
+    year: 1929,
+    blurb:
+      "John Eberson's 4,000-seat movie palace on the Grand Concourse opened in 1929, its ceiling a night sky with moving clouds and twinkling stars.",
+    coords: [-73.8989, 40.8606],
+  },
+  {
+    id: "bronx-courthouse",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Bronx County Courthouse",
+    wikiTitle: "Bronx County Courthouse",
+    year: 1934,
+    blurb:
+      "The Art Deco courthouse and borough hall facing Yankee Stadium, finished in 1934; the Bronx had been its own county only since 1914.",
+    coords: [-73.9242, 40.8261],
+  },
+  {
+    id: "orchard-beach",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Orchard Beach",
+    wikiTitle: "Orchard Beach (Bronx)",
+    year: 1936,
+    blurb:
+      "Robert Moses joined Hunter and Twin Islands to Rodman's Neck with fill and built a crescent beach and pavilion in Pelham Bay Park, opened in 1936.",
+    coords: [-73.7925, 40.8673],
+  },
+  {
+    id: "parkchester",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Parkchester",
+    wikiTitle: "Parkchester, Bronx",
+    year: 1940,
+    blurb:
+      "Metropolitan Life's city of 12,000 apartments for 40,000 people, built 1938–42 on the old Catholic Protectory grounds. Like Stuyvesant Town, it refused Black tenants.",
+    coords: [-73.86, 40.839],
+  },
+  {
+    id: "outerbridge",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Goethals Bridge and Outerbridge Crossing",
+    wikiTitle: "Outerbridge Crossing",
+    year: 1928,
+    blurb:
+      "The Port Authority's first projects: two cantilever bridges to New Jersey opened together in June 1928, ending Staten Island's dependence on ferries.",
+    coords: [-74.247, 40.525],
+  },
+  {
+    id: "bayonne-bridge",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Bayonne Bridge",
+    wikiTitle: "Bayonne Bridge",
+    year: 1931,
+    blurb:
+      "The longest steel arch in the world when it opened across the Kill Van Kull in 1931.",
+    coords: [-74.1422, 40.6419],
+  },
 ];

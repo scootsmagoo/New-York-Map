@@ -234,4 +234,63 @@ export const newAmsterdamEntries: Entry[] = [
       "Gotham quotes De Vries's horror at the killings, which united the lower Hudson's peoples in the war that nearly ended the colony.",
     coords: [-74.037, 40.7165],
   },
+  {
+    id: "wyckoff-house",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Wyckoff House",
+    wikiTitle: "Wyckoff House",
+    year: 1641,
+    yearLabel: "before 1641",
+    blurb:
+      "A Dutch farmhouse built for Director Wouter van Twiller's plantation before 1641 and home to Pieter Claesen Wyckoff's family from about 1652: the oldest building standing in New York City.",
+    coords: [-73.9208, 40.6444],
+    lifespan: [1641, null],
+  },
+  {
+    id: "flatbush-church",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Flatbush Reformed Church",
+    wikiTitle: "Flatbush Reformed Dutch Church Complex",
+    year: 1654,
+    blurb:
+      "Stuyvesant ordered a church for the town of Midwout (Flatbush) in 1654; its congregation has worshiped on the same corner ever since, in a stone church built in 1796.",
+    coords: [-73.9592, 40.65],
+  },
+  {
+    id: "bowne-house",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "John Bowne House",
+    wikiTitle: "John Bowne House",
+    year: 1661,
+    yearLabel: "c. 1661",
+    blurb:
+      "John Bowne let Quakers worship in his Flushing house; Stuyvesant arrested him in 1662 and shipped him to Holland, where the West India Company ruled in his favor: an early precedent for freedom of worship.",
+    coords: [-73.8249, 40.7629],
+    lifespan: [1661, null],
+  },
+  {
+    id: "jonas-bronck",
+    era: "newAmsterdam",
+    kind: "person",
+    title: "Jonas Bronck",
+    wikiTitle: "Jonas Bronck",
+    year: 1639,
+    blurb:
+      "A Scandinavian sea captain who in 1639 settled the land across the Harlem River; the river that bounded his farm, and later the borough, took his name.",
+    coords: [-73.925, 40.808],
+  },
+  {
+    id: "anne-hutchinson",
+    era: "newAmsterdam",
+    kind: "person",
+    title: "Anne Hutchinson",
+    wikiTitle: "Anne Hutchinson",
+    year: 1643,
+    blurb:
+      "Banished from Massachusetts for her religious teaching, she settled near today's Pelham Bay; in 1643, during Kieft's War, she and most of her household were killed in a Siwanoy raid. The Hutchinson River is named for her.",
+    coords: [-73.812, 40.881],
+  },
 ];

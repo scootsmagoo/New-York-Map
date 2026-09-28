@@ -272,4 +272,49 @@ export const earlyRepublicEntries: Entry[] = [
       "Gotham presents Zion as one of the new institutions Black New Yorkers built for themselves in the 1790s.",
     coords: [-74.0, 40.715],
   },
+  {
+    id: "lefferts-house",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "Lefferts Homestead",
+    wikiTitle: "Lefferts Historic House",
+    year: 1783,
+    yearLabel: "c. 1783",
+    blurb:
+      "Pieter Lefferts rebuilt his Flatbush farmhouse around 1783 after retreating American troops burned the old one; the family and the people they enslaved farmed there into the 19th century. It was moved into Prospect Park in 1918.",
+    coords: [-73.9638, 40.6643],
+  },
+  {
+    id: "fulton-ferry",
+    era: "earlyRepublic",
+    kind: "event",
+    title: "Steam ferry to Brooklyn",
+    wikiTitle: "Fulton Ferry, Brooklyn",
+    year: 1814,
+    blurb:
+      "Robert Fulton's steam ferry Nassau began crossing the East River in 1814, turning Brooklyn Heights into a commuters' suburb a few minutes from Wall Street.",
+    coords: [-73.9936, 40.7034],
+  },
+  {
+    id: "king-manor",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "King Manor",
+    wikiTitle: "King Manor",
+    year: 1805,
+    blurb:
+      "Rufus King, a signer of the Constitution and a senator who spoke against the spread of slavery, bought this Jamaica farm in 1805 and expanded the house.",
+    coords: [-73.8039, 40.7031],
+  },
+  {
+    id: "union-course",
+    era: "earlyRepublic",
+    kind: "event",
+    title: "The great match race",
+    wikiTitle: "Union Course",
+    year: 1823,
+    blurb:
+      "At the Union Course in Queens in May 1823, the Northern horse American Eclipse beat the Southern champion Sir Henry before a crowd of perhaps 60,000, a North–South contest followed across the country.",
+    coords: [-73.8606, 40.6891],
+  },
 ];

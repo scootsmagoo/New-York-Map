@@ -16,9 +16,10 @@ test("the corner panels don't cover each other", async ({ page }) => {
 
 test("a map marker can be tapped a finger's width off center", async ({ page }) => {
   await open(page, "#year=1880");
-  const box = await page.locator('.marker[aria-label="Coney Island"] rect').boundingBox();
-  await page.touchscreen.tap(box!.x + box!.width / 2 + 19, box!.y + box!.height / 2);
-  await expect(page.locator(".modal h2")).toHaveText("Coney Island");
+  // Fort Totten stands alone on the Queens shore, with no neighbor to win the tap.
+  const box = await page.locator('.marker[aria-label="Fort Totten"] rect').boundingBox();
+  await page.touchscreen.tap(box!.x + box!.width / 2 - 19, box!.y + box!.height / 2);
+  await expect(page.locator(".modal h2")).toHaveText("Fort Totten");
 });
 
 test("search opens with its box focused", async ({ page }) => {

@@ -241,4 +241,37 @@ export const revolutionEntries: Entry[] = [
     gotham:
       "Gotham counts perhaps four thousand Black refugees escaping through the city, and follows them to a hard welcome in Canada.",
   },
+  {
+    id: "pells-point",
+    era: "revolution",
+    kind: "event",
+    title: "Battle of Pell's Point",
+    wikiTitle: "Battle of Pell's Point",
+    year: 1776,
+    blurb:
+      "On October 18, 1776, about 750 Continentals under Colonel John Glover held off the British landing at Pell's Point for a day, buying time for Washington to escape Manhattan toward White Plains.",
+    coords: [-73.8105, 40.8662],
+  },
+  {
+    id: "british-land-staten-island",
+    era: "revolution",
+    kind: "event",
+    title: "The British land on Staten Island",
+    wikiTitle: "New York and New Jersey campaign",
+    year: 1776,
+    blurb:
+      "In July 1776 General Howe landed his army on Staten Island, where Loyalist farmers welcomed it; by August some 32,000 troops were camped there and hundreds of ships filled the harbor, the largest expedition Britain had ever sent overseas.",
+    coords: [-74.076, 40.636],
+  },
+  {
+    id: "peace-conference",
+    era: "revolution",
+    kind: "event",
+    title: "The Staten Island peace conference",
+    wikiTitle: "Staten Island Peace Conference",
+    year: 1776,
+    blurb:
+      "On September 11, 1776, Benjamin Franklin, John Adams, and Edward Rutledge met Admiral Lord Howe at Christopher Billopp's stone house; they refused his terms, which required revoking independence first.",
+    coords: [-74.2538, 40.5029],
+  },
 ];
