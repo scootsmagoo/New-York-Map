@@ -610,6 +610,16 @@ button {
   pointer-events: none;
 }
 
+/* Streets outside Manhattan, from the city's centerlines */
+.borough-street {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ink) 58%, transparent);
+  stroke-width: 0.55;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
 .street {
   fill: none;
   stroke: color-mix(in srgb, var(--ink) 72%, transparent);

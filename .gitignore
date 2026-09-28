@@ -10,3 +10,4 @@ Thumbs.db
 .idea
 test-results/
 playwright-report/
+.venv/

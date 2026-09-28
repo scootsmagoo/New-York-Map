@@ -69,6 +69,12 @@ export interface FootprintSnapshot {
   /** Built-up rings for the other four boroughs, clipped to all city land. */
   other: [number, number][][];
   /**
+   * The same area as polygons with holes, [outline, hole, …], where the
+   * outlines are drawn from the streets (1880 on); `other` then holds just
+   * the outlines.
+   */
+  otherPolygons?: [number, number][][][];
+  /**
    * Northern limit of Manhattan's solid built-up band at the Hudson (latW)
    * and East River (latE) — drives the "streets built so far" frontier.
    */

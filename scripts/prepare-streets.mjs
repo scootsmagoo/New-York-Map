@@ -18,7 +18,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { footprints, frontierAt, frontierBand } from "../src/data/footprints.ts";
+import { footprints, frontierAt, frontierBand, inOtherFootprint } from "../src/data/footprints.ts";
 import { colonialStreets } from "../src/data/streets.ts";
 
 const URL = "https://data.cityofnewyork.us/resource/inkn-q76z.json";
@@ -239,8 +239,10 @@ function builtYear(pt, manhattan) {
 function snapshotYear(pt, manhattan) {
   for (let i = 0; i < footprints.length; i++) {
     const f = footprints[i];
-    const rings = manhattan ? f.manhattan : f.other;
-    if (rings.some((ring) => inRing(pt, ring))) {
+    const inside = manhattan
+      ? f.manhattan.some((ring) => inRing(pt, ring))
+      : inOtherFootprint(f, pt);
+    if (inside) {
       // Snapshots cross-fade in from the previous one; appear halfway.
       const prev = footprints[i - 1];
       return prev ? Math.round((prev.year + f.year) / 2) : f.year;

@@ -1,4 +1,5 @@
 import type { FootprintSnapshot } from "../types";
+import outerFootprints from "./geo/outerFootprints.json" with { type: "json" };
 
 type Ring = [number, number][];
 
@@ -588,7 +589,38 @@ const snapshots: FootprintSnapshot[] = [
   },
 ];
 
-export const footprints = snapshots;
+/**
+ * From 1880 on, the other four boroughs' built-up areas are drawn from the
+ * dated street lines (scripts/borough-footprints/build.py) rather than by
+ * hand, so the wash matches the streets drawn over it. The hand outlines
+ * above stay as the record of what was drawn before, and are what dates
+ * the villages' streets through 1880.
+ */
+const derivedOther = outerFootprints as unknown as Record<string, Ring[][]>;
+
+/** The hand-drawn snapshots, as drawn (scripts/prepare-borough-streets.mjs dates by these). */
+export const handFootprints = snapshots;
+
+export const footprints: FootprintSnapshot[] = snapshots.map((s) => {
+  const polygons = derivedOther[String(s.year)];
+  return polygons ? { ...s, other: polygons.map((p) => p[0]), otherPolygons: polygons } : s;
+});
+
+/** Whether a point is in a snapshot's outer-borough built-up area (holes and all). */
+export function inOtherFootprint(s: FootprintSnapshot, pt: [number, number]): boolean {
+  const polygons = s.otherPolygons ?? s.other.map((r) => [r]);
+  return polygons.some(([outline, ...holes]) => inRing(pt, outline) && !holes.some((h) => inRing(pt, h)));
+}
+
+function inRing(pt: [number, number], ring: Ring): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if (yi > pt[1] !== yj > pt[1] && pt[0] < ((xj - xi) * (pt[1] - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
 
 /**
  * Returns the two snapshots bracketing `year` plus the interpolation progress

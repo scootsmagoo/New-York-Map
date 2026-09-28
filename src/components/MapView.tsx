@@ -38,6 +38,7 @@ import { LostLandscapeLayer } from "./LostLandscapeLayer";
 import { CalamityLayer } from "./CalamityLayer";
 import { WaterfrontLayer } from "./WaterfrontLayer";
 import { StreetcarLayer } from "./StreetcarLayer";
+import { BoroughStreetLayer } from "./BoroughStreetLayer";
 import { streetcarLines, streetcarPower } from "../data/streetcars";
 import { waterfront, waterfrontOpacity } from "../data/waterfront";
 import { calamities, calamityOpacity } from "../data/calamities";
@@ -242,6 +243,14 @@ function toGeo(rings: [number, number][][]): GeoJSON {
   };
 }
 
+/** Polygons with holes, reversed like toGeo's rings for d3's spherical winding. */
+function polygonsToGeo(polygons: [number, number][][][]): GeoJSON {
+  return {
+    type: "MultiPolygon",
+    coordinates: polygons.map((poly) => poly.map((ring) => [...ring, ring[0]].reverse())),
+  };
+}
+
 /** A footprint snapshot as SVG path strings for Manhattan and the rest. */
 function projectSnapshot(
   snapshot: FootprintSnapshot | null,
@@ -250,7 +259,11 @@ function projectSnapshot(
   if (!snapshot || !path) return { manhattan: "", other: "" };
   return {
     manhattan: snapshot.manhattan.length ? (path(toGeo(snapshot.manhattan)) ?? "") : "",
-    other: snapshot.other.length ? (path(toGeo(snapshot.other)) ?? "") : "",
+    other: snapshot.otherPolygons
+      ? (path(polygonsToGeo(snapshot.otherPolygons)) ?? "")
+      : snapshot.other.length
+        ? (path(toGeo(snapshot.other)) ?? "")
+        : "",
   };
 }
 
@@ -525,6 +538,8 @@ function MapViewInner({
 
   // ----- Level-of-detail fades -----
   const roadFade = fade(k, 1.5, 2.2); // colonial streets + grid
+  // Real streets outside Manhattan replace the street-hatch texture there.
+  const boroughStreetFade = fade(k, 1.8, 2.5);
   const ferryFade = fade(k, 1.4, 2.0);
   const infraFade = fade(k, 1.6, 2.4); // els, subway, aqueduct
   const minorParkFade = fade(k, 1.8, 2.5);
@@ -909,14 +924,15 @@ function MapViewInner({
               </g>
             )}
 
-            {/* Street-hatch texture over the outer-borough footprint */}
-            {roadFade > 0 &&
+            {/* Street-hatch texture over the outer-borough footprint, until
+                the real streets take over */}
+            {roadFade > boroughStreetFade &&
               base.other.length > 0 &&
               Object.keys(HATCH_ANGLES).map((boro) => (
                 <g
                   key={boro}
                   clipPath={`url(#clip-${boro.replace(/ /g, "-")})`}
-                  style={{ opacity: roadFade }}
+                  style={{ opacity: roadFade - boroughStreetFade }}
                 >
                   <path
                     d={basePaths.other}
@@ -925,6 +941,17 @@ function MapViewInner({
                   />
                 </g>
               ))}
+
+            {/* Every street in the other four boroughs, as it was built up */}
+            <BoroughStreetLayer
+              projection={projection}
+              year={year}
+              width={width}
+              height={height}
+              getTransform={getTransform}
+              onViewSettled={onViewSettled}
+              fade={boroughStreetFade}
+            />
 
             {/* Crooked-street hatch for built Manhattan outside the grid zone */}
             {roadFade > 0 && base.manhattan.length > 0 && (
