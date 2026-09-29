@@ -43,8 +43,14 @@ export async function zoomMap(page: Page, x: number, y: number, steps: number) {
 export const openMenu = (page: Page) => page.locator(".header-menu-btn").click();
 
 /** Open the ⋯ menu and toggle a checkbox by its label. */
-export async function toggleLayer(page: Page, label: string) {
+export async function toggleLayer(page: Page, label: string, on = true) {
   await openMenu(page);
-  await page.getByLabel(label, { exact: true }).click();
+  // Under load a click can land while the menu is still opening and not
+  // register: set the box, confirm it took, and let the menu close.
+  const box = page.getByLabel(label, { exact: true });
+  await expect(box).toBeVisible();
+  await box.setChecked(on);
+  await expect(box).toBeChecked({ checked: on });
   await page.keyboard.press("Escape");
+  await expect(page.locator("#header-menu-panel")).toHaveCount(0);
 }
