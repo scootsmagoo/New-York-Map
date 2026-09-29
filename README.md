@@ -213,6 +213,12 @@ additions.
 
 ## Credits
 
-Burrows & Wallace's *Gotham* (inspiration) · Wikipedia (content & images) ·
-NYC Open Data (boundaries, street centerlines) and the U.S. Census Bureau. Built-up extents are
-approximate, hand-drawn illustrations of growth — see PROJECT.md.
+Stories from standard histories, above all Burrows & Wallace's *Gotham* and
+Wallace's *Greater Gotham* and *Gotham at War* (cited by chapter and page),
+and Wikipedia (live summaries and images). Geometry from NYC Open Data
+(borough boundaries, street centerlines, PLUTO tax lots, NYC Parks
+properties), the U.S. Census Bureau, and the U.S. Geological Survey's
+1891–98 topographic maps; historical map sheets from Wikimedia Commons;
+the pre-contact island from Eric W. Sanderson's *Mannahatta*. What is
+drawn by hand, and how far to trust each layer: PROJECT.md → Data sources
+& honesty, and the About page on the site.

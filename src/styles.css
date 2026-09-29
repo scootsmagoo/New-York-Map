@@ -1814,6 +1814,14 @@ a {
   margin: 18px 0 6px;
 }
 
+.about-sources {
+  padding-left: 18px;
+}
+
+.about-sources li + li {
+  margin-top: 4px;
+}
+
 .about-modal p, .about-modal li {
   font-size: 14.5px;
   line-height: 1.6;

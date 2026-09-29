@@ -456,7 +456,14 @@ node --experimental-strip-types scripts/prepare-streetcars.mjs  # streetcar rout
 ## Credits
 
 - Edwin G. Burrows & Mike Wallace, *Gotham* (Oxford, 1999); Mike Wallace,
-  *Greater Gotham* (Oxford, 2017) — inspiration and emphasis.
-- Wikipedia & Wikimedia Commons — live summaries and imagery.
-- NYC Open Data / Department of City Planning; U.S. Census Bureau — geometry.
+  *Greater Gotham* (Oxford, 2017) and *Gotham at War* (Oxford, 2025) —
+  inspiration, emphasis, and chapter-and-page citations.
+- Wikipedia & Wikimedia Commons — live summaries and imagery; the
+  historical map sheets; dates for many entries, streetcar lines, and
+  neighborhoods.
+- NYC Open Data: Department of City Planning borough boundaries, street
+  centerlines (CSCL), PLUTO tax lots, NYC Parks properties.
+- U.S. Census Bureau — surrounding coastlines.
+- U.S. Geological Survey, Historical Topographic Map Collection — the
+  1891–98 sheets behind the outer boroughs' lost landscape.
 - Eric W. Sanderson's *Mannahatta* project — the pre-contact island.

@@ -1324,8 +1324,7 @@ function MapViewInner({
             <MapKey visible={keyVisible} />
           </div>
           <div className="map-attribution">
-            Boundaries: U.S. Census Bureau &amp; NYC Open Data · Content: Wikipedia ·
-            Built-up extents, streets &amp; sites are approximate
+            NYC Open Data · U.S. Census · USGS · Wikipedia · Sources: ⋯ → About
           </div>
         </>
       )}

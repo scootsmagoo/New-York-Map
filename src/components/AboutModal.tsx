@@ -25,46 +25,84 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
           </button>
           <h2>About this timeline</h2>
           <p>
-            An interactive history of New York City, from the Lenape world
-            through the consolidation of Greater New York and the close of the
-            First World War — the span covered by Edwin G. Burrows &amp; Mike
-            Wallace's <em>Gotham: A History of New York City to 1898</em> and
-            Mike Wallace's <em>Greater Gotham (1898–1919)</em>, which inspired
-            this project — and on through the Depression and the Second World
-            War to 1945.
+            An interactive history of New York City's five boroughs, from the
+            Lenape world to 1945. Drag the timeline and the city grows on the
+            map: its shorelines, streets, parks, and neighborhoods, and the
+            people, places, and events that made it.
           </p>
+
           <h3>How to use it</h3>
           <ul>
             <li>
-              <strong>Pan and zoom the timeline</strong> (drag, scroll, or
-              pinch) — the map redraws the city's rough built-up extent as the
-              years pass under the center line.
+              <strong>Drag, scroll, or pinch the timeline</strong> to move
+              through time; click an era band to jump to it.
             </li>
             <li>
-              <strong>Click an era band</strong> to zoom to it, and{" "}
-              <strong>Explore this era</strong> for its people, places, and
-              events.
+              <strong>Click a marker</strong> on the map or timeline for its
+              story, and <strong>Explore this era</strong> for everything in
+              it. <strong>Search</strong> finds people, places, streets,
+              neighborhoods, lost waters, and more.
             </li>
             <li>
-              <strong>Click marks</strong> on the timeline or map for the full
-              story, with live summaries and images from Wikipedia.
-            </li>
-            <li>
-              Optional <strong>historical map overlays</strong> (Castello,
-              Ratzer, Viele) are in the <strong>⋯ menu</strong> in the header.
+              The <strong>⋯ menu</strong> has guided tours, Then &amp; Now (two
+              years side by side), map layers, and georeferenced historical
+              maps.
             </li>
           </ul>
-          <h3>Sources &amp; caveats</h3>
+
+          <h3>Where it comes from</h3>
+          <ul className="about-sources">
+            <li>
+              <strong>Stories:</strong> written for this site from standard
+              histories, above all Edwin G. Burrows &amp; Mike Wallace's{" "}
+              <em>Gotham</em> (1999) and Mike Wallace's <em>Greater Gotham</em>{" "}
+              (2017) and <em>Gotham at War</em> (2025), which inspired it and
+              are cited by chapter and page; and Wikipedia, whose summaries and
+              images load live under their own licenses.
+            </li>
+            <li>
+              <strong>Shorelines and boroughs:</strong> NYC Department of City
+              Planning and the U.S. Census Bureau.
+            </li>
+            <li>
+              <strong>Streets:</strong> the city's street centerlines (NYC Open
+              Data). Outside Manhattan each street appears when the buildings
+              along it went up, from the city's tax-lot records (PLUTO).
+            </li>
+            <li>
+              <strong>Parks:</strong> NYC Parks property records outside
+              Manhattan, dated by acquisition; Manhattan's squares are drawn
+              by hand.
+            </li>
+            <li>
+              <strong>Lost landscape:</strong> Egbert Viele's 1865 topographical
+              map for Manhattan, and the U.S. Geological Survey's first maps of
+              the city (1891–98) for the other boroughs.
+            </li>
+            <li>
+              <strong>Historical maps:</strong> the Castello Plan (1660),
+              Ratzer's Plan (1767), and Viele's map (1865), from Wikimedia
+              Commons, placed by matching landmarks.
+            </li>
+            <li>
+              <strong>Streetcars, fires, epidemics, and the waterfront:</strong>{" "}
+              the <em>Gotham</em> books and Wikipedia; routes follow today's
+              streets.
+            </li>
+            <li>
+              <strong>Before 1609:</strong> Lenape villages and trails are
+              placed from archaeology and colonial deeds, and only roughly.
+            </li>
+          </ul>
+
+          <h3>How far to trust it</h3>
           <p>
-            Era and entry notes are original summaries informed by{" "}
-            <em>Gotham</em>'s coverage; detail text and images load from
-            Wikipedia under their respective licenses. Coastlines come from U.S.
-            Census cartographic boundary files (modern shorelines — landfill
-            means the 17th-century island was a touch slimmer). Built-up
-            footprints, streets, parks, and Lenape sites are deliberately
-            impressionistic: the 1811 grid is generated geometrically, colonial
-            roads and park outlines are hand-drawn from period maps — painted,
-            not surveyed.
+            Dates and places are researched, but the map is a picture of
+            growth, not a survey of it. The built-up area is drawn by hand
+            for Manhattan, and for the other boroughs before 1880, from period
+            maps and histories. Tax-lot dates describe the buildings standing
+            today, so neighborhoods torn down and rebuilt read later than they
+            first grew. Old maps are placed to within about half a block.
           </p>
         </article>
       </FocusTrap>
