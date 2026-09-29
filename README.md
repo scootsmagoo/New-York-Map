@@ -34,8 +34,9 @@ npm run dev      # open http://localhost:5173
   the grid marching north, crossing the East River, fire and Croton water,
   Robert Moses's bridges and World's Fair, the island remade by landfill,
   slavery and freedom, the war years, the riots, the rich moving uptown,
-  and horsecar to bus. Deep-link one with `#tour=grid`,
-  `#tour=horsecar-to-bus`, and so on.
+  horsecar to bus, and one for each of the other boroughs (Brooklyn,
+  Queens, the Bronx, Staten Island). Deep-link one with `#tour=grid`,
+  `#tour=brooklyn`, and so on.
 - **Then & Now** (⋯ menu) wipes between two years with a draggable line.
   Type either year, or scrub the timeline to change Now. Deep-link with
   `#year=1900&compare=1776`.
@@ -131,8 +132,8 @@ grouped in the ⋯ menu.
   especially *Greater Gotham*'s people and places for 1898–1919.
 - Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
   marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
-- More outer-borough entries and tours now that the streets are there: a
-  Brooklyn tour, a Queens tour.
+- More outer-borough names and places: neighborhood names and dated
+  park outlines (Pelham Bay, Van Cortlandt, Forest Park, Marine Park).
 - Carry the timeline past 1945 (Moses's expressways, public housing, the
   fiscal crisis).
 - Audio per era.

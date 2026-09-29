@@ -409,11 +409,11 @@ header, theme, footprint, markers, panel — derives from it.
       Barren Island, North Beach, Jamaica Bay, Fresh Kills). Still open:
       what was filled before the 1890s (Gowanus, Wallabout), which needs
       an 1840s Coast Survey chart.
-- [x] Guided "tours": scripted camera+timeline paths — shipped: ten tours
+- [x] Guided "tours": scripted camera+timeline paths — shipped: fourteen tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair, the island remade by landfill,
       slavery and freedom, New York at war, a city of riots, the rich moving
-      uptown, horsecar to bus) with animated timeline flights, map camera moves, and
+      uptown, horsecar to bus, and a tour of each outer borough) with animated timeline flights, map camera moves, and
       `#tour=<id>` deep links. Adding one is a data entry in `tours.ts`.
 - [x] ~~Deep links~~ — shipped: `#year=1863` (optional `&span=`) opens the
       timeline there; `#entry=<id>` opens an entry; *Copy link* on entry
