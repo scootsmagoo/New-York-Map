@@ -1,5 +1,6 @@
 import type { FootprintSnapshot } from "../types";
 import outerFootprints from "./geo/outerFootprints.json" with { type: "json" };
+import { unpackRing } from "../lib/geoPack.ts";
 
 type Ring = [number, number][];
 
@@ -606,7 +607,13 @@ const snapshots: FootprintSnapshot[] = [
  * above stay as the record of what was drawn before, and are what dates
  * the villages' streets through 1880.
  */
-const derivedOther = outerFootprints as unknown as Record<string, Ring[][]>;
+const packedOther = outerFootprints as unknown as { q: number; years: Record<string, number[][][]> };
+const derivedOther: Record<string, Ring[][]> = Object.fromEntries(
+  Object.entries(packedOther.years).map(([y, polys]) => [
+    y,
+    polys.map((poly) => poly.map((flat) => unpackRing(flat, packedOther.q))),
+  ])
+);
 
 /** The hand-drawn snapshots, as drawn (scripts/prepare-borough-streets.mjs dates by these). */
 export const handFootprints = snapshots;

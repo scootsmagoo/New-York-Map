@@ -8,8 +8,10 @@ A ~120 m cell counts as built in a year when enough street built by then
 runs through it; gaps of a block are closed, small specks dropped,
 traced into outlines, simplified, and kept off Manhattan.
 
-Output: src/data/geo/outerFootprints.json — { "1880": [polygon, …], … },
-each polygon [outline, hole, …] and each ring [[lon, lat], …]. The holes
+Output: src/data/geo/outerFootprints.json — { "q": 10000, "years":
+{ "1880": [polygon, …], … } }, each polygon [outline, hole, …] and each
+ring delta-encoded [dx0, dy0, dx1, dy1, …] in 1/q-degree steps
+(lib/geoPack.ts unpackRing). The holes
 matter: Staten Island's shore towns ringed an empty interior.
 
 Run: .venv/bin/python scripts/borough-footprints/build.py
@@ -32,6 +34,16 @@ CELL_LON, CELL_LAT = 0.0015, 0.0011  # about 125 × 122 m
 DECADE_SHOWS_AT = 4  # a decade's streets count from its fifth year (BoroughStreetLayer.tsx)
 MIN_LENGTH_M = 150  # street length in a cell for it to count as built
 M_LON, M_LAT = 84310, 111320
+Q = 10000  # output precision: 1e-4° (about 10 m)
+
+
+def pack(pts):
+    out, px, py = [], 0, 0
+    for x, y in pts:
+        X, Y = round(x * Q), round(y * Q)
+        out += [X - px, Y - py]
+        px, py = X, Y
+    return out
 
 nx = int((LON1 - LON0) / CELL_LON) + 1
 ny = int((LAT1 - LAT0) / CELL_LAT) + 1
@@ -114,11 +126,11 @@ for year in YEARS:
         # Outline counterclockwise, holes clockwise (the map reverses both
         # for d3's spherical winding, as it does the hand-drawn rings).
         g = orient(g, 1.0)
-        ring = lambda r: [[round(x, 4), round(y, 4)] for x, y in list(r.coords)[:-1]]
+        ring = lambda r: pack([(x, y) for x, y in list(r.coords)[:-1]])
         holes = [ring(h) for h in g.interiors if Polygon(h).area >= 2e-6]
         polygons.append([ring(g.exterior), *holes])
-    out[str(year)] = polygons
+    out[str(year)] = polygons  # packed rings
     print(year, len(polygons), "polygons,", sum(len(p) - 1 for p in polygons), "holes,",
-          sum(len(r) for p in polygons for r in p), "points")
+          sum(len(r) // 2 for p in polygons for r in p), "points")
 
-(GEO / "outerFootprints.json").write_text(json.dumps(out))
+(GEO / "outerFootprints.json").write_text(json.dumps({"q": Q, "years": out}, separators=(",", ":")))

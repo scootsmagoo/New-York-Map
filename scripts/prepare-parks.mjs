@@ -14,7 +14,10 @@
  * so a park assembled over years can read late; KNOWN below overrides the
  * ones that matter.
  *
- * Output: src/data/geo/outerParks.json — [{ id, name, from, completed?, rings }]
+ * Output: src/data/geo/outerParks.json — { q, parks: [{ id, name, from,
+ * completed?, rings }] }, each ring delta-encoded [dx0, dy0, dx1, dy1, …] in
+ * 1/q-degree steps (lib/geoPack.ts unpackRing): about 10 m, finer than the
+ * outlines are simplified to.
  * Run: node scripts/prepare-parks.mjs
  */
 import fs from "node:fs";
@@ -62,6 +65,19 @@ const area = (r) => Math.abs(r.reduce((s, p, i) => { const q = r[(i + 1) % r.len
 /** Counterclockwise, like the hand-drawn rings (the map reverses them for d3). */
 const ccw = (r) => (r.reduce((s, p, i) => { const q = r[(i + 1) % r.length]; return s + (q[0] - p[0]) * (q[1] + p[1]); }, 0) > 0 ? [...r].reverse() : r);
 
+const Q = 10000;
+function pack(ring) {
+  const out = [];
+  let px = 0, py = 0;
+  for (const [x, y] of ring) {
+    const X = Math.round(x * Q), Y = Math.round(y * Q);
+    out.push(X - px, Y - py);
+    px = X;
+    py = Y;
+  }
+  return out;
+}
+
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const out = [];
 for (const r of rows) {
@@ -72,7 +88,7 @@ for (const r of rows) {
   for (const poly of r.multipolygon.coordinates) {
     const outer = poly[0].slice(0, -1);
     if (area(outer) < 4000) continue; // pieces under ~1 acre: medians, slivers
-    const s = simplify(outer, 10).map(([x, y]) => [Number(x.toFixed(5)), Number(y.toFixed(5))]);
+    const s = simplify(outer, 10);
     if (s.length >= 3) rings.push(ccw(s));
   }
   if (!rings.length) continue;
@@ -82,10 +98,10 @@ for (const r of rows) {
     name: known.name ?? name,
     from: known.from ?? Number(r.acquisitiondate.slice(0, 4)),
     ...(known.completed ? { completed: known.completed } : {}),
-    rings,
+    rings: rings.map(pack),
   });
 }
 out.sort((a, b) => a.from - b.from || a.name.localeCompare(b.name));
 const file = path.resolve("src/data/geo/outerParks.json");
-fs.writeFileSync(file, JSON.stringify(out));
-console.log(`${out.length} parks, ${out.reduce((s, p) => s + p.rings.reduce((t, r) => t + r.length, 0), 0)} points, ${(fs.statSync(file).size / 1024).toFixed(0)} KB`);
+fs.writeFileSync(file, JSON.stringify({ q: Q, parks: out }));
+console.log(`${out.length} parks, ${out.reduce((s, p) => s + p.rings.reduce((t, r) => t + r.length / 2, 0), 0)} points, ${(fs.statSync(file).size / 1024).toFixed(0)} KB`);

@@ -1,5 +1,6 @@
 import type { Park } from "../types";
 import outerParks from "./geo/outerParks.json";
+import { unpackRing } from "../lib/geoPack";
 
 type Ring = [number, number][];
 
@@ -158,8 +159,13 @@ const handParks: Park[] = [
  * The other boroughs' parks, with real outlines from NYC Parks' property
  * records (scripts/prepare-parks.mjs), dated by acquisition.
  */
-const recordedParks: Park[] = (
-  outerParks as unknown as { id: string; name: string; from: number; completed?: number; rings: Ring[] }[]
-).map(({ rings, ...p }) => ({ ...p, ring: rings[0], extraRings: rings.slice(1) }));
+const packedParks = outerParks as unknown as {
+  q: number;
+  parks: { id: string; name: string; from: number; completed?: number; rings: number[][] }[];
+};
+const recordedParks: Park[] = packedParks.parks.map(({ rings, ...p }) => {
+  const unpacked = rings.map((flat) => unpackRing(flat, packedParks.q));
+  return { ...p, ring: unpacked[0], extraRings: unpacked.slice(1) };
+});
 
 export const parks: Park[] = [...handParks, ...recordedParks];

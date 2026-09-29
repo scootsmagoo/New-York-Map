@@ -31,3 +31,20 @@ export function unpackBoroughs(packed: PackedBorough[]) {
     })),
   };
 }
+
+/**
+ * One ring from a delta-encoded list [dx0, dy0, dx1, dy1, …] in 1/q-degree
+ * steps, the first absolute — the compact form the build scripts write
+ * (about a third the size of plain coordinates, gzipped).
+ */
+export function unpackRing(flat: number[], q: number): [number, number][] {
+  const ring: [number, number][] = [];
+  let x = 0;
+  let y = 0;
+  for (let i = 0; i < flat.length; i += 2) {
+    x += flat[i];
+    y += flat[i + 1];
+    ring.push([x / q, y / q]);
+  }
+  return ring;
+}
