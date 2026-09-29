@@ -117,6 +117,9 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
 
+*Done 2026-09-29:* tours of Brooklyn, Queens, the Bronx, and Staten
+Island; real outlines for 90 parks there; 65 more neighborhood names.
+
 *Done 2026-09-28:* the outer boroughs brought up toward Manhattan's
 detail: every street in Brooklyn, Queens, the Bronx, and Staten Island,
 dated block by block; the built-up areas drawn from them; their marshes
@@ -132,8 +135,6 @@ grouped in the ⋯ menu.
   especially *Greater Gotham*'s people and places for 1898–1919.
 - Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
   marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
-- More outer-borough names and places: neighborhood names and dated
-  park outlines (Pelham Bay, Van Cortlandt, Forest Park, Marine Park).
 - Carry the timeline past 1945 (Moses's expressways, public housing, the
   fiscal crisis).
 - Audio per era.
