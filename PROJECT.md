@@ -124,6 +124,12 @@ header, theme, footprint, markers, panel — derives from it.
   today, so neighborhoods rebuilt wholesale read later than they were
   first built. From 1880 the outer boroughs' built-up wash is drawn from
   these streets (`scripts/borough-footprints/build.py`).
+- **Outer-borough parks:** outlines from NYC Parks' property records
+  (Open Data enfh-gkve), parks, community parks, and nature areas of 6+
+  acres acquired by 1945, dated by acquisition (`scripts/prepare-parks.mjs`).
+  The record keeps a property's latest acquisition, so parks assembled over
+  years can read late; the big ones' dates are set by hand. Freshkills Park
+  (a landfill until 2008) is left out.
 - **Outer-borough lost landscape:** USGS topographic sheets of 1891–98,
   georeferenced by USGS; wet areas picked by color and dated by the
   streets that reached them (`scripts/lost-landscape-outer/README.md`).

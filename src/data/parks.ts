@@ -1,4 +1,5 @@
 import type { Park } from "../types";
+import outerParks from "./geo/outerParks.json";
 
 type Ring = [number, number][];
 
@@ -25,25 +26,13 @@ export const CENTRAL_PARK_RING: Ring = [
   [-73.958, 40.8003],
 ];
 
-export const parks: Park[] = [
+/** Hand-drawn: Manhattan's parks, and Green-Wood. */
+const handParks: Park[] = [
   {
     id: "central-park",
     name: "Central Park",
     ring: CENTRAL_PARK_RING,
     from: 1857,
-    completed: 1873,
-  },
-  {
-    id: "prospect-park",
-    name: "Prospect Park",
-    ring: [
-      [-73.9755, 40.6565],
-      [-73.965, 40.6505],
-      [-73.9585, 40.6545],
-      [-73.9625, 40.6685],
-      [-73.9745, 40.6715],
-    ],
-    from: 1867,
     completed: 1873,
   },
   {
@@ -163,48 +152,14 @@ export const parks: Park[] = [
     from: 1875,
     completed: 1910,
   },
-  {
-    id: "van-cortlandt",
-    name: "Van Cortlandt Park",
-    ring: blob(-73.8935, 40.8895, 0.008, 0.007),
-    from: 1888,
-  },
-  {
-    id: "bronx-park",
-    name: "Bronx Park",
-    ring: blob(-73.8765, 40.8565, 0.0065, 0.009),
-    from: 1888,
-  },
-  {
-    id: "pelham-bay",
-    name: "Pelham Bay Park",
-    ring: blob(-73.8065, 40.8675, 0.0105, 0.009),
-    from: 1888,
-  },
-  {
-    id: "crotona-park",
-    name: "Crotona Park",
-    ring: blob(-73.8955, 40.84, 0.004),
-    from: 1888,
-  },
-  {
-    id: "forest-park",
-    name: "Forest Park",
-    ring: blob(-73.8485, 40.7025, 0.0062, 0.0045),
-    from: 1895,
-  },
-  {
-    id: "flushing-meadows",
-    name: "Flushing Meadows",
-    // The Corona ash dumps, filled and graded for the 1939 World's Fair.
-    ring: [
-      [-73.8395, 40.76],
-      [-73.856, 40.7555],
-      [-73.8515, 40.73],
-      [-73.836, 40.7255],
-      [-73.8345, 40.742],
-    ],
-    from: 1936,
-    completed: 1939,
-  },
 ];
+
+/**
+ * The other boroughs' parks, with real outlines from NYC Parks' property
+ * records (scripts/prepare-parks.mjs), dated by acquisition.
+ */
+const recordedParks: Park[] = (
+  outerParks as unknown as { id: string; name: string; from: number; completed?: number; rings: Ring[] }[]
+).map(({ rings, ...p }) => ({ ...p, ring: rings[0], extraRings: rings.slice(1) }));
+
+export const parks: Park[] = [...handParks, ...recordedParks];

@@ -686,7 +686,7 @@ function MapViewInner({
     if (!path || !projection) return [];
     return parks.map((p) => ({
       ...p,
-      d: path(toGeo([p.ring])) ?? "",
+      d: path(toGeo([p.ring, ...(p.extraRings ?? [])])) ?? "",
       center: projection(ringCentroid(p.ring))!,
       major: ringBboxArea(p.ring) >= MAJOR_PARK_AREA,
     }));

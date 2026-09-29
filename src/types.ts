@@ -111,6 +111,8 @@ export interface Park {
   name: string;
   /** Polygon ring of [lon, lat] points (counterclockwise, unclosed). */
   ring: [number, number][];
+  /** Further pieces of the same park (the largest is `ring`). */
+  extraRings?: [number, number][][];
   /** Year the land became (or began becoming) a park. */
   from: number;
   /** Year construction finished; between `from` and this it draws hatched. */
