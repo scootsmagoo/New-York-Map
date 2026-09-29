@@ -33,11 +33,26 @@ export interface Tour {
   stops: TourStop[];
   /** Map layers the tour turns on when it starts. */
   layers?: TourLayer[];
+  /** Where the ⋯ menu files it. */
+  area: TourArea;
 }
+
+export type TourArea = "manhattan" | "brooklyn" | "queens" | "bronx" | "staten-island" | "citywide";
+
+/** The ⋯ menu's tour groups, in order. */
+export const TOUR_AREAS: { id: TourArea; title: string }[] = [
+  { id: "manhattan", title: "Manhattan" },
+  { id: "brooklyn", title: "Brooklyn" },
+  { id: "queens", title: "Queens" },
+  { id: "bronx", title: "The Bronx" },
+  { id: "staten-island", title: "Staten Island" },
+  { id: "citywide", title: "Across the city" },
+];
 
 export const tours: Tour[] = [
   {
     id: "grid",
+    area: "manhattan",
     title: "The Grid Marches North",
     subtitle: "From the 1811 plan to a built-out island",
     stops: [
@@ -86,6 +101,7 @@ export const tours: Tour[] = [
   },
   {
     id: "east-river",
+    area: "brooklyn",
     title: "Crossing the East River",
     subtitle: "A rowboat, a steam ferry, a poem, and a bridge",
     stops: [
@@ -134,6 +150,7 @@ export const tours: Tour[] = [
   },
   {
     id: "fire-water",
+    area: "manhattan",
     title: "Fire and Water",
     subtitle: "How cholera and a great fire brought the Croton to Manhattan",
     layers: ["calamities"],
@@ -177,6 +194,7 @@ export const tours: Tour[] = [
   },
   {
     id: "moses",
+    area: "citywide",
     title: "The Power Broker's City",
     subtitle: "Bridges, parks, and a World's Fair, 1931–1945",
     stops: [
@@ -224,6 +242,7 @@ export const tours: Tour[] = [
   },
   {
     id: "horsecar-to-bus",
+    area: "citywide",
     title: "Horsecar to Bus",
     subtitle: "A century of streetcars, 1832–1945",
     layers: ["streetcars"],
@@ -275,6 +294,7 @@ export const tours: Tour[] = [
   },
   {
     id: "brooklyn",
+    area: "brooklyn",
     title: "The City of Brooklyn",
     subtitle: "A ferry village becomes America's third-largest city, then a borough",
     stops: [
@@ -338,6 +358,7 @@ export const tours: Tour[] = [
   },
   {
     id: "queens",
+    area: "queens",
     title: "Queens: Farms to Fairgrounds",
     subtitle: "Quaker Flushing, the Long Island City waterfront, and a World's Fair",
     layers: ["lostLandscape"],
@@ -394,6 +415,7 @@ export const tours: Tour[] = [
   },
   {
     id: "bronx",
+    area: "bronx",
     title: "The Bronx: Manors to Mass Transit",
     subtitle: "Jonas Bronck's farm becomes the subway's instant city",
     stops: [
@@ -450,6 +472,7 @@ export const tours: Tour[] = [
   },
   {
     id: "staten-island",
+    area: "staten-island",
     title: "Staten Island",
     subtitle: "The ferry borough, still half country in 1945",
     layers: ["lostLandscape"],
@@ -513,6 +536,7 @@ export const tours: Tour[] = [
   },
   {
     id: "island-remade",
+    area: "manhattan",
     title: "The Island Remade",
     subtitle:
       "Ponds filled, streams buried, a shoreline pushed into the rivers",
@@ -573,6 +597,7 @@ export const tours: Tour[] = [
   },
   {
     id: "slavery-freedom",
+    area: "citywide",
     title: "Slavery and Freedom",
     subtitle:
       "Two centuries of bondage in a northern city, and what came after",
@@ -656,6 +681,7 @@ export const tours: Tour[] = [
   },
   {
     id: "new-york-at-war",
+    area: "citywide",
     title: "New York at War",
     subtitle: "Nazis in the Garden, a U-boat at the harbor mouth, and V-J Day",
     stops: [
@@ -717,6 +743,7 @@ export const tours: Tour[] = [
   },
   {
     id: "riots",
+    area: "citywide",
     title: "A City of Riots",
     subtitle: "Who fought whom in New York's streets, and what it cost",
     stops: [
@@ -784,6 +811,7 @@ export const tours: Tour[] = [
   },
   {
     id: "rich-uptown",
+    area: "manhattan",
     title: "The Rich Move Uptown",
     subtitle:
       "Two centuries of the wealthy running from commerce, up the island",

@@ -2039,6 +2039,74 @@ a {
   color: var(--ink-soft);
 }
 
+/* Tours, folded by borough */
+.header-menu-tour-group {
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.header-menu-tour-group:last-of-type {
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.header-menu-tour-group > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 4px 2px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.header-menu-tour-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A chevron that turns when the group opens. */
+.header-menu-tour-group > summary::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin: 0 2px 0 1px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+
+.header-menu-tour-group[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.header-menu-tour-group > summary:hover {
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+
+.header-menu-tour-group-count {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 9%, transparent);
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.header-menu-tour-group[open] {
+  padding-bottom: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-menu-tour-group > summary::before {
+    transition: none;
+  }
+}
+
 .header-menu-tour {
   display: block;
   width: 100%;

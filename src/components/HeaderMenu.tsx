@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { tours, type Tour } from "../data/tours";
+import { TOUR_AREAS, tours, type Tour } from "../data/tours";
 import { formatYear } from "../data/eras";
 import { CopyLinkButton } from "./CopyLinkButton";
 import { LAYERS, LAYER_GROUPS, type LayerId, type LayerVisibility } from "../lib/layers";
@@ -121,20 +121,32 @@ export function HeaderMenu({
             <p className="header-menu-section-note">
               Scripted walks through time and across the map.
             </p>
-            {tours.map((tour) => (
-              <button
-                key={tour.id}
-                className="header-menu-tour"
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  onStartTour(tour);
-                }}
-              >
-                <span className="header-menu-tour-title">{tour.title}</span>
-                <span className="header-menu-tour-sub">{tour.subtitle}</span>
-              </button>
-            ))}
+            {TOUR_AREAS.map((area) => {
+              const inArea = tours.filter((t) => t.area === area.id);
+              if (!inArea.length) return null;
+              return (
+                <details key={area.id} className="header-menu-tour-group">
+                  <summary>
+                    <span className="header-menu-tour-group-title">{area.title}</span>
+                    <span className="header-menu-tour-group-count">{inArea.length}</span>
+                  </summary>
+                  {inArea.map((tour) => (
+                    <button
+                      key={tour.id}
+                      className="header-menu-tour"
+                      type="button"
+                      onClick={() => {
+                        setOpen(false);
+                        onStartTour(tour);
+                      }}
+                    >
+                      <span className="header-menu-tour-title">{tour.title}</span>
+                      <span className="header-menu-tour-sub">{tour.subtitle}</span>
+                    </button>
+                  ))}
+                </details>
+              );
+            })}
           </div>
 
           <div className="header-menu-divider" role="separator" />

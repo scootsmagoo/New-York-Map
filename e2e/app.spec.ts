@@ -248,6 +248,16 @@ test("the era panel keeps its scroll position when closed and reopened", async (
   expect(await scroller.evaluate((el) => el.scrollTop)).toBe(400);
 });
 
+test("tours are folded by borough in the ⋯ menu", async ({ page }) => {
+  await open(page, "#year=1850");
+  await openMenu(page);
+  const tour = page.getByRole("button", { name: /The City of Brooklyn/ });
+  await expect(tour).toBeHidden();
+  await page.locator("summary", { hasText: "Brooklyn" }).click();
+  await tour.click();
+  await expect(page.locator(".tour-card")).toContainText("The City of Brooklyn");
+});
+
 test("the ⋯ menu scrolls when it's taller than a laptop screen", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 800 });
   await open(page, "#year=1850");

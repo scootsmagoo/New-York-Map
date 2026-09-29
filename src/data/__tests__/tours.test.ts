@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { allEntries } from "../entries";
 import { TIME_MAX, TIME_MIN } from "../eras";
-import { tourById, tours } from "../tours";
+import { TOUR_AREAS, tourById, tours } from "../tours";
 
 describe("guided tours", () => {
   it("have unique ids and at least three stops", () => {
@@ -21,6 +21,11 @@ describe("guided tours", () => {
         prev = s.year;
       }
     }
+  });
+
+  it("are each filed under a menu group", () => {
+    const areas = new Set(TOUR_AREAS.map((a) => a.id));
+    for (const t of tours) expect(areas.has(t.area), t.id).toBe(true);
   });
 
   it("link only to entries that exist", () => {
