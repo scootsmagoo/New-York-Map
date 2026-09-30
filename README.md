@@ -226,6 +226,7 @@ additions.
 | `node scripts/prepare-overlays.mjs` | download & compress historical map sheets |
 | `node --experimental-strip-types scripts/prepare-streets.mjs` | street names and the Manhattan grid table from NYC street centerlines |
 | `node --experimental-strip-types scripts/prepare-streetcars.mjs` | streetcar routes from the legs in `src/data/streetcars.ts` (uses the centerlines `prepare-streets` downloads) |
+| `node --experimental-strip-types scripts/prepare-railroads.mjs` | railroad routes from `src/data/railroads.ts`, using an OpenStreetMap export in `data-raw/osm_rail.json` (the download command is in the script's header) |
 | `python3 scripts/books/extract-epub.py <epub> <slug>` / `scripts/books/find.py "<regex>"` | extract your own copy of a book to gitignored text, then search it with chapter/page citations |
 
 ## Credits
@@ -234,7 +235,8 @@ Stories from standard histories, above all Burrows & Wallace's *Gotham* and
 Wallace's *Greater Gotham* and *Gotham at War* (cited by chapter and page),
 and Wikipedia (live summaries and images). Geometry from NYC Open Data
 (borough boundaries, street centerlines, PLUTO tax lots, NYC Parks
-properties), the U.S. Census Bureau, and the U.S. Geological Survey's
+properties), railroad tracks © OpenStreetMap contributors (ODbL), the
+U.S. Census Bureau, and the U.S. Geological Survey's
 1891–98 topographic maps; historical map sheets from Wikimedia Commons;
 the pre-contact island from Eric W. Sanderson's *Mannahatta*. What is
 drawn by hand, and how far to trust each layer: PROJECT.md → Data sources

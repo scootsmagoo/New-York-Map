@@ -1,5 +1,6 @@
 import type { InfrastructureLine } from "../types";
 import { avenuePolyline } from "../lib/grid";
+import { railroadInfrastructure } from "./railroads";
 import { transitInfrastructure } from "./transit";
 
 /**
@@ -111,4 +112,8 @@ const manhattanLines: InfrastructureLine[] = [
 ];
 
 /** Manhattan's trunk lines, plus the els and subways of the other boroughs (transit.ts). */
-export const infrastructureLines: InfrastructureLine[] = [...manhattanLines, ...transitInfrastructure];
+export const infrastructureLines: InfrastructureLine[] = [
+  ...manhattanLines,
+  ...transitInfrastructure,
+  ...railroadInfrastructure,
+];

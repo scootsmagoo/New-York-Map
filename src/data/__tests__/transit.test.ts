@@ -12,7 +12,7 @@ describe("els and subways beyond Manhattan's trunk lines", () => {
     const src = new Map(transitLines.map((l) => [l.id, l]));
     for (const line of transitInfrastructure) {
       const t = src.get(line.id)!;
-      if (t.legs) expect(line.legs?.length, line.id).toBe(t.legs.length);
+      expect(line.legs?.length, line.id).toBe(t.legs.length);
     }
   });
 });

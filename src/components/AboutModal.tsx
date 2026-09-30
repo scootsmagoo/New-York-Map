@@ -75,6 +75,12 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               centerlines, each drawn from the year it opened.
             </li>
             <li>
+              <strong>Railroads:</strong> track geometry © OpenStreetMap
+              contributors (ODbL), with dates from Wikipedia; where a subway
+              was rebuilt on an old railroad's right-of-way, today's tracks
+              stand in for the old ones.
+            </li>
+            <li>
               <strong>Parks:</strong> NYC Parks property records outside
               Manhattan, dated by acquisition; Manhattan's squares are drawn
               by hand.

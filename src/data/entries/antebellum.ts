@@ -583,4 +583,16 @@ export const antebellumEntries: Entry[] = [
     coords: [-73.7919, 40.8056],
     lifespan: [1856, null],
   },
+  {
+    id: "cobble-hill-tunnel",
+    era: "antebellum",
+    kind: "place",
+    title: "Cobble Hill Tunnel",
+    wikiTitle: "Cobble Hill Tunnel",
+    year: 1844,
+    blurb:
+      "The Long Island Rail Road dug an open cut under Atlantic Avenue and roofed it over, opening it in December 1844 to carry trains to the South Ferry. When Brooklyn banned steam engines in 1861 the ends were sealed, and the tunnel was forgotten until 1980. Guinness calls it the oldest subway tunnel in the world.",
+    coords: [-73.9951, 40.6904],
+    lifespan: [1844, null],
+  },
 ];

@@ -94,11 +94,11 @@ export interface Structure {
   entryId?: string;
 }
 
-/** Els, subways, aqueducts — dated line geometry with distinct styling. */
+/** Els, subways, railroads, aqueducts — dated line geometry with distinct styling. */
 export interface InfrastructureLine {
   id: string;
   name: string;
-  kind: "aqueduct" | "elevated" | "subway";
+  kind: "aqueduct" | "elevated" | "subway" | "railroad";
   pts: [number, number][];
   /** Separate pieces, when the line isn't one polyline (pts is them joined). */
   legs?: [number, number][][];

@@ -160,8 +160,15 @@ header, theme, footprint, markers, panel — derives from it.
   1895, Manhattan 1900) unless the line's own date is known: approximate.
 - **Outer-borough els and subways:** opening and closing dates from
   Wikipedia's article on each line. Routes follow the streets each line
-  ran over or under, on today's street geometry; the Rockaway trestle
-  across Jamaica Bay is drawn by hand.
+  ran over or under, on today's street geometry.
+- **Railroads:** track geometry from OpenStreetMap (© OpenStreetMap
+  contributors, ODbL; `data-raw/osm_rail.json`, an Overpass export of the
+  city's railway ways), picked by name within a box and thinned to one
+  line per corridor (`scripts/prepare-railroads.mjs`). Dates from
+  Wikipedia. Today's tracks stand in where a line was rebuilt in place:
+  the Coney Island excursion railroads that became BMT lines, the
+  Rockaway trestle, the Westchester & Boston's Dyre Avenue stretch. Lines
+  whose tracks are gone and unmapped (the South Beach Branch) are left out.
 - **Working waterfront:** dates from the books where they give them,
   otherwise Wikipedia; a site whose closing year neither gives stays open.
 - **Fires & epidemics:** outlines follow the streets *Gotham* names for
@@ -408,6 +415,13 @@ header, theme, footprint, markers, panel — derives from it.
       Connection (`src/data/transit.ts`, geometry from the street
       centerlines by `scripts/prepare-transit.mjs`, which shares its
       route builder with the streetcars).
+- [x] Railroads — shipped: 23 dated sections, 1834–1975 (the Harlem and
+      Hudson River railroads, the Long Island Rail Road's Brooklyn and
+      Queens lines and the Cobble Hill tunnel, the Staten Island Railway,
+      the Coney Island excursion lines handing over to the BMT, the
+      Westchester & Boston, the High Line), drawn with cross ties, plus
+      the five subway lines built on their rights-of-way
+      (`src/data/railroads.ts`, geometry from OpenStreetMap).
 - [x] Every named street: ~15,000 label anchors from the city's street
       centerlines, appearing as the built-up area reaches them.
 - [x] Neighborhood names: ~70 villages and neighborhoods under the names

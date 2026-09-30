@@ -903,6 +903,21 @@ button {
   opacity: 0.9;
 }
 
+/* Railroads: the mapmaker's line with cross ties. */
+.infra-railroad {
+  stroke: #3b3531;
+  stroke-width: 1.4;
+}
+
+.infra-ties {
+  fill: none;
+  stroke: #3b3531;
+  stroke-width: 5;
+  stroke-dasharray: 1 5;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
 /* Public housing */
 .housing {
   fill: color-mix(in srgb, #7a4f8c 38%, transparent);

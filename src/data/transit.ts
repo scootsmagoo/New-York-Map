@@ -4,9 +4,10 @@
  * changes. Els ran over streets and most subways under them, so routes are
  * legs along the street they followed (a street between two cross
  * streets, as for streetcars), built by scripts/prepare-transit.mjs into
- * src/data/geo/transit.json. Where a line left the streets (the Rockaway
- * trestle), it is drawn by hand. Dates from Wikipedia's articles on each
- * line; a line built in stages is dated by its main section.
+ * src/data/geo/transit.json. Lines on railroad rights-of-way (the Coney
+ * Island lines, the Rockaway line, Dyre Avenue) are in railroads.ts. Dates
+ * from Wikipedia's articles on each line; a line built in stages is dated
+ * by its main section.
  */
 import type { InfrastructureLine } from "../types";
 import type { Leg } from "./streetcars";
@@ -20,9 +21,7 @@ export interface TransitLine {
   boro: string;
   open: number;
   close?: number;
-  legs?: Leg[];
-  /** Hand-drawn route where there's no street to follow. */
-  pts?: [number, number][];
+  legs: Leg[];
   entryId?: string;
 }
 
@@ -62,17 +61,6 @@ export const transitLines: TransitLine[] = [
     legs: [["QUEENS BLVD", "THOMSON AVE", "UNION TPKE"]] },
   { id: "ind-hillside", name: "IND Hillside Avenue extension", kind: "subway", boro: "4", open: 1950,
     legs: [["HILLSIDE AVE", "QUEENS BLVD", "179 ST"]] },
-  { id: "ind-rockaway", name: "IND Rockaway line", kind: "subway", boro: "4", open: 1956,
-    // Across Jamaica Bay on the Long Island Rail Road's old trestle, bought
-    // by the city after a 1950 fire.
-    pts: [
-      [-73.8303, 40.6604],
-      [-73.8252, 40.6380],
-      [-73.8181, 40.6128],
-      [-73.8162, 40.6086],
-      [-73.8157, 40.5998],
-      [-73.8134, 40.588],
-    ] },
 
   // ----- The Bronx -----
   { id: "bx-third-ave-el", name: "Third Avenue El (Bronx)", kind: "elevated", boro: "2", open: 1891, close: 1973,
@@ -97,7 +85,7 @@ const routes = geometry as unknown as Record<string, [number, number][][]>;
 
 /** As infrastructure lines, their legs from the built geometry. */
 export const transitInfrastructure: InfrastructureLine[] = transitLines.map((t) => {
-  const legs = t.pts ? [t.pts] : (routes[t.id] ?? []);
+  const legs = routes[t.id] ?? [];
   return {
     id: t.id,
     name: t.name,

@@ -797,6 +797,7 @@ function MapViewInner({
       elevated: openLines.some((l) => l.kind === "elevated"),
       subway: openLines.some((l) => l.kind === "subway"),
       aqueduct: openLines.some((l) => l.kind === "aqueduct"),
+      railroad: openLines.some((l) => l.kind === "railroad"),
       people: markers.some((m) => m.kind === "person"),
       places: markers.some((m) => m.kind === "place"),
       events: markers.some((m) => m.kind === "event"),
@@ -1098,7 +1099,7 @@ function MapViewInner({
             {/* Horsecar and trolley lines, under the els that later rose over them */}
             {showStreetcars && <StreetcarLayer project={projection} year={year} />}
 
-            {/* Els, subway, and Croton Aqueduct */}
+            {/* Els, subways, railroads, and the Croton Aqueduct */}
             {infrastructurePaths
               .filter(
                 (line) =>
@@ -1118,6 +1119,7 @@ function MapViewInner({
                 return (
                   <g key={line.id} clipPath={clip} style={{ opacity: infraFade }}>
                     {line.kind !== "aqueduct" && <path className="infra-casing" d={line.d} />}
+                    {line.kind === "railroad" && <path className="infra-ties" d={line.d} />}
                     <path
                       className={`infra infra-${line.kind}`}
                       d={line.d}
@@ -1350,7 +1352,7 @@ function MapViewInner({
             <MapKey visible={keyVisible} />
           </div>
           <div className="map-attribution">
-            NYC Open Data · U.S. Census · USGS · Wikipedia · Sources: ⋯ → About
+            NYC Open Data · © OpenStreetMap · U.S. Census · USGS · Wikipedia · Sources: ⋯ → About
           </div>
         </>
       )}

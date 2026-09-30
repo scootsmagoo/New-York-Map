@@ -12,7 +12,6 @@ import { buildLeg, midpoint } from "./lib/street-routes.mjs";
 const out = {};
 let failed = 0;
 for (const line of transitLines) {
-  if (!line.legs) continue;
   const legs = [];
   for (const leg of line.legs) {
     const r = buildLeg(line.boro, leg);

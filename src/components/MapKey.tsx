@@ -19,6 +19,7 @@ export interface MapKeyVisible {
   elevated: boolean;
   subway: boolean;
   aqueduct: boolean;
+  railroad: boolean;
   people: boolean;
   places: boolean;
   events: boolean;
@@ -150,6 +151,16 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     { show: v.ferries, label: "Ferry route", swatch: <Swatch>{line("ferry")}</Swatch> },
     { show: v.elevated, label: "Elevated railway", swatch: <Swatch>{line("infra infra-elevated")}</Swatch> },
     { show: v.subway, label: "Subway", swatch: <Swatch>{line("infra infra-subway")}</Swatch> },
+    {
+      show: v.railroad,
+      label: "Railroad",
+      swatch: (
+        <Swatch>
+          {line("infra-ties")}
+          {line("infra infra-railroad")}
+        </Swatch>
+      ),
+    },
     { show: v.aqueduct, label: "Croton Aqueduct", swatch: <Swatch>{line("infra infra-aqueduct")}</Swatch> },
     {
       show: v.expressways,
