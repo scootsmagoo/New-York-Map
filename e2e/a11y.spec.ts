@@ -12,6 +12,7 @@ const states: [string, string, (p: Page) => Promise<unknown>, { tips?: boolean }
   ["1880", "#year=1880", async () => {}],
   ["1910", "#year=1910", async () => {}],
   ["1940", "#year=1940", async () => {}],
+  ["1960", "#year=1960", async () => {}],
   ["an entry card", "#entry=prison-ships", async () => {}],
   ["the ⋯ menu", "#year=1850", (p) => openMenu(p)],
   ["the era panel", "#year=1850", (p) => p.locator(".explore-btn").click()],
