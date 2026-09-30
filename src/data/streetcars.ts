@@ -1,5 +1,5 @@
 /**
- * Streetcar lines, 1832–1945: the main horsecar and trolley routes, each
+ * Streetcar lines, 1832–1956: the main horsecar and trolley routes, each
  * from its opening to its conversion to buses. Routes are written as legs
  * along today's streets (a street, from one cross street to another);
  * scripts/prepare-streetcars.mjs turns them into geometry from the city's
@@ -25,7 +25,7 @@ export interface StreetcarLine {
   borough: Borough;
   /** Year it opened (horsecars, unless it opened electric). */
   open: number;
-  /** Year buses replaced it; absent = still running in 1945. */
+  /** Year buses replaced it; absent = still running at the timeline's end. */
   close?: number;
   /** Year it went electric, where known; null = horses to the end. */
   electric?: number | null;
@@ -88,6 +88,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Third Avenue line",
     borough: "manhattan",
     open: 1853,
+    close: 1947,
     legs: [
       ["BOWERY", "CHATHAM SQ", "COOPER SQ"],
       ["3 AVE", "COOPER SQ", "E 125 ST"],
@@ -191,6 +192,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Myrtle Avenue line",
     borough: "brooklyn",
     open: 1854,
+    close: 1949,
     electric: 1893,
     legs: [["MYRTLE AVE", "FLATBUSH AVE EXTENSION", "WYCKOFF AVE"]],
     note: "Brooklyn's first streetcar line, opened with Fulton Street's by the Brooklyn City Railroad in 1854; electric trolleys replaced its horses by July 1893.",
@@ -201,6 +203,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Flushing Avenue line",
     borough: "brooklyn",
     open: 1854,
+    close: 1948,
     legs: [["FLUSHING AVE", "NAVY ST", "WYCKOFF AVE"]],
     note: "Past the Navy Yard gate and out through Williamsburg's factories toward Maspeth.",
   },
@@ -218,6 +221,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Broadway line (Brooklyn)",
     borough: "brooklyn",
     open: 1859,
+    close: 1950,
     legs: [["BROADWAY", "KENT AVE", "JAMAICA AVE"]],
     note: "From the Williamsburg ferries out Broadway to East New York and Cypress Hills, later under the el.",
   },
@@ -226,6 +230,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Flatbush Avenue line",
     borough: "brooklyn",
     open: 1860,
+    close: 1951,
     legs: [["FLATBUSH AVE", "ATLANTIC AVE", "AVE U"]],
     note: "Down Flatbush Avenue past Prospect Park to the old Dutch town of Flatbush and on to Marine Park.",
   },
@@ -234,6 +239,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "DeKalb Avenue line",
     borough: "brooklyn",
     open: 1862,
+    close: 1949,
     legs: [["DEKALB AVE", "FLATBUSH AVE EXTENSION", "WYCKOFF AVE"]],
     note: "Through Fort Greene and Bedford to Ridgewood. In 1895 Brooklyn's trolley men struck every line in the city, and the militia rode the cars.",
     book: { book: "gotham", chapter: "67. Good Government", pages: "1202" },
@@ -243,6 +249,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Smith Street line",
     borough: "brooklyn",
     open: 1866,
+    close: 1951,
     legs: [
       ["SMITH ST", "LIVINGSTON ST", "9 ST"],
       ["9 ST", "SMITH ST", "PROSPECT PARK W"],
@@ -254,6 +261,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Coney Island Avenue line",
     borough: "brooklyn",
     open: 1890,
+    close: 1955,
     legs: [["CONEY ISLAND AVE", "PARK CIR", "BRIGHTON BEACH AVE"]],
     note: "One of the trolley routes that carried summer crowds from Prospect Park to the beach.",
   },
@@ -262,6 +270,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Nostrand Avenue line",
     borough: "brooklyn",
     open: 1895,
+    close: 1951,
     legs: [["NOSTRAND AVE", "FLUSHING AVE", "EMMONS AVE"]],
     note: "Opened in 1895 as Brooklyn's lines went electric; it ran nearly the length of the borough, from Williamsburg to Sheepshead Bay.",
   },
@@ -272,6 +281,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Third Avenue line (the 'Huckleberry')",
     borough: "bronx",
     open: 1865,
+    close: 1948,
     legs: [["3 AVE", "E 138 ST", "E FORDHAM RD"]],
     note: "Since the 1860s horsecars ran now and then from the Harlem Bridge up Third Avenue to Fordham; in the delays riders hopped off to pick huckleberries, and the line took the name.",
     book: { book: "greaterGotham", chapter: "10. Housing › The Bronx: Instant City" },
@@ -281,6 +291,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Westchester Avenue line",
     borough: "bronx",
     open: 1892,
+    close: 1948,
     legs: [["WESTCHESTER AVE", "3 AVE", "E TREMONT AVE"]],
     note: "Out from the Hub to Westchester Square, one of the Union Railway's trolley lines of the 1890s.",
   },
@@ -289,6 +300,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Webster Avenue line",
     borough: "bronx",
     open: 1892,
+    close: 1948,
     legs: [["WEBSTER AVE", "E 165 ST", "E GUN HILL RD"]],
     note: "North along Webster Avenue to Williamsbridge and on to Wakefield at the city line.",
   },
@@ -308,6 +320,7 @@ export const streetcarLines: StreetcarLine[] = [
     name: "Jamaica Avenue line",
     borough: "queens",
     open: 1863,
+    close: 1947,
     legs: [["JAMAICA AVE", "WOODHAVEN BLVD", "168 ST"]],
     note: "Opened by the East New York and Jamaica Railroad in 1863, along the old turnpike to the village of Jamaica.",
   },

@@ -28,7 +28,7 @@ from skimage.measure import find_contours
 
 ROOT = Path(__file__).resolve().parents[2]
 GEO = ROOT / "src/data/geo"
-YEARS = [1880, 1898, 1919, 1930, 1945]  # the footprint snapshots from 1880 on
+YEARS = [1880, 1898, 1919, 1930, 1945, 1960, 1975]  # the footprint snapshots from 1880 on
 LON0, LON1, LAT0, LAT1 = -74.27, -73.69, 40.49, 40.92
 CELL_LON, CELL_LAT = 0.0015, 0.0011  # about 125 × 122 m
 DECADE_SHOWS_AT = 4  # a decade's streets count from its fifth year (BoroughStreetLayer.tsx)

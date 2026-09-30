@@ -598,6 +598,20 @@ const snapshots: FootprintSnapshot[] = [
       blob(-74.2465, 40.5125, 0.0065), // Tottenville
     ],
   },
+  {
+    // Postwar: Manhattan was built out; the other boroughs' suburbs filled
+    // in (drawn from the streets, like every snapshot from 1880).
+    year: 1960,
+    frontier: { latW: 40.879, latE: 40.875 },
+    manhattan: [manhattanBelow(40.879, 40.875)],
+    other: [],
+  },
+  {
+    year: 1975,
+    frontier: { latW: 40.879, latE: 40.875 },
+    manhattan: [manhattanBelow(40.879, 40.875)],
+    other: [],
+  },
 ];
 
 /**

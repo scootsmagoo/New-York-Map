@@ -7,7 +7,7 @@
  * Input (gitignored): data-raw/parks/outer.json — download with
  *   curl -s --get https://data.cityofnewyork.us/resource/enfh-gkve.json \
  *     --data-urlencode '$select=name311,signname,borough,acquisitiondate,acres,typecategory,multipolygon' \
- *     --data-urlencode "\$where=borough in('B','Q','X','R') AND acres >= 6 AND acquisitiondate < '1946-01-01' AND typecategory in('Flagship Park','Community Park','Neighborhood Park','Nature Area','Historic House Park')" \
+ *     --data-urlencode "\$where=borough in('B','Q','X','R') AND acres >= 6 AND acquisitiondate < '1976-01-01' AND typecategory in('Flagship Park','Community Park','Neighborhood Park','Nature Area','Historic House Park')" \
  *     --data-urlencode '$limit=2000' -o data-raw/parks/outer.json
  *
  * The acquisition date is the city's latest recorded one for the property,
@@ -25,7 +25,7 @@ import path from "node:path";
 
 const rows = JSON.parse(fs.readFileSync(path.resolve("data-raw/parks/outer.json"), "utf8"));
 
-/** Not parks by 1945, whatever the land records say. */
+/** Not parks by 1975, whatever the land records say. */
 const SKIP = new Set([
   "Freshkills Park", // the city's landfill from 1948; a park only from 2008
 ]);

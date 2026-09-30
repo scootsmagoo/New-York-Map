@@ -5,10 +5,11 @@ import type { Era } from "../types";
  * "Gotham: A History of New York City to 1898", extended to 1919 where the
  * sequel "Greater Gotham" leaves off, then on through the Depression and the
  * Second World War. Wallace's third volume, "Gotham at War" (2025), covers
- * 1933–1945; the 1920s fall between the books.
+ * 1933–1945; the 1920s fall between the books. The postwar era, to the
+ * fiscal crisis of 1975, goes past them.
  */
 export const TIME_MIN = -10000;
-export const TIME_MAX = 1945;
+export const TIME_MAX = 1975;
 
 export const eras: Era[] = [
   {
@@ -104,11 +105,22 @@ export const eras: Era[] = [
     name: "Capital of the World",
     subtitle: "Jazz Age, Depression, and war, 1919–1945",
     start: 1919,
-    end: TIME_MAX,
+    end: 1945,
     color: "#6e4561",
     summary:
       "Prohibition, the Harlem Renaissance, and a building boom that raised the Chrysler and Empire State towers ended in the 1929 crash and shantytowns in Central Park. La Guardia's city hall and Robert Moses's bridges, parkways, pools, and public housing rebuilt the city with New Deal money; the 1939 World's Fair sold 'the World of Tomorrow' on a Queens ash dump, and the port and Navy Yard sent a war overseas until V-J Day filled Times Square.",
     wikiTitle: "History of New York City (1898–1945)",
+  },
+  {
+    id: "postwar",
+    name: "The Postwar City",
+    subtitle: "Expressways, towers, and the fiscal crisis, 1945–1975",
+    start: 1945,
+    end: TIME_MAX,
+    color: "#4a4f57",
+    summary:
+      "The richest city in the world came out of the war with its port, garment lofts, and factories at full stretch, and the UN on the East River. Then it remade itself: Robert Moses drove expressways through the Bronx and Brooklyn, public housing and urban renewal cleared whole neighborhoods, and the suburbs of Queens and Staten Island filled in. A million white New Yorkers left and as many Black and Puerto Rican New Yorkers arrived; the Dodgers and Giants went west; manufacturing and the docks faded. By 1975 the city could not pay its bills.",
+    wikiTitle: "History of New York City (1946–1977)",
   },
 ];
 

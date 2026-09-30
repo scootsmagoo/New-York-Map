@@ -138,15 +138,17 @@ describe("street label data", () => {
     expect(d.anchors.length).toBeGreaterThan(10000);
     for (const a of d.anchors) {
       expect(a[3]).toBeGreaterThanOrEqual(1800);
-      expect(a[3]).toBeLessThanOrEqual(1945);
+      expect(a[3]).toBeLessThanOrEqual(1975);
       if (a[4] !== 0) expect(a[4]).toBeGreaterThanOrEqual(a[3]);
     }
   });
 
-  it("uses names from before 1945, not today's", () => {
+  it("uses the names of the time, not today's", () => {
     expect(named("Lenox Ave").length).toBeGreaterThan(0);
     expect(named("Malcolm X Blvd")).toHaveLength(0);
-    expect(named("Adam Clayton Powell Jr Blvd")).toHaveLength(0);
+    // Renamed within the timeline: Harlem's 7th Avenue in 1974.
+    expect(named("7th Ave").some((a) => a[4] === 1973)).toBe(true);
+    expect(named("Adam Clayton Powell Jr Blvd").every((a) => a[3] >= 1974)).toBe(true);
     // Renamed during the timeline: 9th Avenue became Columbus in 1890.
     expect(named("9th Ave").some((a) => a[4] === 1889)).toBe(true);
     expect(named("Columbus Ave").every((a) => a[3] >= 1890)).toBe(true);

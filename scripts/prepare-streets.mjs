@@ -12,7 +12,7 @@
  *
  * A street's year is when the built-up footprint (src/data/footprints.ts)
  * first reaches it — there is no dataset of street opening dates. Modern
- * renamings are mapped back to their pre-1945 names below.
+ * renamings are mapped back to their earlier names below.
  *
  * Run: node --experimental-strip-types scripts/prepare-streets.mjs
  */
@@ -97,13 +97,10 @@ const median = (xs) => {
 const BORO_MANHATTAN = "1";
 const BORO_QUEENS = "4";
 
-/** Modern names → what the street was called through 1945. */
+/** Modern names → what the street was called through the timeline's end (1975). */
 const RENAMED = {
-  "1|ADAM CLAYTON POWELL JR BLVD": "7th Ave",
   "1|FREDERICK DOUGLASS BLVD": "8th Ave",
   "1|MALCOLM X BLVD": "Lenox Ave",
-  "1|AVE OF THE AMERICAS": "6th Ave",
-  "1|PARK AVE S": "4th Ave",
   "3|MALCOLM X BLVD": "Reid Ave",
   "3|MARCUS GARVEY BLVD": "Sumner Ave",
   "3|MOTHER GASTON BLVD": "Stone Ave",
@@ -111,8 +108,11 @@ const RENAMED = {
   "5|FATHER CAPODANNO BLVD": "Seaside Blvd",
 };
 
-/** Renamed before 1945: [modern name, earlier name, year of the change]. */
+/** Renamed within the timeline: [modern name, earlier name, year of the change]. */
 const RENAMED_DURING = {
+  "1|AVE OF THE AMERICAS": ["6th Ave", 1945],
+  "1|PARK AVE S": ["4th Ave", 1959],
+  "1|ADAM CLAYTON POWELL JR BLVD": ["7th Ave", 1974],
   "1|CENTRAL PARK W": ["8th Ave", 1883],
   "1|COLUMBUS AVE": ["9th Ave", 1890],
   "1|AMSTERDAM AVE": ["10th Ave", 1890],

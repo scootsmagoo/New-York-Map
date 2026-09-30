@@ -16,8 +16,8 @@ land is left cream or yellow. So:
 Each piece of made land (cut into ~400 m cells) is dated by when the city's
 streets reached it (the dated street lines from prepare-borough-streets.mjs),
 or by a known date for big fills with no streets (airports, parks, rail
-yards, the Navy Yard), and otherwise stays wet through 1945: most of what
-remains, like Idlewild's marshes and Fresh Kills, was filled after the war.
+yards, the Navy Yard, the postwar landfills), and otherwise stays wet
+through 1975, as much of Jamaica Bay still is.
 
 Only land made after the 1890s shows: the older fill along Brooklyn's
 waterfront predates the survey. Manhattan has its own layer (Viele, 1865).
@@ -53,7 +53,7 @@ SHEETS = [
     ("NY_Hempstead_129886_1897_62500_geo.tif", (-73.75, 40.5, -73.5, 40.75), 1897, dict(wet=12, water=32)),
 ]
 DOWN = 4  # 5.3 m pixels → ~21 m
-TIME_MAX = 1945
+TIME_MAX = 1975
 
 # Big fills with no streets to date them: [name, year, (lon0, lat0, lon1, lat1)].
 KNOWN_FILLS = [
@@ -65,6 +65,13 @@ KNOWN_FILLS = [
     ("The Navy Yard's Wallabout fill", 1910, (-73.978, 40.698, -73.962, 40.707)),
     ("Bush Terminal piers", 1905, (-74.02, 40.648, -74.0, 40.662)),
     ("Brooklyn Army Base", 1918, (-74.03, 40.64, -74.018, 40.65)),
+    # Postwar
+    ("Idlewild airport, on the Jamaica Bay marshes", 1948, (-73.83, 40.62, -73.74, 40.67)),
+    # A landfill from 1948; the marsh went under garbage over the next two
+    # decades, so this dates it halfway.
+    ("Fresh Kills landfill", 1958, (-74.215, 40.555, -74.155, 40.605)),
+    ("Great Kills Park (a landfill, 1944–49)", 1949, (-74.13, 40.535, -74.1, 40.56)),
+    ("Ferry Point Park (a landfill)", 1960, (-73.84, 40.8, -73.82, 40.815)),
 ]
 
 # Lakes inside today's land that the sheets tint like marsh.
@@ -217,12 +224,12 @@ def merge(items, key):
             out.append({key: k, "kind": kind, "rings": rings})
     return out
 
-out = {"fill": merge(fill, "until"), "wet1945": merge(marsh, "until")}
-for g in out["wet1945"]:
+out = {"fill": merge(fill, "until"), "stillWet": merge(marsh, "until")}
+for g in out["stillWet"]:
     del g["until"]
 (GEO / "lostLandscapeOuter.json").write_text(json.dumps(out))
 km2 = lambda items: round(sum(abs(sum((a[0] * b[1] - b[0] * a[1]) for a, b in zip(r, r[1:] + r[:1])) / 2) for it in items for r in it["rings"]) * M_LON * M_LAT / 1e6, 1)
-print("filled by 1945 km²", km2(out["fill"]), "in", len(out["fill"]), "groups; still wet in 1945 km²", km2(out["wet1945"]))
+print("filled by", TIME_MAX, "km²", km2(out["fill"]), "in", len(out["fill"]), "groups; still wet in", TIME_MAX, "km²", km2(out["stillWet"]))
 for g in out["fill"]:
     print("  ", g["until"], g["kind"], len(g["rings"]))
 print("bytes", (GEO / "lostLandscapeOuter.json").stat().st_size)

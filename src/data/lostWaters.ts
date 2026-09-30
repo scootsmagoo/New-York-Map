@@ -2,9 +2,8 @@
  * The named waters of the lost-landscape layer, for search: small enough to
  * ship in the main bundle, where the full geometry (geo/lostLandscape.json)
  * loads only when the layer is on. Manhattan's ids match that file; the
- * other boroughs' mark areas of the USGS survey (see `outer`). The two
- * "1948" dates are for fills begun after the timeline ends: Idlewild and
- * the Fresh Kills landfill.
+ * other boroughs' mark areas of the USGS survey (see `outer`). Fresh
+ * Kills went under garbage from 1948 over two decades; 1958 is halfway.
  */
 export interface LostWater {
   id: string;
@@ -38,6 +37,6 @@ export const lostWaters: LostWater[] = [
   { id: "north-beach", name: "Flushing Bay shallows", kind: "marsh", until: 1937, coords: [-73.874, 40.776], aka: "North Beach LaGuardia airport Queens", outer: true },
   { id: "barren-island", name: "Barren Island", kind: "marsh", until: 1930, coords: [-73.892, 40.588], aka: "Jamaica Bay Floyd Bennett Field Brooklyn", outer: true },
   { id: "coney-island-creek", name: "Coney Island Creek", kind: "stream", until: 1925, coords: [-73.968, 40.583], aka: "Coney Island Brooklyn Gravesend", outer: true },
-  { id: "jamaica-bay-marshes", name: "Jamaica Bay marshes", kind: "marsh", until: 1948, coords: [-73.79, 40.645], aka: "Idlewild airport JFK Bergen Island Canarsie Queens Brooklyn", outer: true },
-  { id: "fresh-kills", name: "Fresh Kills marshes", kind: "marsh", until: 1948, coords: [-74.185, 40.583], aka: "Staten Island landfill Arthur Kill", outer: true },
+  { id: "jamaica-bay-marshes", name: "Idlewild marshes", kind: "marsh", until: 1948, coords: [-73.79, 40.645], aka: "Jamaica Bay Idlewild airport JFK Kennedy Queens", outer: true },
+  { id: "fresh-kills", name: "Fresh Kills marshes", kind: "marsh", until: 1958, coords: [-74.185, 40.583], aka: "Staten Island landfill Arthur Kill", outer: true },
 ];

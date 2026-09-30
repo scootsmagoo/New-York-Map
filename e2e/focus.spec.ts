@@ -67,7 +67,7 @@ test("the playhead is a keyboard slider for the year", async ({ page }) => {
   await page.keyboard.press("ArrowRight");
   await expect.poll(async () => Number(await slider.getAttribute("aria-valuenow"))).toBeGreaterThan(1850);
   await page.keyboard.press("End");
-  await expect(slider).toHaveAttribute("aria-valuenow", "1945");
+  await expect(slider).toHaveAttribute("aria-valuenow", "1975");
 });
 
 test("Space on a map marker opens it without starting playback", async ({ page }) => {

@@ -2,7 +2,7 @@
 
 Builds `src/data/geo/lostLandscapeOuter.json`: the tidal marshes and
 shallows of the 1890s that are land today, each with the year it was filled
-(or none, if it was still wet in 1945). Manhattan's lost landscape comes
+(or none, if it was still wet in 1975). Manhattan's lost landscape comes
 from the Viele map instead (`scripts/lost-landscape/`).
 
 It's a one-off: the output is committed, and the app never runs this.
@@ -43,8 +43,10 @@ first.
   `prepare-borough-streets`), never before the survey. Cells with streets
   dated well before the survey are dropped as misread land. Big fills
   without streets have known dates (`KNOWN_FILLS`: airports, parks, the
-  Navy Yard, Sunnyside Yard, the Brooklyn waterfront terminals). The rest
-  stays wet through 1945, which is mostly right: Idlewild, Marine Park,
-  and the Fresh Kills landfill were filled after the war.
+  Navy Yard, Sunnyside Yard, the Brooklyn waterfront terminals, and the
+  postwar fills: Idlewild airport, 1948; Great Kills Park and Ferry Point
+  Park, landfills; and the Fresh Kills landfill, begun in 1948, dated to
+  1958 because it buried the marsh over two decades). The rest stays wet
+  through 1975, as much of Jamaica Bay still is.
 - **What it misses.** Anything filled before the 1890s (most of Brooklyn's
   older waterfront, Gowanus's marshes) was already land on these maps.

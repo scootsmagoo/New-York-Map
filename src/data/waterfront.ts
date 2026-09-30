@@ -16,7 +16,7 @@ export interface WaterfrontSite {
   name: string;
   coords: [number, number];
   from: number;
-  /** Year it closed or came down; absent = still working in 1945. */
+  /** Year it closed or came down; absent = still working at the timeline's end. */
   to?: number;
   /** Dates as shown, when the numbers need a "c." or a range. */
   dates?: string;
@@ -61,7 +61,8 @@ export const waterfront: WaterfrontSite[] = [
     name: "Washington Market",
     coords: [-74.0133, 40.7125],
     from: 1812,
-    note: "The city's produce market on the Hudson, at Fulton, Vesey, Washington, and West streets: by the 1830s the most lucrative of its twelve markets, with a wholesale district spreading north toward Canal.",
+    to: 1967,
+    note: "The city's produce market on the Hudson, at Fulton, Vesey, Washington, and West streets: by the 1830s the most lucrative of its twelve markets, with a wholesale district spreading north toward Canal. It moved to Hunts Point in the Bronx in 1967, and the World Trade Center rose on its site.",
     aka: "produce Tribeca Bear Market",
     book: { book: "greaterGotham", chapter: "8. Arteries › Food In" },
   },
@@ -114,6 +115,7 @@ export const waterfront: WaterfrontSite[] = [
     name: "Brooklyn Army Base",
     coords: [-74.0265, 40.6455],
     from: 1919,
+    to: 1966,
     note: "Cass Gilbert's concrete supply base, finished just after the Armistice. In the Second World War it was a main gateway for troops and supplies bound overseas.",
     aka: "Brooklyn Army Terminal Sunset Park",
     book: { book: "greaterGotham", chapter: "24. Over Here" },

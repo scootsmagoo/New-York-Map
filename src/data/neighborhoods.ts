@@ -10,7 +10,7 @@ export interface Neighborhood {
   coords: [number, number];
   /** Names in order; each holds from its year until the next one's. */
   names: { name: string; from: number }[];
-  /** Year the name fell out of use, if it did before 1945. */
+  /** Year the name fell out of use, if it did within the timeline. */
   to?: number;
   /** Major places show at lower zoom. */
   major?: boolean;

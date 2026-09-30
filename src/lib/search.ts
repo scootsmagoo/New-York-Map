@@ -181,7 +181,7 @@ function neighborhoodSearchItems(): SearchItem[] {
   return neighborhoods.map((nb) => {
     const current = nb.names[nb.names.length - 1].name;
     const first = nb.names[0].from;
-    const end = nb.to ?? 1945;
+    const end = nb.to ?? TIME_MAX;
     const earlier = nb.names.slice(0, -1).map((n) => n.name);
     return {
       id: `neighborhood:${nb.id}`,

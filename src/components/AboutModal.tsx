@@ -26,7 +26,7 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
           <h2>About this timeline</h2>
           <p>
             An interactive history of New York City's five boroughs, from the
-            Lenape world to 1945. Drag the timeline and the city grows on the
+            Lenape world to the fiscal crisis of 1975. Drag the timeline and the city grows on the
             map: its shorelines, streets, parks, and neighborhoods, and the
             people, places, and events that made it.
           </p>

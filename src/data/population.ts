@@ -1,6 +1,6 @@
 /**
  * Historical population snapshots for Manhattan (through 1897) and Greater New
- * York (1898–1945). Figures are rounded census totals or scholarly estimates;
+ * York (1898–1975). Figures are rounded census totals or scholarly estimates;
  * demographic splits are approximate, informed by federal censuses and
  * Burrows & Wallace's *Gotham*.
  */
@@ -321,6 +321,67 @@ const SNAPSHOTS = [
       chinese: 12_700,
       scandinavian: 115_000,
       other_foreign: 250_000,
+    },
+  },
+  {
+    // 1950–1970: census totals, and the census counts of Black, Puerto
+    // Rican, and Chinese New Yorkers; the European groups (as above, the
+    // foreign-born and their children, roughly) are estimates. After 1965
+    // "other foreign-born" is mostly Caribbean, Latin American, and Asian.
+    year: 1950,
+    scope: "greaterNY",
+    estimate: true,
+    segments: {
+      native_born_white: 3_884_957,
+      free_black: 748_000,
+      puerto_rican: 246_000,
+      irish: 340_000,
+      german: 300_000,
+      british_other: 70_000,
+      italian: 780_000,
+      jewish: 900_000,
+      polish: 210_000,
+      chinese: 18_000,
+      scandinavian: 95_000,
+      other_foreign: 300_000,
+    },
+  },
+  {
+    year: 1960,
+    scope: "greaterNY",
+    estimate: true,
+    segments: {
+      native_born_white: 3_342_984,
+      free_black: 1_088_000,
+      puerto_rican: 613_000,
+      irish: 270_000,
+      german: 240_000,
+      british_other: 60_000,
+      italian: 700_000,
+      jewish: 800_000,
+      polish: 180_000,
+      chinese: 33_000,
+      scandinavian: 75_000,
+      other_foreign: 380_000,
+    },
+  },
+  {
+    year: 1970,
+    scope: "greaterNY",
+    estimate: true,
+    segments: {
+      native_born_white: 2_860_862,
+      free_black: 1_668_000,
+      puerto_rican: 812_000,
+      irish: 200_000,
+      german: 180_000,
+      british_other: 50_000,
+      italian: 600_000,
+      jewish: 650_000,
+      polish: 150_000,
+      chinese: 69_000,
+      scandinavian: 55_000,
+      other_foreign: 600_000,
     },
   },
 ].map((s) => ({ ...s, segments: { ...s.segments } })) as PopSnapshot[];

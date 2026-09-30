@@ -47,14 +47,14 @@ describe("lost waters for search", () => {
 import outer from "../geo/lostLandscapeOuter.json";
 
 describe("the other boroughs' lost landscape", () => {
-  it("is filled after the surveys and by 1945, or still wet, and lies off Manhattan", () => {
+  it("is filled after the surveys and by the timeline's end, or still wet, and lies off Manhattan", () => {
     const inCity = ([lon, lat]: number[]) => lon > -74.27 && lon < -73.69 && lat > 40.49 && lat < 40.92;
     expect(outer.fill.length).toBeGreaterThan(10);
     for (const f of outer.fill) {
       expect(f.until, "filled after the 1890s surveys").toBeGreaterThanOrEqual(1893);
-      expect(f.until).toBeLessThanOrEqual(1945);
+      expect(f.until).toBeLessThanOrEqual(1975);
       for (const ring of f.rings) for (const p of ring) expect(inCity(p)).toBe(true);
     }
-    expect(outer.wet1945.length).toBeGreaterThan(0);
+    expect(outer.stillWet.length).toBeGreaterThan(0);
   });
 });

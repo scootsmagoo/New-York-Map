@@ -1,6 +1,7 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
 import { lostWaters } from "../data/lostWaters";
+import { TIME_MAX } from "../data/eras";
 
 /** As written by scripts/lost-landscape (see its README). */
 interface LostLandscapeData {
@@ -28,11 +29,11 @@ interface LostLandscapeLayerProps {
 /**
  * The other four boroughs, from the USGS surveys of 1891–98
  * (scripts/lost-landscape-outer): marsh and water then that is land now,
- * with the year it was filled, or none if still wet in 1945.
+ * with the year it was filled, or none if still wet at the timeline's end.
  */
 interface OuterLostLandscapeData {
   fill: { until: number; kind: "water" | "marsh"; rings: [number, number][][] }[];
-  wet1945: { kind: "water" | "marsh"; rings: [number, number][][] }[];
+  stillWet: { kind: "water" | "marsh"; rings: [number, number][][] }[];
 }
 
 let dataPromise: Promise<[LostLandscapeData, OuterLostLandscapeData]> | null = null;
@@ -60,7 +61,7 @@ function inRing(pt: [number, number], ring: [number, number][]): boolean {
 
 /** When the built-up city reached a point — the fate of unnamed marshes. */
 function builtOverYear(pt: [number, number]): number {
-  for (let y = 1609; y <= 1945; y++) {
+  for (let y = 1609; y <= TIME_MAX; y++) {
     if (inRing(pt, frontierBand(frontierAt(y)))) return y;
     if (footprintAt(y).base.manhattan.some((r) => inRing(pt, r))) return y;
   }
@@ -122,7 +123,7 @@ function LostLandscapeLayerInner({ project, year, k }: LostLandscapeLayerProps) 
         })
         .join("");
     const outerFill = (outer?.fill ?? []).map((f) => ({ ...f, d: f.rings.map(ringD).join("") }));
-    const outerWet = (outer?.wet1945 ?? []).map((f) => ({ ...f, d: f.rings.map(ringD).join("") }));
+    const outerWet = (outer?.stillWet ?? []).map((f) => ({ ...f, d: f.rings.map(ringD).join("") }));
     return {
       outerFill,
       outerWet,
