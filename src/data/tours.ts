@@ -574,6 +574,7 @@ export const tours: Tour[] = [
     area: "citywide",
     title: "The Postwar City",
     subtitle: "New Yorkers, old neighborhoods, and the fiscal crisis, 1945–1975",
+    layers: ["publicHousing"],
     stops: [
       {
         year: 1947,
@@ -585,7 +586,7 @@ export const tours: Tour[] = [
       {
         year: 1952,
         title: "New New Yorkers",
-        text: "Cheap flights from San Juan and trains from the South brought hundreds of thousands of Puerto Rican and Black New Yorkers after the war, to East Harlem, Bedford-Stuyvesant, and the South Bronx, as white families left for Queens, Staten Island, and the suburbs. The population panel shows the change.",
+        text: "Cheap flights from San Juan and trains from the South brought hundreds of thousands of Puerto Rican and Black New Yorkers after the war, to East Harlem, Bedford-Stuyvesant, and the South Bronx, as white families left for Queens, Staten Island, and the suburbs. The Housing Authority built towers across East Harlem and the Lower East Side (purple on the map); the population panel shows the change.",
         focus: { coords: [-73.94, 40.79], k: 2.4 },
         entryId: "puerto-rican-migration",
       },

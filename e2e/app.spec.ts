@@ -145,6 +145,15 @@ test("streetcars run on horses, then electricity, and the tour turns them on", a
   await expect(page.locator(".map-key-panel")).toContainText("Electric trolley line");
 });
 
+test("public housing developments appear as they were completed", async ({ page }) => {
+  await open(page, "#year=1938");
+  await toggleLayer(page, "Public housing");
+  const before = await page.locator(".housing").count();
+  expect(before).toBeGreaterThan(0);
+  await open(page, "#year=1965");
+  await expect.poll(() => page.locator(".housing").count()).toBeGreaterThan(before + 50);
+});
+
 test("the Fire and Water tour turns on fires & epidemics", async ({ page }) => {
   await open(page, "#tour=fire-water");
   await expect(page.locator(".calamity-epidemic")).toHaveCount(1);

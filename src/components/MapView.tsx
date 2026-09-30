@@ -39,6 +39,7 @@ import { CalamityLayer } from "./CalamityLayer";
 import { WaterfrontLayer } from "./WaterfrontLayer";
 import { StreetcarLayer } from "./StreetcarLayer";
 import { HighwayLayer } from "./HighwayLayer";
+import { HousingLayer } from "./HousingLayer";
 import { highways, highwayOpen } from "../data/highways";
 import { BoroughStreetLayer } from "./BoroughStreetLayer";
 import { streetcarLines, streetcarPower } from "../data/streetcars";
@@ -316,6 +317,7 @@ function MapViewInner({
   const showCalamities = !!layers.calamities;
   const showWaterfront = !!layers.waterfront;
   const showStreetcars = !!layers.streetcars;
+  const showHousing = !!layers.publicHousing;
   const { ref, width, height } = useElementSize<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement>(null);
   const contentRef = useRef<SVGGElement>(null);
@@ -800,6 +802,7 @@ function MapViewInner({
       parkways: highwayFade > 0 && highways.some((h) => h.kind === "parkway" && highwayOpen(h, year)),
       expressways: highwayFade > 0 && highways.some((h) => h.kind === "expressway" && highwayOpen(h, year)),
       roadTunnels: highwayFade > 0 && highways.some((h) => h.kind === "tunnel" && highwayOpen(h, year)),
+      publicHousing: showHousing && year >= 1935,
       horsecars: showStreetcars && streetcarLines.some((l) => streetcarPower(l, year) === "horse"),
       trolleys: showStreetcars && streetcarLines.some((l) => streetcarPower(l, year) === "electric"),
       waterfront: showWaterfront
@@ -815,7 +818,7 @@ function MapViewInner({
     year, roadFade, surveyOpacity, infraFade, highwayFade, ferryFade, minorParkFade, base,
     structurePaths, infrastructurePaths, parkPaths, markers, ghostMarkers,
     lenapeOpacity, visibleSettlements, showLostLandscape, showCalamities, showWaterfront,
-    showStreetcars, overlayFrames,
+    showStreetcars, showHousing, overlayFrames,
   ]);
 
   if (!width || !height) return <div className="map-view" ref={ref} />;
@@ -1132,6 +1135,9 @@ function MapViewInner({
             {showCalamities && (
               <CalamityLayer project={projection} year={year} k={k} onSelectEntry={onSelectEntry} />
             )}
+
+            {/* Public housing developments */}
+            {showHousing && <HousingLayer project={projection} year={year} />}
 
             {/* Markets, shipyards, sugar houses, and docks */}
             {showWaterfront && <WaterfrontLayer project={projection} year={year} k={k} />}

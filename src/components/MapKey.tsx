@@ -31,6 +31,7 @@ export interface MapKeyVisible {
   parkways: boolean;
   expressways: boolean;
   roadTunnels: boolean;
+  publicHousing: boolean;
   horsecars: boolean;
   trolleys: boolean;
   /** Waterfront kinds on the map now, comma-joined (a string compares by value). */
@@ -288,6 +289,16 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
           <g className="calamity calamity-epidemic">
             <rect x={1} y={1} width={W - 2} height={H - 2} rx={2} />
           </g>
+        </Swatch>
+      ),
+    },
+    {
+      show: v.publicHousing,
+      layer: "publicHousing",
+      label: "Housing Authority development",
+      swatch: (
+        <Swatch>
+          <rect className="housing" x={3} y={2} width={W - 6} height={H - 4} rx={1} />
         </Swatch>
       ),
     },

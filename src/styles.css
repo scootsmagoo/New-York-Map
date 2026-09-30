@@ -892,6 +892,14 @@ button {
   opacity: 0.9;
 }
 
+/* Public housing */
+.housing {
+  fill: color-mix(in srgb, #7a4f8c 38%, transparent);
+  stroke: #5a3a6a;
+  stroke-width: 0.9;
+  vector-effect: non-scaling-stroke;
+}
+
 /* Parkways, expressways, and road tunnels */
 .highway path {
   fill: none;

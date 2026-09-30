@@ -11,7 +11,8 @@ export type LayerId =
   | "lostLandscape"
   | "waterfront"
   | "calamities"
-  | "streetcars";
+  | "streetcars"
+  | "publicHousing";
 
 export type LayerGroupId = "names" | "land" | "life";
 
@@ -59,6 +60,12 @@ export const LAYERS: LayerDef[] = [
     group: "life",
     label: "Streetcars",
     note: "Horsecar and trolley lines, from the first in 1832 until buses replaced them.",
+  },
+  {
+    id: "publicHousing",
+    group: "life",
+    label: "Public housing",
+    note: "The Housing Authority's developments, from First Houses (1935) through the postwar towers, as they were completed.",
   },
   {
     id: "calamities",
