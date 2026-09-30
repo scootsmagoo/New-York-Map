@@ -475,4 +475,38 @@ export const civilWarGildedEntries: Entry[] = [
       "Nurse Lillian Wald moved to the Lower East Side in 1893 to care for the sick in their tenements; her Henry Street house grew into a center for visiting nurses, clubs, and reform.",
     coords: [-73.984, 40.7137],
   },
+  {
+    id: "fort-wadsworth",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Fort Wadsworth",
+    wikiTitle: "Fort Wadsworth",
+    year: 1865,
+    blurb:
+      "The granite forts at the Narrows, rebuilt from 1847, were named for a general killed in the Wilderness in 1865; the Army held the post until 1994.",
+    coords: [-74.0567, 40.605],
+  },
+  {
+    id: "kreischerville",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Kreischerville",
+    wikiTitle: "Kreischer House",
+    year: 1885,
+    blurb:
+      "Balthasar Kreischer's brickworks on the Arthur Kill made firebrick from the island's clay from the 1850s; he built the Queen Anne mansion that still stands around 1885. The village was renamed Charleston in the First World War.",
+    coords: [-74.2383, 40.5325],
+  },
+  {
+    id: "poppenhusen",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Poppenhusen Institute",
+    wikiTitle: "Poppenhusen Institute",
+    year: 1868,
+    blurb:
+      "Conrad Poppenhusen, whose rubber works made College Point a company town, gave it this institute in 1868; it housed the first free kindergarten in the United States.",
+    coords: [-73.8533, 40.7844],
+    lifespan: [1868, null],
+  },
 ];

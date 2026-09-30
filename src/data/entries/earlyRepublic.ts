@@ -317,4 +317,16 @@ export const earlyRepublicEntries: Entry[] = [
       "At the Union Course in Queens in May 1823, the Northern horse American Eclipse beat the Southern champion Sir Henry before a crowd of perhaps 60,000, a North–South contest followed across the country.",
     coords: [-73.8606, 40.6891],
   },
+  {
+    id: "kingsland-homestead",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "Kingsland Homestead",
+    wikiTitle: "Kingsland Homestead",
+    year: 1785,
+    blurb:
+      "Charles Doughty's farmhouse in Flushing, built about 1785; it was moved nearby in 1968 and now houses the Queens Historical Society.",
+    coords: [-73.8242, 40.7636],
+    lifespan: [1785, null],
+  },
 ];

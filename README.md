@@ -120,6 +120,10 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
 
+*Done 2026-09-30 (later):* a Public housing layer (185 Housing Authority
+developments, 1935–75), a borough filter in Explore this era and search,
+and 25 more Staten Island and Queens entries.
+
 *Done 2026-09-30:* the timeline carried to 1975 (a Postwar City era, 38
 entries, parkways and expressways, five bridges, a Postwar City tour,
 the Moses tour to 1968); the map key leads with the layers you turned on.
@@ -143,8 +147,6 @@ grouped in the ⋯ menu.
 - Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
   marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
 - Past 1975: the city's comeback, the 1977 blackout, the modern city.
-- Public housing projects as a layer (the Housing Authority's developments
-  are all dated).
 - Audio per era.
 
 **Done: React 19.3** (2026-09-26). Upgraded from 19.2.7, following the

@@ -125,6 +125,12 @@ header, theme, footprint, markers, panel — derives from it.
   today, so neighborhoods rebuilt wholesale read later than they were
   first built. From 1880 the outer boroughs' built-up wash is drawn from
   these streets (`scripts/borough-footprints/build.py`).
+- **Public housing:** NYC Open Data's NYCHA development outlines, joined
+  on the TDS number to the Development Data Book for completion years and
+  apartment counts (`scripts/prepare-housing.mjs`). Only NYCHA; Title I
+  and Mitchell-Lama co-ops (Co-op City, Stuyvesant Town) are entries.
+- **Boroughs of entries:** from each entry's location against the borough
+  outlines; offshore points go to the nearest shore within ~800 m.
 - **Parkways and expressways:** the city's highway, bridge, and tunnel
   centerlines (CSCL), matched by name (`scripts/prepare-highways.mjs`).
   Each road appears in the year it was substantially open; most were built

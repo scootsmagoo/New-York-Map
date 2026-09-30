@@ -476,4 +476,39 @@ export const antebellumEntries: Entry[] = [
       "A railroad down the island's east side from Vanderbilt's Landing to Tottenville opened in 1860, meeting the ferries to Manhattan.",
     coords: [-74.0776, 40.6437],
   },
+  {
+    id: "si-courthouse",
+    era: "antebellum",
+    kind: "place",
+    title: "Richmond County Courthouse",
+    wikiTitle: "Third County Courthouse (Staten Island)",
+    year: 1837,
+    blurb:
+      "The Greek Revival courthouse at Richmondtown, the island's county seat, where Polly Bodine was tried in 1844 for murdering her sister-in-law and niece, a case Poe and Barnum both seized on.",
+    coords: [-74.1456, 40.5708],
+    lifespan: [1837, null],
+  },
+  {
+    id: "seguine-mansion",
+    era: "antebellum",
+    kind: "place",
+    title: "Seguine Mansion",
+    wikiTitle: "Seguine Mansion",
+    year: 1838,
+    blurb:
+      "Joseph Seguine's Greek Revival house on Lemon Creek, built on an oyster and farming fortune when the South Shore was still country.",
+    coords: [-74.1975, 40.5152],
+    lifespan: [1838, null],
+  },
+  {
+    id: "olmsted-farm",
+    era: "antebellum",
+    kind: "place",
+    title: "Olmsted's farm",
+    wikiTitle: "Olmsted–Beil House",
+    year: 1848,
+    blurb:
+      "Frederick Law Olmsted farmed here on the South Shore from 1848, planting trees and experimenting with landscape a decade before he and Vaux designed Central Park.",
+    coords: [-74.1581, 40.5319],
+  },
 ];

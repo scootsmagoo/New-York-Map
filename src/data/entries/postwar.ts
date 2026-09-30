@@ -439,4 +439,15 @@ export const postwarEntries: Entry[] = [
     coords: [-73.9828, 40.7683],
     lifespan: [1956, 2000],
   },
+  {
+    id: "willowbrook",
+    era: "postwar",
+    kind: "event",
+    title: "The Willowbrook exposé",
+    wikiTitle: "Willowbrook State School",
+    year: 1972,
+    blurb:
+      "The state's school for children with intellectual disabilities, built for 4,000, held 6,000 by 1965. Geraldo Rivera's 1972 television exposé of its conditions led to a lawsuit, reforms, and its closing in 1987.",
+    coords: [-74.1517, 40.5997],
+  },
 ];

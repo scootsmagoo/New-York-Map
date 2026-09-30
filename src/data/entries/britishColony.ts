@@ -322,4 +322,28 @@ export const britishColonyEntries: Entry[] = [
       "The Moravian congregation's burying ground at New Dorp, begun around 1740; Cornelius Vanderbilt, who was born on the island, is buried here.",
     coords: [-74.1167, 40.58],
   },
+  {
+    id: "onderdonk-house",
+    era: "britishColony",
+    kind: "place",
+    title: "Vander Ende–Onderdonk House",
+    wikiTitle: "Vander Ende–Onderdonk House",
+    year: 1709,
+    blurb:
+      "Paulus Vander Ende built this stone farmhouse on the Brooklyn–Queens line in 1709, on a site first settled in 1661: the oldest Dutch Colonial stone house in the city.",
+    coords: [-73.92, 40.7111],
+    lifespan: [1709, null],
+  },
+  {
+    id: "newtown-pippin",
+    era: "britishColony",
+    kind: "event",
+    title: "The Newtown Pippin",
+    wikiTitle: "Newtown Pippin",
+    year: 1730,
+    yearLabel: "early 1700s",
+    blurb:
+      "An apple that originated in the orchards of Newtown (now Elmhurst) around 1700 and became one of the colonies' best-known exports; Benjamin Franklin favored it, and Queen Victoria was later sent barrels.",
+    coords: [-73.8795, 40.7365],
+  },
 ];
