@@ -57,8 +57,9 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               histories, above all Edwin G. Burrows &amp; Mike Wallace's{" "}
               <em>Gotham</em> (1999) and Mike Wallace's <em>Greater Gotham</em>{" "}
               (2017) and <em>Gotham at War</em> (2025), which inspired it and
-              are cited by chapter and page; and Wikipedia, whose summaries and
-              images load live under their own licenses.
+              are cited by chapter and page (they end in 1945; the postwar era
+              is written from Wikipedia's articles); and Wikipedia, whose
+              summaries and images load live under their own licenses.
             </li>
             <li>
               <strong>Shorelines and boroughs:</strong> NYC Department of City
@@ -68,6 +69,10 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               <strong>Streets:</strong> the city's street centerlines (NYC Open
               Data). Outside Manhattan each street appears when the buildings
               along it went up, from the city's tax-lot records (PLUTO).
+            </li>
+            <li>
+              <strong>Parkways and expressways:</strong> the city's highway
+              centerlines, each drawn from the year it opened.
             </li>
             <li>
               <strong>Parks:</strong> NYC Parks property records outside

@@ -2,8 +2,7 @@ import type { Entry } from "../../types";
 
 /**
  * The Postwar City, 1945–1975. Past the Gotham books; written from
- * Wikipedia and standard histories (Robert Caro's The Power Broker, Kenneth
- * Jackson's Encyclopedia of New York City).
+ * Wikipedia's articles, with facts checked against them.
  */
 export const postwarEntries: Entry[] = [
   {

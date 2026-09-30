@@ -3,7 +3,8 @@
 An interactive, pannable timeline of New York City's history — from the Lenape
 world through New Amsterdam, British New York, and the metropolis to 1919,
 where Mike Wallace's *Greater Gotham* closes, then on through the Depression
-and the Second World War to 1945. Inspired by Edwin G. Burrows & Mike
+and the Second World War, and through the postwar city to the fiscal
+crisis of 1975. Inspired by Edwin G. Burrows & Mike
 Wallace, *Gotham: A History of New York City to 1898*.
 
 **Repo:** https://github.com/scootsmagoo/New-York-Map
@@ -15,13 +16,13 @@ Wallace, *Gotham: A History of New York City to 1898*.
 - A **zoomable, pannable timeline** runs along the bottom of the screen. The
   year under the center playhead drives everything else. The ~11,600 years of
   Lenapehoking are compressed into the left 14% of the strip (a polylinear
-  scale); 1609–1945 gets the rest.
+  scale); 1609–1975 gets the rest.
 - A **stylized archival map** fills the screen. As the playhead moves, the
   city's rough built-up footprint grows — lower Manhattan first, then the
   ribbon up the Bowery, Brooklyn ferry towns, the 1811 grid filling north,
   Brooklyn's row-house ring, the South Bronx, Queens corridors, Staten
   Island's north shore. Footprints cross-fade between 14 hand-drawn snapshots
-  (1609–1945) and are clipped to real shorelines.
+  (1609–1975) and are clipped to real shorelines.
 - Before 1609, the map shows the **Lenape world** instead: territory names
   (Wecquaesgeek, Canarsee, Raritan…), village sites (Werpoes, Shorakapok…),
   and the Wickquasgeck trail that became Broadway. This layer fades out
@@ -79,7 +80,7 @@ src/
     eras.ts            8 eras with palette, summary, Wikipedia article
     entries/<era>.ts   ~190 people/places/events, each with wikiTitle,
                        fallback blurb, optional coords + Gotham note
-    footprints.ts      14 cumulative built-up snapshots, 1609–1945
+    footprints.ts      17 cumulative built-up snapshots, 1609–1975
     lenapeSites.ts     villages, territories, trails (pre-contact layer)
     geo/*.json         generated borough + surrounding-land GeoJSON
   lib/
@@ -124,9 +125,16 @@ header, theme, footprint, markers, panel — derives from it.
   today, so neighborhoods rebuilt wholesale read later than they were
   first built. From 1880 the outer boroughs' built-up wash is drawn from
   these streets (`scripts/borough-footprints/build.py`).
+- **Parkways and expressways:** the city's highway, bridge, and tunnel
+  centerlines (CSCL), matched by name (`scripts/prepare-highways.mjs`).
+  Each road appears in the year it was substantially open; most were built
+  in sections over years, and the tooltip gives the span. Dates from
+  Wikipedia.
+- **1945–1975 population:** census totals and the census counts of Black,
+  Puerto Rican, and Chinese New Yorkers; the European groups are estimates.
 - **Outer-borough parks:** outlines from NYC Parks' property records
   (Open Data enfh-gkve), parks, community parks, and nature areas of 6+
-  acres acquired by 1945, dated by acquisition (`scripts/prepare-parks.mjs`).
+  acres acquired by 1975, dated by acquisition (`scripts/prepare-parks.mjs`).
   The record keeps a property's latest acquisition, so parks assembled over
   years can read late; the big ones' dates are set by hand. Freshkills Park
   (a landfill until 2008) is left out.
@@ -372,8 +380,11 @@ header, theme, footprint, markers, panel — derives from it.
       the IND, the els coming down, a 1945 footprint, and 1930/1940 census
       population. Gotham at War (2025) covers 1933–45; the 1920s fall
       between the volumes.
-- [ ] Carry on past 1945 (Moses's expressways, the fiscal crisis, the
-      modern city).
+- [x] Carry on past 1945 — shipped to 1975: a tenth era (The Postwar
+      City), 38 entries, parkways, expressways, and road tunnels from the
+      city's highway centerlines (`src/data/highways.ts`), five bridges,
+      1950–70 census population, streets and built-up areas dated to 1975,
+      and the postwar landfills. Next: past 1975.
 - [x] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
       Viele 1865) with opacity blending — shipped: Wikimedia-sourced sheets,
       Manhattan clip, timeline crossfade + manual override, opacity slider.

@@ -1,7 +1,7 @@
 # Gotham — A Timeline of New York City
 
 An interactive, pannable timeline of New York City's history, from
-Lenapehoking to V-J Day (1945). Pan through time and watch the
+Lenapehoking to the fiscal crisis of 1975. Pan through time and watch the
 city's built-up footprint spread across the five boroughs; click into any era
 for its people, places, and events, with live summaries and images from
 Wikipedia.
@@ -75,8 +75,11 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Where things stand**
 
-- The timeline runs from Lenapehoking to 1945 across nine eras, with about
-  200 entries.
+- The timeline runs from Lenapehoking to 1975 across ten eras, with about
+  330 entries. The tenth, **The Postwar City (1945–1975)**, carries
+  every layer on: expressways, parkways, and the Verrazzano as they open,
+  the suburbs of Queens and Staten Island filling in, the last trolleys,
+  Lincoln Center, Stonewall, and the fiscal crisis.
 - **Phones, either way up.** Turned on its side, a phone gets a one-row
   header and a slimmer timeline so the map has most of the screen; tour
   cards dock to the side. Turning the phone keeps the map where it was
@@ -117,6 +120,10 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
 
+*Done 2026-09-30:* the timeline carried to 1975 (a Postwar City era, 38
+entries, parkways and expressways, five bridges, a Postwar City tour,
+the Moses tour to 1968); the map key leads with the layers you turned on.
+
 *Done 2026-09-29:* tours of Brooklyn, Queens, the Bronx, and Staten
 Island; real outlines for 90 parks there; 65 more neighborhood names.
 
@@ -135,8 +142,9 @@ grouped in the ⋯ menu.
   especially *Greater Gotham*'s people and places for 1898–1919.
 - Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
   marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
-- Carry the timeline past 1945 (Moses's expressways, public housing, the
-  fiscal crisis).
+- Past 1975: the city's comeback, the 1977 blackout, the modern city.
+- Public housing projects as a layer (the Housing Authority's developments
+  are all dated).
 - Audio per era.
 
 **Done: React 19.3** (2026-09-26). Upgraded from 19.2.7, following the
