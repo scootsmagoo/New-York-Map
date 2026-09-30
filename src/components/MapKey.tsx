@@ -1,6 +1,7 @@
 import { memo, useEffect } from "react";
 import { announcePanelOpen, onOtherPanelOpen } from "../lib/mapPanels";
 import { usePersistedState } from "../lib/usePersistedState";
+import { LAYERS, type LayerId } from "../lib/layers";
 import { WATERFRONT_KIND_LABEL, type WaterfrontKind } from "../data/waterfront";
 import { WaterfrontGlyph } from "./WaterfrontLayer";
 
@@ -89,6 +90,8 @@ interface Row {
   show: boolean;
   label: string;
   swatch: React.ReactNode;
+  /** Rows from an optional layer; listed first, under the layer's name. */
+  layer?: LayerId;
 }
 
 function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
@@ -171,6 +174,7 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.lostLandscape,
+      layer: "lostLandscape",
       label: "Shoreline in 1609",
       swatch: (
         <Swatch>
@@ -180,6 +184,7 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.lostLandscape,
+      layer: "lostLandscape",
       label: "River, filled in later",
       swatch: (
         <Swatch>
@@ -191,6 +196,7 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.lostLandscape,
+      layer: "lostLandscape",
       label: "Made land (filled so far)",
       swatch: (
         <Swatch>
@@ -204,6 +210,7 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.lostLandscape,
+      layer: "lostLandscape",
       label: "Pond · marsh · stream",
       swatch: (
         <Swatch>
@@ -223,6 +230,7 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.lostLandscape,
+      layer: "lostLandscape",
       label: "Filled or buried: a ghost",
       swatch: (
         <Swatch>
@@ -236,6 +244,7 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.fires,
+      layer: "calamities",
       label: "Burned in a great fire",
       swatch: (
         <Swatch>
@@ -247,6 +256,7 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.epidemics,
+      layer: "calamities",
       label: "Epidemic's worst-hit blocks",
       swatch: (
         <Swatch>
@@ -258,16 +268,19 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     },
     {
       show: v.horsecars,
+      layer: "streetcars",
       label: "Horsecar line",
       swatch: <Swatch>{line("streetcar streetcar-horse")}</Swatch>,
     },
     {
       show: v.trolleys,
+      layer: "streetcars",
       label: "Electric trolley line",
       swatch: <Swatch>{line("streetcar streetcar-electric")}</Swatch>,
     },
     ...(Object.keys(WATERFRONT_KIND_LABEL) as WaterfrontKind[]).map((kind) => ({
       show: v.waterfront.split(",").includes(kind),
+      layer: "waterfront" as const,
       label: WATERFRONT_KIND_LABEL[kind],
       swatch: (
         <Swatch>
@@ -280,6 +293,17 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
   ];
 
   const shown = rows.filter((r) => r.show);
+  // Layers you turned on come first, each under its name, in menu order.
+  const layerGroups = LAYERS.map((l) => ({ layer: l, rows: shown.filter((r) => r.layer === l.id) })).filter(
+    (g) => g.rows.length
+  );
+  const baseRows = shown.filter((r) => !r.layer);
+  const item = (r: Row) => (
+    <li key={r.label}>
+      {r.swatch}
+      <span>{r.label}</span>
+    </li>
+  );
 
   return (
     <div className={`map-key${open ? " map-key-open" : ""}`}>
@@ -298,14 +322,18 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
       </button>
       {open && (
         <div id="map-key-panel" className="map-key-panel" role="region" aria-label="Map key">
-          <ul>
-            {shown.map((r) => (
-              <li key={r.label}>
-                {r.swatch}
-                <span>{r.label}</span>
-              </li>
-            ))}
-          </ul>
+          {layerGroups.map((g) => (
+            <section key={g.layer.id} className="map-key-group" aria-label={g.layer.label}>
+              <h3 className="map-key-group-title">{g.layer.label}</h3>
+              <ul>{g.rows.map(item)}</ul>
+            </section>
+          ))}
+          {baseRows.length > 0 && (
+            <section className="map-key-group" aria-label="On the map">
+              {layerGroups.length > 0 && <h3 className="map-key-group-title">On the map</h3>}
+              <ul>{baseRows.map(item)}</ul>
+            </section>
+          )}
           {v.overlay && <p className="map-key-note">Historical map: {v.overlay}</p>}
           {!v.streets && v.builtUp && <p className="map-key-note">Zoom in for streets and more.</p>}
         </div>
