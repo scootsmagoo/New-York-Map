@@ -161,6 +161,57 @@ export const bridges: Structure[] = [
     ],
     open: 1939,
   },
+  {
+    id: "kosciuszko",
+    name: "Kosciuszko Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.925, 40.732],
+      [-73.9338, 40.7251],
+    ],
+    open: 1939,
+  },
+  {
+    id: "pulaski",
+    name: "Pulaski Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.9513, 40.7433],
+      [-73.9527, 40.7355],
+    ],
+    open: 1954,
+  },
+  {
+    id: "throgs-neck",
+    name: "Throgs Neck Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.7926, 40.7906],
+      [-73.7973, 40.8158],
+    ],
+    open: 1961,
+  },
+  {
+    id: "alexander-hamilton",
+    name: "Alexander Hamilton Bridge",
+    kind: "bridge",
+    pts: [
+      [-73.9305, 40.8461],
+      [-73.9247, 40.8448],
+    ],
+    open: 1963,
+  },
+  {
+    id: "verrazzano",
+    name: "Verrazzano-Narrows Bridge",
+    kind: "bridge",
+    pts: [
+      [-74.036, 40.6093],
+      [-74.0535, 40.6036],
+    ],
+    open: 1964,
+    entryId: "verrazzano-bridge",
+  },
 ];
 
 export const ferries: Structure[] = [

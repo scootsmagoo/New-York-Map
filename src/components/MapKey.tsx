@@ -28,6 +28,9 @@ export interface MapKeyVisible {
   lostLandscape: boolean;
   fires: boolean;
   epidemics: boolean;
+  parkways: boolean;
+  expressways: boolean;
+  roadTunnels: boolean;
   horsecars: boolean;
   trolleys: boolean;
   /** Waterfront kinds on the map now, comma-joined (a string compares by value). */
@@ -147,6 +150,28 @@ function MapKeyInner({ visible: v }: { visible: MapKeyVisible }) {
     { show: v.elevated, label: "Elevated railway", swatch: <Swatch>{line("infra infra-elevated")}</Swatch> },
     { show: v.subway, label: "Subway", swatch: <Swatch>{line("infra infra-subway")}</Swatch> },
     { show: v.aqueduct, label: "Croton Aqueduct", swatch: <Swatch>{line("infra infra-aqueduct")}</Swatch> },
+    {
+      show: v.expressways,
+      label: "Expressway",
+      swatch: (
+        <Swatch>
+          <g className="highway highway-expressway">
+            {line("highway-casing")}
+            {line("highway-line")}
+          </g>
+        </Swatch>
+      ),
+    },
+    {
+      show: v.parkways,
+      label: "Parkway",
+      swatch: <Swatch><g className="highway highway-parkway">{line("highway-line")}</g></Swatch>,
+    },
+    {
+      show: v.roadTunnels,
+      label: "Road tunnel",
+      swatch: <Swatch><g className="highway highway-tunnel">{line("highway-line")}</g></Swatch>,
+    },
     { show: v.people, label: "Person", swatch: <Swatch>{marker("person")}</Swatch> },
     { show: v.places, label: "Place", swatch: <Swatch>{marker("place")}</Swatch> },
     { show: v.events, label: "Event", swatch: <Swatch>{marker("event")}</Swatch> },

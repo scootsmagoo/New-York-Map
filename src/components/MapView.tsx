@@ -38,6 +38,8 @@ import { LostLandscapeLayer } from "./LostLandscapeLayer";
 import { CalamityLayer } from "./CalamityLayer";
 import { WaterfrontLayer } from "./WaterfrontLayer";
 import { StreetcarLayer } from "./StreetcarLayer";
+import { HighwayLayer } from "./HighwayLayer";
+import { highways, highwayOpen } from "../data/highways";
 import { BoroughStreetLayer } from "./BoroughStreetLayer";
 import { streetcarLines, streetcarPower } from "../data/streetcars";
 import { waterfront, waterfrontOpacity } from "../data/waterfront";
@@ -542,6 +544,7 @@ function MapViewInner({
   const boroughStreetFade = fade(k, 1.8, 2.5);
   const ferryFade = fade(k, 1.4, 2.0);
   const infraFade = fade(k, 1.6, 2.4); // els, subway, aqueduct
+  const highwayFade = fade(k, 1.25, 1.8);
   const minorParkFade = fade(k, 1.8, 2.5);
   const labelFade = fade(k, 2.8, 3.6);
   const expandMarkers = k >= 2;
@@ -794,6 +797,9 @@ function MapViewInner({
       lostLandscape: showLostLandscape,
       fires: showCalamities && calamities.some((c) => c.kind === "fire" && calamityOpacity(c, year) > 0),
       epidemics: showCalamities && calamities.some((c) => c.kind === "epidemic" && calamityOpacity(c, year) > 0),
+      parkways: highwayFade > 0 && highways.some((h) => h.kind === "parkway" && highwayOpen(h, year)),
+      expressways: highwayFade > 0 && highways.some((h) => h.kind === "expressway" && highwayOpen(h, year)),
+      roadTunnels: highwayFade > 0 && highways.some((h) => h.kind === "tunnel" && highwayOpen(h, year)),
       horsecars: showStreetcars && streetcarLines.some((l) => streetcarPower(l, year) === "horse"),
       trolleys: showStreetcars && streetcarLines.some((l) => streetcarPower(l, year) === "electric"),
       waterfront: showWaterfront
@@ -806,7 +812,7 @@ function MapViewInner({
         : null,
     };
   }, [
-    year, roadFade, surveyOpacity, infraFade, ferryFade, minorParkFade, base,
+    year, roadFade, surveyOpacity, infraFade, highwayFade, ferryFade, minorParkFade, base,
     structurePaths, infrastructurePaths, parkPaths, markers, ghostMarkers,
     lenapeOpacity, visibleSettlements, showLostLandscape, showCalamities, showWaterfront,
     showStreetcars, overlayFrames,
@@ -1075,6 +1081,9 @@ function MapViewInner({
                   </g>
                 );
               })}
+
+            {/* Parkways, expressways, and road tunnels */}
+            <HighwayLayer project={projection} year={year} fade={highwayFade} onSelectEntry={onSelectEntry} />
 
             {/* Horsecar and trolley lines, under the els that later rose over them */}
             {showStreetcars && <StreetcarLayer project={projection} year={year} />}

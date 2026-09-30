@@ -892,6 +892,36 @@ button {
   opacity: 0.9;
 }
 
+/* Parkways, expressways, and road tunnels */
+.highway path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.highway-expressway .highway-casing {
+  stroke: color-mix(in srgb, var(--ink) 70%, transparent);
+  stroke-width: 3.4;
+}
+
+.highway-expressway .highway-line {
+  stroke: #d99a3a;
+  stroke-width: 1.8;
+}
+
+.highway-parkway .highway-line {
+  stroke: #4f6f3f;
+  stroke-width: 1.8;
+}
+
+.highway-tunnel .highway-line {
+  stroke: #9c6b24;
+  stroke-width: 1.6;
+  stroke-dasharray: 3 2.5;
+}
+
 /* Streetcars: dotted while horses pulled them, solid once electric. */
 .streetcar {
   fill: none;
