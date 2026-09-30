@@ -628,4 +628,41 @@ export const greaterNYEntries: Entry[] = [
       "An Army coast-defense post on the Rockaway peninsula, set up as Camp Rockaway Beach when the United States entered the war in 1917.",
     coords: [-73.8833, 40.5667],
   },
+  {
+    id: "jerome-park-reservoir",
+    era: "greaterNY",
+    kind: "place",
+    title: "Jerome Park Reservoir",
+    wikiTitle: "Jerome Park Reservoir",
+    year: 1906,
+    blurb:
+      "Dug out of the old Jerome Park racetrack to receive the water of the New Croton Aqueduct, and finished in 1906.",
+    coords: [-73.8956, 40.8778],
+    lifespan: [1906, null],
+  },
+  {
+    id: "american-bank-note",
+    era: "greaterNY",
+    kind: "place",
+    title: "American Bank Note printing plant",
+    wikiTitle: "American Bank Note Company Printing Plant",
+    year: 1911,
+    yearLabel: "1909–11",
+    blurb:
+      "The American Bank Note Company built this Hunts Point plant on an old estate in 1909–11. It printed financial documents and currency for countries around the world, above all in Latin America.",
+    coords: [-73.8906, 40.8169],
+    lifespan: [1911, null],
+  },
+  {
+    id: "kingsbridge-armory",
+    era: "greaterNY",
+    kind: "place",
+    title: "Kingsbridge Armory",
+    wikiTitle: "Kingsbridge Armory",
+    year: 1917,
+    blurb:
+      "Built for the National Guard's Eighth Coast Defense Command and completed in 1917, with a steel-and-glass drill shed; possibly the largest armory in the world.",
+    coords: [-73.8986, 40.8679],
+    lifespan: [1917, null],
+  },
 ];

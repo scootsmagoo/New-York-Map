@@ -293,4 +293,15 @@ export const newAmsterdamEntries: Entry[] = [
       "Banished from Massachusetts for her religious teaching, she settled near today's Pelham Bay; in 1643, during Kieft's War, she and most of her household were killed in a Siwanoy raid. The Hutchinson River is named for her.",
     coords: [-73.812, 40.881],
   },
+  {
+    id: "throgs-neck",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Throgs Neck",
+    wikiTitle: "Throggs Neck",
+    year: 1642,
+    blurb:
+      "The Dutch let John Throckmorton, a New Englander who had followed Roger Williams, settle this neck with thirty-five others in 1642. He went back to Rhode Island, but his name stayed, worn down to Throgs; in October 1776 General Howe landed here trying to cut off Washington's army.",
+    coords: [-73.82, 40.823],
+  },
 ];

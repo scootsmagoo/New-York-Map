@@ -450,4 +450,50 @@ export const postwarEntries: Entry[] = [
       "The state's school for children with intellectual disabilities, built for 4,000, held 6,000 by 1965. Geraldo Rivera's 1972 television exposé of its conditions led to a lawsuit, reforms, and its closing in 1987.",
     coords: [-74.1517, 40.5997],
   },
+  {
+    id: "freedomland",
+    era: "postwar",
+    kind: "place",
+    title: "Freedomland U.S.A.",
+    wikiTitle: "Freedomland U.S.A.",
+    year: 1960,
+    blurb:
+      "A theme park of American history laid out in the shape of a map of the United States, on William Zeckendorf's Baychester marshland. It opened to crowds in June 1960, was deep in debt within a season, and went bankrupt in 1964. Co-op City rose on the site.",
+    coords: [-73.8275, 40.8719],
+    lifespan: [1960, 1964],
+  },
+  {
+    id: "young-lords-lincoln",
+    era: "postwar",
+    kind: "event",
+    title: "The Young Lords take Lincoln Hospital",
+    wikiTitle: "Young Lords",
+    year: 1970,
+    blurb:
+      "On July 14, 1970, the Young Lords, Puerto Rican radicals who had dumped uncollected garbage in East Harlem's streets the summer before, occupied Lincoln Hospital's administration building to protest the care it gave the South Bronx. In November they returned and won a drug-treatment program. The city replaced the old hospital with this one in 1976.",
+    coords: [-73.9167, 40.8167],
+  },
+  {
+    id: "bronx-burning",
+    era: "postwar",
+    kind: "event",
+    title: "The Bronx is burning",
+    wikiTitle: "South Bronx",
+    year: 1970,
+    yearLabel: "1970s",
+    blurb:
+      "As the middle class left and landlords walked away, the South Bronx burned. Owners had buildings torched for the insurance, while budget cuts left too few inspectors and fire marshals to stop them; by the 1970s poverty reached as far north as Fordham Road.",
+    coords: [-73.9, 40.822],
+  },
+  {
+    id: "sedgwick-1520",
+    era: "postwar",
+    kind: "event",
+    title: "1520 Sedgwick Avenue",
+    wikiTitle: "1520 Sedgwick Avenue",
+    year: 1973,
+    blurb:
+      "On August 11, 1973, DJ Kool Herc spun records at his sister Cindy Campbell's back-to-school party in this apartment house's rec room: often called the birth of hip hop.",
+    coords: [-73.9244, 40.8472],
+  },
 ];

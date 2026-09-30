@@ -509,4 +509,26 @@ export const civilWarGildedEntries: Entry[] = [
     coords: [-73.8533, 40.7844],
     lifespan: [1868, null],
   },
+  {
+    id: "city-island",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "City Island",
+    wikiTitle: "City Island, Bronx",
+    year: 1895,
+    blurb:
+      "An island of oystermen, Hell Gate pilots, and shipbuilders in Pelham Bay. In 1895 it narrowly voted to join New York City in exchange for a new bridge to the mainland, and became part of the Bronx at consolidation in 1898.",
+    coords: [-73.786, 40.848],
+  },
+  {
+    id: "morris-high-school",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Morris High School",
+    wikiTitle: "Morris High School (Bronx)",
+    year: 1897,
+    blurb:
+      "Opened in 1897 as the Mixed High School in a small brick building at 157th Street and Third Avenue, one of the city's first public high schools; in 1899 it was a founding member of the College Entrance Examination Board. It later moved six blocks north to this building. Milton Berle was a student.",
+    coords: [-73.9041, 40.8271],
+  },
 ];

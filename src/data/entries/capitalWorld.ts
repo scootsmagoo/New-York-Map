@@ -575,4 +575,40 @@ export const capitalWorldEntries: Entry[] = [
       "A St. Albans enclave of large single-family houses where, as its restrictive covenants were overturned in the 1940s, Count Basie, Ella Fitzgerald, Lena Horne, Fats Waller, and W. E. B. Du Bois came to live.",
     coords: [-73.7705, 40.6945],
   },
+  {
+    id: "concourse-plaza-hotel",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Concourse Plaza Hotel",
+    wikiTitle: "Concourse Plaza Hotel",
+    year: 1923,
+    blurb:
+      "The Grand Concourse's grand hotel, opened in 1923 a walk from Yankee Stadium; Babe Ruth, Mickey Mantle, and Roger Maris stayed there. As the neighborhood declined it became, by 1968, a welfare hotel for families the city placed there.",
+    coords: [-73.9219, 40.8272],
+    lifespan: [1923, null],
+  },
+  {
+    id: "andrew-freedman-home",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Andrew Freedman Home",
+    wikiTitle: "Andrew Freedman Home",
+    year: 1924,
+    blurb:
+      "Andrew Freedman, onetime owner of the baseball Giants and a director of the IRT subway company, left his fortune to build a retirement home on the Grand Concourse for the once-rich who had lost everything. It opened in 1924; the trust ran out of money in the 1960s.",
+    coords: [-73.9201, 40.8327],
+    lifespan: [1924, null],
+  },
+  {
+    id: "bronx-terminal-market",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Bronx Terminal Market",
+    wikiTitle: "Bronx Terminal Market",
+    year: 1935,
+    blurb:
+      "The city finished this wholesale produce market on the Harlem River in 1935. That December, La Guardia came here to proclaim his ban on selling artichokes, aimed at the mobster Ciro Terranova, who had driven up their price.",
+    coords: [-73.9303, 40.8204],
+    lifespan: [1935, null],
+  },
 ];

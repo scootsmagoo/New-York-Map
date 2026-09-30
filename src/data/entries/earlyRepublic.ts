@@ -329,4 +329,15 @@ export const earlyRepublicEntries: Entry[] = [
     coords: [-73.8242, 40.7636],
     lifespan: [1785, null],
   },
+  {
+    id: "morrisania",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "Morrisania",
+    wikiTitle: "Morrisania, Bronx",
+    year: 1790,
+    blurb:
+      "The Morris family's estate across the Harlem River, home to Lewis Morris, signer of the Declaration of Independence, and Gouverneur Morris, who wrote out the Constitution and is buried nearby at St. Ann's Church. In 1790 Lewis offered it as the site of the federal capital. It stayed farmland until his nephew Gouverneur Morris Jr. let a railroad cross it about 1840.",
+    coords: [-73.904, 40.832],
+  },
 ];

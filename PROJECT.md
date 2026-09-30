@@ -158,6 +158,10 @@ header, theme, footprint, markers, panel — derives from it.
   its longest, on today's street geometry; terminals and jogs varied. When
   a line went electric is by borough (Bronx 1892, Brooklyn 1893, Queens
   1895, Manhattan 1900) unless the line's own date is known: approximate.
+- **Outer-borough els and subways:** opening and closing dates from
+  Wikipedia's article on each line. Routes follow the streets each line
+  ran over or under, on today's street geometry; the Rockaway trestle
+  across Jamaica Bay is drawn by hand.
 - **Working waterfront:** dates from the books where they give them,
   otherwise Wikipedia; a site whose closing year neither gives stays open.
 - **Fires & epidemics:** outlines follow the streets *Gotham* names for
@@ -399,6 +403,11 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Population counter and demographic strip charts that track the playhead.
 - [x] Els, subway lines, and the Croton Aqueduct as dated line geometry;
       street name labels beyond Broadway; demolition "ghost" markers.
+- [x] Outer-borough els and subways — shipped: 23 lines in Brooklyn,
+      Queens, and the Bronx, 1885–1975, plus the Chrystie Street
+      Connection (`src/data/transit.ts`, geometry from the street
+      centerlines by `scripts/prepare-transit.mjs`, which shares its
+      route builder with the streetcars).
 - [x] Every named street: ~15,000 label anchors from the city's street
       centerlines, appearing as the built-up area reaches them.
 - [x] Neighborhood names: ~70 villages and neighborhoods under the names

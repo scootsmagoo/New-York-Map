@@ -76,7 +76,7 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 **Where things stand**
 
 - The timeline runs from Lenapehoking to 1975 across ten eras, with about
-  330 entries. The tenth, **The Postwar City (1945–1975)**, carries
+  375 entries. The tenth, **The Postwar City (1945–1975)**, carries
   every layer on: expressways, parkways, and the Verrazzano as they open,
   the suburbs of Queens and Staten Island filling in, the last trolleys,
   Lincoln Center, Stonewall, and the fiscal crisis.
@@ -108,7 +108,8 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
   names; obscure ones may not.
 - **Neighborhood names** (about 70 places) use the names of their day.
 - The Manhattan grid, elevated trains, and subways sit on the real avenues
-  and streets.
+  and streets; so do the els and subways of Brooklyn, Queens, and the
+  Bronx.
 - On phones: pinch the timeline with two fingers, and *Explore this era*
   opens as a bottom sheet.
 - Street and neighborhood names had no measurable effect on panning or
@@ -119,6 +120,12 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Done 2026-09-26/27:* the "Things to try" card, *Fires & epidemics*,
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
+
+*Done 2026-09-30 (last):* els and subways in Brooklyn, Queens, and the
+Bronx (23 lines, 1885–1975, each opening and coming down on its own
+date, including the Rockaway line and the Chrystie Street Connection),
+and 20 Bronx entries from Throgs Neck (1642) to 1520 Sedgwick Avenue
+(1973), taking the Bronx from 22 markers to 42.
 
 *Done 2026-09-30 (later):* a Public housing layer (185 Housing Authority
 developments, 1935–75), a borough filter in Explore this era and search,
