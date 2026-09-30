@@ -8,6 +8,7 @@ import { antebellumEntries } from "./antebellum";
 import { civilWarGildedEntries } from "./civilWarGilded";
 import { greaterNYEntries } from "./greaterNY";
 import { capitalWorldEntries } from "./capitalWorld";
+import { postwarEntries } from "./postwar";
 
 export const allEntries: Entry[] = [
   ...lenapeEntries,
@@ -19,6 +20,7 @@ export const allEntries: Entry[] = [
   ...civilWarGildedEntries,
   ...greaterNYEntries,
   ...capitalWorldEntries,
+  ...postwarEntries,
 ];
 
 export function entriesForEra(eraId: string): Entry[] {

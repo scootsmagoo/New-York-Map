@@ -54,6 +54,12 @@ export const neighborhoods: Neighborhood[] = [
   n("sugar-hill", [-73.9435, 40.8265], [["Sugar Hill", 1920]]),
   n("washington-heights", [-73.939, 40.8445], [["Washington Heights", 1890]], { major: true }),
   n("inwood", [-73.9215, 40.8675], [["Inwood", 1864]]),
+  // Postwar names: SoHo was coined by planners in 1962 and took hold as the
+  // artists' district later that decade; Tribeca by its residents in 1973.
+  n("east-village", [-73.9845, 40.7265], [["East Village", 1960]]),
+  n("soho", [-74.0015, 40.7233], [["SoHo", 1968]]),
+  n("tribeca", [-74.009, 40.7163], [["Tribeca", 1974]]),
+  n("stuy-town", [-73.978, 40.732], [["Stuyvesant Town", 1947]]),
 
   // ----- Brooklyn -----
   n("brooklyn-heights", [-73.9955, 40.6962], [["Breuckelen", 1646], ["Brooklyn Village", 1664], ["Brooklyn Heights", 1820]], { major: true }),
@@ -143,6 +149,8 @@ export const neighborhoods: Neighborhood[] = [
   n("kingsbridge", [-73.905, 40.8785], [["Kingsbridge", 1693]]),
   n("riverdale", [-73.912, 40.8993], [["Riverdale", 1853]]),
   n("city-island", [-73.7865, 40.847], [["City Island", 1761]]),
+  n("south-bronx", [-73.915, 40.816], [["South Bronx", 1965]]),
+  n("co-op-city", [-73.829, 40.874], [["Co-op City", 1970]]),
 
   n("melrose", [-73.91, 40.825], [["Melrose", 1850]]),
   n("tremont", [-73.906, 40.85], [["Tremont", 1850]]),
