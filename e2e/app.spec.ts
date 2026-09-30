@@ -148,8 +148,9 @@ test("streetcars run on horses, then electricity, and the tour turns them on", a
 test("public housing developments appear as they were completed", async ({ page }) => {
   await open(page, "#year=1938");
   await toggleLayer(page, "Public housing");
+  // The layer's geometry loads lazily; wait for it before counting.
+  await expect.poll(() => page.locator(".housing").count()).toBeGreaterThan(0);
   const before = await page.locator(".housing").count();
-  expect(before).toBeGreaterThan(0);
   await open(page, "#year=1965");
   await expect.poll(() => page.locator(".housing").count()).toBeGreaterThan(before + 50);
 });

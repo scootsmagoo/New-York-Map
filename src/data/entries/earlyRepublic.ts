@@ -105,6 +105,7 @@ export const earlyRepublicEntries: Entry[] = [
     year: 1792,
     blurb:
       "Twenty-four brokers, burned by the Duer panic, signed a pact under a Wall Street buttonwood tree fixing commissions and trading among themselves — the seed of the New York Stock Exchange.",
+    coords: [-74.00767, 40.70537],
   },
   {
     id: "yellow-fever",

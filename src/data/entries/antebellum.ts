@@ -73,6 +73,7 @@ export const antebellumEntries: Entry[] = [
     year: 1842,
     blurb:
       "'Dagger John,' combative shepherd of the Irish city — builder of parochial schools and St. Patrick's Cathedral, who armed his churches against nativist mobs and got results.",
+    coords: [-73.99528, 40.72361],
   },
   {
     id: "ruggles-david",
@@ -83,6 +84,7 @@ export const antebellumEntries: Entry[] = [
     year: 1838,
     blurb:
       "Black abolitionist whose Committee of Vigilance hid hundreds of fugitives from slave-catchers — including, in 1838, a young Frederick Douglass — and who ran the city's first Black bookstore.",
+    coords: [-74.0036, 40.7197],
   },
   {
     id: "restell",
@@ -96,6 +98,7 @@ export const antebellumEntries: Entry[] = [
       "Ann Lohman, the city's most famous abortionist, grew rich enough to build a marble mansion on Fifth Avenue across from the future cathedral — hounded for decades, finally by Anthony Comstock.",
     gotham:
       "A recurring Gotham figure for what the city tolerated, used, and punished.",
+    coords: [-73.976, 40.76],
   },
   {
     id: "stewart",
@@ -116,6 +119,7 @@ export const antebellumEntries: Entry[] = [
     year: 1835,
     blurb:
       "On a night so cold the rivers froze and pumps failed, 700 buildings of the business district burned. Insurance companies collapsed — and rebuilding began before the ruins cooled.",
+    coords: [-74.00903, 40.70532],
   },
   {
     id: "panic-1837",
@@ -136,6 +140,7 @@ export const antebellumEntries: Entry[] = [
     year: 1842,
     blurb:
       "Forty-one miles of masonry aqueduct brought Westchester water over High Bridge to fountains that jetted fifty feet in City Hall Park, October 1842 — death sentence for wells, cholera, and the fire risk alike.",
+    coords: [-74.0068, 40.7118],
   },
   {
     id: "astor-place-riot",

@@ -10,6 +10,7 @@ export const civilWarGildedEntries: Entry[] = [
     year: 1870,
     blurb:
       "Chairmaker, fireman, and Grand Sachem of Tammany Hall whose Ring stole tens of millions through padded contracts — the County Courthouse alone cost more than Alaska — before dying in his own Ludlow Street jail.",
+    coords: [-74.00556, 40.71333],
   },
   {
     id: "nast",
@@ -40,6 +41,7 @@ export const civilWarGildedEntries: Entry[] = [
     year: 1890,
     blurb:
       "From 23 Wall Street, Morgan reorganized bankrupt railroads, electrified the city with Edison, and made the private banker the arbiter of American capital.",
+    coords: [-74.01056, 40.70694],
   },
   {
     id: "gould",
@@ -70,6 +72,7 @@ export const civilWarGildedEntries: Entry[] = [
     year: 1887,
     blurb:
       "Pulitzer's World stunt reporter who feigned madness to expose the Blackwell's Island asylum in 1887, then beat Phileas Fogg around the world in 72 days.",
+    coords: [-73.94393, 40.76901],
   },
   {
     id: "henry-george",
@@ -92,6 +95,7 @@ export const civilWarGildedEntries: Entry[] = [
     year: 1880,
     blurb:
       "THE Mrs. Astor, whose ballroom held four hundred and whose social secretary Ward McAllister rationed old-money society against the Vanderbilt new — until the new built bigger ballrooms.",
+    coords: [-73.98456, 40.74845],
   },
   {
     id: "draft-riots",
@@ -102,6 +106,7 @@ export const civilWarGildedEntries: Entry[] = [
     year: 1863,
     blurb:
       "Four July days of 1863: mobs enraged by the $300 commutation clause burned the draft office, the Colored Orphan Asylum, and Black homes, lynching at least eleven Black New Yorkers before troops from Gettysburg retook the streets. The deadliest riot in American history.",
+    coords: [-73.97214, 40.75395],
   },
   {
     id: "black-friday",
@@ -122,6 +127,7 @@ export const civilWarGildedEntries: Entry[] = [
     year: 1871,
     blurb:
       "Irish Protestant–Catholic violence over a Boyne Day parade: when the militia escorting the Orangemen fired into the Eighth Avenue crowd, more than sixty died — and the carnage helped finish Tweed.",
+    coords: [-73.99801, 40.74596],
   },
   {
     id: "tweed-falls",

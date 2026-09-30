@@ -36,6 +36,7 @@ export const greaterNYEntries: Entry[] = [
       "Fulton Fish Market boy risen through Tammany to the Assembly, co-chair of the Triangle factory investigating commission — the sidewalks of New York on their way to the Governor's mansion.",
     gotham:
       "Greater Gotham roots him in the old city: a South Street boyhood under the rising Brooklyn Bridge, selling Henry George's paper in 1886 while his father voted Tammany.",
+    coords: [-73.9985, 40.71211],
   },
   {
     id: "stieglitz",
@@ -48,6 +49,7 @@ export const greaterNYEntries: Entry[] = [
       "Photographer of the steerage, the Flatiron in snow, and the hand-of-man city; his 291 gallery introduced America to modern art before the Armory Show finished the job.",
     gotham:
       "Greater Gotham begins with his gloom on coming home in 1890, when the city looked too raw for art, and follows how he made it his subject anyway.",
+    coords: [-73.98605, 40.74645],
   },
   {
     id: "wharton",
@@ -60,6 +62,7 @@ export const greaterNYEntries: Entry[] = [
       "Daughter of old Knickerbocker society who dissected it in 'The House of Mirth' (1905) — the brownstone world of her childhood already a lost civilization by the time she wrote.",
     gotham:
       "Greater Gotham pairs her with Dreiser: two novels of a woman undone by New York, received very differently because of where each author started.",
+    coords: [-73.9902, 40.7418],
   },
   {
     id: "du-bois",
@@ -84,6 +87,7 @@ export const greaterNYEntries: Entry[] = [
       "Anarchist orator of the Lower East Side, publisher of Mother Earth from East 13th Street — arrested for birth-control lectures and draft opposition, deported on the Buford in 1919.",
     gotham:
       "Greater Gotham places her at the center of the Village's anarchist and bohemian circuit, from the Brevoort's basement café to Polly's on MacDougal Street.",
+    coords: [-73.9866, 40.7322],
   },
   {
     id: "subway-opens",
@@ -96,6 +100,7 @@ export const greaterNYEntries: Entry[] = [
       "October 27, 1904: Mayor McClellan drove the first IRT train from City Hall toward 145th Street — 'City Hall to Harlem in fifteen minutes' — and the city's shape changed overnight.",
     gotham:
       "Greater Gotham notes how quickly the jubilation soured: built for 400,000 riders a day, the IRT soon carried 800,000, and profited too well to hurry new lines.",
+    coords: [-74.0067, 40.7126],
   },
   {
     id: "slocum",

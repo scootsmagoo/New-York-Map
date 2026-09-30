@@ -135,6 +135,7 @@ export const revolutionEntries: Entry[] = [
     year: 1776,
     blurb:
       "Days after the British marched in, fire raced up the west side from Whitehall, consuming perhaps a quarter of the town including Trinity Church. Each side blamed the other ever after.",
+    coords: [-74.01306, 40.70306],
   },
   {
     id: "prison-ships",

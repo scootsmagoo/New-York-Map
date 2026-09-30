@@ -118,6 +118,7 @@ export const britishColonyEntries: Entry[] = [
     year: 1712,
     blurb:
       "Two dozen enslaved Africans fired a Maiden Lane outbuilding and killed nine whites who answered the alarm. Retribution was ferocious: twenty executed, some burned alive, and the slave code tightened.",
+    coords: [-74.0098, 40.7097],
   },
   {
     id: "conspiracy-1741",
@@ -150,6 +151,7 @@ export const britishColonyEntries: Entry[] = [
     year: 1754,
     blurb:
       "Chartered in 1754 in Trinity's vestry room — after a furious pamphlet war over Anglican control — the college taught Hamilton, Jay, and Gouverneur Morris before reopening as Columbia.",
+    coords: [-74.0088, 40.7134],
   },
   {
     id: "fort-george",

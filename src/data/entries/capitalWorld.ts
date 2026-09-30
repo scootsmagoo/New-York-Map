@@ -15,6 +15,7 @@ export const capitalWorldEntries: Entry[] = [
     year: 1920,
     blurb:
       "Jamaican-born founder of the Universal Negro Improvement Association, who filled Madison Square Garden for its 1920 convention and ran the Black Star Line from Harlem's Liberty Hall until a mail-fraud conviction and deportation.",
+    coords: [-73.98556, 40.74278],
   },
   {
     id: "jimmy-walker",
@@ -38,6 +39,7 @@ export const capitalWorldEntries: Entry[] = [
       "Bohemian journalist turned Catholic radical who launched the Catholic Worker at a penny a copy in Union Square on May Day 1933 and ran houses of hospitality for the Depression's destitute.",
     gotham:
       "Gotham at War singles her out as one of the first Catholic voices in New York to break with the Church's support for Franco, in the Catholic Worker in 1936.",
+    coords: [-73.99056, 40.73556],
   },
   {
     id: "la-guardia",

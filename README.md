@@ -76,7 +76,7 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 **Where things stand**
 
 - The timeline runs from Lenapehoking to 1975 across ten eras, with about
-  375 entries. The tenth, **The Postwar City (1945–1975)**, carries
+  380 entries. The tenth, **The Postwar City (1945–1975)**, carries
   every layer on: expressways, parkways, and the Verrazzano as they open,
   the suburbs of Queens and Staten Island filling in, the last trolleys,
   Lincoln Center, Stonewall, and the fiscal crisis.
@@ -120,6 +120,14 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Done 2026-09-26/27:* the "Things to try" card, *Fires & epidemics*,
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
+
+*Done 2026-09-30 (night):* railroads, 1834–1975 (the Harlem, Hudson River, Long
+Island, and Staten Island lines, the Cobble Hill tunnel, the Coney Island
+excursion lines that became the BMT, the Westchester & Boston, the High
+Line), drawn with cross ties from OpenStreetMap track geometry; and 22
+entries that had no marker (Nellie Bly at the Blackwell's Island asylum,
+Stieglitz's 291, the draft office the 1863 rioters burned…) placed where
+their stories happen.
 
 *Done 2026-09-30 (last):* els and subways in Brooklyn, Queens, and the
 Bronx (23 lines, 1885–1975, each opening and coming down on its own
