@@ -1,5 +1,6 @@
 import type { InfrastructureLine } from "../types";
 import { avenuePolyline } from "../lib/grid";
+import { transitInfrastructure } from "./transit";
 
 /**
  * Dated linear infrastructure — els, early subway, and the Croton Aqueduct.
@@ -13,7 +14,7 @@ const MIDTOWN = 6500;
 const HARLEM = 12500;
 const INWOOD = 16800;
 
-export const infrastructureLines: InfrastructureLine[] = [
+const manhattanLines: InfrastructureLine[] = [
   {
     id: "croton-aqueduct",
     name: "Croton Aqueduct",
@@ -108,3 +109,6 @@ export const infrastructureLines: InfrastructureLine[] = [
     pts: avenuePolyline("6th Ave", DOWNTOWN, MIDTOWN),
   },
 ];
+
+/** Manhattan's trunk lines, plus the els and subways of the other boroughs (transit.ts). */
+export const infrastructureLines: InfrastructureLine[] = [...manhattanLines, ...transitInfrastructure];

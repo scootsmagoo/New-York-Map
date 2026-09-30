@@ -669,8 +669,15 @@ function MapViewInner({
     if (!projection) return [];
     return infrastructureLines.map((line) => {
       const projected = line.pts.map((p) => projection(p)!);
-      const d = projected
-        .map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`)
+      const d = (line.legs ?? [line.pts])
+        .map((leg) =>
+          leg
+            .map((c, i) => {
+              const p = projection(c)!;
+              return `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`;
+            })
+            .join("")
+        )
         .join("");
       const a = projected[0];
       const b = projected[projected.length - 1];
@@ -1103,10 +1110,14 @@ function MapViewInner({
                 const entry = line.entryId
                   ? allEntries.find((e) => e.id === line.entryId)
                   : undefined;
+                // Manhattan's trunk lines run the length of its avenues and are
+                // clipped to the island; lines routed along real streets
+                // elsewhere (transit.ts) need no clip.
                 const clip =
-                  line.kind === "aqueduct" ? undefined : "url(#manhattan-clip)";
+                  line.kind === "aqueduct" || line.legs ? undefined : "url(#manhattan-clip)";
                 return (
                   <g key={line.id} clipPath={clip} style={{ opacity: infraFade }}>
+                    {line.kind !== "aqueduct" && <path className="infra-casing" d={line.d} />}
                     <path
                       className={`infra infra-${line.kind}`}
                       d={line.d}

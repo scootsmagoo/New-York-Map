@@ -100,6 +100,8 @@ export interface InfrastructureLine {
   name: string;
   kind: "aqueduct" | "elevated" | "subway";
   pts: [number, number][];
+  /** Separate pieces, when the line isn't one polyline (pts is them joined). */
+  legs?: [number, number][][];
   open: number;
   close?: number;
   entryId?: string;
