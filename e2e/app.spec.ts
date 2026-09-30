@@ -246,6 +246,27 @@ test("search remembers its last query, selected so typing replaces it", async ({
   await expect(box).toHaveValue("Minetta");
 });
 
+test("the borough chips filter the era panel and search, and stay set", async ({ page }) => {
+  await open(page, "#year=1960");
+  await page.locator(".explore-btn").click();
+  const panel = page.locator(".era-panel");
+  await expect(panel.locator(".entry-row").first()).toBeVisible();
+  const all = await panel.locator(".entry-row").count();
+  await panel.getByRole("button", { name: /^Queens/ }).click();
+  await expect(panel.getByRole("button", { name: /^Queens/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(panel.locator(".entry-row", { hasText: "Shea Stadium" })).toBeVisible();
+  await expect(panel.locator(".entry-row", { hasText: "Lincoln Center" })).toHaveCount(0);
+  expect(await panel.locator(".entry-row").count()).toBeLessThan(all);
+  await page.keyboard.press("Escape");
+  await page.locator(".era-panel .modal-close").click();
+  // Search shares the setting.
+  await page.keyboard.press("Control+k");
+  await expect(page.locator(".search-palette").getByRole("button", { name: "Queens" })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("combobox", { name: "Search Gotham" }).fill("stadium");
+  await expect(page.getByRole("option", { name: /Shea Stadium/ })).toBeVisible();
+  await expect(page.getByRole("option", { name: /Yankee Stadium/ })).toHaveCount(0);
+});
+
 test("the era panel keeps its scroll position when closed and reopened", async ({ page }) => {
   await open(page, "#year=1880");
   await page.locator(".explore-btn").click();

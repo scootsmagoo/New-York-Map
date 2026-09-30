@@ -11,6 +11,9 @@ import { allEntries, entriesForEra } from "../data/entries";
 import { FocusTrap } from "./FocusTrap";
 import { getWikiSummary } from "../lib/wikipedia";
 import { runWikiQueued } from "../lib/wikiQueue";
+import { BOROUGHS, boroughOf, type Borough } from "../lib/boroughs";
+import { usePersistedState } from "../lib/usePersistedState";
+import { BoroughChips } from "./BoroughChips";
 
 interface EraPanelProps {
   era: Era;
@@ -59,7 +62,17 @@ function EntryRow({
 const byId = new Map(allEntries.map((e) => [e.id, e]));
 
 export function EraPanel({ era, onClose, onSelectEntry }: EraPanelProps) {
-  const entries = entriesForEra(era.id);
+  const allInEra = entriesForEra(era.id);
+  const [borough, setBorough] = usePersistedState<Borough | null>("boroughFilter", null);
+  const counts: Partial<Record<Borough | "all", number>> = { all: allInEra.length };
+  for (const e of allInEra) {
+    const b = e.coords ? boroughOf(e.coords) : null;
+    if (b) counts[b] = (counts[b] ?? 0) + 1;
+  }
+  for (const { id } of BOROUGHS) counts[id] ??= 0;
+  const entries = borough
+    ? allInEra.filter((e) => e.coords && boroughOf(e.coords) === borough)
+    : allInEra;
   const [thumbs, setThumbs] = useState<Record<string, string>>({});
 
   // One observer for every row: Wikipedia thumbnails load as rows scroll
@@ -118,6 +131,16 @@ export function EraPanel({ era, onClose, onSelectEntry }: EraPanelProps) {
             <p className="era-panel-subtitle">{era.subtitle}</p>
             <p className="era-panel-summary">{era.summary}</p>
           </header>
+
+          <BoroughChips
+            value={borough}
+            onChange={setBorough}
+            counts={counts}
+            label="Show entries in"
+          />
+          {borough && entries.length === 0 && (
+            <p className="era-panel-empty">Nothing placed in this borough in this era yet.</p>
+          )}
 
           {GROUPS.map((g) => {
             const group = entries.filter((e) => e.kind === g.kind);

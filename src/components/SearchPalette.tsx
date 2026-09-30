@@ -17,6 +17,9 @@ import {
 } from "../lib/search";
 import { useDebouncedValue } from "../lib/useDebouncedValue";
 import { FocusTrap } from "./FocusTrap";
+import { BoroughChips } from "./BoroughChips";
+import { usePersistedState } from "../lib/usePersistedState";
+import { BOROUGHS, type Borough } from "../lib/boroughs";
 
 const KIND_GLYPH: Record<SearchItemKind, string> = {
   person: "●",
@@ -66,10 +69,11 @@ export function SearchPalette({
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const debouncedQuery = useDebouncedValue(query, 120);
+  const [borough, setBorough] = usePersistedState<Borough | null>("boroughFilter", null);
 
   const groups = useMemo(
-    () => groupSearchHits(searchEntries(debouncedQuery)),
-    [debouncedQuery]
+    () => groupSearchHits(searchEntries(debouncedQuery, 24, borough)),
+    [debouncedQuery, borough]
   );
   const flat = useMemo(() => groups.flatMap((g) => g.hits), [groups]);
 
@@ -90,7 +94,7 @@ export function SearchPalette({
 
   useEffect(() => {
     setActiveIndex(0);
-  }, [debouncedQuery]);
+  }, [debouncedQuery, borough]);
 
   // Reads the latest results and selection without re-subscribing on each
   // keystroke.
@@ -169,6 +173,8 @@ export function SearchPalette({
             </button>
           </div>
 
+          <BoroughChips value={borough} onChange={setBorough} label="Search in" />
+
           <div className="search-results">
             {!query.trim() && (
               <p className="search-empty">
@@ -178,7 +184,10 @@ export function SearchPalette({
               </p>
             )}
             {query.trim() && flat.length === 0 && (
-              <p className="search-empty">No matches for “{query.trim()}”.</p>
+              <p className="search-empty">
+                No matches for “{query.trim()}”
+                {borough ? ` in ${BOROUGHS.find((b) => b.id === borough)?.label}` : ""}.
+              </p>
             )}
             <div id="search-results" role="listbox" aria-label="Results">
               {groups.map((group) => (

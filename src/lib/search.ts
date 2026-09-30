@@ -13,6 +13,7 @@ import { CALAMITY_FADE, calamities, calamityCenter } from "../data/calamities";
 import { WATERFRONT_KIND_LABEL, waterfront, waterfrontDates } from "../data/waterfront";
 import { streetcarLines } from "../data/streetcars";
 import type { LayerId } from "./layers";
+import { boroughOf, type Borough } from "./boroughs";
 import streetcarCenters from "../data/geo/streetcarCenters.json";
 
 export type SearchItemKind =
@@ -38,6 +39,8 @@ export interface MapLocation {
 
 /** A single searchable record — extend `source` as new map content types ship. */
 export interface SearchItem {
+  /** Where it is, for the borough filter; absent for citywide entries. */
+  coords?: [number, number];
   id: string;
   kind: SearchItemKind;
   title: string;
@@ -334,6 +337,15 @@ export function buildSearchIndex(): SearchItem[] {
       source: { type: "entry" as const, entry },
     };
   });
+  const withCoords = (item: SearchItem): SearchItem => ({
+    ...item,
+    coords:
+      item.source.type === "entry"
+        ? item.source.entry.coords
+        : item.source.type === "street"
+          ? streetMidpoint(item.source.street)
+          : item.source.location.coords,
+  });
   return [
     ...entries,
     ...colonialStreets.map(streetSearchItem),
@@ -342,16 +354,17 @@ export function buildSearchIndex(): SearchItem[] {
     ...calamitySearchItems(),
     ...waterfrontSearchItems(),
     ...streetcarSearchItems(),
-  ];
+  ].map(withCoords);
 }
 
 const INDEX = buildSearchIndex();
 
-export function searchEntries(query: string, limit = 24): SearchHit[] {
+export function searchEntries(query: string, limit = 24, borough: Borough | null = null): SearchHit[] {
   const q = query.trim();
   if (!q) return [];
 
-  return INDEX.map((item) => ({ item, score: scoreItem(q, item) }))
+  return INDEX.filter((item) => !borough || (item.coords && boroughOf(item.coords) === borough))
+    .map((item) => ({ item, score: scoreItem(q, item) }))
     .filter((hit) => hit.score > 0)
     .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title))
     .slice(0, limit);

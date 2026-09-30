@@ -1576,6 +1576,63 @@ button {
 
 .era-group { margin-top: 18px; }
 
+/* Borough filter chips (era panel, search) */
+.borough-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 2px;
+}
+
+.search-palette .borough-chips {
+  margin: 0;
+  padding: 8px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.borough-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.borough-chip:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.borough-chip[aria-pressed="true"],
+.borough-chip[aria-pressed="true"]:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.borough-chip:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.borough-chip-count {
+  font-size: 10.5px;
+  font-weight: 600;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+.era-panel-empty {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
 .era-group-title {
   font-family: var(--serif);
   font-size: 13px;
