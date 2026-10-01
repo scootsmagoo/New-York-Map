@@ -19,8 +19,13 @@ or by a known date for big fills with no streets (airports, parks, rail
 yards, the Navy Yard, the postwar landfills), and otherwise stays wet
 through 1975, as much of Jamaica Bay still is.
 
-Only land made after the 1890s shows: the older fill along Brooklyn's
-waterfront predates the survey. Manhattan has its own layer (Viele, 1865).
+Land made before the 1890s comes from an older source: the U.S. Coast
+Survey's Map of New-York Bay and Harbor and the Environs (Hassler, 1845),
+an engraving with no color to go by, so its marshes and shallows are traced
+by hand (hassler-1845.json) and placed by landmarks. That adds the Red Hook
+and Gowanus marshes, Wallabout Bay, Greenpoint's Newtown Creek marshes,
+and the St. George waterfront; the chart stops short of the Bronx.
+Manhattan has its own layer (Viele, 1865).
 
 Downloads (data-raw/usgs/, gitignored): see README.md.
 Output: src/data/geo/lostLandscapeOuter.json
@@ -65,6 +70,10 @@ KNOWN_FILLS = [
     ("The Navy Yard's Wallabout fill", 1910, (-73.978, 40.698, -73.962, 40.707)),
     ("Bush Terminal piers", 1905, (-74.02, 40.648, -74.0, 40.662)),
     ("Brooklyn Army Base", 1918, (-74.03, 40.64, -74.018, 40.65)),
+    # Before the 1890s (the 1845 chart)
+    ("The Atlantic Docks", 1847, (-74.016, 40.681, -74.004, 40.691)),
+    ("Erie Basin", 1864, (-74.022, 40.665, -74.005, 40.678)),
+    ("St. George ferry and railroad terminal", 1886, (-74.08, 40.636, -74.066, 40.648)),
     # Postwar
     ("Idlewild airport, on the Jamaica Bay marshes", 1948, (-73.83, 40.62, -73.74, 40.67)),
     # A landfill from 1948; the marsh went under garbage over the next two
@@ -137,6 +146,41 @@ made = land.intersection(wet).difference(lakes)
 made = made.buffer(-deg(20)).buffer(deg(20))
 print("made land since the 1890s, km²", round(made.area * M_LON * M_LAT / 1e6, 1))
 
+# ----- Before the 1890s: the 1845 Coast Survey chart, traced by hand -----
+
+HASSLER = json.loads((Path(__file__).parent / "hassler-1845.json").read_text())
+
+
+def hassler_place():
+    """Chart pixels → lon/lat: a second-order fit to the chart's landmarks."""
+    lm = HASSLER["landmarks"]
+    px = np.array([l["px"] for l in lm], float)
+    ll = np.array([l["lonlat"] for l in lm])
+    design = lambda x, y: np.stack([np.ones_like(x), x, y, x * x, x * y, y * y], -1)
+    B = design(px[:, 0] / 1000, px[:, 1] / 1000)
+    cx = np.linalg.lstsq(B, ll[:, 0], rcond=None)[0]
+    cy = np.linalg.lstsq(B, ll[:, 1], rcond=None)[0]
+    res = np.hypot((B @ cx - ll[:, 0]) * M_LON, (B @ cy - ll[:, 1]) * M_LAT)
+    print("1845 chart placed by", len(lm), "landmarks, rms", round(float(np.sqrt((res ** 2).mean()))), "m")
+
+    def place(ring):
+        r = np.array(ring, float)
+        b = design(r[:, 0] / 1000, r[:, 1] / 1000)
+        return list(zip(b @ cx, b @ cy))
+    return place
+
+
+place = hassler_place()
+# Hand-traced rings can cross themselves; buffer(0) repairs them.
+areas = [(a["kind"], Polygon(place(a["ring"]), [place(h) for h in a.get("holes", [])]).buffer(0)) for a in HASSLER["areas"]]
+wet45 = unary_union([g for _, g in areas])
+water45 = unary_union([g for k, g in areas if k == "water"])
+HASSLER_YEAR = 1845
+# Only what the 1890s sheets show as dry: the rest is in `made` already.
+made45 = land.intersection(wet45).difference(wet).difference(lakes)
+made45 = made45.buffer(-deg(20)).buffer(deg(20))
+print("made land 1845–1890s, km²", round(made45.area * M_LON * M_LAT / 1e6, 1))
+
 # ----- Dating -----
 
 def decode(key):
@@ -179,31 +223,38 @@ def street_year(geom):
 
 CELL = 0.005
 fill, marsh = [], []
-x0, y0, x1, y1 = made.bounds
-for i in range(int(x0 // CELL), int(x1 // CELL) + 1):
-    for j in range(int(y0 // CELL), int(y1 // CELL) + 1):
-        cell = box(i * CELL, j * CELL, (i + 1) * CELL, (j + 1) * CELL)
-        piece = made.intersection(cell)
-        if piece.is_empty or piece.area * M_LON * M_LAT < 4000:
-            continue
-        year = None
-        for name, y, b in KNOWN_FILLS:
-            if piece.representative_point().within(box(*b)):
-                year = y
-                break
-        survey = next(y for f, b, y, _ in SHEETS if piece.representative_point().within(box(*b)))
-        streets = street_year(piece)
-        # Streets laid out well before the survey mean the tint misled us:
-        # it was land already (a pale lawn, a causeway, a registration slip).
-        if year is None and streets is not None and streets < survey - 5:
-            continue
-        year = year or (max(streets, survey + 2) if streets else None)
-        was_water = piece.intersection(water).area > 0.5 * piece.area
-        until = year if year and year <= TIME_MAX else None
-        for kind, part in (("water", piece.intersection(water)), ("marsh", piece.difference(water))):
-            if part.is_empty:
+
+
+def date_cells(made, water, survey_of):
+    x0, y0, x1, y1 = made.bounds
+    for i in range(int(x0 // CELL), int(x1 // CELL) + 1):
+        for j in range(int(y0 // CELL), int(y1 // CELL) + 1):
+            cell = box(i * CELL, j * CELL, (i + 1) * CELL, (j + 1) * CELL)
+            piece = made.intersection(cell)
+            if piece.is_empty or piece.area * M_LON * M_LAT < 4000:
                 continue
-            (fill if until else marsh).append({"until": until, "kind": kind, "geom": part})
+            year = None
+            for name, y, b in KNOWN_FILLS:
+                if piece.representative_point().within(box(*b)):
+                    year = y
+                    break
+            survey = survey_of(piece)
+            streets = street_year(piece)
+            # Streets laid out well before the survey mean the source misled
+            # us: it was land already (a pale lawn, a causeway, a slip in
+            # registration or tracing).
+            if year is None and streets is not None and streets < survey - 5:
+                continue
+            year = year or (max(streets, survey + 2) if streets else None)
+            until = year if year and year <= TIME_MAX else None
+            for kind, part in (("water", piece.intersection(water)), ("marsh", piece.difference(water))):
+                if part.is_empty:
+                    continue
+                (fill if until else marsh).append({"until": until, "kind": kind, "geom": part})
+
+
+date_cells(made, water, lambda piece: next(y for f, b, y, _ in SHEETS if piece.representative_point().within(box(*b))))
+date_cells(made45, water45, lambda piece: HASSLER_YEAR)
 
 # Merge the cells that share a year and kind, so no seams show between
 # them. Rings are outlines then holes, drawn with the even-odd rule.

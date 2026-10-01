@@ -127,12 +127,19 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 *More history*
 - More entries from the candidate list in docs/BOOK_REFERENCE.md,
   especially *Greater Gotham*'s people and places for 1898–1919.
-- Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
-  marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
 - Past 1975: the city's comeback, the 1977 blackout, the modern city.
 - Audio per era.
 
 **Done**, newest first:
+
+*Done 2026-10-01 (night):* the lost landscape before the 1890s outside
+Manhattan, traced by hand from the U.S. Coast Survey's 1845 chart of New
+York Bay: the Red Hook and Gowanus marshes, Wallabout Bay, Greenpoint's
+marshes on Newtown Creek, and the St. George waterfront, each dated by
+when the streets reached it (search "Gowanus marshes"). Also a health
+check (one moved Wikipedia title fixed, a Brooklyn scene in the frame-rate
+check, the first load re-measured) and the LIRR's 1861 Main Line and 1870
+Lower Montauk.
 
 *Done 2026-10-01 (last):* 17 early-Brooklyn entries (Nieuw Amersfoort,
 Lady Deborah Moody's Gravesend, New Utrecht, Boswijck, Erasmus Hall, Fort

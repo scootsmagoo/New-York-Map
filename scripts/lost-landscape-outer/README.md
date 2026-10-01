@@ -48,5 +48,26 @@ first.
   Park, landfills; and the Fresh Kills landfill, begun in 1948, dated to
   1958 because it buried the marsh over two decades). The rest stays wet
   through 1975, as much of Jamaica Bay still is.
-- **What it misses.** Anything filled before the 1890s (most of Brooklyn's
-  older waterfront, Gowanus's marshes) was already land on these maps.
+- **Before the 1890s.** What the USGS sheets already show as land is
+  filled in from the U.S. Coast Survey's *Map of New-York Bay and Harbor
+  and the Environs* (F. R. Hassler, published 1845), the Library of
+  Congress scan on Wikimedia Commons. It is an engraving with no color to
+  go by (marsh is rows of tufts, shallows are dots, upland is hatched or
+  plain), so its marshes and shallows are traced by hand in the image's
+  pixels (`hassler-1845.json`: the Red Hook and Gowanus marshes, Wallabout
+  Bay, Greenpoint's Newtown Creek marshes, Bushwick Creek, the St. George
+  waterfront). Thirteen landmarks place it (harbor forts, the Flatbush
+  and Flatlands crossroads, Gravesend's square, Snug Harbor, Manhattan's
+  squares), with a second-order fit and ~57 m rms error. Pieces are dated
+  like the rest, never before 1847, with known dates for the Atlantic
+  Docks (1847), Erie Basin (1864), and the St. George terminal (1886).
+  Download the chart into `data-raw/coast-survey/` only to retrace:
+
+  ```bash
+  curl -sL -o data-raw/coast-survey/hassler-loc-1845.jpg \
+    "https://upload.wikimedia.org/wikipedia/commons/7/74/Map_of_New-York_Bay_and_Harbor_and_the_environs_LOC_2004629241.jpg"
+  ```
+- **What it misses.** The chart covers Brooklyn, southern Queens, and
+  Staten Island's north and east shores, but not the Bronx or upper
+  Queens, so those show only what was filled after the 1890s. The traced
+  areas are generalized, to about 100 m.

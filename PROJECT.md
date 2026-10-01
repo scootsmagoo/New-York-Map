@@ -467,8 +467,10 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Lost landscape beyond Manhattan — shipped from the USGS surveys of
       1891–98: the marshes and shallows filled since (Flushing Meadows,
       Barren Island, North Beach, Jamaica Bay, Fresh Kills). Still open:
-      what was filled before the 1890s (Gowanus, Wallabout), which needs
-      an 1840s Coast Survey chart.
+      what was filled before the 1890s — shipped 2026-10-01 from the 1845
+      Coast Survey chart, traced by hand: the Red Hook and Gowanus
+      marshes, Wallabout Bay, Greenpoint, the St. George waterfront. The
+      Bronx and upper Queens, off the chart, still start in the 1890s.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: fourteen tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair, the island remade by landfill,

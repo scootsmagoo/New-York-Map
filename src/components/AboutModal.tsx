@@ -87,8 +87,10 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
             </li>
             <li>
               <strong>Lost landscape:</strong> Egbert Viele's 1865 topographical
-              map for Manhattan, and the U.S. Geological Survey's first maps of
-              the city (1891–98) for the other boroughs.
+              map for Manhattan; for the other boroughs, the U.S. Geological
+              Survey's first maps of the city (1891–98) and, for land filled
+              earlier, the U.S. Coast Survey's 1845 chart of New York Bay,
+              traced by hand.
             </li>
             <li>
               <strong>Historical maps:</strong> the Castello Plan (1660),

@@ -2,7 +2,8 @@
  * The named waters of the lost-landscape layer, for search: small enough to
  * ship in the main bundle, where the full geometry (geo/lostLandscape.json)
  * loads only when the layer is on. Manhattan's ids match that file; the
- * other boroughs' mark areas of the USGS survey (see `outer`). Fresh
+ * other boroughs' mark areas of the USGS survey or, for land filled before
+ * the 1890s, the 1845 Coast Survey chart (see `outer`). Fresh
  * Kills went under garbage from 1948 over two decades; 1958 is halfway.
  */
 export interface LostWater {
@@ -39,4 +40,9 @@ export const lostWaters: LostWater[] = [
   { id: "coney-island-creek", name: "Coney Island Creek", kind: "stream", until: 1925, coords: [-73.968, 40.583], aka: "Coney Island Brooklyn Gravesend", outer: true },
   { id: "jamaica-bay-marshes", name: "Idlewild marshes", kind: "marsh", until: 1948, coords: [-73.79, 40.645], aka: "Jamaica Bay Idlewild airport JFK Kennedy Queens", outer: true },
   { id: "fresh-kills", name: "Fresh Kills marshes", kind: "marsh", until: 1958, coords: [-74.185, 40.583], aka: "Staten Island landfill Arthur Kill", outer: true },
+  // ----- Before the 1890s, from the 1845 Coast Survey chart -----
+  { id: "gowanus-marshes", name: "Gowanus marshes", kind: "marsh", until: 1865, coords: [-73.993, 40.676], aka: "Gowanus Creek Gowanus Canal Brooklyn", outer: true },
+  { id: "red-hook-marshes", name: "Red Hook marshes", kind: "marsh", until: 1865, coords: [-74.009, 40.677], aka: "Red Hook Atlantic Docks Erie Basin Brooklyn", outer: true },
+  { id: "greenpoint-marshes", name: "Greenpoint marshes", kind: "marsh", until: 1865, coords: [-73.947, 40.734], aka: "Newtown Creek Greenpoint Bushwick Creek Brooklyn", outer: true },
+  { id: "wallabout-bay", name: "Wallabout Bay", kind: "marsh", until: 1910, coords: [-73.969, 40.702], aka: "Wallabout Navy Yard Brooklyn", outer: true },
 ];

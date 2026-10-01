@@ -51,9 +51,12 @@ describe("the other boroughs' lost landscape", () => {
     const inCity = ([lon, lat]: number[]) => lon > -74.27 && lon < -73.69 && lat > 40.49 && lat < 40.92;
     expect(outer.fill.length).toBeGreaterThan(10);
     for (const f of outer.fill) {
-      expect(f.until, "filled after the 1890s surveys").toBeGreaterThanOrEqual(1893);
+      expect(f.until, "filled after the 1845 chart").toBeGreaterThanOrEqual(1847);
       expect(f.until).toBeLessThanOrEqual(1975);
       for (const ring of f.rings) for (const p of ring) expect(inCity(p)).toBe(true);
+      // Before the 1890s surveys, only the 1845 Coast Survey chart dates a
+      // fill, and it stops south of the Bronx.
+      if (f.until < 1893) for (const ring of f.rings) for (const [, lat] of ring) expect(lat).toBeLessThan(40.76);
     }
     expect(outer.stillWet.length).toBeGreaterThan(0);
   });
