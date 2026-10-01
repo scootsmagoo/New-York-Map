@@ -623,4 +623,51 @@ export const antebellumEntries: Entry[] = [
     coords: [-73.8869, 40.6889],
     lifespan: [1858, null],
   },
+  {
+    id: "fort-hamilton",
+    era: "antebellum",
+    kind: "place",
+    title: "Fort Hamilton",
+    wikiTitle: "Fort Hamilton",
+    year: 1825,
+    yearLabel: "1825–31",
+    blurb:
+      "Simon Bernard, once one of Napoleon's engineers, laid the cornerstone in 1825 of this fort guarding the Narrows; it was finished in 1831. On the same spot an American battery had fired on HMS Asia on July 4, 1776.",
+    coords: [-74.0308, 40.6061],
+    lifespan: [1831, null],
+  },
+  {
+    id: "williamsburgh",
+    era: "antebellum",
+    kind: "place",
+    title: "Williamsburgh",
+    wikiTitle: "Williamsburg, Brooklyn",
+    year: 1827,
+    blurb:
+      "In 1802 the speculator Richard M. Woodhull bought 13 acres on the river here and named them for Jonathan Williams, the engineer who surveyed them. Williamsburgh was incorporated as a village in 1827, had 11,500 people by 1845, and was a city of its own until Brooklyn annexed it in 1855 and dropped the h.",
+    coords: [-73.963, 40.714],
+  },
+  {
+    id: "brooklyn-city-hall",
+    era: "antebellum",
+    kind: "place",
+    title: "Brooklyn City Hall",
+    wikiTitle: "Brooklyn Borough Hall",
+    year: 1848,
+    blurb:
+      "Brooklyn got its city charter in 1834 and laid this city hall's cornerstone in 1836 on land given by the Remsen and Pierrepont families. Work stopped until money came again in 1845, and the Greek Revival building was finished in Tuckahoe marble in 1848. It has been Borough Hall since 1898.",
+    coords: [-73.99, 40.6928],
+    lifespan: [1848, null],
+  },
+  {
+    id: "cypress-hills",
+    era: "antebellum",
+    kind: "place",
+    title: "Cypress Hills Cemetery",
+    wikiTitle: "Cypress Hills Cemetery",
+    year: 1848,
+    blurb:
+      "Dedicated in 1848, the city's first non-sectarian cemetery corporation was laid out as a rural cemetery on the hills along the Brooklyn–Queens line. A corner became a national cemetery for Civil War soldiers in 1862.",
+    coords: [-73.8768, 40.6963],
+  },
 ];

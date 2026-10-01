@@ -648,4 +648,28 @@ export const capitalWorldEntries: Entry[] = [
     coords: [-73.9578, 40.7475],
     lifespan: [1940, null],
   },
+  {
+    id: "coney-cyclone",
+    era: "capitalWorld",
+    kind: "place",
+    title: "The Cyclone",
+    wikiTitle: "Coney Island Cyclone",
+    year: 1927,
+    blurb:
+      "Vernon Keenan's wooden roller coaster opened at Coney Island on June 26, 1927, on the site of the Giant Racer (1911–26).",
+    coords: [-73.9778, 40.5742],
+    lifespan: [1927, null],
+  },
+  {
+    id: "williamsburgh-bank-tower",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Williamsburgh Savings Bank Tower",
+    wikiTitle: "Williamsburgh Savings Bank Tower",
+    year: 1929,
+    blurb:
+      "The bank, chartered in Williamsburgh in 1851, built this tower at Hanson Place in 1927–29 and opened on its lowest floors on April 1, 1929, renting the stories above as offices.",
+    coords: [-73.9778, 40.6856],
+    lifespan: [1929, null],
+  },
 ];

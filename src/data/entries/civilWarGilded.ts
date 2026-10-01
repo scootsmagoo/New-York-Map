@@ -549,4 +549,15 @@ export const civilWarGildedEntries: Entry[] = [
       "Harbor sand dredged from 1860 was piled off South Beach into two islands. Swinburne, developed in 1870 by the Civil War surgeon it is named for, became a quarantine hospital for sick steerage passengers; Hoffman was finished beside it in 1873. The country's last cholera patients were held on Swinburne in 1910–11.",
     coords: [-74.0525, 40.5722],
   },
+  {
+    id: "manhattan-beach",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Manhattan Beach",
+    wikiTitle: "Manhattan Beach, Brooklyn",
+    year: 1877,
+    blurb:
+      "Austin Corbin, the banker who later ran the Long Island Rail Road, built the Manhattan Beach Hotel in 1877 and the grander Oriental in 1880, with Sousa's band and fireworks every night. He barred Jews from the resort.",
+    coords: [-73.944, 40.578],
+  },
 ];

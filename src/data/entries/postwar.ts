@@ -543,4 +543,16 @@ export const postwarEntries: Entry[] = [
     coords: [-74.1656, 40.5817],
     lifespan: [1973, null],
   },
+  {
+    id: "heights-promenade",
+    era: "postwar",
+    kind: "place",
+    title: "Brooklyn Heights Promenade",
+    wikiTitle: "Brooklyn Heights Promenade",
+    year: 1950,
+    blurb:
+      "When Moses proposed running the Brooklyn–Queens Expressway through Brooklyn Heights in 1941, residents fought it off; the road went along Furman Street instead, and a walkway was cantilevered over it. The Promenade opened in 1950–51, with the harbor and lower Manhattan laid out below.",
+    coords: [-73.9973, 40.6975],
+    lifespan: [1950, null],
+  },
 ];

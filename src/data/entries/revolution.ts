@@ -275,4 +275,15 @@ export const revolutionEntries: Entry[] = [
       "On September 11, 1776, Benjamin Franklin, John Adams, and Edward Rutledge met Admiral Lord Howe at Christopher Billopp's stone house; they refused his terms, which required revoking independence first.",
     coords: [-74.2538, 40.5029],
   },
+  {
+    id: "new-utrecht-liberty-pole",
+    era: "revolution",
+    kind: "event",
+    title: "New Utrecht's liberty pole",
+    wikiTitle: "New Utrecht Reformed Church",
+    year: 1783,
+    blurb:
+      "As the British prepared to leave in 1783, New Utrecht raised a liberty pole to jeer them on their way. The pole beside the Reformed Church, whose graveyard dates to 1654, is the sixth on the spot.",
+    coords: [-74.0008, 40.6083],
+  },
 ];

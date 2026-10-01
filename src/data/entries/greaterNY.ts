@@ -736,4 +736,16 @@ export const greaterNYEntries: Entry[] = [
       "Founded in Rochester in 1883 as a Lutheran seminary, Wagner College moved in 1918 to the former Cunard estate on Grymes Hill, whose mansion of 1851 is now Cunard Hall.",
     coords: [-74.094, 40.615],
   },
+  {
+    id: "prison-ship-monument",
+    era: "greaterNY",
+    kind: "place",
+    title: "Prison Ship Martyrs' Monument",
+    wikiTitle: "Prison Ship Martyrs' Monument",
+    year: 1908,
+    blurb:
+      "The bones of the more than 11,500 Americans who died on sixteen British prison ships lay along the Wallabout shore for decades. They were gathered in 1808, moved in 1873 to a crypt in Fort Greene Park, and crowned with this monument, dedicated by President-elect Taft in 1908.",
+    coords: [-73.9756, 40.6918],
+    lifespan: [1908, null],
+  },
 ];

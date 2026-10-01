@@ -341,4 +341,39 @@ export const earlyRepublicEntries: Entry[] = [
       "The Morris family's estate across the Harlem River, home to Lewis Morris, signer of the Declaration of Independence, and Gouverneur Morris, who wrote out the Constitution and is buried nearby at St. Ann's Church. In 1790 Lewis offered it as the site of the federal capital. It stayed farmland until his nephew Gouverneur Morris Jr. let a railroad cross it about 1840.",
     coords: [-73.904, 40.832],
   },
+  {
+    id: "erasmus-hall",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "Erasmus Hall Academy",
+    wikiTitle: "Erasmus Hall High School",
+    year: 1786,
+    blurb:
+      "Founded in 1786 on land given by the Flatbush Reformed Church, Erasmus Hall was the first secondary school chartered by the New York State Regents; its clapboard schoolhouse opened in 1787 with 26 students. The city took it into the public schools in 1896.",
+    coords: [-73.9578, 40.6494],
+    lifespan: [1787, null],
+  },
+  {
+    id: "lott-house",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "Hendrick I. Lott House",
+    wikiTitle: "Hendrick I. Lott House",
+    year: 1800,
+    blurb:
+      "Hendrick Lott built this Flatlands farmhouse in 1800 around the 1720 homestead of his grandfather Johannes, and it stands nearly as he left it.",
+    coords: [-73.9328, 40.6103],
+    lifespan: [1800, null],
+  },
+  {
+    id: "pierrepont",
+    era: "earlyRepublic",
+    kind: "person",
+    title: "Hezekiah Pierrepont",
+    wikiTitle: "Hezekiah Pierrepont",
+    year: 1814,
+    blurb:
+      "A merchant who bought 60 acres on Clover Hill, today's Brooklyn Heights, and backed Robert Fulton's steam ferry so Manhattan merchants could live across the river. The ferry ran from 1814, Brooklyn became a village in 1816, and his big lots south of Clark Street made the Heights a suburb.",
+    coords: [-73.9945, 40.695],
+  },
 ];

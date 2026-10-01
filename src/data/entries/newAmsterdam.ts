@@ -339,4 +339,48 @@ export const newAmsterdamEntries: Entry[] = [
     coords: [-74.1008, 40.5928],
     lifespan: [1662, null],
   },
+  {
+    id: "amersfoort",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Nieuw Amersfoort (Flatlands)",
+    wikiTitle: "Flatlands, Brooklyn",
+    year: 1636,
+    blurb:
+      "Wolfert Gerritse Van Couwenhoven and Andries Hudde started a farming settlement here in 1636, named for the Dutch city of Amersfoort; Stuyvesant gave it local rule in 1661 as one of the Dutch towns on Long Island. Its farm families held enslaved Black workers until New York's emancipation in 1827.",
+    coords: [-73.935, 40.621],
+  },
+  {
+    id: "lady-moody",
+    era: "newAmsterdam",
+    kind: "person",
+    title: "Lady Deborah Moody",
+    wikiTitle: "Deborah Moody",
+    year: 1645,
+    blurb:
+      "An English widow put on trial for religious dissent in Massachusetts in 1643, she brought her followers to New Netherland and in 1645 received a patent for the English town of Gravesend, taking in all of Coney Island. She is the only European woman known to have founded a settlement in North America.",
+    coords: [-73.971, 40.598],
+  },
+  {
+    id: "new-utrecht",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "New Utrecht",
+    wikiTitle: "New Utrecht, Brooklyn",
+    year: 1652,
+    blurb:
+      "The land went first, in 1643, to Anthony Janszoon van Salee, the half-Dutch, half-Moroccan son of a pirate. Cornelius van Werckhoven took it over in 1652, and after his death Jacques Cortelyou sold lots for a town, the last of Kings County's original six. It covered today's Bay Ridge, Bensonhurst, and Dyker Heights.",
+    coords: [-74.0033, 40.61],
+  },
+  {
+    id: "boswijck",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Boswijck (Bushwick)",
+    wikiTitle: "Bushwick, Brooklyn",
+    year: 1661,
+    blurb:
+      "Fourteen French Huguenot settlers and their Dutch interpreter, Peter Jan De Wit, settled between Bushwick and Newtown creeks in February 1660, and Stuyvesant chartered the town as Boswijck in 1661. Bushwick took in today's Williamsburg and Greenpoint until it joined the City of Brooklyn in 1854.",
+    coords: [-73.917, 40.697],
+  },
 ];

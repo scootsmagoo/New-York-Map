@@ -968,6 +968,68 @@ export const tours: Tour[] = [
       },
     ],
   },
+  {
+    id: "hudson",
+    area: "citywide",
+    title: "Crossing the Hudson",
+    subtitle: "Ferries, tunnels, and a bridge to New Jersey, 1661–1967",
+    stops: [
+      {
+        year: 1661,
+        title: "A ferry from the fort",
+        text: "Stuyvesant chartered a ferry from Fort Amsterdam to Communipaw, the farm village on the Jersey shore, rowed or sailed across. In one form or another it ran for three centuries. Zoom in: the dashed lines on the water are ferry routes, each drawn while it ran.",
+        focus: { coords: [-74.026, 40.706], k: 3.2 },
+        entryId: "stuyvesant",
+      },
+      {
+        year: 1764,
+        title: "The Paulus Hook ferry",
+        text: "A ferry from Cortlandt Street to Paulus Hook, later Jersey City's Exchange Place, began in 1764. It ran for 185 years, the last of them for the Pennsylvania Railroad.",
+        focus: { coords: [-74.022, 40.713], k: 3.6 },
+      },
+      {
+        year: 1812,
+        title: "Steam, and a monopoly",
+        text: "In 1812 steamboats went to work on the Paulus Hook ferry and the Hoboken ferry from Barclay Street. The Hoboken boat, the Juliana, was soon withdrawn for a horse-powered boat, almost certainly because Fulton and Livingston held a monopoly on steam in New York waters.",
+        focus: { coords: [-74.02, 40.718], k: 3.4 },
+        entryId: "fulton",
+      },
+      {
+        year: 1900,
+        title: "End of the line: the Jersey shore",
+        text: "The railroads from the south and west stopped at the river: the Jersey Central at Communipaw, the Pennsylvania at Exchange Place, the Erie at Pavonia, the Lackawanna at Hoboken, the West Shore at Weehawken. Their passengers finished the trip by ferry, and the routes fanned out across the Hudson to a row of Manhattan slips.",
+        focus: { coords: [-74.021, 40.722], k: 3 },
+      },
+      {
+        year: 1910,
+        title: "Under the river",
+        text: "The Pennsylvania Railroad tunneled under the Hudson and opened Penn Station in 1910, so its trains no longer stopped at the water. Its Desbrosses Street ferry hung on until 1930.",
+        focus: { coords: [-73.9935, 40.7506], k: 3 },
+        entryId: "penn-station",
+      },
+      {
+        year: 1927,
+        title: "A tunnel for cars",
+        text: "The Holland Tunnel opened in 1927 from Canal Street to Jersey City, its giant fans changing the air every 90 seconds so drivers did not choke on exhaust.",
+        focus: { coords: [-74.012, 40.726], k: 3.6 },
+        entryId: "holland-tunnel",
+      },
+      {
+        year: 1937,
+        title: "Bridge and tunnels",
+        text: "The George Washington Bridge (1931) and the Lincoln Tunnel (1937) followed. One by one the ferries quit: Desbrosses Street in 1930, 125th Street in 1941, Paulus Hook in 1949.",
+        focus: { coords: [-73.975, 40.8], k: 2.2 },
+        entryId: "gw-bridge",
+      },
+      {
+        year: 1968,
+        title: "The last ferry",
+        text: "The Erie Lackawanna's Hoboken boats and the Jersey Central's Liberty Street boats made their last runs in 1967. For the first time in three centuries no ferry crossed the Hudson, until service came back in 1989. Only the Staten Island ferry sailed on.",
+        focus: { coords: [-74.02, 40.715], k: 3.2 },
+        entryId: "municipal-ferry",
+      },
+    ],
+  },
 ];
 
 export function tourById(id: string): Tour | undefined {
