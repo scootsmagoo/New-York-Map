@@ -10,7 +10,7 @@ bounds.
 
 Input: data-raw/coast-survey/hassler-loc-1845.jpg (see
 scripts/lost-landscape-outer/README.md for the download).
-Output: public/overlays/coast-survey-1845.jpg; the bounds it prints go in
+Output: public/overlays/coast-survey-1845.webp; the bounds it prints go in
 historicalOverlays.ts.
 Run: .venv/bin/python scripts/prepare-coast-survey-overlay.py
 """
@@ -23,7 +23,10 @@ from scipy import ndimage
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "data-raw/coast-survey/hassler-loc-1845.jpg"
-OUT = ROOT / "public/overlays/coast-survey-1845.jpg"
+OUT = ROOT / "public/overlays/coast-survey-1845.webp"
+# The chart stops at its top border, across Queens: fade the top this many
+# pixels (~1 km) into transparency rather than ending in a hard line.
+FADE = 120
 TRACE = json.loads((ROOT / "scripts/lost-landscape-outer/hassler-1845.json").read_text())
 
 # Brooklyn, southern Queens, and Staten Island, up to just inside the
@@ -64,6 +67,10 @@ chart = ndimage.gaussian_filter(chart, sigma=(1.0, 1.0, 0))
 out = np.stack(
     [ndimage.map_coordinates(chart[:, :, c], [cy, cx], order=1, mode="nearest") for c in range(3)], -1
 )
-Image.fromarray(out.clip(0, 255).astype(np.uint8)).save(OUT, quality=72, optimize=True, progressive=True)
+alpha = np.full(out.shape[:2], 255.0)
+ramp = np.clip((np.arange(height) + 0.5) / FADE, 0, 1)
+alpha *= (ramp * ramp * (3 - 2 * ramp))[:, None]
+rgba = np.dstack([out.clip(0, 255), alpha]).astype(np.uint8)
+Image.fromarray(rgba, "RGBA").save(OUT, quality=70, method=6)
 print(f"{OUT.relative_to(ROOT)}: {WIDTH}×{height}, {OUT.stat().st_size // 1024} KB")
 print(f"bounds: west {WEST}, south {SOUTH}, east {EAST}, north {NORTH}")

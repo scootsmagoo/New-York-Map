@@ -189,7 +189,7 @@ test("historical maps are placed by landmarks, not stretched boxes", async ({ pa
 test("the 1845 Coast Survey chart covers the other boroughs", async ({ page }) => {
   await open(page, "#year=1845");
   await toggleLayer(page, "Show overlays");
-  const chart = page.locator('.historical-overlay[href$="coast-survey-1845.jpg"]');
+  const chart = page.locator('.historical-overlay[href$="coast-survey-1845.webp"]');
   await expect(chart).toBeAttached();
   // Its own clip (Manhattan has the Viele and Ratzer sheets), and on.
   await expect(chart.locator("xpath=..")).toHaveAttribute("clip-path", "url(#outer-clip)");

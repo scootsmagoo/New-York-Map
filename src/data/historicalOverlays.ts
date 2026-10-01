@@ -105,7 +105,7 @@ export const HISTORICAL_OVERLAYS: HistoricalOverlay[] = [
     label: "Coast Survey chart (1845)",
     shortLabel: "Coast Survey",
     year: 1845,
-    src: "./overlays/coast-survey-1845.jpg",
+    src: "./overlays/coast-survey-1845.webp",
     // The whole harbor needs a second-order fit to its 13 landmarks (~57 m),
     // so it is warped north-up in advance (scripts/prepare-coast-survey-
     // overlay.py) and placed by its bounds. Drawn over Brooklyn, southern
