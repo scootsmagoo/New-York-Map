@@ -64,62 +64,81 @@ npm run dev      # open http://localhost:5173
   on screen in the current year and zoom.
 - Map and timeline markers are keyboard-reachable: Tab to one, Enter to open.
 
-## Status (as of 2026-09-28)
+## Status (as of 2026-10-01)
 
 Everything below is on `main` and live at
-https://scootsmagoo.github.io/New-York-Map/. 90 unit tests and 61 browser
-tests (desktop WebKit and Chromium, plus an emulated iPhone upright and
-on its side) run on every
-push, and a failure stops the deploy. A pan frame-rate check runs locally
+https://scootsmagoo.github.io/New-York-Map/. 104 unit tests and 57 browser
+tests (122 runs across desktop WebKit and Chromium and an emulated iPhone,
+upright and on its side) run on every push, in Playwright's own container
+image, and a failure stops the deploy. A pan frame-rate check runs locally
 (CI has no GPU).
 
 **Where things stand**
 
 - The timeline runs from Lenapehoking to 1975 across ten eras, with about
-  400 entries. The tenth, **The Postwar City (1945–1975)**, carries
+  420 entries. The tenth, **The Postwar City (1945–1975)**, carries
   every layer on: expressways, parkways, and the Verrazzano as they open,
   the suburbs of Queens and Staten Island filling in, the last trolleys,
   Lincoln Center, Stonewall, and the fiscal crisis.
+- **All five boroughs in detail.** Manhattan's grid as it was opened and
+  every outer-borough street dated block by block, with the built-up areas
+  drawn from them; 35 to 130 markers per borough; and a borough filter in
+  *Explore this era* and search.
+- **How the city moved:** els and subways in four boroughs, railroads from
+  1834 (drawn with cross ties), streetcars, 18 ferries and 34 bridges,
+  parkways and expressways, each appearing and disappearing on its dates.
+- **Layers** (⋯ menu): street and neighborhood names, the lost landscape
+  of every borough, the working waterfront, streetcars, public housing,
+  and fires & epidemics.
 - **Phones, either way up.** Turned on its side, a phone gets a one-row
   header and a slimmer timeline so the map has most of the screen; tour
-  cards dock to the side. Turning the phone keeps the map where it was
-  (it used to vanish until a reload). The map runs under an iPhone's
-  notch; the controls stay clear of it.
+  cards dock to the side. Turning the phone keeps the map where it was.
+  The map runs under an iPhone's notch; the controls stay clear of it.
 - **Built on the *Gotham* trilogy.** Entry cards cite the chapter and
   pages that cover them in *Gotham*, *Greater Gotham*, or *Gotham at War*
   ("Read more:"), and margin notes say how that volume treats the subject.
   The 1920s fall between the volumes and have neither. Blurbs were
   checked against the books; see
-  [docs/BOOK_REFERENCE.md](docs/BOOK_REFERENCE.md).
+  [docs/BOOK_REFERENCE.md](docs/BOOK_REFERENCE.md). Entries beyond the
+  books (the postwar city, much of the outer boroughs) are written from
+  Wikipedia.
 - **Accessibility (WCAG 2.2 AA pass, 2026-09-26).** Every main screen is
   checked by axe in the browser tests. Text and map labels meet 4.5:1
   contrast, the timeline's playhead is a keyboard slider (arrows, Page
   Up/Down, Home/End) that reads out the year and era, search follows the
   combobox pattern, tours announce each stop, and single-key shortcuts
   work only when the map or timeline has focus.
-- **Nine tours** (⋯ menu, or `#tour=<id>`): the grid, the East River,
-  fire and water, Moses, the island remade, *Slavery and Freedom*,
-  *New York at War*, *A City of Riots*, and *The Rich Move Uptown*.
+- **Sixteen tours** (⋯ menu, by borough, or `#tour=<id>`): the grid, the
+  East River, fire and water, Moses, horsecar to bus, one for each outer
+  borough, the postwar city, the island remade, *Slavery and Freedom*,
+  *New York at War*, *A City of Riots*, *The Rich Move Uptown*, and
+  *Crossing the Hudson*.
 - **Then & Now** compares any two years. It opens on two different years,
   and both can be typed.
-- **Street names** cover every named street in all five boroughs, from
-  NYC's street centerlines. A name appears when the built-up area reaches
-  it, so the timing is approximate. Well-known renamings show their older
-  names; obscure ones may not.
-- **Neighborhood names** (about 70 places) use the names of their day.
-- The Manhattan grid, elevated trains, and subways sit on the real avenues
-  and streets; so do the els and subways of Brooklyn, Queens, and the
-  Bronx.
 - On phones: pinch the timeline with two fingers, and *Explore this era*
   opens as a bottom sheet.
-- Street and neighborhood names had no measurable effect on panning or
-  scrubbing speed in Safari's engine.
 
 **Next up** (details in PROJECT.md → Future features)
 
-*Done 2026-09-26/27:* the "Things to try" card, *Fires & epidemics*,
-*Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
-out the early eras (above).
+*Keeping it working*
+- Check search on a real iPhone: the keyboard should come up on the first
+  tap. Emulators can't show the iOS rule this works around.
+
+*More history*
+- More entries from the candidate list in docs/BOOK_REFERENCE.md,
+  especially *Greater Gotham*'s people and places for 1898–1919.
+- Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
+  marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
+- Past 1975: the city's comeback, the 1977 blackout, the modern city.
+- Audio per era.
+
+**Done**, newest first:
+
+*Done 2026-10-01 (last):* 17 early-Brooklyn entries (Nieuw Amersfoort,
+Lady Deborah Moody's Gravesend, New Utrecht, Boswijck, Erasmus Hall, Fort
+Hamilton, Williamsburgh, Brooklyn's City Hall, Manhattan Beach, the
+Promenade…) and a *Crossing the Hudson* tour, from Stuyvesant's
+Communipaw ferry to the last Hudson ferry in 1967.
 
 *Done 2026-10-01 (later):* 21 more Staten Island and Queens entries, from
 the Lenape burial ground at Ward's Point and the island's oldest house to
@@ -165,17 +184,9 @@ dated block by block; the built-up areas drawn from them; their marshes
 and shallows in the lost landscape; 78 new entries; and the map layers
 grouped in the ⋯ menu.
 
-*Keeping it working*
-- Check search on a real iPhone: the keyboard should come up on the first
-  tap. Emulators can't show the iOS rule this works around.
-
-*More history*
-- More entries from the candidate list in docs/BOOK_REFERENCE.md,
-  especially *Greater Gotham*'s people and places for 1898–1919.
-- Lost landscape before the 1890s outside Manhattan (Gowanus Creek's
-  marshes, Wallabout Bay), from an 1840s U.S. Coast Survey chart.
-- Past 1975: the city's comeback, the 1977 blackout, the modern city.
-- Audio per era.
+*Done 2026-09-26/27:* the "Things to try" card, *Fires & epidemics*,
+*Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
+out the early eras.
 
 **Done: React 19.3** (2026-09-26). Upgraded from 19.2.7, following the
 plan researched from the [release post](https://react.dev/blog/2026/09/09/react-19-3)
