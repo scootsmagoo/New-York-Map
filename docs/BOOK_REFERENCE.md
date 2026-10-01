@@ -363,6 +363,16 @@ Schneiderman, Elizabeth Gurley Flynn, John Sloan, Irving Berlin.
 - The UN chooses Manhattan (Epilogs). This is 1946, just past the
   timeline's end; a candidate if the timeline ever goes past 1945.
 
+*Added 2026-10-01:* Washington Heights as the "Fourth Reich" (p. 27), the
+1941 bus boycott (p. 347–48), Minton's (p. 637–39), the dim-out
+(p. 381–84), Art of This Century (p. 651–56), and Sinatra at the
+Paramount (p. 633–34). Already entries: the Bund rally, Columbia, the
+*Normandie*, Stuyvesant Town, the 1943 riot. Still open: the 1933 boycott
+and the Lincoln Brigade (no single place to mark), the 1935 Ethiopia
+protests (at Abyssinian, where the bus boycott now sits), "We Will Never
+Die" (Madison Square Garden, where the Bund rally sits), British Security
+Coordination (beside the Rockefeller Center marker).
+
 **Heavily indexed local figures with no entry yet:** Thomas Dewey (32;
 the racket-busting D.A.), Herbert Lehman (28), A. Philip Randolph (24),
 Vito Marcantonio (22; East Harlem), Adam Clayton Powell Jr. (22), Walter

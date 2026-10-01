@@ -672,4 +672,80 @@ export const capitalWorldEntries: Entry[] = [
     coords: [-73.9778, 40.6856],
     lifespan: [1929, null],
   },
+  {
+    id: "fourth-reich",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Washington Heights, the \"Fourth Reich\"",
+    wikiTitle: "Washington Heights, Manhattan",
+    year: 1940,
+    blurb:
+      "German Jews who escaped the Nazis made Washington Heights the largest and most concentrated German Jewish community in the United States. By 1940 the blocks around 158th Street, between Broadway and Fort Washington Avenue, were known as the \"Fourth Reich.\"",
+    gotham:
+      "Gotham at War notes that religion counted for more uptown than on the Upper West Side, with the Orthodox prominent beyond their numbers.",
+    coords: [-73.9443, 40.8346],
+  },
+  {
+    id: "bus-boycott-1941",
+    era: "capitalWorld",
+    kind: "event",
+    title: "The Harlem bus boycott",
+    wikiTitle: "Adam Clayton Powell Jr.",
+    year: 1941,
+    blurb:
+      "When the Transport Workers Union ended its March 1941 strike against the Fifth Avenue Coach and Omnibus lines, Adam Clayton Powell Jr.'s committee told Harlem to keep walking. The boycott won, on April 19, an agreement giving the next 100 driver jobs and 70 maintenance jobs to Black workers, and Powell announced from the pulpit of Abyssinian Baptist that he would run for the City Council.",
+    gotham:
+      "Gotham at War tells it as the making of Powell, who rode the victory into the City Council that fall.",
+    coords: [-73.9408, 40.8166],
+  },
+  {
+    id: "mintons",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Minton's Playhouse",
+    wikiTitle: "Minton's Playhouse",
+    year: 1941,
+    blurb:
+      "After their regular gigs, often in all-white clubs, Black musicians came up to Minton's at 218 West 118th Street to jam until dawn. Kenny Clarke ran the house band, Thelonious Monk played piano, and with Dizzy Gillespie and Charlie Parker they worked out the music that would be called bebop.",
+    gotham:
+      "Gotham at War traces bebop's sudden arrival on 52nd Street back to these after-hours sessions uptown.",
+    coords: [-73.9522, 40.8048],
+  },
+  {
+    id: "dimout-1942",
+    era: "capitalWorld",
+    kind: "event",
+    title: "The dim-out",
+    wikiTitle: "Second Happy Time",
+    year: 1942,
+    blurb:
+      "With U-boats sinking ships off the coast against the glow of the city, the lights went down. Streetlamps were dimmed from January 1942; Times Square's great signs were cut 95 percent or switched off; the Statue of Liberty's torch went dark, and Coney Island went dark for the duration.",
+    gotham:
+      "Gotham at War notes that La Guardia meant to keep the lights blazing, and it took a mighty nudge from the military to make the city switch off.",
+    coords: [-73.981, 40.5728],
+  },
+  {
+    id: "art-of-this-century",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Art of This Century",
+    wikiTitle: "Art of This Century gallery",
+    year: 1942,
+    blurb:
+      "Peggy Guggenheim opened her gallery at 30 West 57th Street in October 1942. Its 1943 Spring Salon for young artists brought in Jackson Pollock, out of work since the WPA ended, and his first solo show followed that fall.",
+    coords: [-73.975, 40.7635],
+  },
+  {
+    id: "sinatra-paramount",
+    era: "capitalWorld",
+    kind: "event",
+    title: "Sinatra at the Paramount",
+    wikiTitle: "Paramount Theatre (Manhattan)",
+    year: 1944,
+    blurb:
+      "When Frank Sinatra stepped onstage at the Paramount on Times Square, a wall of screaming from teenage girls froze Benny Goodman's baton. On October 12, 1944, his return engagement drew so many frantic bobbysoxers that the police had to hold back the crowds.",
+    gotham:
+      "Gotham at War hears the end of the big bands in those screams.",
+    coords: [-73.9866, 40.7571],
+  },
 ];

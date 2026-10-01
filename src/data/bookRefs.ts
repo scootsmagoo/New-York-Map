@@ -766,4 +766,10 @@ export const bookRefs: Record<string, BookRef> = {
   "rosenthal-murder": { book: "greaterGotham", chapter: "17. Repressives › Gambling" },
   "paterson-pageant": { book: "greaterGotham", chapter: "20. Bending Gender › Counterculture" },
   "tannenbaum-1914": { book: "greaterGotham", chapter: "19. Radicals › The Army of the Unemployed" },
+  "fourth-reich": { book: "gothamAtWar", chapter: "Nazis and New York", pages: "27" },
+  "bus-boycott-1941": { book: "gothamAtWar", chapter: "Gotham Girds for War", pages: "347–48" },
+  "mintons": { book: "gothamAtWar", chapter: "On the Town", pages: "637–39" },
+  "dimout-1942": { book: "gothamAtWar", chapter: "Under the Gun", pages: "381–84" },
+  "art-of-this-century": { book: "gothamAtWar", chapter: "On the Town", pages: "651–56" },
+  "sinatra-paramount": { book: "gothamAtWar", chapter: "On the Town", pages: "633–34" },
 };

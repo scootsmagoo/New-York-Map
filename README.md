@@ -108,11 +108,11 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
   Up/Down, Home/End) that reads out the year and era, search follows the
   combobox pattern, tours announce each stop, and single-key shortcuts
   work only when the map or timeline has focus.
-- **Sixteen tours** (⋯ menu, by borough, or `#tour=<id>`): the grid, the
+- **Seventeen tours** (⋯ menu, by borough, or `#tour=<id>`): the grid, the
   East River, fire and water, Moses, horsecar to bus, one for each outer
   borough, the postwar city, the island remade, *Slavery and Freedom*,
-  *New York at War*, *A City of Riots*, *The Rich Move Uptown*, and
-  *Crossing the Hudson*.
+  *New York at War*, *A City of Riots*, *The Rich Move Uptown*,
+  *Crossing the Hudson*, and *Marsh to Runway*.
 - **Then & Now** compares any two years. It opens on two different years,
   and both can be typed.
 - On phones: pinch the timeline with two fingers, and *Explore this era*
@@ -131,6 +131,12 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 - Audio per era.
 
 **Done**, newest first:
+
+*Done 2026-10-02:* six entries for 1933–45 cited to *Gotham at War*
+(Washington Heights' "Fourth Reich," the 1941 bus boycott, Minton's, the
+dim-out, Art of This Century, Sinatra at the Paramount); a *Marsh to
+Runway* tour of the outer boroughs' filled shores; and a fix for tours
+opened from a link, whose first stop never flew the camera.
 
 *Done 2026-10-01 (late):* 12 entries for 1898–1919 cited to *Greater
 Gotham* (the Tenderloin riot, the Panic of 1907, the Hudson tubes, the
