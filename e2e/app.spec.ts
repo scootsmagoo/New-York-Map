@@ -196,6 +196,18 @@ test("the 1845 Coast Survey chart covers the other boroughs", async ({ page }) =
   await expect.poll(() => chart.evaluate((el) => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.5);
 });
 
+test("a tour opened from a link flies to its first stop", async ({ page }) => {
+  // The first stop's flight used to be cut short when the layout settled on
+  // first load, leaving the whole city in view.
+  await open(page, "#tour=grid");
+  const zoom = () =>
+    page.locator(".map-content").first().evaluate((g) => {
+      const m = /scale\(([\d.]+)\)/.exec(g.getAttribute("transform") ?? "");
+      return m ? Number(m[1]) : 1;
+    });
+  await expect.poll(zoom, { timeout: 5000 }).toBeGreaterThan(2.5);
+});
+
 test("the map key lists only what's on screen", async ({ page }) => {
   await open(page, "#year=1700");
   await page.getByRole("button", { name: "Key" }).click();

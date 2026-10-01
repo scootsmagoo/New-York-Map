@@ -322,6 +322,8 @@ function MapViewInner({
   const svgRef = useRef<SVGSVGElement>(null);
   const contentRef = useRef<SVGGElement>(null);
   const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+  /** True while the zoom setup interrupts transitions after a resize. */
+  const resizingCamera = useRef(false);
   const transformRef = useRef(zoomIdentity);
   const lodBandRef = useRef(zoomLodBand(1));
   const [zoomK, setZoomK] = useState(1);
@@ -435,7 +437,12 @@ function MapViewInner({
       });
     zoomRef.current = behavior;
     const sel = select(svg);
+    // Cutting short a tour flight here isn't the user taking over: the
+    // flight effect below runs again and flies on from wherever this leaves
+    // the view.
+    resizingCamera.current = true;
     sel.interrupt();
+    resizingCamera.current = false;
     sel.call(behavior);
     // Same place in the middle, same zoom, in the refitted projection. Set
     // through the behavior so d3's own record of the transform agrees.
@@ -510,15 +517,17 @@ function MapViewInner({
 
   // Guided-tour camera: fly to an explicit point and zoom, or pull back.
   // A token that arrives before the map has measured itself (a #tour deep
-  // link on first load) is applied once the projection exists; a resize
-  // afterwards must not re-fly, hence the applied-token ref.
+  // link on first load) is applied once the projection exists. It counts
+  // as applied when the flight lands, or when the user grabs the map
+  // mid-flight; a resize that cuts it short (the layout settling on first
+  // load) flies again, and a resize after it has landed doesn't.
   const appliedFocusToken = useRef(0);
   useEffect(() => {
     if (!focusPointToken || appliedFocusToken.current === focusPointToken) return;
     const svg = svgRef.current;
     const behavior = zoomRef.current;
     if (!svg || !behavior || !projection || !width || !height) return;
-    appliedFocusToken.current = focusPointToken;
+    const token = focusPointToken;
 
     let next = zoomIdentity;
     if (focusPoint) {
@@ -532,7 +541,13 @@ function MapViewInner({
     select(svg)
       .transition()
       .duration(900)
-      .call(behavior.transform as any, next);
+      .call(behavior.transform as any, next)
+      .on("end", () => {
+        appliedFocusToken.current = token;
+      })
+      .on("interrupt", () => {
+        if (!resizingCamera.current) appliedFocusToken.current = token;
+      });
   }, [focusPointToken, focusPoint, projection, width, height]);
 
   const resetZoom = () => {
