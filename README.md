@@ -76,7 +76,7 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 **Where things stand**
 
 - The timeline runs from Lenapehoking to 1975 across ten eras, with about
-  380 entries. The tenth, **The Postwar City (1945–1975)**, carries
+  400 entries. The tenth, **The Postwar City (1945–1975)**, carries
   every layer on: expressways, parkways, and the Verrazzano as they open,
   the suburbs of Queens and Staten Island filling in, the last trolleys,
   Lincoln Center, Stonewall, and the fiscal crisis.
@@ -120,6 +120,12 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Done 2026-09-26/27:* the "Things to try" card, *Fires & epidemics*,
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
+
+*Done 2026-10-01 (later):* 21 more Staten Island and Queens entries, from
+the Lenape burial ground at Ward's Point and the island's oldest house to
+the valley of ashes, Big Allis, and the Staten Island Mall; and the 1916
+polio epidemic, drawn on the fires & epidemics layer over the old South
+Brooklyn section where it began.
 
 *Done 2026-10-01:* 13 more ferries (Paulus Hook, Hoboken, Pavonia,
 Communipaw, Catharine, Wall Street, Hamilton Avenue, and others, each

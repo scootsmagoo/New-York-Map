@@ -613,4 +613,39 @@ export const capitalWorldEntries: Entry[] = [
     coords: [-73.9303, 40.8204],
     lifespan: [1935, null],
   },
+  {
+    id: "astoria-pool",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Astoria Pool",
+    wikiTitle: "Astoria Park",
+    year: 1936,
+    blurb:
+      "A WPA pool and bathhouse on the Hell Gate shore of Astoria Park, built in 1935–36 and used for the U.S. Olympic swimming trials in 1936, 1952, and 1964.",
+    coords: [-73.9219, 40.7794],
+    lifespan: [1936, null],
+  },
+  {
+    id: "queens-college",
+    era: "capitalWorld",
+    kind: "place",
+    title: "Queens College",
+    wikiTitle: "Queens College, City University of New York",
+    year: 1937,
+    blurb:
+      "The city opened Queens College in 1937 on the grounds of the New York Parental School, a home for troubled boys. The old Jamaica Academy, where Walt Whitman once worked, had stood on the site.",
+    coords: [-73.817, 40.737],
+  },
+  {
+    id: "pepsi-cola-sign",
+    era: "capitalWorld",
+    kind: "place",
+    title: "The Pepsi-Cola sign",
+    wikiTitle: "Pepsi-Cola sign",
+    year: 1940,
+    blurb:
+      "The red neon sign went up in 1940 on the roof of Pepsi-Cola's bottling plant in Long Island City, facing Manhattan across the East River.",
+    coords: [-73.9578, 40.7475],
+    lifespan: [1940, null],
+  },
 ];

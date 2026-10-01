@@ -600,4 +600,27 @@ export const antebellumEntries: Entry[] = [
     coords: [-73.9951, 40.6904],
     lifespan: [1844, null],
   },
+  {
+    id: "stapleton",
+    era: "antebellum",
+    kind: "place",
+    title: "Stapleton",
+    wikiTitle: "Stapleton, Staten Island",
+    year: 1836,
+    blurb:
+      "William J. Staples and his partner Tompkins ran a ferry from this shore to Manhattan and began advertising their new village in 1836, beside Seaman's Retreat, a hospital for sailors entering the harbor (1832). It stayed the island's main town until the Verrazzano Bridge drew business inland.",
+    coords: [-74.078, 40.627],
+  },
+  {
+    id: "ridgewood-reservoir",
+    era: "antebellum",
+    kind: "place",
+    title: "Ridgewood Reservoir",
+    wikiTitle: "Ridgewood Reservoir",
+    year: 1858,
+    blurb:
+      "Brooklyn, losing businesses for want of water as good as Manhattan's Croton supply, dug its reservoir just over the Queens line in 1856–58 and fed it from streams dammed across Queens and Long Island. By 1868 it held ten days' supply for the city.",
+    coords: [-73.8869, 40.6889],
+    lifespan: [1858, null],
+  },
 ];

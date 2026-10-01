@@ -304,4 +304,39 @@ export const newAmsterdamEntries: Entry[] = [
       "The Dutch let John Throckmorton, a New Englander who had followed Roger Williams, settle this neck with thirty-five others in 1642. He went back to Rhode Island, but his name stayed, worn down to Throgs; in October 1776 General Howe landed here trying to cut off Washington's army.",
     coords: [-73.82, 40.823],
   },
+  {
+    id: "middleburgh",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Middleburgh (Newtown)",
+    wikiTitle: "Elmhurst, Queens",
+    year: 1652,
+    blurb:
+      "English Puritans from Connecticut and Massachusetts founded the village of Middleburgh in 1652, under Dutch rule; after the English took over in 1664 it became Newtown. It is today's Elmhurst.",
+    coords: [-73.88, 40.74],
+  },
+  {
+    id: "jamaica-settled",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Jamaica settled",
+    wikiTitle: "Jamaica, Queens",
+    year: 1656,
+    blurb:
+      "Settlers paid the Native owners two guns, a coat, and some powder and lead for land by Beaver Pond in 1655, and founded Jamaica under Dutch rule the next year. It was the seat of Queens County from 1683 to 1788 and the first incorporated village on Long Island.",
+    coords: [-73.8, 40.7],
+  },
+  {
+    id: "billiou-house",
+    era: "newAmsterdam",
+    kind: "place",
+    title: "Billiou–Stillwell–Perine House",
+    wikiTitle: "Billiou–Stillwell–Perine House",
+    year: 1662,
+    yearLabel: "c. 1662",
+    blurb:
+      "Pierre Billiou, a Huguenot who reached New Amsterdam in 1661 and founded Oude Dorp (Old Town) that year, built the stone first section of this house about 1662; his son-in-law Thomas Stillwell enlarged it about 1680. It is the oldest building standing on Staten Island.",
+    coords: [-74.1008, 40.5928],
+    lifespan: [1662, null],
+  },
 ];

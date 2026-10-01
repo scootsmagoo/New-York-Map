@@ -496,4 +496,51 @@ export const postwarEntries: Entry[] = [
       "On August 11, 1973, DJ Kool Herc spun records at his sister Cindy Campbell's back-to-school party in this apartment house's rec room: often called the birth of hip hop.",
     coords: [-73.9244, 40.8472],
   },
+  {
+    id: "lefrak-city",
+    era: "postwar",
+    kind: "place",
+    title: "LeFrak City",
+    wikiTitle: "LeFrak City",
+    year: 1962,
+    blurb:
+      "4,605 apartments beside the new Long Island Expressway, built in 1962–71 for working- and middle-class families who couldn't afford Manhattan or didn't want it.",
+    coords: [-73.8625, 40.7364],
+    lifespan: [1962, null],
+  },
+  {
+    id: "ravenswood",
+    era: "postwar",
+    kind: "place",
+    title: "Ravenswood and Big Allis",
+    wikiTitle: "Ravenswood Generating Station",
+    year: 1963,
+    blurb:
+      "Con Edison's power plant on the Long Island City shore opened in 1963; its third unit, 'Big Allis' (1965), could make nearly 1,000 megawatts.",
+    coords: [-73.9458, 40.7597],
+    lifespan: [1963, null],
+  },
+  {
+    id: "kitty-genovese",
+    era: "postwar",
+    kind: "event",
+    title: "Kitty Genovese",
+    wikiTitle: "Murder of Kitty Genovese",
+    year: 1964,
+    blurb:
+      "Kitty Genovese, a 28-year-old bartender, was murdered outside her apartment building here on March 13, 1964. The Times reported that 37 witnesses saw or heard and did nothing; the account was later shown to be badly wrong, but it had already made her a byword for big-city indifference.",
+    coords: [-73.8303, 40.7094],
+  },
+  {
+    id: "si-mall",
+    era: "postwar",
+    kind: "place",
+    title: "Staten Island Mall",
+    wikiTitle: "Staten Island Mall",
+    year: 1973,
+    blurb:
+      "The borough's only indoor mall opened in 1973 in New Springville, on the site of the 1941 Staten Island Airport. Macy's and Abraham & Straus had signed on in 1964, the year the Verrazzano Bridge opened.",
+    coords: [-74.1656, 40.5817],
+    lifespan: [1973, null],
+  },
 ];

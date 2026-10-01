@@ -451,9 +451,10 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Fires & epidemics layer — shipped: burned districts (1776, 1835,
       1845) and the epidemics' worst quarters (yellow fever 1798 and 1822,
       cholera 1832 and 1849, the 1903 lung block) as dated areas that fade
-      out after, cited to the books (`src/data/calamities.ts`). Not yet:
-      the 1866 cholera the new Board of Health contained, the 1916 polio
-      and 1918 flu (citywide, so not an area).
+      out after, cited to the books (`src/data/calamities.ts`), and the
+      1916 polio epidemic over the old South Brooklyn section. Not drawn:
+      the 1866 cholera (the sources name no district) and the 1918 flu
+      (citywide; it has an entry).
 - [x] Working waterfront — shipped: 14 markets, docks, shipyards, and
       sugar houses as dated points (`src/data/waterfront.ts`); sites that
       already have entry markers are left out.

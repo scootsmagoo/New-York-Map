@@ -203,4 +203,16 @@ export const lenapeEntries: Entry[] = [
       "Gotham walks the island's trail from south to north, naming each stop; this was the turn-off to the river.",
     coords: [-74.008, 40.7335],
   },
+  {
+    id: "burial-ridge",
+    era: "lenape",
+    kind: "place",
+    title: "Burial Ridge",
+    wikiTitle: "Ward's Point",
+    year: 1000,
+    yearLabel: "Woodland period",
+    blurb:
+      "On the bluff at Ward's Point, Staten Island's southern tip, the Lenape buried their dead for centuries before Europeans came: the largest burial ground from that time in New York City. Bones turned up from 1858 on; oyster-shell middens still wash out of the beach below.",
+    coords: [-74.2519, 40.4989],
+  },
 ];

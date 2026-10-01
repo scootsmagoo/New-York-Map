@@ -670,4 +670,70 @@ export const greaterNYEntries: Entry[] = [
     coords: [-73.8986, 40.8679],
     lifespan: [1917, null],
   },
+  {
+    id: "farm-colony",
+    era: "greaterNY",
+    kind: "place",
+    title: "New York City Farm Colony",
+    wikiTitle: "New York City Farm Colony",
+    year: 1898,
+    blurb:
+      "Richmond County bought this farm for its poorhouse in 1829. When the island joined the city in 1898 it became the New York City Farm Colony, where every resident had to work, mostly in the fields, until 1924.",
+    coords: [-74.1386, 40.5936],
+  },
+  {
+    id: "kew-gardens",
+    era: "greaterNY",
+    kind: "place",
+    title: "Kew Gardens",
+    wikiTitle: "Kew Gardens, Queens",
+    year: 1910,
+    blurb:
+      "When the Long Island Rail Road straightened its main line in 1908 and cut a golf course in two, the heirs of the landowner Albon Man laid out a garden suburb named for England's Kew Gardens. Lots went on sale in 1910.",
+    coords: [-73.825, 40.705],
+  },
+  {
+    id: "valley-of-ashes",
+    era: "greaterNY",
+    kind: "place",
+    title: "The valley of ashes",
+    wikiTitle: "Flushing Meadows–Corona Park",
+    year: 1910,
+    blurb:
+      "From 1910 the contractor Michael Degnon filled the Flushing River's marshes with Brooklyn's coal ash and street sweepings, hauled by Tammany man Fishhooks McCarthy's Brooklyn Ash Removal Company. Fitzgerald made the dump the 'valley of ashes' of The Great Gatsby; Moses made it the 1939 World's Fair.",
+    coords: [-73.8447, 40.7458],
+  },
+  {
+    id: "broad-channel",
+    era: "greaterNY",
+    kind: "place",
+    title: "Broad Channel",
+    wikiTitle: "Broad Channel, Queens",
+    year: 1915,
+    blurb:
+      "A fishing settlement on the only inhabited island in Jamaica Bay, cut through by the Rockaway railroad in 1880. In 1915 the city leased the island to a developer, who sublet it to the Broad Channel Corporation.",
+    coords: [-73.82, 40.605],
+  },
+  {
+    id: "polio-1916",
+    era: "greaterNY",
+    kind: "event",
+    title: "The 1916 polio epidemic",
+    wikiTitle: "1916 New York City polio epidemic",
+    year: 1916,
+    blurb:
+      "Polio was declared epidemic in Brooklyn on June 17, 1916; by the end of the month nearly all of the 183 cases were in the old South Brooklyn section. More than 2,000 New Yorkers died that year, most of them children under five.",
+    coords: [-73.9955, 40.6805],
+  },
+  {
+    id: "wagner-college",
+    era: "greaterNY",
+    kind: "place",
+    title: "Wagner College",
+    wikiTitle: "Wagner College",
+    year: 1918,
+    blurb:
+      "Founded in Rochester in 1883 as a Lutheran seminary, Wagner College moved in 1918 to the former Cunard estate on Grymes Hill, whose mansion of 1851 is now Cunard Hall.",
+    coords: [-74.094, 40.615],
+  },
 ];

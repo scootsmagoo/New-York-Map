@@ -537,4 +537,16 @@ export const civilWarGildedEntries: Entry[] = [
       "Opened in 1897 as the Mixed High School in a small brick building at 157th Street and Third Avenue, one of the city's first public high schools; in 1899 it was a founding member of the College Entrance Examination Board. It later moved six blocks north to this building. Milton Berle was a student.",
     coords: [-73.9041, 40.8271],
   },
+  {
+    id: "quarantine-islands",
+    era: "civilWarGilded",
+    kind: "place",
+    title: "Hoffman and Swinburne islands",
+    wikiTitle: "Swinburne Island",
+    year: 1870,
+    yearLabel: "1870–73",
+    blurb:
+      "Harbor sand dredged from 1860 was piled off South Beach into two islands. Swinburne, developed in 1870 by the Civil War surgeon it is named for, became a quarantine hospital for sick steerage passengers; Hoffman was finished beside it in 1873. The country's last cholera patients were held on Swinburne in 1910–11.",
+    coords: [-74.0525, 40.5722],
+  },
 ];

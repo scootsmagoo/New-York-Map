@@ -348,4 +348,27 @@ export const britishColonyEntries: Entry[] = [
       "An apple that originated in the orchards of Newtown (now Elmhurst) around 1700 and became one of the colonies' best-known exports; Benjamin Franklin favored it, and Queen Victoria was later sent barrels.",
     coords: [-73.8795, 40.7365],
   },
+  {
+    id: "queens-farm",
+    era: "britishColony",
+    kind: "place",
+    title: "The Adriance farm",
+    wikiTitle: "Queens County Farm Museum",
+    year: 1697,
+    blurb:
+      "The Adriance family farmed here from 1697 to 1808, and their farmhouse of 1772 still stands. It is the largest stretch of the city's farmland never disturbed, and still a working farm.",
+    coords: [-73.7203, 40.7483],
+  },
+  {
+    id: "st-andrews-si",
+    era: "britishColony",
+    kind: "place",
+    title: "St. Andrew's Church, Richmondtown",
+    wikiTitle: "St. Andrew's Church (Staten Island)",
+    year: 1708,
+    blurb:
+      "Staten Island's Anglican congregation, founded in 1708, built its church at Richmondtown in 1708–12. The British used it as a hospital in the Revolution; after fires in 1867 and 1872 it was rebuilt in fieldstone.",
+    coords: [-74.1474, 40.5729],
+    lifespan: [1712, null],
+  },
 ];

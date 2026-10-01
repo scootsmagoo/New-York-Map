@@ -178,6 +178,26 @@ export const calamities: Calamity[] = [
     book: { book: "gotham", chapter: "44. Into the Crazy-Loved Dens of Death", pages: "785" },
   },
   {
+    id: "polio-1916",
+    kind: "epidemic",
+    name: "Polio, 1916",
+    from: 1916,
+    to: 1916,
+    // The old South Brooklyn section: Atlantic Avenue to Red Hook, the
+    // waterfront to Fourth Avenue (corners from the street centerlines).
+    ring: [
+      [-73.99951, 40.69166],
+      [-73.97839, 40.68443],
+      [-73.98865, 40.67033],
+      [-73.99777, 40.67475],
+      [-74.01543, 40.67521],
+      [-74.00139, 40.68776],
+    ],
+    note: "Declared epidemic in Brooklyn on June 17, 1916; by the end of June nearly all of the 183 cases were in the old South Brooklyn section. More than 2,000 New Yorkers died that year, most of them children under five.",
+    aka: "infantile paralysis poliomyelitis South Brooklyn Red Hook Carroll Gardens",
+    entryId: "polio-1916",
+  },
+  {
     id: "lung-block",
     kind: "epidemic",
     name: "The \"lung block\"",

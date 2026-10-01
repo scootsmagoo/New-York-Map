@@ -4,18 +4,23 @@ import { allEntries } from "../entries";
 import { TIME_MAX } from "../eras";
 
 describe("fires and epidemics", () => {
-  it("have unique ids, dates in range, and rings in lower Manhattan", () => {
+  it("have unique ids, dates in range, and compact rings in the city", () => {
     expect(new Set(calamities.map((c) => c.id)).size).toBe(calamities.length);
     for (const c of calamities) {
       expect(c.to, c.id).toBeGreaterThanOrEqual(c.from);
       expect(c.to, c.id).toBeLessThanOrEqual(TIME_MAX);
       expect(c.ring.length, c.id).toBeGreaterThanOrEqual(3);
       for (const [lon, lat] of c.ring) {
-        expect(lon, c.id).toBeGreaterThan(-74.02);
-        expect(lon, c.id).toBeLessThan(-73.97);
-        expect(lat, c.id).toBeGreaterThan(40.7);
-        expect(lat, c.id).toBeLessThan(40.73);
+        expect(lon, c.id).toBeGreaterThan(-74.27);
+        expect(lon, c.id).toBeLessThan(-73.69);
+        expect(lat, c.id).toBeGreaterThan(40.49);
+        expect(lat, c.id).toBeLessThan(40.92);
       }
+      // A district or a quarter, not a borough: a stray corner shows up here.
+      const lons = c.ring.map((p) => p[0]);
+      const lats = c.ring.map((p) => p[1]);
+      expect(Math.max(...lons) - Math.min(...lons), c.id).toBeLessThan(0.05);
+      expect(Math.max(...lats) - Math.min(...lats), c.id).toBeLessThan(0.04);
     }
   });
 
