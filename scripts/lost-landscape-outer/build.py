@@ -19,12 +19,13 @@ or by a known date for big fills with no streets (airports, parks, rail
 yards, the Navy Yard, the postwar landfills), and otherwise stays wet
 through 1975, as much of Jamaica Bay still is.
 
-Land made before the 1890s comes from an older source: the U.S. Coast
-Survey's Map of New-York Bay and Harbor and the Environs (Hassler, 1845),
-an engraving with no color to go by, so its marshes and shallows are traced
-by hand (hassler-1845.json) and placed by landmarks. That adds the Red Hook
-and Gowanus marshes, Wallabout Bay, Greenpoint's Newtown Creek marshes,
-and the St. George waterfront; the chart stops short of the Bronx.
+Land made before the 1890s comes from older maps, traced by hand and
+placed by landmarks: the U.S. Coast Survey's Map of New-York Bay and Harbor
+and the Environs (Hassler, 1845; hassler-1845.json) for the Red Hook and
+Gowanus marshes, Wallabout Bay, Greenpoint's Newtown Creek marshes, and
+the St. George waterfront; and F. W. Beers's map of the town of Morrisania
+(1865; beers-morrisania-1865.json) for the Harlem River flats of the South
+Bronx. Upper Queens and the rest of the Bronx still start in the 1890s.
 Manhattan has its own layer (Viele, 1865).
 
 Downloads (data-raw/usgs/, gitignored): see README.md.
@@ -146,41 +147,6 @@ made = land.intersection(wet).difference(lakes)
 made = made.buffer(-deg(20)).buffer(deg(20))
 print("made land since the 1890s, km²", round(made.area * M_LON * M_LAT / 1e6, 1))
 
-# ----- Before the 1890s: the 1845 Coast Survey chart, traced by hand -----
-
-HASSLER = json.loads((Path(__file__).parent / "hassler-1845.json").read_text())
-
-
-def hassler_place():
-    """Chart pixels → lon/lat: a second-order fit to the chart's landmarks."""
-    lm = HASSLER["landmarks"]
-    px = np.array([l["px"] for l in lm], float)
-    ll = np.array([l["lonlat"] for l in lm])
-    design = lambda x, y: np.stack([np.ones_like(x), x, y, x * x, x * y, y * y], -1)
-    B = design(px[:, 0] / 1000, px[:, 1] / 1000)
-    cx = np.linalg.lstsq(B, ll[:, 0], rcond=None)[0]
-    cy = np.linalg.lstsq(B, ll[:, 1], rcond=None)[0]
-    res = np.hypot((B @ cx - ll[:, 0]) * M_LON, (B @ cy - ll[:, 1]) * M_LAT)
-    print("1845 chart placed by", len(lm), "landmarks, rms", round(float(np.sqrt((res ** 2).mean()))), "m")
-
-    def place(ring):
-        r = np.array(ring, float)
-        b = design(r[:, 0] / 1000, r[:, 1] / 1000)
-        return list(zip(b @ cx, b @ cy))
-    return place
-
-
-place = hassler_place()
-# Hand-traced rings can cross themselves; buffer(0) repairs them.
-areas = [(a["kind"], Polygon(place(a["ring"]), [place(h) for h in a.get("holes", [])]).buffer(0)) for a in HASSLER["areas"]]
-wet45 = unary_union([g for _, g in areas])
-water45 = unary_union([g for k, g in areas if k == "water"])
-HASSLER_YEAR = 1845
-# Only what the 1890s sheets show as dry: the rest is in `made` already.
-made45 = land.intersection(wet45).difference(wet).difference(lakes)
-made45 = made45.buffer(-deg(20)).buffer(deg(20))
-print("made land 1845–1890s, km²", round(made45.area * M_LON * M_LAT / 1e6, 1))
-
 # ----- Dating -----
 
 def decode(key):
@@ -226,6 +192,8 @@ fill, marsh = [], []
 
 
 def date_cells(made, water, survey_of):
+    """Date each ~400 m cell of `made`; returns the pieces kept."""
+    kept = []
     x0, y0, x1, y1 = made.bounds
     for i in range(int(x0 // CELL), int(x1 // CELL) + 1):
         for j in range(int(y0 // CELL), int(y1 // CELL) + 1):
@@ -247,14 +215,70 @@ def date_cells(made, water, survey_of):
                 continue
             year = year or (max(streets, survey + 2) if streets else None)
             until = year if year and year <= TIME_MAX else None
+            kept.append(piece)
             for kind, part in (("water", piece.intersection(water)), ("marsh", piece.difference(water))):
                 if part.is_empty:
                     continue
                 (fill if until else marsh).append({"until": until, "kind": kind, "geom": part})
+    return kept
 
 
-date_cells(made, water, lambda piece: next(y for f, b, y, _ in SHEETS if piece.representative_point().within(box(*b))))
-date_cells(made45, water45, lambda piece: HASSLER_YEAR)
+kept90 = date_cells(made, water, lambda piece: next(y for f, b, y, _ in SHEETS if piece.representative_point().within(box(*b))))
+
+# ----- Before the 1890s: older maps, traced by hand -----
+
+# Each source: its tracing (pixel rings and landmarks), the year it shows,
+# and the fit that places it. The 1845 chart spans the harbor and needs a
+# second-order fit; the 1865 Morrisania map is a surveyed town plan, and an
+# affine fit places it to ~15 m. Each adds only what nothing newer shows wet.
+TRACED = [
+    ("hassler-1845.json", 1845, 2),  # Brooklyn, southern Queens, Staten Island
+    ("beers-morrisania-1865.json", 1865, 1),  # the South Bronx
+]
+
+
+def placer(trace, order):
+    """Map pixels → lon/lat, fitted to the tracing's landmarks."""
+    lm = trace["landmarks"]
+    px = np.array([l["px"] for l in lm], float)
+    ll = np.array([l["lonlat"] for l in lm])
+
+    def design(x, y):
+        cols = [np.ones_like(x), x, y]
+        if order == 2:
+            cols += [x * x, x * y, y * y]
+        return np.stack(cols, -1)
+
+    B = design(px[:, 0] / 1000, px[:, 1] / 1000)
+    cx = np.linalg.lstsq(B, ll[:, 0], rcond=None)[0]
+    cy = np.linalg.lstsq(B, ll[:, 1], rcond=None)[0]
+    res = np.hypot((B @ cx - ll[:, 0]) * M_LON, (B @ cy - ll[:, 1]) * M_LAT)
+    print(" placed by", len(lm), "landmarks, rms", round(float(np.sqrt((res ** 2).mean()))), "m")
+
+    def place(ring):
+        r = np.array(ring, float)
+        b = design(r[:, 0] / 1000, r[:, 1] / 1000)
+        return list(zip(b @ cx, b @ cy))
+    return place
+
+
+# What the 1890s pass kept is spoken for. Wet areas it set aside because
+# streets came first were land by then, and an older map may date them.
+covered = unary_union(kept90)
+for fname, shown, order in TRACED:
+    trace = json.loads((Path(__file__).parent / fname).read_text())
+    print(fname, end="")
+    place = placer(trace, order)
+    # Hand-traced rings can cross themselves; buffer(0) repairs them.
+    areas = [(a["kind"], Polygon(place(a["ring"]), [place(h) for h in a.get("holes", [])]).buffer(0)) for a in trace["areas"]]
+    wet_t = unary_union([g for _, g in areas])
+    water_t = unary_union([g for k, g in areas if k == "water"])
+    made_t = land.intersection(wet_t).difference(covered).difference(lakes)
+    made_t = made_t.buffer(-deg(20)).buffer(deg(20))
+    print(f" made land {shown}–1890s, km²", round(made_t.area * M_LON * M_LAT / 1e6, 1))
+    kept = date_cells(made_t, water_t, lambda piece, shown=shown: shown)
+    covered = covered.union(unary_union(kept)) if kept else covered
+
 
 # Merge the cells that share a year and kind, so no seams show between
 # them. Rings are outlines then holes, drawn with the even-odd rule.

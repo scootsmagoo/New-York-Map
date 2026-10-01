@@ -3,7 +3,8 @@
  * ship in the main bundle, where the full geometry (geo/lostLandscape.json)
  * loads only when the layer is on. Manhattan's ids match that file; the
  * other boroughs' mark areas of the USGS survey or, for land filled before
- * the 1890s, the 1845 Coast Survey chart (see `outer`). Fresh
+ * the 1890s, the 1845 Coast Survey chart and the 1865 map of Morrisania
+ * (see `outer`). Fresh
  * Kills went under garbage from 1948 over two decades; 1958 is halfway.
  */
 export interface LostWater {
@@ -44,5 +45,6 @@ export const lostWaters: LostWater[] = [
   { id: "gowanus-marshes", name: "Gowanus marshes", kind: "marsh", until: 1865, coords: [-73.993, 40.676], aka: "Gowanus Creek Gowanus Canal Brooklyn", outer: true },
   { id: "red-hook-marshes", name: "Red Hook marshes", kind: "marsh", until: 1865, coords: [-74.009, 40.677], aka: "Red Hook Atlantic Docks Erie Basin Brooklyn", outer: true },
   { id: "greenpoint-marshes", name: "Greenpoint marshes", kind: "marsh", until: 1865, coords: [-73.947, 40.734], aka: "Newtown Creek Greenpoint Bushwick Creek Brooklyn", outer: true },
+  { id: "harlem-river-flats", name: "Harlem River flats", kind: "marsh", until: 1885, coords: [-73.9295, 40.825], aka: "Cromwell's Creek Macombs Dam Yankee Stadium Morrisania South Bronx", outer: true },
   { id: "wallabout-bay", name: "Wallabout Bay", kind: "marsh", until: 1910, coords: [-73.969, 40.702], aka: "Wallabout Navy Yard Brooklyn", outer: true },
 ];

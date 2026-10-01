@@ -67,7 +67,25 @@ first.
   curl -sL -o data-raw/coast-survey/hassler-loc-1845.jpg \
     "https://upload.wikimedia.org/wikipedia/commons/7/74/Map_of_New-York_Bay_and_Harbor_and_the_environs_LOC_2004629241.jpg"
   ```
-- **What it misses.** The chart covers Brooklyn, southern Queens, and
-  Staten Island's north and east shores, but not the Bronx or upper
-  Queens, so those show only what was filled after the 1890s. The traced
-  areas are generalized, to about 100 m.
+- **The South Bronx before the 1890s** comes from F. W. Beers's *Map of
+  the Town of Morrisania* (Beers, Ellis & Soule, 1865), the Library of
+  Congress scan, traced the same way (`beers-morrisania-1865.json`): the
+  Harlem River flats below High Bridge, with their marsh islands and the
+  mouth of Cromwell's Creek, and the shore down to Mott Haven, now Macombs
+  Dam Park, the Yankee Stadium area, and the rail yards. A surveyed town
+  plan, it is placed by an affine fit to ten landmarks (High Bridge, St.
+  Ann's Church, Mott Haven street corners), ~15 m rms. Download it into
+  `data-raw/beers/` only to retrace:
+
+  ```bash
+  curl -s -o data-raw/beers/morrisania-1865.jpg \
+    "https://tile.loc.gov/image-services/iiif/service:gmd:gmd380:g3804:g3804n:la002330/full/5000,/0/default.jpg"
+  ```
+- **Older maps fill what the 1890s pass sets aside.** An area the USGS
+  sheets tint wet but whose streets came first is dropped from the 1890s
+  pass as land already; the traced maps subtract only what that pass kept,
+  so they can date such ground themselves.
+- **What it misses.** The traced maps cover Brooklyn, southern Queens,
+  Staten Island's north and east shores, and the South Bronx, but not the
+  rest of the Bronx or upper Queens, which show only what was filled
+  after the 1890s. The traced areas are generalized, to about 100 m.

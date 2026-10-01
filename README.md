@@ -132,6 +132,13 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Done**, newest first:
 
+*Done 2026-10-02 (later):* the South Bronx before the 1890s, traced from
+F. W. Beers's 1865 map of Morrisania: the Harlem River flats below High
+Bridge and the shore to Mott Haven (search "Harlem River flats"); a fix
+that let the older maps date ground the 1890s pass had set aside (half a
+km² more in Brooklyn too); and the 1845 chart now fades out across Queens
+instead of ending in a hard line.
+
 *Done 2026-10-02:* six entries for 1933–45 cited to *Gotham at War*
 (Washington Heights' "Fourth Reich," the 1941 bus boycott, Minton's, the
 dim-out, Art of This Century, Sinatra at the Paramount); a *Marsh to

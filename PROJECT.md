@@ -474,8 +474,10 @@ header, theme, footprint, markers, panel — derives from it.
       Barren Island, North Beach, Jamaica Bay, Fresh Kills). Still open:
       what was filled before the 1890s — shipped 2026-10-01 from the 1845
       Coast Survey chart, traced by hand: the Red Hook and Gowanus
-      marshes, Wallabout Bay, Greenpoint, the St. George waterfront. The
-      Bronx and upper Queens, off the chart, still start in the 1890s.
+      marshes, Wallabout Bay, Greenpoint, the St. George waterfront; and
+      the South Bronx's Harlem River flats from F. W. Beers's 1865 map of
+      Morrisania. The rest of the Bronx and upper Queens still start in
+      the 1890s.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: fourteen tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair, the island remade by landfill,
