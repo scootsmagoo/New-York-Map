@@ -71,6 +71,14 @@ export const railroadLines: RailroadLine[] = [
       { names: ["Port Washington Branch"], box: box(-73.96, 40.73, -73.83, 40.77) },
       { names: ["Main Line", "LIRR Main Line"], box: box(-73.96, 40.73, -73.903, 40.76) },
     ] },
+  // Driven out of Brooklyn, the LIRR built its own line from Jamaica to
+  // Hunters Point (1861), today's Main Line through Woodside; the South
+  // Side Railroad's route to Long Island City (1870) is the Lower Montauk.
+  { id: "lirr-main-queens", name: "Long Island Rail Road (to Hunters Point)", kind: "railroad", open: 1861,
+    osm: [{ names: ["Main Line", "LIRR Main Line"], box: box(-73.903, 40.69, -73.8, 40.76) }] },
+  { id: "lower-montauk", name: "South Side Railroad (Lower Montauk)", kind: "railroad", open: 1870,
+    // OSM names it for its freight operator, the New York & Atlantic.
+    osm: [{ names: ["Montauk Branch", "NYAR Secondary 1", "NYAR Secondary 2", "Secondary 2"], box: box(-73.96, 40.68, -73.8, 40.75) }] },
   { id: "flushing-rr-east", name: "Port Washington Branch (to Great Neck)", kind: "railroad", open: 1866,
     osm: [{ names: ["Port Washington Branch"], box: box(-73.83, 40.74, -73.7, 40.79) }] },
   { id: "rockaway-beach-branch", name: "Rockaway Beach Branch", kind: "railroad", open: 1880, close: 1962,

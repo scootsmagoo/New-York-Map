@@ -384,6 +384,12 @@ header, theme, footprint, markers, panel — derives from it.
     (141 → 50 KB) and lazy-loading the dialogs did the rest: 402 → 311 KB
     in all, map on screen 1.63 → 1.50 s, fully loaded 3.28 → 2.81 s.
 
+    Measured again on 2026-10-01 (slow 4G, 4× CPU, same harness against
+    a build of 583eadb): about 100 more entries and the transit, railroad,
+    and highway geometry added 44 KB and put the map on screen ~240 ms
+    later (≈1.8 → 2.0 s). Lazy-loading the zoomed-in transport geometry
+    would win back ~15 KB; not worth it yet.
+
 26. **With `<ViewTransition>`, decide what may *not* be a transition.**
     `useDeferredValue` renders are transitions, and the map follows the
     timeline through one, so anything inside a `<ViewTransition>` that

@@ -213,7 +213,7 @@ export const newAmsterdamEntries: Entry[] = [
     era: "newAmsterdam",
     kind: "place",
     title: "Half-freedom and the Negroes' Farms",
-    wikiTitle: "Land of the blacks",
+    wikiTitle: "Land of the Blacks (Manhattan)",
     year: 1644,
     blurb:
       "In 1644 the company freed eleven of its enslaved men on conditions: a yearly tribute, work when called, and their children still in bondage. Their farms outside town were meant as a buffer against Lenape attack.",
