@@ -26,7 +26,7 @@ import { allEntries } from "../data/entries";
 import { eraForYear } from "../data/eras";
 import { populationAt, SEGMENT_META, type SegmentKey } from "../data/population";
 import { settlementsAt } from "../data/settlements";
-import { HISTORICAL_OVERLAYS } from "../data/historicalOverlays";
+import { HISTORICAL_OVERLAYS, overlayRegion } from "../data/historicalOverlays";
 import {
   overlayAutoWeights,
   overlayManualWeights,
@@ -393,6 +393,15 @@ function MapViewInner({
 
   const landClipD = useMemo(
     () => boroughPaths.map((b: { d: string }) => b.d).join(""),
+    [boroughPaths]
+  );
+  // The other four boroughs as one path (one shape per clipPath; see below).
+  const outerClipD = useMemo(
+    () =>
+      boroughPaths
+        .filter((b: { boro: string }) => b.boro !== "Manhattan")
+        .map((b: { d: string }) => b.d)
+        .join(""),
     [boroughPaths]
   );
 
@@ -848,6 +857,9 @@ function MapViewInner({
           <clipPath id="land-clip">
             <path d={landClipD} />
           </clipPath>
+          <clipPath id="outer-clip">
+            <path d={outerClipD} />
+          </clipPath>
           <clipPath id="manhattan-clip">
             {boroughPaths
               .filter((b: { boro: string }) => b.boro === "Manhattan")
@@ -920,10 +932,15 @@ function MapViewInner({
             {renderFootprint(basePaths)}
             {next && renderFootprint(nextPaths, 0.25 + 0.75 * progress)}
 
-            {/* Georeferenced historical map sheets (Manhattan only) */}
-            {overlayFrames.length > 0 && (
-              <g className="historical-overlays" clipPath="url(#manhattan-clip)">
-                {overlayFrames.map(({ overlay, placement, weight }) => (
+            {/* Georeferenced historical map sheets, each clipped to its region */}
+            {overlayFrames.length > 0 &&
+              (["manhattan", "outer"] as const).map((region) => (
+              <g
+                key={region}
+                className="historical-overlays"
+                clipPath={region === "manhattan" ? "url(#manhattan-clip)" : "url(#outer-clip)"}
+              >
+                {overlayFrames.filter(({ overlay }) => overlayRegion(overlay) === region).map(({ overlay, placement, weight }) => (
                   <image
                     key={overlay.id}
                     className={`historical-overlay${weight > 0.005 ? "" : " historical-overlay-off"}`}
@@ -940,7 +957,7 @@ function MapViewInner({
                   </image>
                 ))}
               </g>
-            )}
+            ))}
 
             {/* Street-hatch texture over the outer-borough footprint, until
                 the real streets take over */}

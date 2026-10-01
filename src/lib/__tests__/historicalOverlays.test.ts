@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fitAffine, overlayPlacement } from "../historicalOverlays";
-import { HISTORICAL_OVERLAYS } from "../../data/historicalOverlays";
+import { HISTORICAL_OVERLAYS, overlayRegion } from "../../data/historicalOverlays";
 
 describe("overlay placement", () => {
   it("recovers an affine map from control points", () => {
@@ -15,10 +15,10 @@ describe("overlay placement", () => {
     expect(fitAffine([[0, 0], [1, 1]], [[0, 0], [1, 1]])).toBeNull();
   });
 
-  it("places every sheet by landmarks, within ~100 m of each", () => {
+  it("places every Manhattan sheet by landmarks, within ~100 m of each", () => {
     // A local equirectangular "projection" in meters.
     const project = ([lon, lat]: [number, number]): [number, number] => [lon * 84310, -lat * 111320];
-    for (const overlay of HISTORICAL_OVERLAYS) {
+    for (const overlay of HISTORICAL_OVERLAYS.filter((o) => overlayRegion(o) === "manhattan")) {
       expect(overlay.gcps?.length, overlay.id).toBeGreaterThanOrEqual(4);
       const p = overlayPlacement(project, overlay)!;
       expect(p.transform).toMatch(/^matrix\(/);
@@ -30,9 +30,18 @@ describe("overlay placement", () => {
       }
     }
   });
+
+  it("places a pre-warped sheet by its north-up bounds", () => {
+    const project = ([lon, lat]: [number, number]): [number, number] => [lon * 84310, -lat * 111320];
+    const chart = HISTORICAL_OVERLAYS.find((o) => o.id === "coast-survey")!;
+    const p = overlayPlacement(project, chart)!;
+    expect(p.transform).toBeUndefined();
+    expect(p.width).toBeCloseTo((chart.bounds.east - chart.bounds.west) * 84310);
+    expect(p.height).toBeCloseTo((chart.bounds.north - chart.bounds.south) * 111320);
+  });
 });
 
-import { overlayAutoWeights, overlayManualWeights } from "../historicalOverlays";
+import { overlayAutoWeight, overlayAutoWeights, overlayManualWeights } from "../historicalOverlays";
 
 describe("overlay fades", () => {
   it("eases a lone sheet in and out rather than switching it at full strength", () => {
@@ -42,12 +51,16 @@ describe("overlay fades", () => {
     expect(ratzer(1748)).toBeLessThan(0.2);
     expect(ratzer(1767)).toBeCloseTo(1);
     expect(ratzer(1830)).toBeLessThan(0.1);
-    // Nothing between the Ratzer and Viele windows.
-    expect(overlayAutoWeights(1840).size).toBe(0);
-    // Never more than full strength in all.
+    // Nothing over Manhattan between the Ratzer and Viele windows.
+    expect([...overlayAutoWeights(1840).keys()].filter((id) => id !== "coast-survey")).toEqual([]);
+    // Never more than full strength in all, in each region.
     for (let y = 1600; y <= 1945; y++) {
-      const total = [...overlayAutoWeights(y).values()].reduce((a, b) => a + b, 0);
-      expect(total, String(y)).toBeLessThanOrEqual(1.0001);
+      for (const region of ["manhattan", "outer"]) {
+        const total = [...overlayAutoWeights(y).entries()]
+          .filter(([id]) => overlayRegion(HISTORICAL_OVERLAYS.find((o) => o.id === id)!) === region)
+          .reduce((a, [, w]) => a + w, 0);
+        expect(total, `${region} ${y}`).toBeLessThanOrEqual(1.0001);
+      }
     }
   });
 
@@ -58,5 +71,15 @@ describe("overlay fades", () => {
     expect(at.get("ratzer")).toBeGreaterThan(0.3);
     expect(overlayManualWeights(1700).get("castello")).toBe(1);
     expect(overlayManualWeights(1900).get("viele")).toBe(1);
+  });
+
+  it("keeps the regions apart: the 1845 chart doesn't dim Manhattan's sheets", () => {
+    // 1850: the chart is near its peak, and Viele is coming in alone over Manhattan.
+    const w = overlayAutoWeights(1850);
+    expect(w.get("coast-survey")).toBeGreaterThan(0.8);
+    expect(w.get("viele")).toBeCloseTo(overlayAutoWeight(1850, HISTORICAL_OVERLAYS.find((o) => o.id === "viele")!));
+    // Manual mode shows a sheet in each region.
+    expect(overlayManualWeights(1845).get("coast-survey")).toBe(1);
+    expect(overlayManualWeights(1845).get("viele")).toBeGreaterThan(0);
   });
 });

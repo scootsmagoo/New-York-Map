@@ -26,7 +26,16 @@ export interface HistoricalOverlay {
   /** Year range where this overlay is eligible for auto crossfade. */
   window: { from: number; peak: number; to: number };
   attribution: string;
+  /**
+   * Where it is drawn: Manhattan (the default), or the other boroughs.
+   * Sheets crossfade only with others of their region.
+   */
+  region?: OverlayRegion;
 }
+
+export type OverlayRegion = "manhattan" | "outer";
+
+export const overlayRegion = (o: Pick<HistoricalOverlay, "region">): OverlayRegion => o.region ?? "manhattan";
 
 export const HISTORICAL_OVERLAYS: HistoricalOverlay[] = [
   {
@@ -90,5 +99,21 @@ export const HISTORICAL_OVERLAYS: HistoricalOverlay[] = [
     window: { from: 1845, peak: 1865, to: 1895 },
     attribution:
       "Egbert L. Viele, Sanitary & Topographical Map of the City and Island of New York (1865), via Wikimedia Commons",
+  },
+  {
+    id: "coast-survey",
+    label: "Coast Survey chart (1845)",
+    shortLabel: "Coast Survey",
+    year: 1845,
+    src: "./overlays/coast-survey-1845.jpg",
+    // The whole harbor needs a second-order fit to its 13 landmarks (~57 m),
+    // so it is warped north-up in advance (scripts/prepare-coast-survey-
+    // overlay.py) and placed by its bounds. Drawn over Brooklyn, southern
+    // Queens, and Staten Island; the chart stops short of the Bronx.
+    bounds: { west: -74.26, south: 40.495, east: -73.72, north: 40.74 },
+    region: "outer",
+    window: { from: 1815, peak: 1845, to: 1880 },
+    attribution:
+      "U.S. Coast Survey, Map of New-York Bay and Harbor and the Environs (F. R. Hassler, 1845), Library of Congress, via Wikimedia Commons",
   },
 ];

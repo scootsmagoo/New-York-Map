@@ -94,8 +94,10 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
             </li>
             <li>
               <strong>Historical maps:</strong> the Castello Plan (1660),
-              Ratzer's Plan (1767), and Viele's map (1865), from Wikimedia
-              Commons, placed by matching landmarks.
+              Ratzer's Plan (1767), and Viele's map (1865) over Manhattan, and
+              the U.S. Coast Survey's 1845 chart of New York Bay over the
+              other boroughs, from Wikimedia Commons, placed by matching
+              landmarks.
             </li>
             <li>
               <strong>Streetcars, fires, epidemics, and the waterfront:</strong>{" "}

@@ -180,7 +180,7 @@ export function HeaderMenu({
           <div className="header-menu-section" role="group" aria-label="Historical map overlays">
             <div className="header-menu-section-title">Historical maps</div>
             <p className="header-menu-section-note">
-              Optional georeferenced sheets (Castello, Ratzer, Viele) over Manhattan.
+              Optional georeferenced sheets: Castello, Ratzer, and Viele over Manhattan; the 1845 Coast Survey chart over Brooklyn, Queens, and Staten Island.
             </p>
 
             <label className="header-menu-check">

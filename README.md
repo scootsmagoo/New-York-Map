@@ -132,6 +132,10 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Done**, newest first:
 
+*Done 2026-10-01 (late):* the 1845 Coast Survey chart as a historical map
+over Brooklyn, southern Queens, and Staten Island (⋯ → Show overlays),
+the first sheet outside Manhattan.
+
 *Done 2026-10-01 (night):* the lost landscape before the 1890s outside
 Manhattan, traced by hand from the U.S. Coast Survey's 1845 chart of New
 York Bay: the Red Hook and Gowanus marshes, Wallabout Bay, Greenpoint's

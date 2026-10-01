@@ -1,5 +1,6 @@
 import {
   HISTORICAL_OVERLAYS,
+  overlayRegion,
   type HistoricalOverlay,
 } from "../data/historicalOverlays";
 
@@ -112,56 +113,64 @@ export function overlayAutoWeight(year: number, overlay: HistoricalOverlay): num
  * the edges of its window.)
  */
 export function overlayAutoWeights(year: number): Map<string, number> {
-  const raw = HISTORICAL_OVERLAYS.map((o) => ({
-    id: o.id,
-    w: overlayAutoWeight(year, o),
-  }));
-  const sum = raw.reduce((s, x) => s + x.w, 0);
   const out = new Map<string, number>();
-  if (sum <= 0) return out;
-  const scale = sum > 1 ? 1 / sum : 1;
-  for (const { id, w } of raw) {
-    if (w > 0) out.set(id, w * scale);
+  // Sheets of different regions don't overlap on the map, so each region
+  // shares out its own full strength.
+  for (const sheets of byRegion()) {
+    const raw = sheets.map((o) => ({ id: o.id, w: overlayAutoWeight(year, o) }));
+    const sum = raw.reduce((s, x) => s + x.w, 0);
+    if (sum <= 0) continue;
+    const scale = sum > 1 ? 1 / sum : 1;
+    for (const { id, w } of raw) {
+      if (w > 0) out.set(id, w * scale);
+    }
   }
   return out;
+}
+
+/** The sheets of each region, oldest first. */
+function byRegion(): HistoricalOverlay[][] {
+  const groups = new Map<string, HistoricalOverlay[]>();
+  for (const o of HISTORICAL_OVERLAYS) {
+    const r = overlayRegion(o);
+    if (!groups.has(r)) groups.set(r, []);
+    groups.get(r)!.push(o);
+  }
+  return [...groups.values()].map((g) => [...g].sort((a, b) => a.year - b.year));
 }
 
 /** Years over which manual mode crossfades from one sheet to the next. */
 const MANUAL_CROSSFADE = 16;
 
 /**
- * Manual mode: always a sheet, the nearest by date, crossfading into the
- * next over the years around the midpoint between them.
+ * Manual mode: always a sheet in each region, the nearest by date,
+ * crossfading into the next over the years around the midpoint between them.
  */
 export function overlayManualWeights(year: number): Map<string, number> {
-  const sheets = [...HISTORICAL_OVERLAYS].sort((a, b) => a.year - b.year);
   const out = new Map<string, number>();
-  for (let i = 0; i < sheets.length; i++) {
-    const prev = sheets[i - 1];
-    const next = sheets[i + 1];
-    // Fully on between the midpoints to its neighbors, fading across each.
-    const rise = prev ? smoothstep(mid(prev, sheets[i]) - MANUAL_CROSSFADE / 2, mid(prev, sheets[i]) + MANUAL_CROSSFADE / 2, year) : 1;
-    const fall = next ? 1 - smoothstep(mid(sheets[i], next) - MANUAL_CROSSFADE / 2, mid(sheets[i], next) + MANUAL_CROSSFADE / 2, year) : 1;
-    const w = Math.min(rise, fall);
-    if (w > 0) out.set(sheets[i].id, w);
+  for (const sheets of byRegion()) {
+    for (let i = 0; i < sheets.length; i++) {
+      const prev = sheets[i - 1];
+      const next = sheets[i + 1];
+      // Fully on between the midpoints to its neighbors, fading across each.
+      const rise = prev ? smoothstep(mid(prev, sheets[i]) - MANUAL_CROSSFADE / 2, mid(prev, sheets[i]) + MANUAL_CROSSFADE / 2, year) : 1;
+      const fall = next ? 1 - smoothstep(mid(sheets[i], next) - MANUAL_CROSSFADE / 2, mid(sheets[i], next) + MANUAL_CROSSFADE / 2, year) : 1;
+      const w = Math.min(rise, fall);
+      if (w > 0) out.set(sheets[i].id, w);
+    }
   }
   return out;
 }
 
 const mid = (a: HistoricalOverlay, b: HistoricalOverlay) => (a.year + b.year) / 2;
 
-/** Manual mode's main sheet: the one whose date is nearest. */
-export function overlayManualPick(year: number): string | null {
-  let best: HistoricalOverlay | null = null;
-  let bestDist = Infinity;
-  for (const o of HISTORICAL_OVERLAYS) {
-    const dist = Math.abs(year - o.year);
-    if (dist < bestDist) {
-      bestDist = dist;
-      best = o;
-    }
-  }
-  return best?.id ?? null;
+/** Manual mode's main sheets: in each region, the one whose date is nearest. */
+export function overlayManualPicks(year: number): string[] {
+  return byRegion().map((sheets) => {
+    let best = sheets[0];
+    for (const o of sheets) if (Math.abs(year - o.year) < Math.abs(year - best.year)) best = o;
+    return best.id;
+  });
 }
 
 export function activeOverlayLabel(
@@ -180,7 +189,6 @@ export function activeOverlayLabel(
       })
       .join(" · ");
   }
-  const id = overlayManualPick(year);
-  const o = HISTORICAL_OVERLAYS.find((x) => x.id === id);
-  return o?.shortLabel ?? "None";
+  const labels = overlayManualPicks(year).map((id) => HISTORICAL_OVERLAYS.find((x) => x.id === id)!.shortLabel);
+  return labels.length ? labels.join(" · ") : "None";
 }

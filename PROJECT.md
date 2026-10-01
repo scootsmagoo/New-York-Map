@@ -418,6 +418,11 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
       Viele 1865) with opacity blending — shipped: Wikimedia-sourced sheets,
       Manhattan clip, timeline crossfade + manual override, opacity slider.
+      Since 2026-10-01 also the U.S. Coast Survey's 1845 chart over the
+      outer boroughs: it needs a second-order fit, so it is warped north-up
+      in advance (`scripts/prepare-coast-survey-overlay.py`) and placed by
+      bounds; sheets crossfade only within their region (Manhattan or the
+      other boroughs), each clipped to it.
 - [x] ~~Street-grid growth rendering~~ — shipped: procedural 1811 grid with
       survey-vs-built frontier, colonial road network, street-hatch fills.
 - [x] Population counter and demographic strip charts that track the playhead.
