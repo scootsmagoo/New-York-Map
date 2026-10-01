@@ -132,7 +132,10 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Done**, newest first:
 
-*Done 2026-10-01 (late):* the 1845 Coast Survey chart as a historical map
+*Done 2026-10-01 (late):* 12 entries for 1898–1919 cited to *Greater
+Gotham* (the Tenderloin riot, the Panic of 1907, the Hudson tubes, the
+Singer and Met Life towers, Tin Pan Alley, Mabel Dodge's salon, the
+Paterson Pageant, the Rosenthal murder…), and the 1845 Coast Survey chart as a historical map
 over Brooklyn, southern Queens, and Staten Island (⋯ → Show overlays),
 the first sheet outside Manhattan.
 

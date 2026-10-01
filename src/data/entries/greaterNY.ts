@@ -748,4 +748,152 @@ export const greaterNYEntries: Entry[] = [
     coords: [-73.9756, 40.6918],
     lifespan: [1908, null],
   },
+  {
+    id: "tenderloin-riot-1900",
+    era: "greaterNY",
+    kind: "event",
+    title: "The Tenderloin riot",
+    wikiTitle: "Tenderloin, Manhattan",
+    year: 1900,
+    blurb:
+      "On a sweltering August night in 1900, Arthur Harris, a young migrant from Virginia, stabbed a plainclothes policeman who was manhandling his girlfriend outside McBride's Saloon at Eighth Avenue and 41st Street. The officer died, and three nights later Irish mobs hunted Black New Yorkers through the Tenderloin.",
+    gotham:
+      "Greater Gotham opens its chapter on Black New York with the riot, then follows the migrants who kept coming north.",
+    coords: [-73.99028, 40.75658],
+  },
+  {
+    id: "macys-herald-square",
+    era: "greaterNY",
+    kind: "place",
+    title: "Macy's moves to Herald Square",
+    wikiTitle: "Macy's Herald Square",
+    year: 1902,
+    blurb:
+      "Isidor Straus's sons Jesse and Percy picked a site a mile north of Ladies' Mile, where Broadway crosses Sixth Avenue at 34th Street, on the trolleys, the Sixth Avenue el, and the subway to come. The store opened in 1902, and other retailers followed it uptown.",
+    coords: [-73.98833, 40.75028],
+    lifespan: [1902, null],
+  },
+  {
+    id: "bronx-boom",
+    era: "greaterNY",
+    kind: "event",
+    title: "The Bronx boom",
+    wikiTitle: "The Bronx",
+    year: 1904,
+    yearLabel: "1904–16",
+    blurb:
+      "As the subway pushed north, the Bronx went into a frenzy. Lots in the old villages went from $500 to $5,000, farmhouses near planned stations came down for apartment houses, and speculators bought up the estates of the Morrises, Lorillards, and Pells.",
+    gotham:
+      "Greater Gotham calls it an instant city: a bucolic borough remade in a dozen years by the subway and the real estate men.",
+    coords: [-73.91765, 40.81607],
+  },
+  {
+    id: "panic-1907",
+    era: "greaterNY",
+    kind: "event",
+    title: "The Panic of 1907",
+    wikiTitle: "Panic of 1907",
+    year: 1907,
+    blurb:
+      "Rumors tied Charles T. Barney's Knickerbocker Trust, the city's third largest, to a failed copper corner. Depositors lined up at its columned branch by Stanford White at Fifth Avenue and 34th Street; it paid out $8 million in two hours and then closed its doors, and the panic spread until J. P. Morgan organized the bankers to stop it.",
+    gotham:
+      "Greater Gotham draws the moral from the architecture: a bank built to radiate prudence wasn't, and you couldn't tell a bank by its columns.",
+    coords: [-73.9851, 40.7488],
+  },
+  {
+    id: "hudson-tubes",
+    era: "greaterNY",
+    kind: "place",
+    title: "The Hudson tubes",
+    wikiTitle: "Hudson and Manhattan Railroad",
+    year: 1908,
+    blurb:
+      "In 1901 the Georgia lawyer William Gibbs McAdoo revived an abandoned tunnel under the Hudson. The first tubes carried passengers from Hoboken in 1908, and in 1909 a second pair ran from Jersey City to the Hudson Terminal, twin 22-story towers on Church Street that made the largest office complex in the world.",
+    coords: [-74.0108, 40.71103],
+  },
+  {
+    id: "singer-building",
+    era: "greaterNY",
+    kind: "place",
+    title: "Singer Building",
+    wikiTitle: "Singer Building",
+    year: 1908,
+    blurb:
+      "Ernest Flagg's tower for the Singer sewing-machine company was the tallest building in the world in 1908; fifty cents bought a ride to the observation balcony on the 40th floor. It was torn down in 1969.",
+    coords: [-74.01083, 40.70972],
+    lifespan: [1908, 1969],
+  },
+  {
+    id: "met-life-tower",
+    era: "greaterNY",
+    kind: "place",
+    title: "Metropolitan Life Tower",
+    wikiTitle: "Metropolitan Life Insurance Company Tower",
+    year: 1909,
+    blurb:
+      "Met Life answered Singer with a 700-foot copy of the campanile of St. Mark's in Venice on Madison Square, topped by a searchlight: the world's tallest building from 1909 until the Woolworth.",
+    gotham:
+      "Greater Gotham reads the towers as corporate self-presentation; Met Life even published a pamphlet explaining what its campanile stood for.",
+    coords: [-73.9872, 40.7412],
+    lifespan: [1909, null],
+  },
+  {
+    id: "tin-pan-alley",
+    era: "greaterNY",
+    kind: "place",
+    title: "Tin Pan Alley",
+    wikiTitle: "Tin Pan Alley",
+    year: 1909,
+    blurb:
+      "By 1909 the popular-song business had moved from Union Square to West 28th Street between Broadway and Sixth Avenue, home at one time or another to at least twenty-one music publishers. The journalist Monroe Rosenfeld heard the pianists plugging songs as clanging tin pans, and the name stuck.",
+    gotham:
+      "Greater Gotham treats it as an industry: song factories with a division of labor, run mostly by American-born German Jews.",
+    coords: [-73.9902, 40.7458],
+  },
+  {
+    id: "mabel-dodge-salon",
+    era: "greaterNY",
+    kind: "place",
+    title: "Mabel Dodge's salon",
+    wikiTitle: "Mabel Dodge Luhan",
+    year: 1912,
+    blurb:
+      "In 1912 the heiress Mabel Dodge took the second floor of 23 Fifth Avenue and opened her rooms to anarchists, suffragists, birth controllers, painters, and labor organizers. Leo Stein summed it up: 'Mabel Dodge / Hodge podge.'",
+    gotham:
+      "Greater Gotham sets the salon among the Village's meeting places, where Dodge set out on purpose to mix people who never met.",
+    coords: [-73.99592, 40.73286],
+  },
+  {
+    id: "rosenthal-murder",
+    era: "greaterNY",
+    kind: "event",
+    title: "The Rosenthal murder",
+    wikiTitle: "Murder of Herman Rosenthal",
+    year: 1912,
+    blurb:
+      "Herman Rosenthal, a gambler who had come up under Big Tim Sullivan, threatened to expose the police lieutenant Charles Becker, his silent partner. In July 1912 gunmen shot him dead outside the Hotel Metropole on West 43rd Street. Becker was convicted of ordering the killing and executed in 1915.",
+    coords: [-73.9852, 40.7562],
+  },
+  {
+    id: "paterson-pageant",
+    era: "greaterNY",
+    kind: "event",
+    title: "The Paterson Strike Pageant",
+    wikiTitle: "Paterson silk strike",
+    year: 1913,
+    blurb:
+      "On June 7, 1913, striking silk workers from Paterson reenacted their strike at Madison Square Garden, before a backdrop of a silk mill painted by John Sloan; the night ended with 15,000 people singing the 'Marseillaise.' Critics loved it. The strike was lost.",
+    coords: [-73.98556, 40.74278],
+  },
+  {
+    id: "tannenbaum-1914",
+    era: "greaterNY",
+    kind: "event",
+    title: "The army of the unemployed",
+    wikiTitle: "Frank Tannenbaum",
+    year: 1914,
+    blurb:
+      "In the hard winter of 1914 Frank Tannenbaum, a twenty-year-old busboy and Wobbly, led jobless men into the city's churches to ask for food and a bed. On March 4 his 300 marchers were turned away at St. Alphonsus on West Broadway, and twenty police wagons carried off Tannenbaum and 190 others.",
+    coords: [-74.0042, 40.7219],
+  },
 ];

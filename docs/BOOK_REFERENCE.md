@@ -331,6 +331,16 @@ notes yet:
 Each `greaterNY` entry can now take a `gotham` note sourced from *Greater
 Gotham*.
 
+*Added 2026-10-01:* the 1900 Tenderloin riot (ch. 21 › Riot), Macy's at
+Herald Square (ch. 11), the Bronx boom (ch. 10 › The Bronx: Instant City),
+the Panic of 1907 (ch. 5), the Hudson tubes (ch. 8), the Singer and Met
+Life towers (ch. 7 › Skyline), Tin Pan Alley (ch. 13), Mabel Dodge's salon
+and the Paterson Pageant (ch. 20 › Counterculture), the Rosenthal murder
+(ch. 17 › Gambling), and Tannenbaum's army of the unemployed (ch. 19).
+Still open: Big Tim Sullivan, Hillquit, Mitchel, Hearst, Cahan's *Forward*
+(no Wikipedia article for the building), Florence Kelley, Rose
+Schneiderman, Elizabeth Gurley Flynn, John Sloan, Irving Berlin.
+
 **Places and events for `capitalWorld`, 1933–45** (from *Gotham at War*):
 
 - The German American Bund in Yorkville, and its 1939 Madison Square
