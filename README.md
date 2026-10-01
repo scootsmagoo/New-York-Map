@@ -121,6 +121,13 @@ push, and a failure stops the deploy. A pan frame-rate check runs locally
 *Working waterfront*, *Streetcars* (with a tour), and 14 entries evening
 out the early eras (above).
 
+*Done 2026-10-01:* 13 more ferries (Paulus Hook, Hoboken, Pavonia,
+Communipaw, Catharine, Wall Street, Hamilton Avenue, and others, each
+fading as bridges and tunnels retired it) and 14 more bridges (the Harlem
+River's from Madison Avenue to Broadway, City Island, Pelham, Carroll
+Street, Cross Bay); CI now runs in Playwright's own image, so a slow
+Ubuntu mirror can't stall a deploy.
+
 *Done 2026-09-30 (night):* railroads, 1834–1975 (the Harlem, Hudson River, Long
 Island, and Staten Island lines, the Cobble Hill tunnel, the Coney Island
 excursion lines that became the BMT, the Westchester & Boston, the High

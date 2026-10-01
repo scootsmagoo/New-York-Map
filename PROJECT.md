@@ -161,6 +161,13 @@ header, theme, footprint, markers, panel — derives from it.
 - **Outer-borough els and subways:** opening and closing dates from
   Wikipedia's article on each line. Routes follow the streets each line
   ran over or under, on today's street geometry.
+- **Bridges and ferries:** the first bridges and ferries were placed by
+  hand; the Harlem River and later bridges follow the city's bridge
+  centerlines. Ferry routes run from the street or terminal each used,
+  set just off the shore as the map draws it (New Jersey's shore is
+  coarse), with dates from Wikipedia's lists of East and Hudson River
+  ferries. Ferries whose closing year isn't documented (Grand Street,
+  Houston Street, Astoria) are left out.
 - **Railroads:** track geometry from OpenStreetMap (© OpenStreetMap
   contributors, ODbL; `data-raw/osm_rail.json`, an Overpass export of the
   city's railway ways), picked by name within a box and thinned to one
