@@ -1457,6 +1457,12 @@ button {
 
 .tl-btn-wide { font-size: 12.5px; letter-spacing: 0.4px; }
 
+.tl-sound-icon { width: 16px; height: 16px; display: block; margin: 0 auto; }
+.tl-btn[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--ink) 12%, var(--paper));
+  border-color: var(--ink);
+}
+
 .era-band {
   cursor: pointer;
   /* Opaque so the cream band labels keep 4.5:1 against every era color. */

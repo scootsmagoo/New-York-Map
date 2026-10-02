@@ -23,7 +23,7 @@ test("scrubbing the timeline never starts a view transition, even with panels op
   await page.locator(".explore-btn").click();
   await expect(page.locator(".era-panel")).toBeVisible();
   const before = await count();
-  const box = (await page.locator(".timeline svg").first().boundingBox())!;
+  const box = (await page.locator(".timeline-svg").boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   for (let i = 0; i < 20; i++) await page.mouse.wheel(300, 0);
   for (let i = 0; i < 15; i++) await page.keyboard.press("ArrowRight");

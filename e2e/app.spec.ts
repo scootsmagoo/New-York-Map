@@ -370,6 +370,23 @@ test("a mouse-wheel notch zooms the map smoothly, as far as before", async ({ pa
   }
 });
 
+test("the sounds of the time turn on and off from the timeline", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await open(page, "#year=1885");
+  const sound = page.getByRole("button", { name: "Sounds of the time" });
+  await expect(sound).toHaveAttribute("aria-pressed", "false");
+  await sound.click();
+  await expect(sound).toHaveAttribute("aria-pressed", "true");
+  // Scrubbing through time with sound on is fine.
+  await open(page, "#year=1990");
+  await page.waitForTimeout(600);
+  await page.getByRole("button", { name: "Sounds of the time" }).click();
+  await page.getByRole("button", { name: "Sounds of the time" }).click();
+  await expect(page.getByRole("button", { name: "Sounds of the time" })).toHaveAttribute("aria-pressed", "false");
+  expect(errors).toEqual([]);
+});
+
 test("a two-finger tap zooms the map out", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "raw touch input through Chromium's DevTools protocol");
   await open(page, "#year=1900");
@@ -403,7 +420,7 @@ test("the map key lists only what's on screen", async ({ page }) => {
 
 test("scrolling on the timeline zooms it, and sideways scrolling pans it", async ({ page }) => {
   await open(page, "#year=1850");
-  const strip = page.locator(".timeline svg").first();
+  const strip = page.locator(".timeline-svg");
   const box = (await strip.boundingBox())!;
   const ticks = () => page.locator(".timeline text").allTextContents();
   const before = await ticks();

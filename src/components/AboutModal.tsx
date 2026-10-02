@@ -48,6 +48,12 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               years side by side), map layers, and georeferenced historical
               maps.
             </li>
+            <li>
+              The <strong>speaker button</strong> plays the sounds of the time:
+              surf and birdsong, church bells and hoofbeats, steam whistles and
+              trains, then traffic and sirens. They're made in your browser, not
+              recorded.
+            </li>
           </ul>
 
           <h3>Where it comes from</h3>
@@ -57,8 +63,8 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               histories, above all Edwin G. Burrows &amp; Mike Wallace's{" "}
               <em>Gotham</em> (1999) and Mike Wallace's <em>Greater Gotham</em>{" "}
               (2017) and <em>Gotham at War</em> (2025), which inspired it and
-              are cited by chapter and page (they end in 1945; the postwar era
-              is written from Wikipedia's articles); and Wikipedia, whose
+              are cited by chapter and page (they end in 1945; the years since
+              are written from Wikipedia's articles); and Wikipedia, whose
               summaries and images load live under their own licenses.
             </li>
             <li>

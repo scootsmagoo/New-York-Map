@@ -126,9 +126,14 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 *More history*
 - More entries from the candidate list in docs/BOOK_REFERENCE.md,
   especially *Greater Gotham*'s people and places for 1898–1919.
-- Audio per era.
 
 **Done**, newest first:
+
+*Done 2026-10-02 (late afternoon):* sounds of the time, off until you
+press the speaker button by Play: surf, wind, and birdsong, then church
+bells and hoofbeats, steam whistles and passing trains, then traffic, car
+horns, and distant sirens, each fading in and out with the year
+(`src/lib/ambience.ts`, synthesized with Web Audio, nothing to download).
 
 *Done 2026-10-02 (afternoon):* the timeline carried past 1975 to the
 present: two new eras (The Comeback City, 1975–2001, and The

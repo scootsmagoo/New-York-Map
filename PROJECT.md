@@ -511,8 +511,11 @@ header, theme, footprint, markers, panel — derives from it.
 - [x] Even out the eras — 14 entries from Gotham's early chapters: every
       era before 1825 now has 17–24 (Lenapehoking was 13). More candidates
       remain in docs/BOOK_REFERENCE.md.
-- [ ] Audio: ambient soundscapes per era (gulls and surf → harbor bells →
-      els and steam → ragtime).
+- [x] Audio: ambient soundscapes per era — shipped, synthesized with Web
+      Audio (`src/lib/ambience.ts`): surf, wind, and birds → bells and
+      hoofbeats → whistles and trains → traffic, horns, and sirens, mixed
+      by year; off until the speaker button is pressed. Music (ragtime and
+      on) would need recordings and their licenses; not done.
 - [x] More *Gotham* margin notes; chapter cross-references per entry —
       shipped: citations for ~185 entries (`src/data/bookRefs.ts`) and
       notes for 1898–1919 and 1933–45 (docs/BOOK_REFERENCE.md).

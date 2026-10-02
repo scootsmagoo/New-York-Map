@@ -59,6 +59,7 @@ import { useThrottledValue } from "./lib/useThrottledValue";
 import { usePersistedState } from "./lib/usePersistedState";
 import { useLayers } from "./lib/layers";
 import { useAnimatedState } from "./lib/useAnimatedState";
+import { ambience } from "./lib/ambience";
 
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -83,6 +84,14 @@ export default function App() {
   const [selectedEntry, setSelectedEntry] = useAnimatedState<Entry | null>(null);
   const [aboutOpen, setAboutOpen] = useAnimatedState(false);
   const [playing, setPlaying] = useState(false);
+  // Off on every visit: browsers start audio only from a click anyway.
+  const [soundOn, setSoundOn] = useState(false);
+  const toggleSound = useCallback(() => {
+    // Start or stop inside the click itself, as browsers require.
+    if (ambience.running) ambience.stop();
+    else ambience.start();
+    setSoundOn(ambience.running);
+  }, []);
   const [popOpen, setPopOpen] = useState(false);
   const [showSettlements, setShowSettlements] = usePersistedState("settlements", true);
   const [highlightGroup, setHighlightGroup] = useState<SegmentKey | null>(null);
@@ -171,6 +180,7 @@ export default function App() {
   // (header, era, map) needs sub-year precision, and integer years let
   // memoized children skip most frames entirely.
   const year = useMemo(() => Math.round(yearOfUnit((win.u0 + win.u1) / 2)), [win]);
+  useEffect(() => ambience.setYear(year), [year]);
   /**
    * Map & population lag the playhead slightly so timeline scrub stays smooth:
    * throttled to a steady cadence, and deferred so a slow map render never
@@ -579,6 +589,8 @@ export default function App() {
         onSelectEntry={selectEntry}
         playing={playing}
         onTogglePlay={() => setPlaying((p) => !p)}
+        soundOn={soundOn}
+        onToggleSound={toggleSound}
       />
 
       {selectedEntry && (

@@ -30,6 +30,8 @@ interface TimelineProps {
   onSelectEntry: (entry: Entry) => void;
   playing: boolean;
   onTogglePlay: () => void;
+  soundOn: boolean;
+  onToggleSound: () => void;
 }
 
 /** Row heights; a phone on its side gets a slimmer timeline with two lanes. */
@@ -58,6 +60,8 @@ export function Timeline({
   onSelectEntry,
   playing,
   onTogglePlay,
+  soundOn,
+  onToggleSound,
 }: TimelineProps) {
   const { ref, width } = useElementSize<HTMLDivElement>();
   const { BAND_H, AXIS_H, LANES, HEIGHT } = layoutFor(useMediaQuery(SHORT_SCREEN));
@@ -445,6 +449,22 @@ export function Timeline({
   return (
     <div className="timeline" ref={ref}>
       <div className="timeline-controls">
+        <button
+          className="tl-btn"
+          onClick={onToggleSound}
+          aria-pressed={soundOn}
+          title={soundOn ? "Turn the sounds of the time off" : "Hear the sounds of the time"}
+          aria-label="Sounds of the time"
+        >
+          <svg className="tl-sound-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M3 7.5h3l4-3.5v12l-4-3.5H3z" fill="currentColor" />
+            {soundOn ? (
+              <path d="M13 7a4 4 0 0 1 0 6M15.2 4.8a7 7 0 0 1 0 10.4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            ) : (
+              <path d="M13 7.5l5 5M18 7.5l-5 5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            )}
+          </svg>
+        </button>
         <button
           className="tl-btn"
           onClick={onTogglePlay}
