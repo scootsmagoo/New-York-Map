@@ -247,7 +247,6 @@ def date_cells(made, water, survey_of):
     return kept
 
 
-kept90 = date_cells(made, water, lambda piece: next(y for f, b, y, _ in SHEETS if piece.representative_point().within(box(*b))))
 
 # ----- Before the 1890s: older maps, traced by hand -----
 
@@ -294,20 +293,34 @@ def placer(trace, order):
     return place
 
 
-# What the 1890s pass kept is spoken for. Wet areas it set aside because
-# streets came first were land by then, and an older map may date them.
-covered = unary_union(kept90)
+traced = []
 for fname, shown, order in TRACED:
     trace = json.loads((Path(__file__).parent / fname).read_text())
     print(fname, end="")
     place = placer(trace, order)
     # Hand-traced rings can cross themselves; buffer(0) repairs them.
-    areas = [(a["kind"], Polygon(place(a["ring"]), [place(h) for h in a.get("holes", [])]).buffer(0)) for a in trace["areas"]]
+    traced.append((shown, [(a["kind"], Polygon(place(a["ring"]), [place(h) for h in a.get("holes", [])]).buffer(0)) for a in trace["areas"]]))
+
+# The 1890s sheets tell open water from marsh only by how dark the tint is,
+# and a dense marsh can read as water (Sunken Meadow). A detailed survey
+# from just before them settles it: its marsh outlines stay marsh.
+SETTLES_MARSH = 1880
+marsh_override = unary_union([g for shown, areas in traced if shown >= SETTLES_MARSH for k, g in areas if k == "marsh"])
+kept90 = date_cells(
+    made,
+    water.difference(marsh_override),
+    lambda piece: next(y for f, b, y, _ in SHEETS if piece.representative_point().within(box(*b))),
+)
+
+# What the 1890s pass kept is spoken for. Wet areas it set aside because
+# streets came first were land by then, and an older map may date them.
+covered = unary_union(kept90)
+for (fname, shown, order), (_, areas) in zip(TRACED, traced):
     wet_t = unary_union([g for _, g in areas])
     water_t = unary_union([g for k, g in areas if k == "water"])
     made_t = land.intersection(wet_t).difference(covered).difference(lakes)
     made_t = made_t.buffer(-deg(20)).buffer(deg(20))
-    print(f" made land {shown}–1890s, km²", round(made_t.area * M_LON * M_LAT / 1e6, 1))
+    print(f"{fname}: made land {shown}–1890s, km²", round(made_t.area * M_LON * M_LAT / 1e6, 1))
     kept = date_cells(made_t, water_t, lambda piece, shown=shown: shown)
     covered = covered.union(unary_union(kept)) if kept else covered
 
