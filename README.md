@@ -108,11 +108,11 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
   Up/Down, Home/End) that reads out the year and era, search follows the
   combobox pattern, tours announce each stop, and single-key shortcuts
   work only when the map or timeline has focus.
-- **Seventeen tours** (⋯ menu, by borough, or `#tour=<id>`): the grid, the
+- **Eighteen tours** (⋯ menu, by borough, or `#tour=<id>`): the grid, the
   East River, fire and water, Moses, horsecar to bus, one for each outer
   borough, the postwar city, the island remade, *Slavery and Freedom*,
   *New York at War*, *A City of Riots*, *The Rich Move Uptown*,
-  *Crossing the Hudson*, and *Marsh to Runway*.
+  *Crossing the Hudson*, *Marsh to Runway*, and *Creeks and Channels*.
 - **Then & Now** compares any two years. It opens on two different years,
   and both can be typed.
 - On phones: pinch the timeline with two fingers, and *Explore this era*

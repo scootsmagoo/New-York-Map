@@ -1109,6 +1109,61 @@ export const tours: Tour[] = [
       },
     ],
   },
+  {
+    id: "creeks-channels",
+    area: "citywide",
+    title: "Creeks and Channels",
+    subtitle: "The smaller waters the city filled, 1845–1962",
+    layers: ["lostLandscape"],
+    stops: [
+      {
+        year: 1845,
+        title: "Greenpoint's marshes",
+        text: "On the Coast Survey's 1845 chart, salt marsh lined Newtown Creek where Greenpoint's streets are now, and Bushwick Creek cut in from the East River. Green on the map is marsh and blue is shallow water that is land today; each fades as it is filled.",
+        focus: { coords: [-73.948, 40.73], k: 4.5 },
+      },
+      {
+        year: 1865,
+        title: "The Harlem River flats",
+        text: "Below High Bridge, F. W. Beers's 1865 map of Morrisania shows the Harlem River opening into flats and marsh islands, with Cromwell's Creek winding in from the Bronx. The streets had crossed them by about 1885; the ground is now Macombs Dam Park, near Yankee Stadium.",
+        focus: { coords: [-73.93, 40.827], k: 5 },
+        entryId: "yankee-stadium",
+      },
+      {
+        year: 1905,
+        title: "Wallabout Bay",
+        text: "Wallabout Bay, where the British moored their prison ships in the Revolution, is now the site of the Brooklyn Navy Yard, built out over its shallows.",
+        focus: { coords: [-73.97, 40.702], k: 5 },
+        entryId: "wallabout-bay",
+      },
+      {
+        year: 1909,
+        title: "Governors Island doubles",
+        text: "The Army Corps of Engineers dumped nearly 4.8 million cubic yards of rock dug out for the first subway onto the shoals south of Governors Island, adding 103 acres. The work was mostly done by 1910; in 1909 Wilbur Wright took off from the new ground.",
+        focus: { coords: [-74.019, 40.689], k: 5 },
+      },
+      {
+        year: 1913,
+        title: "Marble Hill joins the Bronx",
+        text: "In the 1890s a ship canal was cut across the top of Manhattan to bypass the winding Spuyten Duyvil Creek, leaving Marble Hill an island. In 1913 the old creek bed was filled, and Marble Hill, still part of Manhattan, was joined to the Bronx.",
+        focus: { coords: [-73.91, 40.876], k: 5 },
+        entryId: "kings-bridge",
+      },
+      {
+        year: 1955,
+        title: "Sunken Meadow",
+        text: "The marsh island just off Randall's Island was joined to it in 1955.",
+        focus: { coords: [-73.917, 40.793], k: 5 },
+        entryId: "triborough",
+      },
+      {
+        year: 1962,
+        title: "Little Hell Gate",
+        text: "The channel between Randall's and Ward's islands was filled by the early 1960s, and two islands became one.",
+        focus: { coords: [-73.924, 40.791], k: 5 },
+      },
+    ],
+  },
 ];
 
 export function tourById(id: string): Tour | undefined {
