@@ -187,7 +187,10 @@ export function Timeline({
     pull.current = 0;
     let last = performance.now();
     const step = (now: number) => {
-      const dt = Math.min(48, now - last);
+      // Real elapsed time, so a slow device glides as far and as long as a
+      // fast one (the glide and spring are exact over long steps); the cap
+      // only covers a tab that was hidden mid-glide.
+      const dt = Math.min(250, now - last);
       last = now;
       if (offset.current) {
         // Stretched: the spring wins, then the glide is over.

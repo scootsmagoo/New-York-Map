@@ -228,11 +228,19 @@ test("a flung timeline glides on after release, then stops", async ({ page }) =>
   await page.mouse.up();
   const atRelease = Number(await year(page));
   await expect.poll(async () => Number(await year(page))).toBeGreaterThan(atRelease);
-  // And it comes to rest.
-  await page.waitForTimeout(2500);
-  const settled = Number(await year(page));
-  await page.waitForTimeout(400);
-  expect(Number(await year(page))).toBe(settled);
+  // And it comes to rest (a hard fling glides for up to ~3 s).
+  let prev = NaN;
+  await expect
+    .poll(
+      async () => {
+        const now = Number(await year(page));
+        const still = now === prev;
+        prev = now;
+        return still;
+      },
+      { intervals: [500], timeout: 8000 }
+    )
+    .toBe(true);
 });
 
 test("pulling the timeline past the start stretches it, then springs back", async ({ page }) => {
