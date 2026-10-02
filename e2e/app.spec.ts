@@ -272,6 +272,67 @@ test("pulling the timeline past the start stretches it, then springs back", asyn
   expect(await year(page)).toBe("10,000 BCE");
 });
 
+/** The map's pan, from its content transform: [x, y, k]. */
+const mapTransform = (page: import("@playwright/test").Page) =>
+  page
+    .locator(".map-content")
+    .first()
+    .evaluate((g) => {
+      const t = g.getAttribute("transform") ?? "";
+      const tr = /translate\(([-\d.e]+),\s*([-\d.e]+)\)/.exec(t);
+      const sc = /scale\(([-\d.e]+)\)/.exec(t);
+      return [tr ? Number(tr[1]) : 0, tr ? Number(tr[2]) : 0, sc ? Number(sc[1]) : 1];
+    });
+
+test("a flung map glides on after release, then stops", async ({ page }) => {
+  const swipe = async (hold: boolean) => {
+    await open(page, "#year=1900");
+    const box = (await page.locator(".map-svg").first().boundingBox())!;
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+    await zoomMap(page, cx, cy, 8);
+    const [x0] = await mapTransform(page);
+    await page.mouse.move(cx + 120, cy);
+    await page.mouse.down();
+    for (let i = 1; i <= 6; i++) await page.mouse.move(cx + 120 - i * 25, cy);
+    if (hold) await page.waitForTimeout(400);
+    await page.mouse.up();
+    let prev = NaN;
+    await expect
+      .poll(
+        async () => {
+          const [x] = await mapTransform(page);
+          const still = Math.abs(x - prev) < 0.5;
+          prev = x;
+          return still;
+        },
+        { intervals: [500], timeout: 10000 }
+      )
+      .toBe(true);
+    return x0 - prev; // how far the map moved left
+  };
+  const held = await swipe(true);
+  const flung = await swipe(false);
+  expect(held).toBeGreaterThan(100);
+  expect(flung).toBeGreaterThan(held + 40);
+});
+
+test("pulling the whole-city map stretches it, then springs back", async ({ page }) => {
+  await open(page, "#year=1900");
+  const box = (await page.locator(".map-svg").first().boundingBox())!;
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  await page.mouse.move(cx, cy);
+  await page.mouse.down();
+  for (let i = 1; i <= 10; i++) await page.mouse.move(cx + i * 20, cy, { steps: 2 });
+  const [stretched] = await mapTransform(page);
+  // At the whole-city view there is no room to pan: it gives, but less than pulled.
+  expect(stretched).toBeGreaterThan(20);
+  expect(stretched).toBeLessThan(200);
+  await page.mouse.up();
+  await expect.poll(async () => Math.abs((await mapTransform(page))[0]), { timeout: 5000 }).toBeLessThan(0.5);
+});
+
 test("the map key lists only what's on screen", async ({ page }) => {
   await open(page, "#year=1700");
   await page.getByRole("button", { name: "Key" }).click();

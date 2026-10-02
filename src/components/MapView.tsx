@@ -7,6 +7,7 @@ import {
   zoomIdentity,
   type D3ZoomEvent,
   type ZoomBehavior,
+  type ZoomTransform,
 } from "d3-zoom";
 import type { Entry, FootprintSnapshot } from "../types";
 import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
@@ -14,6 +15,7 @@ import { lenapeSites, lenapeTerritories, lenapeTrails } from "../data/lenapeSite
 import { bridges, ferries } from "../data/structures";
 import { infrastructureLines, loadOuterInfrastructure } from "../data/infrastructure";
 import { useLazyData } from "../lib/useLazyData";
+import { glide, MIN_VELOCITY, rubberband, springBack } from "../lib/scrollPhysics";
 import { parks } from "../data/parks";
 import {
   colonialStreets,
@@ -419,23 +421,152 @@ function MapViewInner({
     // True while applying a transform that another map published, so it
     // isn't echoed back.
     let following = false;
+
+    // Touch-scroll feel, as on the timeline (scrollPhysics.ts): a dragged
+    // map glides on after release, and pulling past its edges stretches
+    // against growing resistance and springs back. "drag" while a pointer
+    // pans the map (rubber band on), "spring" while it eases home (edges
+    // off), "idle" otherwise (d3's hard clamp).
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    let mode: "idle" | "drag" | "spring" = "idle";
+    let samples: { t: number; x: number; y: number }[] = [];
+    let multiTouch = false;
+    let coastFrame: number | null = null;
+    let coasting = false; // our own frames: not a new gesture, and settle once at the end
+    const extent: [[number, number], [number, number]] = [
+      [0, 0],
+      [width, height],
+    ];
+    /** d3-zoom's own clamp to the translate extent. */
+    const clamp = (t: ZoomTransform) => {
+      const dx0 = t.invertX(0) - extent[0][0];
+      const dx1 = t.invertX(width) - extent[1][0];
+      const dy0 = t.invertY(0) - extent[0][1];
+      const dy1 = t.invertY(height) - extent[1][1];
+      return t.translate(
+        dx1 > dx0 ? (dx0 + dx1) / 2 : Math.min(0, dx0) || Math.max(0, dx1),
+        dy1 > dy0 ? (dy0 + dy1) / 2 : Math.min(0, dy0) || Math.max(0, dy1)
+      );
+    };
+    const stopCoast = () => {
+      if (coastFrame !== null) cancelAnimationFrame(coastFrame);
+      coastFrame = null;
+      if (mode === "spring") mode = "idle";
+    };
+
     const behavior = zoom<SVGSVGElement, unknown>()
       .scaleExtent([1, 16])
-      .translateExtent([
-        [0, 0],
-        [width, height],
-      ])
+      .translateExtent(extent)
+      .constrain((t) => {
+        if (mode === "spring") return t;
+        const c = clamp(t);
+        if (mode !== "drag" || reduced) return c;
+        return zoomIdentity
+          .translate(c.x + rubberband(t.x - c.x, width), c.y + rubberband(t.y - c.y, height))
+          .scale(t.k);
+      })
+      .on("start", (e: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        if (coasting || following) return;
+        // Anything else that moves the map (a new touch, a tour's flight)
+        // takes over from a glide.
+        stopCoast();
+        const type = (e.sourceEvent as Event | null)?.type;
+        mode = type === "mousedown" || type === "touchstart" || type === "pointerdown" ? "drag" : "idle";
+        samples = [];
+        multiTouch = false;
+      })
       .on("zoom", (e: D3ZoomEvent<SVGSVGElement, unknown>) => {
         // Imperative transform during gesture — avoids re-rendering the full SVG tree.
         applyTransform(e.transform);
         if (!following) cameraLink?.publish(e.transform, cameraId);
+        if (mode === "drag" && e.sourceEvent) {
+          const touches = (e.sourceEvent as TouchEvent).touches;
+          if (touches && touches.length > 1) multiTouch = true;
+          samples.push({ t: performance.now(), x: e.transform.x, y: e.transform.y });
+          if (samples.length > 12) samples.shift();
+        }
       })
       .on("end", (e: D3ZoomEvent<SVGSVGElement, unknown>) => {
         // A follower settles when its leader does, not after every step.
-        if (following) return;
+        if (following || coasting) return;
+        if (mode === "drag" && !reduced) {
+          mode = "idle";
+          if (coast(e.transform)) return;
+        }
+        mode = "idle";
         syncZoomK(e.transform);
         cameraLink?.publish(e.transform, cameraId, true);
       });
+
+    /** Velocity (px/ms) over the drag's last ~100 ms. */
+    const releaseVelocity = () => {
+      const last = samples[samples.length - 1];
+      const recent = samples.filter((s) => last && last.t - s.t <= 100);
+      if (multiTouch || recent.length < 2 || performance.now() - last.t > 60) return { vx: 0, vy: 0 };
+      const span = last.t - recent[0].t;
+      if (span < 8) return { vx: 0, vy: 0 };
+      const cap = (v: number) => Math.max(-6, Math.min(6, v));
+      return { vx: cap((last.x - recent[0].x) / span), vy: cap((last.y - recent[0].y) / span) };
+    };
+
+    /**
+     * After a drag: spring back if stretched past an edge, else glide on.
+     * Returns false when there's nothing to do (the caller settles).
+     */
+    const coast = (from: ZoomTransform) => {
+      let { vx, vy } = releaseVelocity();
+      const home = clamp(from);
+      let ox = from.x - home.x;
+      let oy = from.y - home.y;
+      const stretched = Math.abs(ox) > 0.5 || Math.abs(oy) > 0.5;
+      if (!stretched && Math.hypot(vx, vy) < MIN_VELOCITY * 4) return false;
+      mode = stretched ? "spring" : "idle";
+      // Moving back toward home already: let the spring do it.
+      if (stretched) {
+        vx = Math.sign(vx) === Math.sign(ox) ? vx : 0;
+        vy = Math.sign(vy) === Math.sign(oy) ? vy : 0;
+      }
+      let cur = from;
+      let last = performance.now();
+      const set = (t: ZoomTransform) => {
+        coasting = true;
+        behavior.transform(sel, t);
+        coasting = false;
+        cur = transformRef.current;
+      };
+      const finish = () => {
+        coastFrame = null;
+        mode = "idle";
+        syncZoomK(cur);
+        cameraLink?.publish(cur, cameraId, true);
+      };
+      const step = (now: number) => {
+        const dt = Math.min(250, now - last);
+        last = now;
+        if (mode === "spring") {
+          const sx = springBack(ox, vx, dt);
+          const sy = springBack(oy, vy, dt);
+          ox = sx.offset;
+          vx = sx.v;
+          oy = sy.offset;
+          vy = sy.v;
+          set(zoomIdentity.translate(home.x + ox, home.y + oy).scale(home.k));
+          if (sx.done && sy.done) return finish();
+        } else {
+          const gx = glide(vx, dt);
+          const gy = glide(vy, dt);
+          const want = zoomIdentity.translate(cur.x + gx.dx, cur.y + gy.dx).scale(cur.k);
+          set(want);
+          // Stopped by an edge: that direction is spent.
+          vx = Math.abs(cur.x - want.x) > 0.5 ? 0 : gx.v;
+          vy = Math.abs(cur.y - want.y) > 0.5 ? 0 : gy.v;
+          if (Math.hypot(vx, vy) < MIN_VELOCITY) return finish();
+        }
+        coastFrame = requestAnimationFrame(step);
+      };
+      coastFrame = requestAnimationFrame(step);
+      return true;
+    };
     zoomRef.current = behavior;
     const sel = select(svg);
     // Cutting short a tour flight here isn't the user taking over: the
@@ -475,6 +606,7 @@ function MapViewInner({
       if (source !== cameraId) follow(t, settled);
     });
     return () => {
+      stopCoast();
       unsubscribe?.();
       sel.on(".zoom", null);
       sel.on(".end", null);
