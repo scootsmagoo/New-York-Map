@@ -45,6 +45,8 @@ export const lostWaters: LostWater[] = [
   { id: "gowanus-marshes", name: "Gowanus marshes", kind: "marsh", until: 1865, coords: [-73.993, 40.676], aka: "Gowanus Creek Gowanus Canal Brooklyn", outer: true },
   { id: "red-hook-marshes", name: "Red Hook marshes", kind: "marsh", until: 1865, coords: [-74.009, 40.677], aka: "Red Hook Atlantic Docks Erie Basin Brooklyn", outer: true },
   { id: "greenpoint-marshes", name: "Greenpoint marshes", kind: "marsh", until: 1865, coords: [-73.947, 40.734], aka: "Newtown Creek Greenpoint Bushwick Creek Brooklyn", outer: true },
+  { id: "little-hell-gate", name: "Little Hell Gate", kind: "stream", until: 1962, coords: [-73.9238, 40.7915], aka: "Randall's Island Ward's Island Randalls Wards Triborough", outer: true },
+  { id: "sunken-meadow", name: "Sunken Meadow", kind: "marsh", until: 1955, coords: [-73.9169, 40.7926], aka: "Randall's Island Randalls Wards", outer: true },
   { id: "harlem-river-flats", name: "Harlem River flats", kind: "marsh", until: 1885, coords: [-73.9295, 40.825], aka: "Cromwell's Creek Macombs Dam Yankee Stadium Morrisania South Bronx", outer: true },
   { id: "wallabout-bay", name: "Wallabout Bay", kind: "marsh", until: 1910, coords: [-73.969, 40.702], aka: "Wallabout Navy Yard Brooklyn", outer: true },
 ];

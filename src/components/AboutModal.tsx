@@ -89,8 +89,9 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
               <strong>Lost landscape:</strong> Egbert Viele's 1865 topographical
               map for Manhattan; for the other boroughs, the U.S. Geological
               Survey's first maps of the city (1891–98) and, for land filled
-              earlier, the U.S. Coast Survey's 1845 chart of New York Bay and
-              F. W. Beers's 1865 map of Morrisania, traced by hand.
+              earlier, the U.S. Coast Survey's 1845 chart of New York Bay, its
+              1885 sheet of Randall's and Ward's islands, and F. W. Beers's 1865
+              map of Morrisania, traced by hand.
             </li>
             <li>
               <strong>Historical maps:</strong> the Castello Plan (1660),

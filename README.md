@@ -132,6 +132,13 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Done**, newest first:
 
+*Done 2026-10-02 (night):* six entries from *Gotham* (Vauxhall Garden, the
+Park Theater, Frances Wright's Hall of Science, the 1834 riots against the
+abolitionists, Cooper Union, Josephine Shaw Lowell), the riot linked from
+the *City of Riots* tour; and the lost landscape of Manhattan's made-over
+islands: Little Hell Gate and Sunken Meadow at Randall's and Ward's,
+Governors Island's southern half, and Spuyten Duyvil Creek at Marble Hill.
+
 *Done 2026-10-02 (later):* the South Bronx before the 1890s, traced from
 F. W. Beers's 1865 map of Morrisania: the Harlem River flats below High
 Bridge and the shore to Mott Haven (search "Harlem River flats"); a fix

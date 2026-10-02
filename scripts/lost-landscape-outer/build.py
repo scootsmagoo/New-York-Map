@@ -71,6 +71,13 @@ KNOWN_FILLS = [
     ("The Navy Yard's Wallabout fill", 1910, (-73.978, 40.698, -73.962, 40.707)),
     ("Bush Terminal piers", 1905, (-74.02, 40.648, -74.0, 40.662)),
     ("Brooklyn Army Base", 1918, (-74.03, 40.64, -74.018, 40.65)),
+    # Manhattan's islands and Marble Hill. The first match wins, so the
+    # specific fills come before Randall's and Ward's as a whole.
+    ("Governors Island's southern half, built of the first subway's spoil", 1910, (-74.028, 40.682, -74.012, 40.6905)),
+    ("Sunken Meadow and the waters east of it, joined to Randall's Island", 1955, (-73.9195, 40.789, -73.905, 40.8)),
+    ("Little Hell Gate, between Randall's and Ward's", 1962, (-73.928, 40.784, -73.9195, 40.7955)),
+    ("Spuyten Duyvil Creek at Marble Hill", 1913, (-73.918, 40.87, -73.905, 40.882)),
+    ("Randall's and Ward's meadows, gone with the Triborough works", 1936, (-73.94, 40.778, -73.9, 40.802)),
     # Before the 1890s (the 1845 chart)
     ("The Atlantic Docks", 1847, (-74.016, 40.681, -74.004, 40.691)),
     ("Erie Basin", 1864, (-74.022, 40.665, -74.005, 40.678)),
@@ -137,7 +144,20 @@ wet = unary_union(wet_parts)
 water = unary_union(water_parts)
 
 features = json.loads((GEO / "boroughs.json").read_text())["features"]
-land = unary_union([shape(f["geometry"]) for f in features if f["properties"]["boro"] != "Manhattan"])
+# Manhattan island has its own layer (Viele). Of the rest of the borough,
+# the pieces that were greatly made over are drawn here with the other
+# boroughs: Randall's and Ward's, Governors, and Marble Hill. Roosevelt and
+# Liberty islands changed little, and the sheets' tint misreads them.
+manhattan = next(shape(f["geometry"]) for f in features if f["properties"]["boro"] == "Manhattan")
+MADE_OVER = [(-73.9215, 40.7917), (-74.0194, 40.6877), (-73.9107, 40.8754)]
+manhattan_made_over = [
+    g for g in getattr(manhattan, "geoms", [manhattan])
+    if any(g.buffer(0.002).contains(Point(x, y)) for x, y in MADE_OVER)
+]
+land = unary_union(
+    [shape(f["geometry"]) for f in features if f["properties"]["boro"] != "Manhattan"] + manhattan_made_over
+)
+made_over_islands = unary_union(manhattan_made_over)
 
 deg = lambda m: m / M_LAT
 lakes = unary_union([Point(x, y).buffer(deg(r)) for x, y, r in LAKES])
@@ -217,6 +237,10 @@ def date_cells(made, water, survey_of):
             until = year if year and year <= TIME_MAX else None
             kept.append(piece)
             for kind, part in (("water", piece.intersection(water)), ("marsh", piece.difference(water))):
+                # Manhattan's made-over islands are all built on by 1975;
+                # wet there is a misread, not marsh that survived.
+                if not until:
+                    part = part.difference(made_over_islands)
                 if part.is_empty:
                     continue
                 (fill if until else marsh).append({"until": until, "kind": kind, "geom": part})
@@ -234,14 +258,15 @@ kept90 = date_cells(made, water, lambda piece: next(y for f, b, y, _ in SHEETS i
 TRACED = [
     ("hassler-1845.json", 1845, 2),  # Brooklyn, southern Queens, Staten Island
     ("beers-morrisania-1865.json", 1865, 1),  # the South Bronx
+    ("cgs-islands-1885.json", 1885, 1),  # Randall's and Ward's islands
 ]
 
 
 def placer(trace, order):
-    """Map pixels → lon/lat, fitted to the tracing's landmarks."""
+    """Map pixels → lon/lat, fitted to the tracing's landmarks. A landmark
+    may fix only one coordinate (a graticule tick: [lon, null] or [null,
+    lat]), so longitude and latitude are fitted separately."""
     lm = trace["landmarks"]
-    px = np.array([l["px"] for l in lm], float)
-    ll = np.array([l["lonlat"] for l in lm])
 
     def design(x, y):
         cols = [np.ones_like(x), x, y]
@@ -249,11 +274,18 @@ def placer(trace, order):
             cols += [x * x, x * y, y * y]
         return np.stack(cols, -1)
 
-    B = design(px[:, 0] / 1000, px[:, 1] / 1000)
-    cx = np.linalg.lstsq(B, ll[:, 0], rcond=None)[0]
-    cy = np.linalg.lstsq(B, ll[:, 1], rcond=None)[0]
-    res = np.hypot((B @ cx - ll[:, 0]) * M_LON, (B @ cy - ll[:, 1]) * M_LAT)
-    print(" placed by", len(lm), "landmarks, rms", round(float(np.sqrt((res ** 2).mean()))), "m")
+    def solve(axis):
+        pts = [l for l in lm if l["lonlat"][axis] is not None]
+        px = np.array([l["px"] for l in pts], float)
+        B = design(px[:, 0] / 1000, px[:, 1] / 1000)
+        v = np.array([l["lonlat"][axis] for l in pts])
+        c = np.linalg.lstsq(B, v, rcond=None)[0]
+        return c, (B @ c - v) * (M_LON if axis == 0 else M_LAT)
+
+    cx, rx = solve(0)
+    cy, ry = solve(1)
+    rms = float(np.sqrt((np.concatenate([rx, ry]) ** 2).mean()))
+    print(" placed by", len(lm), "landmarks, rms", round(rms), "m")
 
     def place(ring):
         r = np.array(ring, float)

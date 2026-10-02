@@ -477,7 +477,9 @@ header, theme, footprint, markers, panel — derives from it.
       marshes, Wallabout Bay, Greenpoint, the St. George waterfront; and
       the South Bronx's Harlem River flats from F. W. Beers's 1865 map of
       Morrisania. The rest of the Bronx and upper Queens still start in
-      the 1890s.
+      the 1890s. Manhattan's made-over islands (Randall's and Ward's,
+      Governors, Marble Hill) are drawn with the outer boroughs since
+      2026-10-02.
 - [x] Guided "tours": scripted camera+timeline paths — shipped: fourteen tours
       (the 1811 grid marching north, crossing the East River, fire and Croton
       water, Robert Moses's bridges and fair, the island remade by landfill,

@@ -81,6 +81,24 @@ first.
   curl -s -o data-raw/beers/morrisania-1865.jpg \
     "https://tile.loc.gov/image-services/iiif/service:gmd:gmd380:g3804:g3804n:la002330/full/5000,/0/default.jpg"
   ```
+- **Manhattan's islands.** Manhattan island has its own layer (Viele),
+  but the borough's islands that were made over are drawn here: Randall's
+  and Ward's (Sunken Meadow joined in 1955, Little Hell Gate filled by
+  1962, the meadows taken in the 1930s Triborough works), Governors (its
+  southern half built of the first subway's spoil, 1901–12; traced from
+  the 1845 chart, since the island lies just off the 1891 Brooklyn sheet),
+  and Marble Hill (Spuyten Duyvil Creek filled in 1913). The U.S. Coast
+  and Geodetic Survey's 1885 sheet of Blackwell's, Ward's and Randall's
+  Islands (1:5,000, Library of Congress) is traced too
+  (`cgs-islands-1885.json`), placed by its own printed graticule and four
+  First Avenue corners to ~4 m; it mostly confirms the 1890s sheet there.
+  Roosevelt and Liberty islands changed little and are left out, and
+  "still wet" on the made-over islands is dropped as a misread. Download:
+
+  ```bash
+  curl -s -o data-raw/coast-survey/islands-1885.jpg \
+    "https://tile.loc.gov/image-services/iiif/service:gmd:gmd380:g3804:g3804n:ct006632/full/6000,/0/default.jpg"
+  ```
 - **Older maps fill what the 1890s pass sets aside.** An area the USGS
   sheets tint wet but whose streets came first is dropped from the 1890s
   pass as land already; the traced maps subtract only what that pass kept,
