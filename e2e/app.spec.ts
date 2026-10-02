@@ -218,6 +218,43 @@ test("railroads, els, and highways load once the map zooms in", async ({ page })
   await expect(page.locator(".highway").first()).toBeAttached();
 });
 
+test("a flung timeline glides on after release, then stops", async ({ page }) => {
+  await open(page, "#year=1800&span=0.3");
+  const box = (await page.locator(".timeline-svg").boundingBox())!;
+  const y = box.y + box.height - 20;
+  await page.mouse.move(box.x + box.width * 0.7, y);
+  await page.mouse.down();
+  for (let i = 1; i <= 6; i++) await page.mouse.move(box.x + box.width * 0.7 - i * 40, y);
+  await page.mouse.up();
+  const atRelease = Number(await year(page));
+  await expect.poll(async () => Number(await year(page))).toBeGreaterThan(atRelease);
+  // And it comes to rest.
+  await page.waitForTimeout(2500);
+  const settled = Number(await year(page));
+  await page.waitForTimeout(400);
+  expect(Number(await year(page))).toBe(settled);
+});
+
+test("pulling the timeline past the start stretches it, then springs back", async ({ page }) => {
+  await open(page, "#year=1800");
+  await page.locator(".playhead-slider").focus();
+  await page.keyboard.press("Home");
+  const box = (await page.locator(".timeline-svg").boundingBox())!;
+  const y = box.y + box.height - 20;
+  const content = page.locator(".timeline-svg > g").first();
+  await page.mouse.move(box.x + 100, y);
+  await page.mouse.down();
+  for (let i = 1; i <= 10; i++) await page.mouse.move(box.x + 100 + i * 20, y, { steps: 2 });
+  const shift = await content.evaluate((g) => Number(/translate\(([-\d.]+)/.exec(g.getAttribute("transform") ?? "")?.[1] ?? 0));
+  // Stretched, but by less than the 200 px pulled.
+  expect(shift).toBeGreaterThan(20);
+  expect(shift).toBeLessThan(200);
+  await page.mouse.up();
+  await expect.poll(() => content.getAttribute("transform")).toBeNull();
+  // The map never left the first year.
+  expect(await year(page)).toBe("10,000 BCE");
+});
+
 test("the map key lists only what's on screen", async ({ page }) => {
   await open(page, "#year=1700");
   await page.getByRole("button", { name: "Key" }).click();

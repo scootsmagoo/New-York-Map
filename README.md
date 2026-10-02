@@ -132,6 +132,11 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Done**, newest first:
 
+*Done 2026-10-03 (later):* the timeline scrolls like a phone: a flung drag
+glides on and slows to a stop, and pulling past the first or last year
+stretches the strip with growing resistance and springs it back (drag,
+touch, or trackpad). Catching a glide stops it where it is.
+
 *Done 2026-10-03:* six people and places from *Greater Gotham* (Big Tim
 Sullivan, Morris Hillquit, Rose Schneiderman, the Forward Building, John
 Sloan in Chelsea, Irving Berlin); the railroad, transit, and highway

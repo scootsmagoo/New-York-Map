@@ -14,6 +14,14 @@ import {
   type TimeWindow,
 } from "../lib/timescale";
 import { useElementSize } from "../lib/useElementSize";
+import {
+  glide,
+  MIN_VELOCITY,
+  releaseVelocity,
+  rubberband,
+  springBack,
+  unrubberband,
+} from "../lib/scrollPhysics";
 import { SHORT_SCREEN, useMediaQuery } from "../lib/useMediaQuery";
 
 interface TimelineProps {
@@ -64,6 +72,15 @@ export function Timeline({
   // back after a pan.
   const wasDrag = useRef(false);
   const anim = useRef<number | null>(null);
+  // Rubber band: the strip's contents shift by `offset` px when pulled past
+  // either end of time. The window itself stays clamped, so the map never
+  // sees a year that doesn't exist; only this offset stretches. `pull` is
+  // the drag distance behind it (the offset grows ever more slowly).
+  const contentRef = useRef<SVGGElement>(null);
+  const offset = useRef(0);
+  const pull = useRef(0);
+  const samples = useRef<{ t: number; x: number }[]>([]);
+  const wheelSettle = useRef<number | null>(null);
 
   // The window as of the last event, ahead of React: pointer moves that
   // arrive between renders must build on each other, not on the stale prop.
@@ -75,11 +92,26 @@ export function Timeline({
       cancelAnimationFrame(anim.current);
       anim.current = null;
     }
+    if (wheelSettle.current !== null) {
+      clearTimeout(wheelSettle.current);
+      wheelSettle.current = null;
+    }
   }, []);
+
+  /** Shift the strip's contents (not the playhead) by `px`, imperatively: no re-render per frame. */
+  const setOffset = (px: number) => {
+    offset.current = px;
+    const g = contentRef.current;
+    if (!g) return;
+    if (px) g.setAttribute("transform", `translate(${px.toFixed(1)},0)`);
+    else g.removeAttribute("transform");
+  };
 
   const flyTo = useCallback(
     (target: TimeWindow) => {
       cancelAnim();
+      setOffset(0);
+      pull.current = 0;
       const from = { ...winRef.current };
       const to = clampWindow(target);
       const t0 = performance.now();
@@ -104,11 +136,98 @@ export function Timeline({
 
   useEffect(() => cancelAnim, [cancelAnim]);
 
+  /** Apply a window change now, so a second event before the next render builds on it. */
+  const setWin = (next: TimeWindow) => {
+    winRef.current = next;
+    onWindowChange(next);
+  };
+
+  const reducedMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+
+  /**
+   * Move the strip by `dx` px (positive: content right, toward earlier
+   * years). Past either end of time the window stops and the rest of the
+   * motion stretches the strip instead; moving back unstretches it first.
+   */
+  const pan = (dx: number) => {
+    if (!width || !dx) return;
+    let d = dx;
+    if (pull.current) {
+      const after = pull.current + d;
+      if (Math.sign(after) === Math.sign(pull.current)) {
+        pull.current = after;
+        setOffset(reducedMotion() ? 0 : rubberband(after, width));
+        return;
+      }
+      // Back past the edge: the stretch is gone, the rest pans.
+      pull.current = 0;
+      setOffset(0);
+      d = after;
+    }
+    const w = winRef.current;
+    const span = w.u1 - w.u0;
+    const du = (-d / width) * span;
+    const next = panWindow(w, du);
+    const moved = (next.u0 + next.u1) / 2 - (w.u0 + w.u1) / 2;
+    if (moved) setWin(next);
+    const leftover = (-(du - moved) / span) * width;
+    if (Math.abs(leftover) > 0.01) {
+      pull.current = leftover;
+      setOffset(reducedMotion() ? 0 : rubberband(leftover, width));
+    }
+  };
+
+  /**
+   * After a release: glide on at velocity `v` (px/ms), slowing with
+   * friction, and spring back if the strip is (or ends up) stretched.
+   */
+  const coast = (v0: number) => {
+    cancelAnim();
+    let v = reducedMotion() ? 0 : v0;
+    pull.current = 0;
+    let last = performance.now();
+    const step = (now: number) => {
+      const dt = Math.min(48, now - last);
+      last = now;
+      if (offset.current) {
+        // Stretched: the spring wins, then the glide is over.
+        const s = springBack(offset.current, v, dt);
+        setOffset(s.offset);
+        v = s.v;
+        if (s.done) {
+          anim.current = null;
+          return;
+        }
+      } else {
+        if (Math.abs(v) < MIN_VELOCITY) {
+          anim.current = null;
+          return;
+        }
+        const g = glide(v, dt);
+        v = g.v;
+        pan(g.dx);
+        if (pull.current) {
+          // Hit an end of time mid-glide: carry on into the stretch.
+          setOffset(rubberband(pull.current, width));
+          pull.current = 0;
+        }
+      }
+      anim.current = requestAnimationFrame(step);
+    };
+    if (!v && !offset.current) return;
+    anim.current = requestAnimationFrame(step);
+  };
+
   const onWheel = useEffectEvent((e: WheelEvent) => {
     const svg = svgRef.current;
     if (!svg) return;
     e.preventDefault();
-    cancelAnim();
+    if (anim.current !== null) {
+      // A wheel during a glide or spring takes over from wherever it is.
+      cancelAnimationFrame(anim.current);
+      anim.current = null;
+      pull.current = unrubberband(offset.current, width);
+    }
     const w = winRef.current;
     const wd = width;
     if (!wd) return;
@@ -117,9 +236,19 @@ export function Timeline({
     if (e.ctrlKey || Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       const factor = Math.pow(2, -e.deltaY * (e.ctrlKey ? 0.012 : 0.0022));
       const uFixed = w.u0 + (x / wd) * (w.u1 - w.u0);
-      onWindowChange(zoomWindow(w, factor, uFixed));
+      setWin(zoomWindow(w, factor, uFixed));
     } else {
-      onWindowChange(panWindow(w, (e.deltaX / wd) * (w.u1 - w.u0)));
+      // Trackpads send their own momentum as a tail of wheel events, so
+      // only the stretch at an end needs handling: it springs back once
+      // the events stop.
+      pan(-e.deltaX);
+    }
+    if (offset.current || pull.current) {
+      if (wheelSettle.current !== null) clearTimeout(wheelSettle.current);
+      wheelSettle.current = window.setTimeout(() => {
+        wheelSettle.current = null;
+        coast(0);
+      }, 120);
     }
   });
 
@@ -138,14 +267,13 @@ export function Timeline({
     return { dist: Math.max(1, Math.abs(a - b)), mid: (a + b) / 2 };
   };
 
-  /** Apply a window change now, so a second event before the next render builds on it. */
-  const setWin = (next: TimeWindow) => {
-    winRef.current = next;
-    onWindowChange(next);
-  };
-
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
+    const wasMoving = anim.current !== null;
     cancelAnim();
+    // Catching a glide or a spring mid-flight holds the strip where it is.
+    pull.current = unrubberband(offset.current, width);
+    if (wasMoving) wasDrag.current = true;
+    samples.current = [{ t: e.timeStamp, x: e.clientX }];
     pointers.current.set(e.pointerId, e.clientX);
     (e.target as Element).setPointerCapture?.(e.pointerId);
     if (pointers.current.size === 2) {
@@ -155,8 +283,8 @@ export function Timeline({
       if (drag.current) drag.current.moved = true;
       return;
     }
-    drag.current = { x: e.clientX, moved: false };
-    wasDrag.current = false;
+    drag.current = { x: e.clientX, moved: wasMoving };
+    wasDrag.current = wasMoving;
   };
 
   const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
@@ -164,6 +292,10 @@ export function Timeline({
     pointers.current.set(e.pointerId, e.clientX);
 
     if (pinch.current && pointers.current.size === 2) {
+      if (offset.current) {
+        pull.current = 0;
+        setOffset(0);
+      }
       const next = pinchState();
       const w = winRef.current;
       const rect = svgRef.current!.getBoundingClientRect();
@@ -183,14 +315,16 @@ export function Timeline({
       wasDrag.current = true;
     }
     drag.current.x = e.clientX;
-    const w = winRef.current;
-    setWin(panWindow(w, (-dx / width) * (w.u1 - w.u0)));
+    samples.current.push({ t: e.timeStamp, x: e.clientX });
+    if (samples.current.length > 12) samples.current.shift();
+    pan(dx);
   };
 
   const onPointerCancel = (e: React.PointerEvent<SVGSVGElement>) => {
     pointers.current.delete(e.pointerId);
     pinch.current = null;
     drag.current = null;
+    coast(0);
   };
 
   const onPointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
@@ -200,6 +334,13 @@ export function Timeline({
       pinch.current = null;
       const [rest] = [...pointers.current.values()];
       drag.current = rest === undefined ? null : { x: rest, moved: true };
+      return;
+    }
+    if (drag.current?.moved) {
+      // A drag, not a click: glide on, or spring back from an end.
+      const v = releaseVelocity([...samples.current, { t: e.timeStamp, x: e.clientX }]);
+      drag.current = null;
+      coast(v);
       return;
     }
     const onInteractive = (e.target as Element).closest?.(
@@ -306,8 +447,14 @@ export function Timeline({
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerCancel}
-          onPointerLeave={() => (drag.current = null)}
+          onPointerLeave={() => {
+            if (drag.current && pointers.current.size === 0) {
+              drag.current = null;
+              coast(0);
+            }
+          }}
         >
+          <g ref={contentRef}>
           {/* Era bands */}
           {eras.map((era) => {
             const x0 = yearToX(era.start, win, width);
@@ -411,6 +558,8 @@ export function Timeline({
               </g>
             );
           })}
+
+          </g>
 
           {/* Center playhead: also the keyboard and screen-reader slider
               for the year, since dragging the strip isn't either. */}
