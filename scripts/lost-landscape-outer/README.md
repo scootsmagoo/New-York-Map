@@ -103,7 +103,12 @@ first.
   sheets tint wet but whose streets came first is dropped from the 1890s
   pass as land already; the traced maps subtract only what that pass kept,
   so they can date such ground themselves.
-- **What it misses.** The traced maps cover Brooklyn, southern Queens,
-  Staten Island's north and east shores, and the South Bronx, but not the
-  rest of the Bronx or upper Queens, which show only what was filled
-  after the 1890s. The traced areas are generalized, to about 100 m.
+- **What it misses.** The traced maps cover Brooklyn, southern Queens and
+  Long Island City (the 1845 chart reaches just past Newtown Creek, to the
+  Hunters Point and Dutch Kills marshes), Staten Island's north and east
+  shores, and the South Bronx. The rest of the Bronx and upper Queens show
+  only what was filled after the 1890s. That is probably little loss: a
+  first look at Walling's 1859 map of Kings and Queens and Dripps's 1858
+  map of Westchester County (both Library of Congress) suggests little
+  filling there between the 1850s and the 1890s, but they have not been
+  georeferenced and compared. The traced areas are generalized, to about 100 m.
