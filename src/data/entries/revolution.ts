@@ -286,4 +286,17 @@ export const revolutionEntries: Entry[] = [
       "As the British prepared to leave in 1783, New Utrecht raised a liberty pole to jeer them on their way. The pole beside the Reformed Church, whose graveyard dates to 1654, is the sixth on the spot.",
     coords: [-74.0008, 40.6083],
   },
+  {
+    id: "vauxhall-garden",
+    era: "revolution",
+    kind: "place",
+    title: "Vauxhall Garden",
+    wikiTitle: "New York Vauxhall Gardens",
+    year: 1765,
+    blurb:
+      "Samuel Fraunces opened a pleasure garden on a rise above the Hudson, near today's Greenwich and Warren streets, with a wax museum, Italian fireworks, and afternoon teas; a rival Ranelagh opened at Church and Thomas streets the same year, with band concerts twice a week. That November, Stamp Act rioters marched up to Vauxhall and sacked the house of Major James, the fort's artillery commander.",
+    gotham:
+      "Gotham reads the gardens as a gentry's retreat on the London model, places to stroll and take tea without having to notice one's inferiors.",
+    coords: [-74.01112, 40.7156],
+  },
 ];

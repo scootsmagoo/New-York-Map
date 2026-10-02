@@ -670,4 +670,40 @@ export const antebellumEntries: Entry[] = [
       "Dedicated in 1848, the city's first non-sectarian cemetery corporation was laid out as a rural cemetery on the hills along the Brooklyn–Queens line. A corner became a national cemetery for Civil War soldiers in 1862.",
     coords: [-73.8768, 40.6963],
   },
+  {
+    id: "hall-of-science",
+    era: "antebellum",
+    kind: "place",
+    title: "Frances Wright's Hall of Science",
+    wikiTitle: "Frances Wright",
+    year: 1829,
+    blurb:
+      "In April 1829 the freethinker Frances Wright bought an old Baptist church on Broome Street near the Bowery and made it the Hall of Science: a day school and a Sunday school with no Bible in its books, a radical bookstore, and Sunday debates for ten cents that filled its 1,200 seats with working people.",
+    gotham:
+      "Gotham calls it a radical counterpart to the gentry's athenaeum and the evangelicals' missions.",
+    coords: [-73.995, 40.7196],
+  },
+  {
+    id: "riot-1834",
+    era: "antebellum",
+    kind: "event",
+    title: "The 1834 riots against the abolitionists",
+    wikiTitle: "1834 New York anti-abolitionist riots",
+    year: 1834,
+    blurb:
+      "In July 1834 crowds of butcher boys and day laborers, urged on by well-dressed merchants, gutted the Rose Street house of the abolitionist merchant Lewis Tappan and burned his furniture and pictures in the street, then went on to attack Black churches and homes. Tappan left the house unrepaired, as \"a silent Anti-Slavery preacher.\"",
+    coords: [-74.0025, 40.7105],
+  },
+  {
+    id: "cooper-union",
+    era: "antebellum",
+    kind: "place",
+    title: "Cooper Union",
+    wikiTitle: "Cooper Union",
+    year: 1859,
+    blurb:
+      "Peter Cooper built an institute to give free schooling in the mechanical arts and sciences to working New Yorkers; his son-in-law Abram Hewitt, later mayor, helped him found it in 1859. Its great hall became the city's forum: four thousand women met there in April 1861 to organize relief for the Union army, and the young cigarmaker Samuel Gompers took its classes.",
+    coords: [-73.99056, 40.72917],
+    lifespan: [1859, null],
+  },
 ];

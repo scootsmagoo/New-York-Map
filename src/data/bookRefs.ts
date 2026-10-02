@@ -772,4 +772,10 @@ export const bookRefs: Record<string, BookRef> = {
   "dimout-1942": { book: "gothamAtWar", chapter: "Under the Gun", pages: "381–84" },
   "art-of-this-century": { book: "gothamAtWar", chapter: "On the Town", pages: "651–56" },
   "sinatra-paramount": { book: "gothamAtWar", chapter: "On the Town", pages: "633–34" },
+  "vauxhall-garden": { book: "gotham", chapter: "12. War and Wealth", pages: "175–76" },
+  "park-theatre": { book: "gotham", chapter: "24. Philosophes and Philanthropists", pages: "375" },
+  "hall-of-science": { book: "gotham", chapter: "31. The Press of Democracy", pages: "511–12" },
+  "riot-1834": { book: "gotham", chapter: "33. White, Green, and Black", pages: "557–59" },
+  "cooper-union": { book: "gotham", chapter: "44. Into the Crazy-Loved Dens of Death", pages: "782" },
+  "josephine-shaw-lowell": { book: "gotham", chapter: "65. Purity Crusade", pages: "1159" },
 };

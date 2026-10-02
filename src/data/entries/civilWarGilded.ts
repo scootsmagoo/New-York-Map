@@ -560,4 +560,17 @@ export const civilWarGildedEntries: Entry[] = [
       "Austin Corbin, the banker who later ran the Long Island Rail Road, built the Manhattan Beach Hotel in 1877 and the grander Oriental in 1880, with Sousa's band and fireworks every night. He barred Jews from the resort.",
     coords: [-73.944, 40.578],
   },
+  {
+    id: "josephine-shaw-lowell",
+    era: "civilWarGilded",
+    kind: "person",
+    title: "Josephine Shaw Lowell",
+    wikiTitle: "Josephine Shaw Lowell",
+    year: 1882,
+    blurb:
+      "Widowed in the Civil War, she argued that charity had to be run on business principles and in 1882 founded the Charity Organization Society, which investigated applicants and coordinated the city's private relief. Its home from 1893 was the United Charities Building on Fourth Avenue at 22nd Street.",
+    gotham:
+      "Gotham places her among the genteel reformers bent on curtailing indiscriminate almsgiving.",
+    coords: [-73.98639, 40.73944],
+  },
 ];

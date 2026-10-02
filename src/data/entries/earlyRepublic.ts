@@ -376,4 +376,16 @@ export const earlyRepublicEntries: Entry[] = [
       "A merchant who bought 60 acres on Clover Hill, today's Brooklyn Heights, and backed Robert Fulton's steam ferry so Manhattan merchants could live across the river. The ferry ran from 1814, Brooklyn became a village in 1816, and his big lots south of Clark Street made the Heights a suburb.",
     coords: [-73.9945, 40.695],
   },
+  {
+    id: "park-theatre",
+    era: "earlyRepublic",
+    kind: "place",
+    title: "The Park Theater",
+    wikiTitle: "Park Theatre (Manhattan)",
+    year: 1798,
+    blurb:
+      "A 2,000-seat playhouse facing the Common on Chatham Street (now Park Row), designed by the émigré engineer Marc Isambard Brunel and built for $130,000 for the city's respectable classes. It opened in 1798 and burned in 1848.",
+    coords: [-74.0076, 40.7115],
+    lifespan: [1798, 1848],
+  },
 ];

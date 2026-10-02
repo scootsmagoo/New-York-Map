@@ -303,6 +303,12 @@ would give them a card.
   (21; Plymouth Church, Brooklyn Heights), Frances Wright (19), Abram
   Hewitt (17), John Lamb (20; Sons of Liberty), Josephine Shaw Lowell
   (12), Samuel Gompers (13).
+  *Added 2026-10-02:* the Tappans through the 1834 riots (ch. 33,
+  p. 557–59), Frances Wright's Hall of Science (ch. 31, p. 511–12),
+  Lowell (ch. 65, p. 1159), Hewitt and Gompers through Cooper Union
+  (ch. 44, p. 782), and Vauxhall/Ranelagh (ch. 12, p. 175–76) and the Park
+  Theater (ch. 24, p. 375) from the places list. Still open: Strong (his
+  diary has no single place), Livingston, Duane, Lamb.
 - *Greater Gotham*: Jacob Schiff (52), Morris Hillquit (45), John Purroy
   Mitchel (44; the 1914–17 reform mayor), William Randolph Hearst (44),
   Big Tim Sullivan (30), Abraham Cahan (28; the *Forward*), Lillian Wald

@@ -858,6 +858,7 @@ export const tours: Tour[] = [
         title: "Against the abolitionists",
         text: "In July 1834 crowds of butcher boys and laborers, egged on by well-dressed merchants, gutted Lewis Tappan's house on Rose Street and burned his furniture in the street. Then they stoned Black churches and homes. About five hundred Black New Yorkers fled their homes.",
         focus: { coords: [-74.0025, 40.7105], k: 5.5 },
+        entryId: "riot-1834",
       },
       {
         year: 1849,
