@@ -1,11 +1,21 @@
 import { memo, useMemo } from "react";
-import geometry from "../data/geo/highways.json";
 import { highwayOpen, highways } from "../data/highways";
 import type { Entry } from "../types";
 import { allEntries } from "../data/entries";
 import { unpackRing } from "../lib/geoPack";
+import { useLazyData } from "../lib/useLazyData";
 
-const packed = geometry as unknown as { q: number; roads: Record<string, number[][]> };
+interface Packed {
+  q: number;
+  roads: Record<string, number[][]>;
+}
+
+let packedPromise: Promise<Packed> | null = null;
+/** Drawn only zoomed in, so kept out of the first load. */
+function loadHighways() {
+  packedPromise ??= import("../data/geo/highways.json").then((m) => m.default as unknown as Packed);
+  return packedPromise;
+}
 
 interface HighwayLayerProps {
   project: ((c: [number, number]) => [number, number] | null) | null;
@@ -17,8 +27,9 @@ interface HighwayLayerProps {
 
 /** Parkways, expressways, and road tunnels, each from the year it opened. */
 function HighwayLayerInner({ project, year, fade, onSelectEntry }: HighwayLayerProps) {
+  const packed = useLazyData(loadHighways, fade > 0);
   const roads = useMemo(() => {
-    if (!project) return [];
+    if (!project || !packed) return [];
     return highways.map((h) => ({
       h,
       entry: h.entryId ? allEntries.find((e) => e.id === h.entryId) : undefined,
@@ -33,7 +44,7 @@ function HighwayLayerInner({ project, year, fade, onSelectEntry }: HighwayLayerP
         )
         .join(""),
     }));
-  }, [project]);
+  }, [project, packed]);
 
   if (fade <= 0) return null;
   const open = roads.filter(({ h }) => highwayOpen(h, year));

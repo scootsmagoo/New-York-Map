@@ -1,12 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { allEntries } from "../entries";
-import { infrastructureLines } from "../infrastructure";
-import { railroadInfrastructure, railroadLines } from "../railroads";
+import geometry from "../geo/railroads.json";
+import { infrastructureLines, loadOuterInfrastructure } from "../infrastructure";
+import { railroadInfrastructure as build, railroadLines } from "../railroads";
+import type { Routes } from "../transit";
+
+const railroadInfrastructure = build(geometry as unknown as Routes);
 
 describe("railroads", () => {
-  it("each has built geometry, dates in order, and a real entry", () => {
-    const ids = new Set(infrastructureLines.map((l) => l.id));
-    expect(ids.size).toBe(infrastructureLines.length);
+  it("each has built geometry, dates in order, and a real entry", async () => {
+    // Ids are unique across every line, the lazily loaded ones included.
+    const all = [...infrastructureLines, ...(await loadOuterInfrastructure())];
+    expect(new Set(all.map((l) => l.id)).size).toBe(all.length);
+    expect(all.length).toBeGreaterThan(infrastructureLines.length + 40);
     const entries = new Set(allEntries.map((e) => e.id));
     for (const line of railroadInfrastructure) {
       // Rebuild with scripts/prepare-railroads.mjs after changing a line's sources.

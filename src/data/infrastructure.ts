@@ -1,7 +1,7 @@
 import type { InfrastructureLine } from "../types";
 import { avenuePolyline } from "../lib/grid";
 import { railroadInfrastructure } from "./railroads";
-import { transitInfrastructure } from "./transit";
+import { transitInfrastructure, type Routes } from "./transit";
 
 /**
  * Dated linear infrastructure — els, early subway, and the Croton Aqueduct.
@@ -111,9 +111,20 @@ const manhattanLines: InfrastructureLine[] = [
   },
 ];
 
-/** Manhattan's trunk lines, plus the els and subways of the other boroughs (transit.ts). */
-export const infrastructureLines: InfrastructureLine[] = [
-  ...manhattanLines,
-  ...transitInfrastructure,
-  ...railroadInfrastructure,
-];
+/** Manhattan's trunk lines and the Croton Aqueduct, drawn by hand: always loaded. */
+export const infrastructureLines: InfrastructureLine[] = manhattanLines;
+
+let outerPromise: Promise<InfrastructureLine[]> | null = null;
+
+/**
+ * The els, subways, and railroads routed on street and track geometry
+ * (transit.ts, railroads.ts). They're drawn only zoomed in, so their
+ * geometry stays out of the first load.
+ */
+export function loadOuterInfrastructure(): Promise<InfrastructureLine[]> {
+  outerPromise ??= Promise.all([
+    import("./geo/transit.json").then((m) => m.default as unknown as Routes),
+    import("./geo/railroads.json").then((m) => m.default as unknown as Routes),
+  ]).then(([transit, railroads]) => [...transitInfrastructure(transit), ...railroadInfrastructure(railroads)]);
+  return outerPromise;
+}

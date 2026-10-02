@@ -12,7 +12,8 @@ import type { Entry, FootprintSnapshot } from "../types";
 import { footprintAt, frontierAt, frontierBand } from "../data/footprints";
 import { lenapeSites, lenapeTerritories, lenapeTrails } from "../data/lenapeSites";
 import { bridges, ferries } from "../data/structures";
-import { infrastructureLines } from "../data/infrastructure";
+import { infrastructureLines, loadOuterInfrastructure } from "../data/infrastructure";
+import { useLazyData } from "../lib/useLazyData";
 import { parks } from "../data/parks";
 import {
   colonialStreets,
@@ -689,9 +690,11 @@ function MapViewInner({
   }, [projection]);
 
   // ----- Infrastructure (els, subway, aqueduct) -----
+  // The other boroughs' lines load when the map first zooms in to show them.
+  const outerLines = useLazyData(loadOuterInfrastructure, infraFade > 0);
   const infrastructurePaths = useMemo(() => {
     if (!projection) return [];
-    return infrastructureLines.map((line) => {
+    return [...infrastructureLines, ...(outerLines ?? [])].map((line) => {
       const projected = line.pts.map((p) => projection(p)!);
       const d = (line.legs ?? [line.pts])
         .map((leg) =>
@@ -715,7 +718,7 @@ function MapViewInner({
         angle,
       };
     });
-  }, [projection]);
+  }, [projection, outerLines]);
 
   // ----- Parks -----
   const parkPaths = useMemo(() => {

@@ -388,7 +388,10 @@ header, theme, footprint, markers, panel — derives from it.
     a build of 583eadb): about 100 more entries and the transit, railroad,
     and highway geometry added 44 KB and put the map on screen ~240 ms
     later (≈1.8 → 2.0 s). Lazy-loading the zoomed-in transport geometry
-    would win back ~15 KB; not worth it yet.
+    would win back ~15 KB; not worth it yet. (Done on 2026-10-02: the
+    railroad, transit, and highway geometry now loads when the map first
+    zooms in, or when the browser is idle (`src/lib/useLazyData.ts`);
+    main chunk 296 → 281 KB gzipped.)
 
 26. **With `<ViewTransition>`, decide what may *not* be a transition.**
     `useDeferredValue` renders are transitions, and the map follows the

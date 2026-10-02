@@ -208,6 +208,16 @@ test("a tour opened from a link flies to its first stop", async ({ page }) => {
   await expect.poll(zoom, { timeout: 5000 }).toBeGreaterThan(2.5);
 });
 
+test("railroads, els, and highways load once the map zooms in", async ({ page }) => {
+  // Their geometry stays out of the first load and arrives on zoom (or idle).
+  await open(page, "#year=1960");
+  const box = (await page.locator(".map-svg").first().boundingBox())!;
+  await zoomMap(page, box.x + box.width * 0.52, box.y + box.height * 0.6, 8);
+  await expect(page.locator(".infra-railroad").first()).toBeAttached();
+  await expect(page.locator(".infra-elevated").first()).toBeAttached();
+  await expect(page.locator(".highway").first()).toBeAttached();
+});
+
 test("the map key lists only what's on screen", async ({ page }) => {
   await open(page, "#year=1700");
   await page.getByRole("button", { name: "Key" }).click();

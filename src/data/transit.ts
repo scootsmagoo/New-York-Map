@@ -11,7 +11,6 @@
  */
 import type { InfrastructureLine } from "../types";
 import type { Leg } from "./streetcars";
-import geometry from "./geo/transit.json" with { type: "json" };
 
 export interface TransitLine {
   id: string;
@@ -81,19 +80,24 @@ export const transitLines: TransitLine[] = [
     legs: [["CHRYSTIE ST", "GRAND ST", "E HOUSTON ST"]] },
 ];
 
-const routes = geometry as unknown as Record<string, [number, number][][]>;
+export type Routes = Record<string, [number, number][][]>;
 
-/** As infrastructure lines, their legs from the built geometry. */
-export const transitInfrastructure: InfrastructureLine[] = transitLines.map((t) => {
-  const legs = routes[t.id] ?? [];
-  return {
-    id: t.id,
-    name: t.name,
-    kind: t.kind,
-    open: t.open,
-    close: t.close,
-    entryId: t.entryId,
-    pts: legs.flat(),
-    legs,
-  };
-});
+/**
+ * As infrastructure lines, their legs from the built geometry
+ * (geo/transit.json), which loads only when the map needs it.
+ */
+export function transitInfrastructure(routes: Routes): InfrastructureLine[] {
+  return transitLines.map((t) => {
+    const legs = routes[t.id] ?? [];
+    return {
+      id: t.id,
+      name: t.name,
+      kind: t.kind,
+      open: t.open,
+      close: t.close,
+      entryId: t.entryId,
+      pts: legs.flat(),
+      legs,
+    };
+  });
+}

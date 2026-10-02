@@ -10,7 +10,7 @@
  */
 import type { InfrastructureLine } from "../types";
 import type { Leg } from "./streetcars";
-import geometry from "./geo/railroads.json" with { type: "json" };
+import type { Routes } from "./transit";
 
 export interface OsmSource {
   /** OSM way names, exactly. */
@@ -146,19 +146,22 @@ export const railroadLines: RailroadLine[] = [
     osm: [{ names: ["IRT Dyre Avenue Line"], box: box(-73.9, 40.83, -73.8, 40.89) }] },
 ];
 
-const routes = geometry as unknown as Record<string, [number, number][][]>;
-
-/** As infrastructure lines, their legs from the built geometry. */
-export const railroadInfrastructure: InfrastructureLine[] = railroadLines.map((r) => {
-  const legs = routes[r.id] ?? [];
-  return {
-    id: r.id,
-    name: r.name,
-    kind: r.kind,
-    open: r.open,
-    close: r.close,
-    entryId: r.entryId,
-    pts: legs.flat(),
-    legs,
-  };
-});
+/**
+ * As infrastructure lines, their legs from the built geometry
+ * (geo/railroads.json), which loads only when the map needs it.
+ */
+export function railroadInfrastructure(routes: Routes): InfrastructureLine[] {
+  return railroadLines.map((r) => {
+    const legs = routes[r.id] ?? [];
+    return {
+      id: r.id,
+      name: r.name,
+      kind: r.kind,
+      open: r.open,
+      close: r.close,
+      entryId: r.entryId,
+      pts: legs.flat(),
+      legs,
+    };
+  });
+}

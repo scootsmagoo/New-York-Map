@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { transitInfrastructure, transitLines } from "../transit";
+import geometry from "../geo/transit.json";
+import { transitInfrastructure as build, transitLines, type Routes } from "../transit";
+
+const transitInfrastructure = build(geometry as unknown as Routes);
 
 describe("els and subways beyond Manhattan's trunk lines", () => {
   it("each has built geometry and dates in order", () => {
