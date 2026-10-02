@@ -120,10 +120,6 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Next up** (details in PROJECT.md → Future features)
 
-*Keeping it working*
-- Check search on a real iPhone: the keyboard should come up on the first
-  tap. Emulators can't show the iOS rule this works around.
-
 *More history*
 - More entries from the candidate list in docs/BOOK_REFERENCE.md,
   especially *Greater Gotham*'s people and places for 1898–1919.
@@ -131,6 +127,9 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 - Audio per era.
 
 **Done**, newest first:
+
+*Checked 2026-10-03 on a real iPhone:* search's keyboard comes up on the
+first tap, and double-tap / two-finger tap zoom the map in and out.
 
 *Done 2026-10-03 (night):* a mouse wheel zooms the map and the timeline
 smoothly instead of in jumps (quick notches add up); a two-finger tap on
