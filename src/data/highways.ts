@@ -1,5 +1,5 @@
 /**
- * Parkways, expressways, and road tunnels, 1925–1975: Robert Moses's road
+ * Parkways, expressways, and road tunnels from 1925: Robert Moses's road
  * system and what followed. Geometry comes from the city's centerlines for
  * highways, bridges, and tunnels (scripts/prepare-highways.mjs →
  * src/data/geo/highways.json), matched by the names below.

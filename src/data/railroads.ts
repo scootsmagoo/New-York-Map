@@ -138,12 +138,33 @@ export const railroadLines: RailroadLine[] = [
       { names: ["Hudson Line"], box: box(-74.0, 40.86, -73.918, 40.877) },
       { names: ["Hudson Line"], box: box(-73.94, 40.877, -73.895, 40.915) },
     ] },
-  { id: "high-line", name: "High Line", kind: "railroad", open: 1934,
+  // The last train ran in 1980; the viaduct reopened as a park from 2009.
+  { id: "high-line", name: "High Line", kind: "railroad", open: 1934, close: 1980,
     osm: [{ names: ["High Line", "West Side Line"], box: box(-74.02, 40.73, -73.99, 40.76) }] },
   { id: "nywb", name: "New York, Westchester and Boston Railway", kind: "railroad", open: 1912, close: 1937,
     osm: [{ names: ["IRT Dyre Avenue Line", "New York, Westchester and Boston Railway"], box: box(-73.9, 40.83, -73.8, 40.89) }] },
   { id: "irt-dyre", name: "IRT Dyre Avenue line", kind: "subway", open: 1941,
     osm: [{ names: ["IRT Dyre Avenue Line"], box: box(-73.9, 40.83, -73.8, 40.89) }] },
+
+  // ----- After 1975: the lines begun before the fiscal crisis, finished late -----
+  { id: "archer-ave", name: "Archer Avenue lines", kind: "subway", open: 1988,
+    entryId: "archer-avenue-subway",
+    osm: [{ names: ["IND Archer Avenue Line", "BMT Archer Avenue Line"] }] },
+  // The "subway to nowhere": one stop into Queens until the 2001 connection.
+  { id: "ind-63rd-st", name: "63rd Street line", kind: "subway", open: 1989,
+    entryId: "sixty-third-street-line",
+    osm: [{ names: ["IND 63rd Street Line"], box: box(-73.98, 40.75, -73.941, 40.77) }] },
+  { id: "ind-63rd-st-connection", name: "63rd Street line (Queens Boulevard connection)", kind: "subway", open: 2001,
+    osm: [{ names: ["IND 63rd Street Line"], box: box(-73.9425, 40.74, -73.92, 40.77) }] },
+  { id: "airtrain-jfk", name: "AirTrain JFK", kind: "elevated", open: 2003,
+    entryId: "airtrain-jfk",
+    osm: [{ names: ["AirTrain JFK"] }] },
+  { id: "flushing-extension", name: "7 Subway Extension", kind: "subway", open: 2015,
+    entryId: "seven-extension",
+    osm: [{ names: ["IRT Flushing Line (extension)"] }] },
+  { id: "second-ave-subway", name: "Second Avenue Subway", kind: "subway", open: 2017,
+    entryId: "second-avenue-subway",
+    osm: [{ names: ["IND Second Avenue Line", "BMT 63rd Street Line"] }] },
 ];
 
 /**
