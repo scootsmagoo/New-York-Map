@@ -3,8 +3,8 @@
 An interactive, pannable timeline of New York City's history — from the Lenape
 world through New Amsterdam, British New York, and the metropolis to 1919,
 where Mike Wallace's *Greater Gotham* closes, then on through the Depression
-and the Second World War, and through the postwar city to the fiscal
-crisis of 1975. Inspired by Edwin G. Burrows & Mike
+and the Second World War, and through the postwar city, the fiscal crisis of
+1975, and the comeback to the present. Inspired by Edwin G. Burrows & Mike
 Wallace, *Gotham: A History of New York City to 1898*.
 
 **Repo:** https://github.com/scootsmagoo/New-York-Map
@@ -16,13 +16,13 @@ Wallace, *Gotham: A History of New York City to 1898*.
 - A **zoomable, pannable timeline** runs along the bottom of the screen. The
   year under the center playhead drives everything else. The ~11,600 years of
   Lenapehoking are compressed into the left 14% of the strip (a polylinear
-  scale); 1609–1975 gets the rest.
+  scale); 1609 to the present gets the rest.
 - A **stylized archival map** fills the screen. As the playhead moves, the
   city's rough built-up footprint grows — lower Manhattan first, then the
   ribbon up the Bowery, Brooklyn ferry towns, the 1811 grid filling north,
   Brooklyn's row-house ring, the South Bronx, Queens corridors, Staten
   Island's north shore. Footprints cross-fade between 14 hand-drawn snapshots
-  (1609–1975) and are clipped to real shorelines.
+  (1609–2025) and are clipped to real shorelines.
 - Before 1609, the map shows the **Lenape world** instead: territory names
   (Wecquaesgeek, Canarsee, Raritan…), village sites (Werpoes, Shorakapok…),
   and the Wickquasgeck trail that became Broadway. This layer fades out
@@ -80,7 +80,7 @@ src/
     eras.ts            8 eras with palette, summary, Wikipedia article
     entries/<era>.ts   ~190 people/places/events, each with wikiTitle,
                        fallback blurb, optional coords + Gotham note
-    footprints.ts      17 cumulative built-up snapshots, 1609–1975
+    footprints.ts      19 cumulative built-up snapshots, 1609–2025
     lenapeSites.ts     villages, territories, trails (pre-contact layer)
     geo/*.json         generated borough + surrounding-land GeoJSON
   lib/
@@ -138,12 +138,16 @@ header, theme, footprint, markers, panel — derives from it.
   Wikipedia.
 - **1945–1975 population:** census totals and the census counts of Black,
   Puerto Rican, and Chinese New Yorkers; the European groups are estimates.
+- **1980–2020 population:** from 1980 the segments follow the census's own
+  categories (white non-Hispanic, Black, Puerto Rican, Asian, other
+  Hispanic and other). The 2000–2020 counts are the census's; 1980 and
+  1990 are estimated from its shares.
 - **Outer-borough parks:** outlines from NYC Parks' property records
   (Open Data enfh-gkve), parks, community parks, and nature areas of 6+
-  acres acquired by 1975, dated by acquisition (`scripts/prepare-parks.mjs`).
+  acres, dated by acquisition (`scripts/prepare-parks.mjs`).
   The record keeps a property's latest acquisition, so parks assembled over
   years can read late; the big ones' dates are set by hand. Freshkills Park
-  (a landfill until 2008) is left out.
+  (the landfill until 2001) appears from 2008, when work on the park began.
 - **Outer-borough lost landscape:** USGS topographic sheets of 1891–98,
   georeferenced by USGS; wet areas picked by color and dated by the
   streets that reached them (`scripts/lost-landscape-outer/README.md`).
@@ -417,7 +421,12 @@ header, theme, footprint, markers, panel — derives from it.
       City), 38 entries, parkways, expressways, and road tunnels from the
       city's highway centerlines (`src/data/highways.ts`), five bridges,
       1950–70 census population, streets and built-up areas dated to 1975,
-      and the postwar landfills. Next: past 1975.
+      and the postwar landfills.
+- [x] Past 1975 — shipped to the present: The Comeback City (1975–2001)
+      and The Twenty-First-Century City, 53 entries written from
+      Wikipedia, 1980–2020 population, every dated layer rebuilt to 2025,
+      the late subway lines and AirTrain, streets renamed after 1975 in
+      their year, and a Comeback and After tour.
 - [x] Georeferenced historical map overlays (Castello 1660, Ratzer 1767,
       Viele 1865) with opacity blending — shipped: Wikimedia-sourced sheets,
       Manhattan clip, timeline crossfade + manual override, opacity slider.

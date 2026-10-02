@@ -1,7 +1,7 @@
 # Gotham — A Timeline of New York City
 
 An interactive, pannable timeline of New York City's history, from
-Lenapehoking to the fiscal crisis of 1975. Pan through time and watch the
+Lenapehoking to the present. Pan through time and watch the
 city's built-up footprint spread across the five boroughs; click into any era
 for its people, places, and events, with live summaries and images from
 Wikipedia.
@@ -75,11 +75,14 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Where things stand**
 
-- The timeline runs from Lenapehoking to 1975 across ten eras, with about
-  420 entries. The tenth, **The Postwar City (1945–1975)**, carries
-  every layer on: expressways, parkways, and the Verrazzano as they open,
-  the suburbs of Queens and Staten Island filling in, the last trolleys,
-  Lincoln Center, Stonewall, and the fiscal crisis.
+- The timeline runs from Lenapehoking to the present across twelve eras,
+  with 500 entries. **The Postwar City (1945–1975)** carries every layer
+  on: expressways, parkways, and the Verrazzano as they open, the suburbs
+  of Queens and Staten Island filling in, the last trolleys, Lincoln
+  Center, Stonewall, and the fiscal crisis. **The Comeback City
+  (1975–2001)** and **The Twenty-First-Century City** follow, past the
+  Gotham books, written from Wikipedia: the 1977 blackout, AIDS and
+  crack, the new immigrants, September 11, Sandy, and COVID-19.
 - **All five boroughs in detail.** Manhattan's grid as it was opened and
   every outer-borough street dated block by block, with the built-up areas
   drawn from them; 35 to 130 markers per borough; and a borough filter in
@@ -123,26 +126,34 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 *More history*
 - More entries from the candidate list in docs/BOOK_REFERENCE.md,
   especially *Greater Gotham*'s people and places for 1898–1919.
-- Past 1975: the city's comeback, the 1977 blackout, the modern city.
 - Audio per era.
 
 **Done**, newest first:
 
-*Checked 2026-10-03 on a real iPhone:* search's keyboard comes up on the
+*Done 2026-10-02 (afternoon):* the timeline carried past 1975 to the
+present: two new eras (The Comeback City, 1975–2001, and The
+Twenty-First-Century City), 1980–2020 census population, every dated layer
+rebuilt to 2025 (streets, built-up areas, housing, parks, the lost
+landscape), the lines that opened late (Archer Avenue, 63rd Street,
+AirTrain, the 7 extension, the Second Avenue Subway), streets renamed in
+their year, 53 entries from CBGB to the 2025 election, DUMBO, NoHo, and
+Alphabet City on the map, and a Comeback and After tour.
+
+*Checked 2026-10-02 on a real iPhone:* search's keyboard comes up on the
 first tap, and double-tap / two-finger tap zoom the map in and out.
 
-*Done 2026-10-03 (night):* a mouse wheel zooms the map and the timeline
+*Done 2026-10-02 (midday):* a mouse wheel zooms the map and the timeline
 smoothly instead of in jumps (quick notches add up); a two-finger tap on
 the map zooms out, as double-tap (already) zooms in.
 
-*Done 2026-10-03 (later):* the timeline scrolls like a phone: a flung drag
+*Done 2026-10-02 (late morning):* the timeline scrolls like a phone: a flung drag
 glides on and slows to a stop, and pulling past the first or last year
 stretches the strip with growing resistance and springs it back (drag,
 touch, or trackpad). Catching a glide stops it where it is. The map pans
 the same way: flung, it glides on; pulled past its edges, it stretches
 and springs back.
 
-*Done 2026-10-03:* six people and places from *Greater Gotham* (Big Tim
+*Done 2026-10-02 (morning):* six people and places from *Greater Gotham* (Big Tim
 Sullivan, Morris Hillquit, Rose Schneiderman, the Forward Building, John
 Sloan in Chelsea, Irving Berlin); the railroad, transit, and highway
 geometry now loads on first zoom (first load 15 KB lighter); and Sunken

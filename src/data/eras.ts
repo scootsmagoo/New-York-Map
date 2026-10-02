@@ -142,7 +142,7 @@ export const eras: Era[] = [
     end: TIME_MAX,
     color: "#5a4a6e",
     summary:
-      "The September 11 attacks destroyed the World Trade Center and killed nearly 2,800 people. The city rebuilt downtown, rezoned whole waterfronts for towers, and reached a record population; Hurricane Sandy flooded its shores in 2012, and the COVID-19 pandemic struck it first and hardest in 2020.",
+      "The September 11 attacks destroyed the World Trade Center and killed nearly 2,800 people. The city rebuilt downtown, rezoned whole waterfronts for towers, and reached a record population; Hurricane Sandy flooded its shores in 2012, and in the spring of 2020 the COVID-19 pandemic hit it harder than anywhere else in the country.",
     wikiTitle: "History of New York City (1978–present)",
   },
 ];

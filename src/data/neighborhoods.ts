@@ -59,6 +59,12 @@ export const neighborhoods: Neighborhood[] = [
   n("east-village", [-73.9845, 40.7265], [["East Village", 1960]]),
   n("soho", [-74.0015, 40.7233], [["SoHo", 1968]]),
   n("tribeca", [-74.009, 40.7163], [["Tribeca", 1974]]),
+  // After 1975: NoHo and Alphabet City came into use around 1980, as artists
+  // and then realtors moved in; Battery Park City's first apartments were
+  // begun in 1980 on the new landfill.
+  n("noho", [-73.9935, 40.7268], [["NoHo", 1980]]),
+  n("alphabet-city", [-73.978, 40.7238], [["Alphabet City", 1980]]),
+  n("battery-park-city", [-74.0165, 40.7115], [["Battery Park City", 1980]]),
   n("stuy-town", [-73.978, 40.732], [["Stuyvesant Town", 1947]]),
 
   // ----- Brooklyn -----
@@ -96,6 +102,9 @@ export const neighborhoods: Neighborhood[] = [
   n("ocean-hill", [-73.908, 40.68], [["Ocean Hill", 1890]]),
   n("cypress-hills", [-73.875, 40.681], [["Cypress Hills", 1880]]),
   n("vinegar-hill", [-73.981, 40.702], [["Vinegar Hill", 1800]]),
+  // Coined in 1978 by new loft residents, who hoped so ugly a name would
+  // keep developers away.
+  n("dumbo", [-73.9885, 40.7035], [["DUMBO", 1978]]),
   n("wallabout", [-73.9694, 40.6936], [["Wallabout", 1640]]),
   n("gowanus", [-73.9911, 40.6753], [["Gowanus", 1640]]),
   n("weeksville", [-73.9254, 40.674], [["Weeksville", 1838]], { to: 1900 }),

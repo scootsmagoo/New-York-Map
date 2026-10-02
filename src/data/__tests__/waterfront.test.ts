@@ -40,7 +40,10 @@ describe("the working waterfront", () => {
     expect(waterfrontOpacity(fly, 1698)).toBe(0);
     expect(waterfrontOpacity(fly, 1750)).toBe(1);
     expect(waterfrontOpacity(fly, 1822)).toBe(0);
+    // Still working at the end of the timeline: Industry City.
+    const bush = waterfront.find((s) => s.id === "bush-terminal")!;
+    expect(waterfrontOpacity(bush, TIME_MAX)).toBe(1);
     const fulton = waterfront.find((s) => s.id === "fulton-market")!;
-    expect(waterfrontOpacity(fulton, TIME_MAX)).toBe(1);
+    expect(waterfrontOpacity(fulton, 2010)).toBe(0);
   });
 });

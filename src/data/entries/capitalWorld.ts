@@ -611,7 +611,7 @@ export const capitalWorldEntries: Entry[] = [
     blurb:
       "The city finished this wholesale produce market on the Harlem River in 1935. That December, La Guardia came here to proclaim his ban on selling artichokes, aimed at the mobster Ciro Terranova, who had driven up their price.",
     coords: [-73.9303, 40.8204],
-    lifespan: [1935, null],
+    lifespan: [1935, 2006],
   },
   {
     id: "astoria-pool",
