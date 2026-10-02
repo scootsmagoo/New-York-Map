@@ -285,6 +285,10 @@ const mapTransform = (page: import("@playwright/test").Page) =>
     });
 
 test("a flung map glides on after release, then stops", async ({ page }) => {
+  // A fling is judged by the drag's last ~100 ms and must end within 60 ms
+  // of the last move, as on a phone. CI's GPU-less WebKit can't deliver
+  // input that promptly, so this runs locally (like the frame-rate check).
+  test.skip(!!process.env.CI, "input timing on GPU-less CI runners");
   const swipe = async (hold: boolean) => {
     await open(page, "#year=1900");
     const box = (await page.locator(".map-svg").first().boundingBox())!;
