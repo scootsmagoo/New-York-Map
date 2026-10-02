@@ -333,6 +333,58 @@ test("pulling the whole-city map stretches it, then springs back", async ({ page
   await expect.poll(async () => Math.abs((await mapTransform(page))[0]), { timeout: 5000 }).toBeLessThan(0.5);
 });
 
+test("a mouse-wheel notch zooms the map smoothly, as far as before", async ({ page }) => {
+  await open(page, "#year=1900");
+  const box = (await page.locator(".map-svg").first().boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  // Record every scale the map passes through.
+  await page.evaluate(() => {
+    const g = document.querySelector(".map-content")!;
+    const seen: number[] = ((window as any).__scales = []);
+    new MutationObserver(() => {
+      const m = /scale\(([-\d.e]+)\)/.exec(g.getAttribute("transform") ?? "");
+      if (m) seen.push(Number(m[1]));
+    }).observe(g, { attributes: true, attributeFilter: ["transform"] });
+  });
+  await page.mouse.wheel(0, -100);
+  // d3's step per notch (browsers scale the delta a little differently).
+  await expect.poll(async () => (await mapTransform(page))[2]).toBeGreaterThan(1.1);
+  let prev = 0;
+  await expect
+    .poll(async () => {
+      const k = (await mapTransform(page))[2];
+      const still = Math.abs(k - prev) < 1e-4;
+      prev = k;
+      return still;
+    }, { intervals: [200] })
+    .toBe(true);
+  expect(prev).toBeLessThan(1.2);
+  // On a real GPU the notch arrives in several eased steps, not one jump.
+  if (!process.env.CI) {
+    const seen: number[] = await page.evaluate(() => (window as any).__scales);
+    expect(new Set(seen.map((k) => k.toFixed(3))).size).toBeGreaterThanOrEqual(3);
+  }
+});
+
+test("a two-finger tap zooms the map out", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "raw touch input through Chromium's DevTools protocol");
+  await open(page, "#year=1900");
+  const box = (await page.locator(".map-svg").first().boundingBox())!;
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  await zoomMap(page, cx, cy, 10);
+  const before = (await mapTransform(page))[2];
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+  const points = [
+    { x: cx - 40, y: cy, id: 1 },
+    { x: cx + 40, y: cy, id: 2 },
+  ];
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: points });
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await expect.poll(async () => (await mapTransform(page))[2]).toBeCloseTo(before / 2, 1);
+});
+
 test("the map key lists only what's on screen", async ({ page }) => {
   await open(page, "#year=1700");
   await page.getByRole("button", { name: "Key" }).click();

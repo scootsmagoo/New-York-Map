@@ -81,6 +81,8 @@ export function Timeline({
   const pull = useRef(0);
   const samples = useRef<{ t: number; x: number }[]>([]);
   const wheelSettle = useRef<number | null>(null);
+  // Where a run of wheel notches is zooming to, so quick notches add up.
+  const zoomTarget = useRef<TimeWindow | null>(null);
 
   // The window as of the last event, ahead of React: pointer moves that
   // arrive between renders must build on each other, not on the stale prop.
@@ -96,6 +98,7 @@ export function Timeline({
       clearTimeout(wheelSettle.current);
       wheelSettle.current = null;
     }
+    zoomTarget.current = null;
   }, []);
 
   /** Shift the strip's contents (not the playhead) by `px`, imperatively: no re-render per frame. */
@@ -237,7 +240,32 @@ export function Timeline({
     const rect = svg.getBoundingClientRect();
     const x = e.clientX - rect.left;
     if (e.ctrlKey || Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      const factor = Math.pow(2, -e.deltaY * (e.ctrlKey ? 0.012 : 0.0022));
+      const lines = e.deltaMode === 1 ? 33 : e.deltaMode ? 400 : 1;
+      const factor = Math.pow(2, -e.deltaY * lines * (e.ctrlKey ? 0.012 : 0.0022));
+      // A mouse wheel's notches jump; ease them, adding up quick ones.
+      // Trackpads send small steps that are smooth as they are.
+      const notch = e.deltaMode !== 0 || (!e.ctrlKey && Math.abs(e.deltaY) >= 50);
+      if (notch && !reducedMotion()) {
+        const from = zoomTarget.current ?? w;
+        const uFixed = from.u0 + (x / wd) * (from.u1 - from.u0);
+        const to = zoomWindow(from, factor, uFixed);
+        zoomTarget.current = to;
+        const start = { ...w };
+        const t0 = performance.now();
+        if (anim.current !== null) cancelAnimationFrame(anim.current);
+        const frame = (now: number) => {
+          const f = Math.min(1, (now - t0) / 160);
+          const ease = 1 - Math.pow(1 - f, 3);
+          setWin({ u0: start.u0 + (to.u0 - start.u0) * ease, u1: start.u1 + (to.u1 - start.u1) * ease });
+          if (f < 1) anim.current = requestAnimationFrame(frame);
+          else {
+            anim.current = null;
+            zoomTarget.current = null;
+          }
+        };
+        anim.current = requestAnimationFrame(frame);
+        return;
+      }
       const uFixed = w.u0 + (x / wd) * (w.u1 - w.u0);
       setWin(zoomWindow(w, factor, uFixed));
     } else {

@@ -454,9 +454,22 @@ function MapViewInner({
       if (mode === "spring") mode = "idle";
     };
 
+    /**
+     * A mouse wheel turns in notches, each a jump in zoom; trackpads send a
+     * stream of small steps that is already smooth. Notches are eased here
+     * instead of by d3.
+     */
+    const notchy = (e: WheelEvent) => e.deltaMode !== 0 || (!e.ctrlKey && Math.abs(e.deltaY) >= 50);
+
     const behavior = zoom<SVGSVGElement, unknown>()
       .scaleExtent([1, 16])
       .translateExtent(extent)
+      // d3's default filter, less the wheel notches handled below.
+      .filter((e: Event) => {
+        const ev = e as MouseEvent;
+        if (ev.type === "wheel" && notchy(e as WheelEvent)) return false;
+        return (!ev.ctrlKey || ev.type === "wheel") && !ev.button;
+      })
       .constrain((t) => {
         if (mode === "spring") return t;
         const c = clamp(t);
@@ -569,6 +582,73 @@ function MapViewInner({
     };
     zoomRef.current = behavior;
     const sel = select(svg);
+
+    // ----- Eased wheel notches -----
+    let wheelFrame: number | null = null;
+    let wheelTarget: number | null = null;
+    const onWheelNotch = (e: WheelEvent) => {
+      if (!notchy(e)) return;
+      e.preventDefault();
+      stopCoast();
+      if (wheelFrame !== null) cancelAnimationFrame(wheelFrame);
+      const rect = svg.getBoundingClientRect();
+      const p: [number, number] = [e.clientX - rect.left, e.clientY - rect.top];
+      // d3-zoom's own wheel step, so a notch zooms as far as before.
+      const step = -e.deltaY * (e.deltaMode === 1 ? 0.05 : e.deltaMode ? 1 : 0.002);
+      const k0 = transformRef.current.k;
+      // Notches that come quickly add up rather than restarting from here.
+      const target = Math.max(1, Math.min(16, (wheelTarget ?? k0) * Math.pow(2, step)));
+      wheelTarget = target;
+      const t0 = performance.now();
+      const frame = (now: number) => {
+        const f = Math.min(1, (now - t0) / 160);
+        const eased = 1 - Math.pow(1 - f, 3);
+        coasting = true;
+        behavior.scaleTo(sel, k0 * Math.pow(target / k0, eased), p);
+        coasting = false;
+        if (f < 1) {
+          wheelFrame = requestAnimationFrame(frame);
+          return;
+        }
+        wheelFrame = null;
+        wheelTarget = null;
+        syncZoomK(transformRef.current);
+        cameraLink?.publish(transformRef.current, cameraId, true);
+      };
+      wheelFrame = requestAnimationFrame(frame);
+    };
+    svg.addEventListener("wheel", onWheelNotch, { passive: false });
+
+    // ----- Two-finger tap zooms out (double-tap, d3's own, zooms in) -----
+    let twoTap: { t: number; pts: [number, number][]; moved: boolean } | null = null;
+    const touchPts = (e: TouchEvent) => [...e.touches].map((t) => [t.clientX, t.clientY] as [number, number]);
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) twoTap = { t: performance.now(), pts: touchPts(e), moved: false };
+      else if (e.touches.length > 2) twoTap = null;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!twoTap) return;
+      const now = touchPts(e);
+      if (now.some((q, i) => twoTap!.pts[i] && Math.hypot(q[0] - twoTap!.pts[i][0], q[1] - twoTap!.pts[i][1]) > 12)) {
+        twoTap.moved = true;
+      }
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (!twoTap || e.touches.length > 0) return;
+      const tap = twoTap;
+      twoTap = null;
+      if (tap.moved || performance.now() - tap.t > 300) return;
+      const rect = svg.getBoundingClientRect();
+      const mid: [number, number] = [
+        (tap.pts[0][0] + tap.pts[1][0]) / 2 - rect.left,
+        (tap.pts[0][1] + tap.pts[1][1]) / 2 - rect.top,
+      ];
+      sel.transition().duration(250).call(behavior.scaleBy as any, 0.5, mid);
+    };
+    svg.addEventListener("touchstart", onTouchStart, { passive: true });
+    svg.addEventListener("touchmove", onTouchMove, { passive: true });
+    svg.addEventListener("touchend", onTouchEnd, { passive: true });
+
     // Cutting short a tour flight here isn't the user taking over: the
     // flight effect below runs again and flies on from wherever this leaves
     // the view.
@@ -607,6 +687,11 @@ function MapViewInner({
     });
     return () => {
       stopCoast();
+      if (wheelFrame !== null) cancelAnimationFrame(wheelFrame);
+      svg.removeEventListener("wheel", onWheelNotch);
+      svg.removeEventListener("touchstart", onTouchStart);
+      svg.removeEventListener("touchmove", onTouchMove);
+      svg.removeEventListener("touchend", onTouchEnd);
       unsubscribe?.();
       sel.on(".zoom", null);
       sel.on(".end", null);

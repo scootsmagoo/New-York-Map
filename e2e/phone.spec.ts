@@ -97,3 +97,17 @@ test("on its side, the open key leaves play and zoom uncovered", async ({ page }
   await page.getByRole("button", { name: /play through time/i }).tap();
   await expect(page.getByRole("button", { name: "Pause" })).toBeVisible();
 });
+
+test("double-tapping the map zooms in", async ({ page }) => {
+  await open(page, "#year=1900");
+  const box = (await page.locator(".map-svg").first().boundingBox())!;
+  const scale = () =>
+    page
+      .locator(".map-content")
+      .first()
+      .evaluate((g) => Number(/scale\(([-\d.e]+)\)/.exec(g.getAttribute("transform") ?? "")?.[1] ?? 1));
+  await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+  await page.waitForTimeout(80);
+  await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+  await expect.poll(scale).toBeGreaterThan(1.8);
+});

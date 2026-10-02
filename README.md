@@ -132,6 +132,10 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Done**, newest first:
 
+*Done 2026-10-03 (night):* a mouse wheel zooms the map and the timeline
+smoothly instead of in jumps (quick notches add up); a two-finger tap on
+the map zooms out, as double-tap (already) zooms in.
+
 *Done 2026-10-03 (later):* the timeline scrolls like a phone: a flung drag
 glides on and slows to a stop, and pulling past the first or last year
 stretches the strip with growing resistance and springs it back (drag,
