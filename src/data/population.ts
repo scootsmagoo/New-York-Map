@@ -1,8 +1,10 @@
 /**
  * Historical population snapshots for Manhattan (through 1897) and Greater New
- * York (1898–1975). Figures are rounded census totals or scholarly estimates;
+ * York (1898–2020). Figures are rounded census totals or scholarly estimates;
  * demographic splits are approximate, informed by federal censuses and
- * Burrows & Wallace's *Gotham*.
+ * Burrows & Wallace's *Gotham*. From 1980 the splits follow the census's
+ * own categories (see `segmentLabel`): the European groups fold into
+ * non-Hispanic white, and the Chinese segment becomes Asian.
  */
 
 export type PopScope = "manhattan" | "greaterNY";
@@ -384,6 +386,72 @@ const SNAPSHOTS = [
       other_foreign: 600_000,
     },
   },
+  {
+    // 1980: the census total; the split is an estimate halfway between 1970
+    // and 1990 (Puerto Rican count from the census). From here on the
+    // segments are the census's categories: non-Hispanic white, Black,
+    // Puerto Rican, Asian, and other (other Hispanic, and everyone else).
+    year: 1980,
+    scope: "greaterNY",
+    estimate: true,
+    segments: {
+      native_born_white: 3_619_000,
+      free_black: 1_621_000,
+      puerto_rican: 860_552,
+      chinese: 276_000,
+      other_foreign: 695_087,
+    },
+  },
+  {
+    // 1990: census total and shares (non-Hispanic white 43.3%, Hispanic
+    // 24.0%, Asian 7.0%); Black as the remainder.
+    year: 1990,
+    scope: "greaterNY",
+    estimate: true,
+    segments: {
+      native_born_white: 3_170_670,
+      free_black: 1_845_287,
+      puerto_rican: 896_763,
+      chinese: 512_579,
+      other_foreign: 897_265,
+    },
+  },
+  {
+    // 2000–2020: census counts (Hispanic of any race; the others
+    // non-Hispanic). "Other" is non-Puerto Rican Hispanics plus Native,
+    // Pacific Islander, other, and multiracial New Yorkers.
+    year: 2000,
+    scope: "greaterNY",
+    segments: {
+      native_born_white: 2_801_267,
+      free_black: 1_962_154,
+      puerto_rican: 789_172,
+      chinese: 780_229,
+      other_foreign: 1_675_456,
+    },
+  },
+  {
+    year: 2010,
+    scope: "greaterNY",
+    segments: {
+      native_born_white: 2_722_904,
+      free_black: 1_861_295,
+      puerto_rican: 723_621,
+      chinese: 1_028_119,
+      other_foreign: 1_839_194,
+    },
+  },
+  {
+    year: 2020,
+    scope: "greaterNY",
+    segments: {
+      native_born_white: 2_719_856,
+      free_black: 1_776_891,
+      puerto_rican: 595_535,
+      chinese: 1_373_502,
+      other_foreign: 2_338_406,
+    },
+  },
 ].map((s) => ({ ...s, segments: { ...s.segments } })) as PopSnapshot[];
 
 export interface PopulationAtYear {
@@ -462,6 +530,12 @@ function segmentList(segments: Segments): PopulationAtYear["segments"] {
 /** "Free Black" only means something while slavery is legal (to 1827 in New York). */
 export function segmentLabel(key: SegmentKey, year: number): string {
   if (key === "free_black" && year >= 1827) return "Black";
+  // From 1980 the segments are the census's categories.
+  if (year >= 1980) {
+    if (key === "native_born_white") return "White (non-Hispanic)";
+    if (key === "chinese") return "Asian";
+    if (key === "other_foreign") return "Other Hispanic & other";
+  }
   return SEGMENT_META[key].label;
 }
 

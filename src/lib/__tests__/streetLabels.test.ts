@@ -12,6 +12,7 @@ import {
   type StreetLabelData,
 } from "../streetLabels";
 import realData from "../../data/geo/streetLabels.json";
+import { TIME_MAX } from "../../data/eras";
 
 const projection = geoMercator().fitExtent(
   [
@@ -138,14 +139,17 @@ describe("street label data", () => {
     expect(d.anchors.length).toBeGreaterThan(10000);
     for (const a of d.anchors) {
       expect(a[3]).toBeGreaterThanOrEqual(1800);
-      expect(a[3]).toBeLessThanOrEqual(1975);
+      expect(a[3]).toBeLessThanOrEqual(TIME_MAX);
       if (a[4] !== 0) expect(a[4]).toBeGreaterThanOrEqual(a[3]);
     }
   });
 
   it("uses the names of the time, not today's", () => {
+    // Bed-Stuy's Reid Avenue became Malcolm X Boulevard in 1985 (Harlem's
+    // Lenox Avenue was only co-named, and keeps its name).
     expect(named("Lenox Ave").length).toBeGreaterThan(0);
-    expect(named("Malcolm X Blvd")).toHaveLength(0);
+    expect(named("Reid Ave").some((a) => a[4] === 1984)).toBe(true);
+    expect(named("Malcolm X Blvd").every((a) => a[3] >= 1985)).toBe(true);
     // Renamed within the timeline: Harlem's 7th Avenue in 1974.
     expect(named("7th Ave").some((a) => a[4] === 1973)).toBe(true);
     expect(named("Adam Clayton Powell Jr Blvd").every((a) => a[3] >= 1974)).toBe(true);

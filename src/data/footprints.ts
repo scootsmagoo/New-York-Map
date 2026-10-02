@@ -612,6 +612,20 @@ const snapshots: FootprintSnapshot[] = [
     manhattan: [manhattanBelow(40.879, 40.875)],
     other: [],
   },
+  {
+    // After 1975 Manhattan is built out; the other boroughs' last suburbs
+    // (Staten Island above all) fill in, drawn from the streets.
+    year: 2000,
+    frontier: { latW: 40.879, latE: 40.875 },
+    manhattan: [manhattanBelow(40.879, 40.875)],
+    other: [],
+  },
+  {
+    year: 2025,
+    frontier: { latW: 40.879, latE: 40.875 },
+    manhattan: [manhattanBelow(40.879, 40.875)],
+    other: [],
+  },
 ];
 
 /**

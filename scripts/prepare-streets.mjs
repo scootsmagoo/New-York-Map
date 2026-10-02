@@ -97,16 +97,8 @@ const median = (xs) => {
 const BORO_MANHATTAN = "1";
 const BORO_QUEENS = "4";
 
-/** Modern names → what the street was called through the timeline's end (1975). */
-const RENAMED = {
-  "1|FREDERICK DOUGLASS BLVD": "8th Ave",
-  "1|MALCOLM X BLVD": "Lenox Ave",
-  "3|MALCOLM X BLVD": "Reid Ave",
-  "3|MARCUS GARVEY BLVD": "Sumner Ave",
-  "3|MOTHER GASTON BLVD": "Stone Ave",
-  "4|GUY R BREWER BLVD": "New York Blvd",
-  "5|FATHER CAPODANNO BLVD": "Seaside Blvd",
-};
+/** Modern names → what the street was called through the timeline's end. */
+const RENAMED = {};
 
 /** Renamed within the timeline: [modern name, earlier name, year of the change]. */
 const RENAMED_DURING = {
@@ -119,6 +111,14 @@ const RENAMED_DURING = {
   "1|W END AVE": ["11th Ave", 1880],
   "5|VICTORY BLVD": ["Richmond Turnpike", 1923],
   "1|FRANKLIN D ROOSEVELT DR": ["East River Dr", 1945],
+  // After 1975 (years from Wikipedia's articles on the streets, their
+  // namesakes, or their bus routes, except the two marked).
+  "5|FATHER CAPODANNO BLVD": ["Seaside Blvd", 1976],
+  "1|FREDERICK DOUGLASS BLVD": ["8th Ave", 1977],
+  "3|MOTHER GASTON BLVD": ["Stone Ave", 1981], // year unconfirmed (her statue is 1986)
+  "4|GUY R BREWER BLVD": ["New York Blvd", 1982],
+  "3|MALCOLM X BLVD": ["Reid Ave", 1985],
+  "3|MARCUS GARVEY BLVD": ["Sumner Ave", 1987], // year unconfirmed (Sumner Houses were renamed in 1986)
 };
 
 /** Streets that took their names (or were laid out) later than the land filled in. */
@@ -131,13 +131,20 @@ const NAMED_FROM = {
 /** Commissioners' Plan names in Manhattan: none before the 1811 grid. */
 const GRID_NAME = /^([EW] )?\d+ (ST|AVE)$|^AVE [A-D]$|^(MADISON|LEXINGTON|PARK) AVE$/;
 
-/** Post-1945 streets on land that was already built up (rail yards, projects). */
-const POSTWAR = new Set([
-  "1|RIVERSIDE BLVD", "1|FREEDOM PL", "1|FREEDOM PL S", "1|DUKE ELLINGTON BLVD",
-  // Roosevelt Island's streets date from its 1970s rebuilding.
-  "1|MAIN ST", "1|EAST RD", "1|WEST RD", "1|RIVER RD",
-  "2|CONCOURSE VLG E", "2|CONCOURSE VLG W",
-]);
+/**
+ * Post-1945 streets on land that was already built up (rail yards, projects,
+ * Roosevelt Island), dated by hand. Those left out have no date we trust.
+ */
+const BUILT_IN = {
+  "1|FREEDOM PL": 1965, // with Lincoln Towers, built 1962–65 (approximate)
+  "1|FREEDOM PL S": 1965,
+  "1|RIVERSIDE BLVD": 1998, // Riverside South, its first towers begun in 1997
+  "1|MAIN ST": 1975, // Roosevelt Island's first residents, April 1975
+  "1|EAST RD": 1989, // Main Street was the island's only road until 1989
+  "1|WEST RD": 1989,
+  "1|RIVER RD": 1989,
+};
+const POSTWAR = new Set(["1|DUKE ELLINGTON BLVD", "2|CONCOURSE VLG E", "2|CONCOURSE VLG W"]);
 
 const SUFFIX = {
   ST: "St", AVE: "Ave", BLVD: "Blvd", RD: "Rd", PL: "Pl", DR: "Dr", LN: "Ln",
@@ -289,11 +296,11 @@ for (const s of streets.values()) {
     if (chosen.some((c) => metersBetween(c, mid) < spacing)) continue;
     chosen.push(mid);
 
-    let year = builtYear(mid, manhattan);
+    let year = BUILT_IN[s.key] ?? builtYear(mid, manhattan);
     if (year === null) continue;
     // Modern names only once the old city gives way; colonial streets cover
     // the earlier years.
-    year = Math.max(year, 1800, NAMED_FROM[s.key] ?? 0);
+    year = Math.max(year, 1800, NAMED_FROM[s.key] ?? 0, BUILT_IN[s.key] ?? 0);
     if (manhattan && GRID_NAME.test(s.raw)) year = Math.max(year, 1815);
     if (s.boro === BORO_QUEENS && /^\d/.test(s.raw)) year = Math.max(year, 1925);
 

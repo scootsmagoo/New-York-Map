@@ -33,7 +33,7 @@ export function TipsCard({ onStartTour, onCompare, onSearch, onDismiss }: TipsCa
       <div className="tour-card-kicker">New here? Things to try</div>
       <p className="tour-card-text tips-card-lead">
         Drag the timeline at the bottom and watch the city grow, from the
-        Lenape world to 1975. Click a marker for its story.
+        Lenape world to today. Click a marker for its story.
       </p>
       <ul className="tips-card-list">
         <li>

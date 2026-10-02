@@ -2,7 +2,7 @@ import { TIME_MIN, TIME_MAX } from "../data/eras";
 
 /**
  * The timeline is polylinear: the ~11,600 years of Lenapehoking are compressed
- * into a fixed fraction of the strip, while 1609–1975 gets the rest. Pan/zoom
+ * into a fixed fraction of the strip, while 1609 to the present gets the rest. Pan/zoom
  * operate on a visible window [u0, u1] in "unit space" [0, 1].
  */
 export const BREAK_YEAR = 1609;

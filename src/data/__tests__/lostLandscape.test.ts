@@ -45,6 +45,7 @@ describe("lost waters for search", () => {
 });
 
 import outer from "../geo/lostLandscapeOuter.json";
+import { TIME_MAX } from "../eras";
 
 describe("the other boroughs' lost landscape", () => {
   it("is filled after the surveys and by the timeline's end, or still wet, and lies off Manhattan", () => {
@@ -52,7 +53,7 @@ describe("the other boroughs' lost landscape", () => {
     expect(outer.fill.length).toBeGreaterThan(10);
     for (const f of outer.fill) {
       expect(f.until, "filled after the 1845 chart").toBeGreaterThanOrEqual(1847);
-      expect(f.until).toBeLessThanOrEqual(1975);
+      expect(f.until).toBeLessThanOrEqual(TIME_MAX);
       for (const ring of f.rings) for (const p of ring) expect(inCity(p)).toBe(true);
       // Before the 1890s surveys, only the traced older maps date a fill:
       // the 1845 Coast Survey chart, which stops south of the Bronx, and the

@@ -6,10 +6,11 @@ import type { Era } from "../types";
  * sequel "Greater Gotham" leaves off, then on through the Depression and the
  * Second World War. Wallace's third volume, "Gotham at War" (2025), covers
  * 1933–1945; the 1920s fall between the books. The postwar era, to the
- * fiscal crisis of 1975, goes past them.
+ * fiscal crisis of 1975, and the two after it, to the present, go past
+ * them and are written from Wikipedia.
  */
 export const TIME_MIN = -10000;
-export const TIME_MAX = 1975;
+export const TIME_MAX = 2025;
 
 export const eras: Era[] = [
   {
@@ -116,11 +117,33 @@ export const eras: Era[] = [
     name: "The Postwar City",
     subtitle: "Expressways, towers, and the fiscal crisis, 1945–1975",
     start: 1945,
-    end: TIME_MAX,
+    end: 1975,
     color: "#4a4f57",
     summary:
       "The richest city in the world came out of the war with its port, garment lofts, and factories at full stretch, and the UN on the East River. Then it remade itself: Robert Moses drove expressways through the Bronx and Brooklyn, public housing and urban renewal cleared whole neighborhoods, and the suburbs of Queens and Staten Island filled in. A million white New Yorkers left and as many Black and Puerto Rican New Yorkers arrived; the Dodgers and Giants went west; manufacturing and the docks faded. By 1975 the city could not pay its bills.",
     wikiTitle: "History of New York City (1946–1977)",
+  },
+  {
+    id: "comeback",
+    name: "The Comeback City",
+    subtitle: "Bankruptcy, crack, and the long recovery, 1975–2001",
+    start: 1975,
+    end: 2001,
+    color: "#3d5a6e",
+    summary:
+      "Saved from default in 1975 by the state and the unions' pension funds, the city went dark in the 1977 blackout and burned in the South Bronx, then rebuilt: Koch's housing program, Wall Street's boom, the crack epidemic and AIDS, the 1990s fall in crime, and a new wave of immigrants from the Caribbean, Latin America, Asia, and the former Soviet Union that carried the population past eight million.",
+    wikiTitle: "History of New York City (1978–present)",
+  },
+  {
+    id: "present",
+    name: "The Twenty-First-Century City",
+    subtitle: "September 11, Sandy, and the city today, 2001–present",
+    start: 2001,
+    end: TIME_MAX,
+    color: "#5a4a6e",
+    summary:
+      "The September 11 attacks destroyed the World Trade Center and killed nearly 2,800 people. The city rebuilt downtown, rezoned whole waterfronts for towers, and reached a record population; Hurricane Sandy flooded its shores in 2012, and the COVID-19 pandemic struck it first and hardest in 2020.",
+    wikiTitle: "History of New York City (1978–present)",
   },
 ];
 

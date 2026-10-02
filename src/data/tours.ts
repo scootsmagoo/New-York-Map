@@ -628,7 +628,7 @@ export const tours: Tour[] = [
       {
         year: 1975,
         title: "Drop dead",
-        text: "In 1975 the city could no longer borrow. The state took over its finances, tens of thousands of city workers were laid off, and the Daily News summed up Washington's answer: 'Ford to City: Drop Dead.' Here the timeline ends.",
+        text: "In 1975 the city could no longer borrow. The state took over its finances, tens of thousands of city workers were laid off, and the Daily News summed up Washington's answer: 'Ford to City: Drop Dead.'",
         entryId: "fiscal-crisis",
       },
     ],

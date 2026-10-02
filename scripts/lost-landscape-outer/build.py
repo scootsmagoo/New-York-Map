@@ -17,7 +17,7 @@ Each piece of made land (cut into ~400 m cells) is dated by when the city's
 streets reached it (the dated street lines from prepare-borough-streets.mjs),
 or by a known date for big fills with no streets (airports, parks, rail
 yards, the Navy Yard, the postwar landfills), and otherwise stays wet
-through 1975, as much of Jamaica Bay still is.
+to the present, as much of Jamaica Bay still is.
 
 Land made before the 1890s comes from older maps, traced by hand and
 placed by landmarks: the U.S. Coast Survey's Map of New-York Bay and Harbor
@@ -59,7 +59,7 @@ SHEETS = [
     ("NY_Hempstead_129886_1897_62500_geo.tif", (-73.75, 40.5, -73.5, 40.75), 1897, dict(wet=12, water=32)),
 ]
 DOWN = 4  # 5.3 m pixels → ~21 m
-TIME_MAX = 1975
+TIME_MAX = 2025
 
 # Big fills with no streets to date them: [name, year, (lon0, lat0, lon1, lat1)].
 KNOWN_FILLS = [
@@ -237,7 +237,7 @@ def date_cells(made, water, survey_of):
             until = year if year and year <= TIME_MAX else None
             kept.append(piece)
             for kind, part in (("water", piece.intersection(water)), ("marsh", piece.difference(water))):
-                # Manhattan's made-over islands are all built on by 1975;
+                # Manhattan's made-over islands are all built on by now;
                 # wet there is a misread, not marsh that survived.
                 if not until:
                     part = part.difference(made_over_islands)

@@ -25,10 +25,8 @@ import path from "node:path";
 
 const rows = JSON.parse(fs.readFileSync(path.resolve("data-raw/parks/outer.json"), "utf8"));
 
-/** Not parks by 1975, whatever the land records say. */
-const SKIP = new Set([
-  "Freshkills Park", // the city's landfill from 1948; a park only from 2008
-]);
+/** Not parks, whatever the land records say. */
+const SKIP = new Set();
 
 /** Better dates, from the parks' histories. */
 const KNOWN = {
@@ -40,6 +38,7 @@ const KNOWN = {
   "Crotona Park": { from: 1888 },
   "Forest Park": { from: 1895 },
   "Marine Park": { from: 1924 }, // the first large gift, 1920–24; mostly still marsh in 1945
+  "Freshkills Park": { from: 2008 }, // the city's landfill from 1948; a park only from 2008
 };
 
 const M_LAT = 111320;

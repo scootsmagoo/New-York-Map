@@ -36,8 +36,8 @@ test("deep links open the right year", async ({ page }) => {
   expect(await year(page)).toBe("1776");
   await open(page, "#year=1945");
   expect(await year(page)).toBe("1945");
-  await open(page, "#year=1975");
-  expect(await year(page)).toBe("1975");
+  await open(page, "#year=2010");
+  expect(await year(page)).toBe("2010");
 });
 
 test("an entry link opens its card", async ({ page }) => {
@@ -78,10 +78,10 @@ test("Then & Now opens on two different years, and both can be typed", async ({ 
   await expect(then).toHaveValue("1776");
 
   await now.click();
-  await page.keyboard.type("2020");
+  await page.keyboard.type("2090");
   await page.keyboard.press("Enter");
-  await expect(now).toHaveValue("1975"); // capped at the end of the timeline
-  expect(await year(page)).toBe("1975");
+  await expect(now).toHaveValue("2025"); // capped at the end of the timeline
+  expect(await year(page)).toBe("2025");
 });
 
 test("a tour steps through time and turns on its layer", async ({ page }) => {

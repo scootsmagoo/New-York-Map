@@ -35,6 +35,8 @@
 [data-era="greaterNY"]     { --paper: #e9e3d4; --paper-deep: #d9d2c0; --water: #c5cdd0; --ink: #28211b; }
 [data-era="capitalWorld"]  { --paper: #e8e2d6; --paper-deep: #d8d0c2; --water: #c3cbd1; --ink: #26201c; }
 [data-era="postwar"]       { --paper: #e6e3dc; --paper-deep: #d5d1c8; --water: #c1cad1; --ink: #24211e; }
+[data-era="comeback"]      { --paper: #e5e3de; --paper-deep: #d3d1cb; --water: #bfc9d1; --ink: #23211f; }
+[data-era="present"]       { --paper: #e7e6e2; --paper-deep: #d6d4cf; --water: #c0cbd3; --ink: #222120; }
 
 * { box-sizing: border-box; }
 

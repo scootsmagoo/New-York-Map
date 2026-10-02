@@ -11,7 +11,7 @@
  * rows, consolidated since; its year is the earliest completion).
  *
  * Output: src/data/geo/housing.json — { q, developments: [{ name, year,
- * apartments, rings }] } for those completed by 1975, rings packed like the
+ * apartments, rings }] } for those completed by 2025, rings packed like the
  * other geometry (lib/geoPack.ts unpackRing). Loaded with the layer.
  *
  * Run: node scripts/prepare-housing.mjs
@@ -19,7 +19,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const TIME_MAX = 1975;
+const TIME_MAX = 2025;
 const db = JSON.parse(fs.readFileSync(path.resolve("data-raw/nycha/databook.json"), "utf8"));
 const outlines = JSON.parse(fs.readFileSync(path.resolve("data-raw/nycha/outlines.json"), "utf8"));
 const num = (s) => Number(String(s ?? "0").replace(/,/g, "")) || 0;

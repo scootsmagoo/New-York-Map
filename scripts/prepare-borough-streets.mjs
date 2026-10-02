@@ -18,7 +18,7 @@
  *     themselves drawn from these streets, see scripts/borough-footprints);
  *   - a known date for old roads and turnpikes (OLD_ROADS below).
  * Segments with no dated lots nearby (parks, yards, cemeteries) take the
- * median of their dated neighbors. Anything built after 1975 is dropped.
+ * median of their dated neighbors. Anything built after 2025 is dropped.
  *
  * Output: src/data/geo/streets-{bk,qn,bx,si}.json, loaded by the map only
  * when zoomed into that borough. Lines are grouped in tiles for culling;
@@ -33,7 +33,7 @@ import { handFootprints } from "../src/data/footprints.ts";
 
 const rawDir = path.resolve("data-raw");
 const outDir = path.resolve("src/data/geo");
-const TIME_MAX = 1975;
+const TIME_MAX = 2025;
 /** Hand-drawn outer-borough footprints are used for dating up to here. */
 const HAND_FOOTPRINTS_UNTIL = 1880;
 /**

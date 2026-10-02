@@ -586,6 +586,7 @@ function MapViewInner({
     // ----- Eased wheel notches -----
     let wheelFrame: number | null = null;
     let wheelTarget: number | null = null;
+    let wheelPoint: [number, number] = [0, 0];
     const onWheelNotch = (e: WheelEvent) => {
       if (!notchy(e)) return;
       e.preventDefault();
@@ -599,6 +600,7 @@ function MapViewInner({
       // Notches that come quickly add up rather than restarting from here.
       const target = Math.max(1, Math.min(16, (wheelTarget ?? k0) * Math.pow(2, step)));
       wheelTarget = target;
+      wheelPoint = p;
       const t0 = performance.now();
       const frame = (now: number) => {
         const f = Math.min(1, (now - t0) / 160);
@@ -687,7 +689,12 @@ function MapViewInner({
     });
     return () => {
       stopCoast();
-      if (wheelFrame !== null) cancelAnimationFrame(wheelFrame);
+      // A resize mid-notch (the web fonts arriving, say) lands the notch
+      // where it was headed rather than cutting it short.
+      if (wheelFrame !== null) {
+        cancelAnimationFrame(wheelFrame);
+        if (wheelTarget !== null) behavior.scaleTo(sel, wheelTarget, wheelPoint);
+      }
       svg.removeEventListener("wheel", onWheelNotch);
       svg.removeEventListener("touchstart", onTouchStart);
       svg.removeEventListener("touchmove", onTouchMove);
