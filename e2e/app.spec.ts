@@ -219,28 +219,37 @@ test("railroads, els, and highways load once the map zooms in", async ({ page })
 });
 
 test("a flung timeline glides on after release, then stops", async ({ page }) => {
-  await open(page, "#year=1800&span=0.3");
-  const box = (await page.locator(".timeline-svg").boundingBox())!;
-  const y = box.y + box.height - 20;
-  await page.mouse.move(box.x + box.width * 0.7, y);
-  await page.mouse.down();
-  for (let i = 1; i <= 6; i++) await page.mouse.move(box.x + box.width * 0.7 - i * 40, y);
-  await page.mouse.up();
-  const atRelease = Number(await year(page));
-  await expect.poll(async () => Number(await year(page))).toBeGreaterThan(atRelease);
-  // And it comes to rest (a hard fling glides for up to ~3 s).
-  let prev = NaN;
-  await expect
-    .poll(
-      async () => {
-        const now = Number(await year(page));
-        const still = now === prev;
-        prev = now;
-        return still;
-      },
-      { intervals: [500], timeout: 8000 }
-    )
-    .toBe(true);
+  // The same drag twice: held still before letting go, it stays put; let
+  // go mid-swipe, it glides further. Comparing the two keeps this right
+  // on slow machines, where the glide may be over before a read.
+  const swipe = async (hold: boolean) => {
+    await open(page, "#year=1800&span=0.3");
+    const box = (await page.locator(".timeline-svg").boundingBox())!;
+    const y = box.y + box.height - 20;
+    await page.mouse.move(box.x + box.width * 0.7, y);
+    await page.mouse.down();
+    for (let i = 1; i <= 6; i++) await page.mouse.move(box.x + box.width * 0.7 - i * 40, y);
+    if (hold) await page.waitForTimeout(400);
+    await page.mouse.up();
+    // Wait until the strip has come to rest (a hard fling glides ~3 s).
+    let prev = NaN;
+    await expect
+      .poll(
+        async () => {
+          const now = Number(await year(page));
+          const still = now === prev;
+          prev = now;
+          return still;
+        },
+        { intervals: [600], timeout: 10000 }
+      )
+      .toBe(true);
+    return prev;
+  };
+  const held = await swipe(true);
+  const flung = await swipe(false);
+  expect(held).toBeGreaterThan(1800);
+  expect(flung).toBeGreaterThan(held + 5);
 });
 
 test("pulling the timeline past the start stretches it, then springs back", async ({ page }) => {
