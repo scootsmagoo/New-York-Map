@@ -132,6 +132,12 @@ image, and a failure stops the deploy. A pan frame-rate check runs locally
 
 **Done**, newest first:
 
+*Done 2026-10-03:* six people and places from *Greater Gotham* (Big Tim
+Sullivan, Morris Hillquit, Rose Schneiderman, the Forward Building, John
+Sloan in Chelsea, Irving Berlin); the railroad, transit, and highway
+geometry now loads on first zoom (first load 15 KB lighter); and Sunken
+Meadow draws as the marsh it was.
+
 *Done 2026-10-02 (night):* six entries from *Gotham* (Vauxhall Garden, the
 Park Theater, Frances Wright's Hall of Science, the 1834 riots against the
 abolitionists, Cooper Union, Josephine Shaw Lowell), the riot linked from

@@ -896,4 +896,78 @@ export const greaterNYEntries: Entry[] = [
       "In the hard winter of 1914 Frank Tannenbaum, a twenty-year-old busboy and Wobbly, led jobless men into the city's churches to ask for food and a bed. On March 4 his 300 marchers were turned away at St. Alphonsus on West Broadway, and twenty police wagons carried off Tannenbaum and 190 others.",
     coords: [-74.0042, 40.7219],
   },
+  {
+    id: "hillquit",
+    era: "greaterNY",
+    kind: "person",
+    title: "Morris Hillquit",
+    wikiTitle: "Morris Hillquit",
+    year: 1901,
+    blurb:
+      "Born Moishe Hillkowitz in Riga, he came over in 1885 to a two-room apartment on Clinton Street and worked as a shirtmaker. In 1901 he helped found the Socialist Party of America and became its leading theorist, arguing that capitalism itself was carrying the country toward socialism, so violence was unnecessary. Running for mayor against the war in 1917, he won more than 100,000 votes.",
+    gotham:
+      "Greater Gotham presents him as the voice of New York's evolutionary socialism: even the trusts, for all their evils, were a step forward.",
+    coords: [-73.9855, 40.7185],
+  },
+  {
+    id: "big-tim-sullivan",
+    era: "greaterNY",
+    kind: "person",
+    title: "Big Tim Sullivan",
+    wikiTitle: "Timothy Sullivan",
+    year: 1902,
+    yearLabel: "1890s–1913",
+    blurb:
+      "From his headquarters at 207 Bowery, \"Big Tim\" Sullivan ran the Bowery and the Lower East Side for Tammany and made a fortune in vaudeville houses, nickelodeons, and racetracks. He protected gambling houses and gave young gamblers a leg up, among them Arnold Rothstein and Herman Rosenthal. In 1911 he pushed through the Sullivan Act, an early gun-control law; he died in 1913.",
+    coords: [-73.993, 40.7213],
+  },
+  {
+    id: "sloan-chelsea",
+    era: "greaterNY",
+    kind: "person",
+    title: "John Sloan in Chelsea",
+    wikiTitle: "John Sloan",
+    year: 1904,
+    blurb:
+      "The Philadelphia illustrator moved to New York for good in 1904, to 165 West 23rd Street. From his Chelsea studio window he painted the city's street and rooftop life, one of the realists later called the Ashcan school.",
+    gotham:
+      "Greater Gotham finds the Ashcan painters' realism rose-tinted: their mean streets more erotic than squalid, poverty turned to spectacle.",
+    coords: [-73.995, 40.7438],
+  },
+  {
+    id: "irving-berlin",
+    era: "greaterNY",
+    kind: "person",
+    title: "Irving Berlin",
+    wikiTitle: "Irving Berlin",
+    year: 1907,
+    blurb:
+      "In 1906, at eighteen, he got a job as a singing waiter at the Pelham Cafe in Chinatown; his first published song, \"Marie from Sunny Italy\" (1907), earned him 33 cents. \"Alexander's Ragtime Band\" made him famous in 1911, and by 1914 he had his own publishing house on West 45th Street and a whole Broadway score, Watch Your Step.",
+    gotham:
+      "Greater Gotham credits him with bringing syncopation based on African American music to Broadway, filtered through his own heritage.",
+    coords: [-73.9978, 40.7148],
+  },
+  {
+    id: "schneiderman",
+    era: "greaterNY",
+    kind: "person",
+    title: "Rose Schneiderman",
+    wikiTitle: "Rose Schneiderman",
+    year: 1909,
+    blurb:
+      "A cap-lining stitcher from 1898, she organized her shop for the cap makers' union in 1903, led a cap makers' strike in 1905, and joined the Women's Trade Union League. In 1909 she became its chief organizer, working from its office at 43 West 22nd Street, and stood with Clara Lemlich in the Uprising of the 20,000.",
+    coords: [-73.991, 40.7413],
+  },
+  {
+    id: "forward-building",
+    era: "greaterNY",
+    kind: "place",
+    title: "The Forward Building",
+    wikiTitle: "The Forward",
+    year: 1912,
+    blurb:
+      "Abraham Cahan's Yiddish socialist daily, founded in 1897, sold 120,000 copies by 1912, when it moved into its own ten-story building at 175 East Broadway, with marble columns and stained glass, towering over the Lower East Side. The paper stayed until 1974.",
+    coords: [-73.9893, 40.7141],
+    lifespan: [1912, null],
+  },
 ];

@@ -343,9 +343,13 @@ the Panic of 1907 (ch. 5), the Hudson tubes (ch. 8), the Singer and Met
 Life towers (ch. 7 › Skyline), Tin Pan Alley (ch. 13), Mabel Dodge's salon
 and the Paterson Pageant (ch. 20 › Counterculture), the Rosenthal murder
 (ch. 17 › Gambling), and Tannenbaum's army of the unemployed (ch. 19).
-Still open: Big Tim Sullivan, Hillquit, Mitchel, Hearst, Cahan's *Forward*
-(no Wikipedia article for the building), Florence Kelley, Rose
-Schneiderman, Elizabeth Gurley Flynn, John Sloan, Irving Berlin.
+*Added 2026-10-02:* Big Tim Sullivan (ch. 6 › Bosses and Businessmen),
+Hillquit (ch. 6 › Radicals and Regulators), Schneiderman (ch. 19 ›
+Uprising in the Needle Trades), the Forward Building (ch. 19 › Wobblies
+and Socialists; linked to the newspaper's article), Sloan (ch. 22 › Ash
+Can Realists), Berlin (ch. 14 › Ragtime). Still open: Mitchel (City Hall
+is crowded), Hearst, Florence Kelley (she lived at Henry Street, which
+has an entry), Elizabeth Gurley Flynn (no fixed place).
 
 **Places and events for `capitalWorld`, 1933–45** (from *Gotham at War*):
 

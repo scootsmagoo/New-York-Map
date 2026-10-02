@@ -778,4 +778,10 @@ export const bookRefs: Record<string, BookRef> = {
   "riot-1834": { book: "gotham", chapter: "33. White, Green, and Black", pages: "557–59" },
   "cooper-union": { book: "gotham", chapter: "44. Into the Crazy-Loved Dens of Death", pages: "782" },
   "josephine-shaw-lowell": { book: "gotham", chapter: "65. Purity Crusade", pages: "1159" },
+  "hillquit": { book: "greaterGotham", chapter: "6. Who Rules New York? › Radicals and Regulators" },
+  "big-tim-sullivan": { book: "greaterGotham", chapter: "6. Who Rules New York? › Bosses and Businessmen" },
+  "sloan-chelsea": { book: "greaterGotham", chapter: "22. Insurgent Art › Ash Can Realists" },
+  "irving-berlin": { book: "greaterGotham", chapter: "14. Popular Cultures › Ragtime" },
+  "schneiderman": { book: "greaterGotham", chapter: "19. Radicals › Uprising in the Needle Trades" },
+  "forward-building": { book: "greaterGotham", chapter: "19. Radicals › Wobblies and Socialists" },
 };
